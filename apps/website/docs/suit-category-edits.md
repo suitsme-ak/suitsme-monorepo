@@ -1,0 +1,11 @@
+# Suit category edits
+
+The Suits navigation uses curated edits of ten garments. Fabric references are selected from the original Suits.me public swatches. Material edits are selected from merchant categories: Top Tier wool, Linens, Cottons, Seasonal Winter corduroys identified in the cloth description, and Wedding & Ceremony Suits.
+
+The user approved removing Tweed Suits, Leather Suits, Napolean Wool Suits and Murano Suits because no matching labels were present in the imported catalog. Italian Limited Edition was removed in an earlier request. Other departments retain their existing menus. Historical catalog definitions remain solely to preserve product IDs and saved bags; visible Suits routes now use the curated merchant edits.
+
+There are 50 base garment photographs plus 30 photographs for double-breasted, tuxedo and boys variants. Each ten-item edit uses ten different fictional model castings. Mixed edits reuse the same actual product IDs; products are not renamed into duplicates. Style variants append stable catalog IDs after existing merchant fabrics. Original fabric codes stay attached to product, gallery, customization, bag and server-side order data.
+
+Generation uses the built-in image tool with each original local swatch as material reference. Prompt schema: original photorealistic luxury tailoring ecommerce portrait of one fictional model with an explicit age, ethnicity, hair, facial hair, face and build; specific casting must be visible and distinct. Match the attached cloth hue, visible pattern, weave and realistic textile scale. Two-button notch lapel suits for standard looks; six-button peak-lapel double-breasted suits; satin shawl-lapel tuxedos with formal white shirt and bow tie; fully clothed boys with age-appropriate proportions. Full body head to shoes, pale stone studio background, neutral daylight, no text/logos/watermark/inset. Casting and original fabric code are recorded in data/suit-edit-models.json. Generated images remain illustrations; original swatches are the physical color reference.
+
+New Arrivals describes the website edit, not a verified date of textile arrival. Sale is a curated selection without fabricated discounts. Prices remain preview prices and live payments require the existing merchant setup.

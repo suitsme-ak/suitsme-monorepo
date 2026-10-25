@@ -1,0 +1,290 @@
+{
+  "Shop All": {
+    "title": "Shop All",
+    "ids": [
+      1964,
+      1865,
+      1811,
+      1922,
+      1999,
+      1986,
+      1879,
+      1827,
+      1931,
+      1996
+    ],
+    "intro": "Ten distinct looks, created using original Suits.me fabrics."
+  },
+  "New Arrivals": {
+    "title": "New Arrivals",
+    "ids": [
+      1964,
+      1865,
+      1811,
+      1922,
+      1999,
+      1986,
+      1879,
+      1827,
+      1931,
+      1996
+    ],
+    "intro": "A new edit of ten looks, created from original Suits.me swatches."
+  },
+  "Popular Suits": {
+    "title": "Popular Suits",
+    "ids": [
+      1863,
+      1965,
+      1991,
+      1812,
+      1930,
+      1869,
+      1987,
+      1993,
+      1832,
+      1933
+    ],
+    "intro": "Ten distinct looks, created using original Suits.me fabrics."
+  },
+  "Linen Suits": {
+    "title": "Linen Suits",
+    "ids": [
+      1863,
+      1865,
+      1866,
+      1867,
+      1868,
+      1869,
+      1879,
+      1880,
+      1888,
+      1864
+    ],
+    "intro": "Ten distinct looks, created using original Suits.me fabrics."
+  },
+  "Wool Suits": {
+    "title": "Wool Suits",
+    "ids": [
+      1964,
+      1965,
+      1966,
+      1970,
+      1974,
+      1986,
+      1987,
+      1967,
+      1968,
+      1969
+    ],
+    "intro": "Ten distinct looks, created using original Suits.me fabrics."
+  },
+  "Luxury Suits": {
+    "title": "Luxury Suits",
+    "ids": [
+      1964,
+      1965,
+      1966,
+      1970,
+      1974,
+      1986,
+      1987,
+      1967,
+      1968,
+      1969
+    ],
+    "intro": "Ten fabrics from your Suits.me Top Tier collection."
+  },
+  "Cotton Suits": {
+    "title": "Cotton Suits",
+    "ids": [
+      1809,
+      1810,
+      1811,
+      1812,
+      1813,
+      1818,
+      1825,
+      1827,
+      1832,
+      1833
+    ],
+    "intro": "Ten distinct looks, created using original Suits.me fabrics."
+  },
+  "Corduroy Suits": {
+    "title": "Corduroy Suits",
+    "ids": [
+      1914,
+      1918,
+      1920,
+      1922,
+      1930,
+      1932,
+      1919,
+      1929,
+      1931,
+      1933
+    ],
+    "intro": "Ten distinct looks, created using original Suits.me fabrics."
+  },
+  "Wedding Suits": {
+    "title": "Wedding Suits",
+    "ids": [
+      1989,
+      1990,
+      1991,
+      1997,
+      1999,
+      2004,
+      1992,
+      1993,
+      1995,
+      1996
+    ],
+    "intro": "Ten distinct looks, created using original Suits.me fabrics."
+  },
+  "Business Suits": {
+    "title": "Business Suits",
+    "ids": [
+      1964,
+      1965,
+      1966,
+      1970,
+      1974,
+      1986,
+      1987,
+      1967,
+      1968,
+      1969
+    ],
+    "intro": "Ten distinct looks, created using original Suits.me fabrics."
+  },
+  "Tuxedos": {
+    "title": "Tuxedos",
+    "ids": [
+      2225,
+      2226,
+      2227,
+      2228,
+      2229,
+      2230,
+      2231,
+      2232,
+      2233,
+      2234
+    ],
+    "intro": "Ten distinct looks, created using original Suits.me fabrics."
+  },
+  "Cocktail & Evening Suits": {
+    "title": "Cocktail & Evening Suits",
+    "ids": [
+      1989,
+      1990,
+      1991,
+      1922,
+      1999,
+      1932,
+      1992,
+      1993,
+      1995,
+      1996
+    ],
+    "intro": "Ten distinct looks, created using original Suits.me fabrics."
+  },
+  "Red Carpet Suits": {
+    "title": "Red Carpet Suits",
+    "ids": [
+      1989,
+      1865,
+      1811,
+      1922,
+      1999,
+      1869,
+      1987,
+      1993,
+      1832,
+      1933
+    ],
+    "intro": "Ten distinct looks, created using original Suits.me fabrics."
+  },
+  "Double Breasted Suits": {
+    "title": "Double Breasted Suits",
+    "ids": [
+      2215,
+      2216,
+      2217,
+      2218,
+      2219,
+      2220,
+      2221,
+      2222,
+      2223,
+      2224
+    ],
+    "intro": "Ten distinct looks, created using original Suits.me fabrics."
+  },
+  "Boys Suits": {
+    "title": "Boys Suits",
+    "ids": [
+      2235,
+      2236,
+      2237,
+      2238,
+      2239,
+      2240,
+      2241,
+      2242,
+      2243,
+      2244
+    ],
+    "intro": "Ten distinct looks, created using original Suits.me fabrics."
+  },
+  "Look Book (All)": {
+    "title": "Look Book (All)",
+    "ids": [
+      1863,
+      1965,
+      1991,
+      1812,
+      1930,
+      1869,
+      1987,
+      1993,
+      1832,
+      1933
+    ],
+    "intro": "Ten distinct looks, created using original Suits.me fabrics."
+  },
+  "Shop By Style": {
+    "title": "Shop By Style",
+    "ids": [
+      2215,
+      2216,
+      2217,
+      2218,
+      2229,
+      2230,
+      2231,
+      1827,
+      1931,
+      1996
+    ],
+    "intro": "Ten distinct looks, created using original Suits.me fabrics."
+  },
+  "Sale": {
+    "title": "Sale",
+    "ids": [
+      1863,
+      1965,
+      1991,
+      1812,
+      1930,
+      1869,
+      1987,
+      1993,
+      1832,
+      1933
+    ],
+    "intro": "Explore this fabric edit. Ask your stylist about current offers."
+  }
+}

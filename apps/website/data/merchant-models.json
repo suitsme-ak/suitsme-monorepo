@@ -1,0 +1,434 @@
+{
+  "suit:CB11001": {
+    "image": "merchant-models/suit-CB11001.webp",
+    "fabricCode": "CB11001",
+    "kind": "suit",
+    "generated": true
+  },
+  "suit:CB11009": {
+    "image": "merchant-models/suit-CB11009.webp",
+    "fabricCode": "CB11009",
+    "kind": "suit",
+    "generated": true
+  },
+  "suit:CB11032": {
+    "image": "merchant-models/suit-CB11032.webp",
+    "fabricCode": "CB11032",
+    "kind": "suit",
+    "generated": true
+  },
+  "suit:CG21002": {
+    "image": "merchant-models/suit-CG21002.webp",
+    "fabricCode": "CG21002",
+    "kind": "suit",
+    "generated": true
+  },
+  "suit:CG21196": {
+    "image": "merchant-models/suit-CG21196.webp",
+    "fabricCode": "CG21196",
+    "kind": "suit",
+    "generated": true
+  },
+  "suit:CO41029": {
+    "image": "merchant-models/suit-CO41029.webp",
+    "fabricCode": "CO41029",
+    "kind": "suit",
+    "generated": true
+  },
+  "suit:CO80311": {
+    "image": "merchant-models/suit-CO80311.webp",
+    "fabricCode": "CO80311",
+    "kind": "suit",
+    "generated": true
+  },
+  "suit:CN17300": {
+    "image": "merchant-models/suit-CN17300.webp",
+    "fabricCode": "CN17300",
+    "kind": "suit",
+    "generated": true
+  },
+  "suit:CN51012": {
+    "image": "merchant-models/suit-CN51012.webp",
+    "fabricCode": "CN51012",
+    "kind": "suit",
+    "generated": true
+  },
+  "suit:EO43345": {
+    "image": "merchant-models/suit-EO43345.webp",
+    "fabricCode": "EO43345",
+    "kind": "suit",
+    "generated": true
+  },
+  "suit:CN51055": {
+    "image": "merchant-models/suit-CN51055.webp",
+    "fabricCode": "CN51055",
+    "kind": "suit",
+    "generated": true
+  },
+  "suit:CR31004": {
+    "image": "merchant-models/suit-CR31004.webp",
+    "fabricCode": "CR31004",
+    "kind": "suit",
+    "generated": true
+  },
+  "suit:CO41018": {
+    "image": "merchant-models/suit-CO41018.webp",
+    "fabricCode": "CO41018",
+    "kind": "suit",
+    "generated": true
+  },
+  "suit:CN85301": {
+    "image": "merchant-models/suit-CN85301.webp",
+    "fabricCode": "CN85301",
+    "kind": "suit",
+    "generated": true
+  },
+  "suit:CG21077": {
+    "image": "merchant-models/suit-CG21077.webp",
+    "fabricCode": "CG21077",
+    "kind": "suit",
+    "generated": true
+  },
+  "suit:CO41110": {
+    "image": "merchant-models/suit-CO41110.webp",
+    "fabricCode": "CO41110",
+    "kind": "suit",
+    "generated": true
+  },
+  "suit:EN54125": {
+    "image": "merchant-models/suit-EN54125.webp",
+    "fabricCode": "EN54125",
+    "kind": "suit",
+    "generated": true
+  },
+  "suit:EN54390": {
+    "image": "merchant-models/suit-EN54390.webp",
+    "fabricCode": "EN54390",
+    "kind": "suit",
+    "generated": true
+  },
+  "suit:KN52022": {
+    "image": "merchant-models/suit-KN52022.webp",
+    "fabricCode": "KN52022",
+    "kind": "suit",
+    "generated": true
+  },
+  "suit:CB11048": {
+    "image": "merchant-models/suit-CB11048.webp",
+    "fabricCode": "CB11048",
+    "kind": "suit",
+    "generated": true
+  },
+  "suit:EO43355": {
+    "image": "merchant-models/suit-EO43355.webp",
+    "fabricCode": "EO43355",
+    "kind": "suit",
+    "generated": true
+  },
+  "suit:CB11035": {
+    "image": "merchant-models/suit-CB11035.webp",
+    "fabricCode": "CB11035",
+    "kind": "suit",
+    "generated": true
+  },
+  "suit:CN51094": {
+    "image": "merchant-models/suit-CN51094.webp",
+    "fabricCode": "CN51094",
+    "kind": "suit",
+    "generated": true
+  },
+  "suit:CO41040": {
+    "image": "merchant-models/suit-CO41040.webp",
+    "fabricCode": "CO41040",
+    "kind": "suit",
+    "generated": true
+  },
+  "suit:CN51134": {
+    "image": "merchant-models/suit-CN51134.webp",
+    "fabricCode": "CN51134",
+    "kind": "suit",
+    "generated": true
+  },
+  "suit:EO43470": {
+    "image": "merchant-models/suit-EO43470.webp",
+    "fabricCode": "EO43470",
+    "kind": "suit",
+    "generated": true
+  },
+  "suit:EO43457": {
+    "image": "merchant-models/suit-EO43457.webp",
+    "fabricCode": "EO43457",
+    "kind": "suit",
+    "generated": true
+  },
+  "suit:KN52012": {
+    "image": "merchant-models/suit-KN52012.webp",
+    "fabricCode": "KN52012",
+    "kind": "suit",
+    "generated": true
+  },
+  "suit:ER33190": {
+    "image": "merchant-models/suit-ER33190.webp",
+    "fabricCode": "ER33190",
+    "kind": "suit",
+    "generated": true
+  },
+  "suit:CO41123": {
+    "image": "merchant-models/suit-CO41123.webp",
+    "fabricCode": "CO41123",
+    "kind": "suit",
+    "generated": true
+  },
+  "suit:CO41124": {
+    "image": "merchant-models/suit-CO41124.webp",
+    "fabricCode": "CO41124",
+    "kind": "suit",
+    "generated": true
+  },
+  "suit:EO43008": {
+    "image": "merchant-models/suit-EO43008.webp",
+    "fabricCode": "EO43008",
+    "kind": "suit",
+    "generated": true
+  },
+  "suit:EO43053": {
+    "image": "merchant-models/suit-EO43053.webp",
+    "fabricCode": "EO43053",
+    "kind": "suit",
+    "generated": true
+  },
+  "suit:EO43115": {
+    "image": "merchant-models/suit-EO43115.webp",
+    "fabricCode": "EO43115",
+    "kind": "suit",
+    "generated": true
+  },
+  "suit:EO43117": {
+    "image": "merchant-models/suit-EO43117.webp",
+    "fabricCode": "EO43117",
+    "kind": "suit",
+    "generated": true
+  },
+  "suit:ER33162": {
+    "image": "merchant-models/suit-ER33162.webp",
+    "fabricCode": "ER33162",
+    "kind": "suit",
+    "generated": true
+  },
+  "shirt:25-2542-23": {
+    "image": "merchant-models/shirt-25-2542-23.webp",
+    "fabricCode": "25-2542-23",
+    "kind": "shirt",
+    "generated": true
+  },
+  "shirt:30-3082-23": {
+    "image": "merchant-models/shirt-30-3082-23.webp",
+    "fabricCode": "30-3082-23",
+    "kind": "shirt",
+    "generated": true
+  },
+  "shirt:30-3083-23": {
+    "image": "merchant-models/shirt-30-3083-23.webp",
+    "fabricCode": "30-3083-23",
+    "kind": "shirt",
+    "generated": true
+  },
+  "shirt:10-1182-23": {
+    "image": "merchant-models/shirt-10-1182-23.webp",
+    "fabricCode": "10-1182-23",
+    "kind": "shirt",
+    "generated": true
+  },
+  "shirt:30-3091-07": {
+    "image": "merchant-models/shirt-30-3091-07.webp",
+    "fabricCode": "30-3091-07",
+    "kind": "shirt",
+    "generated": true
+  },
+  "shirt:30-3084-23": {
+    "image": "merchant-models/shirt-30-3084-23.webp",
+    "fabricCode": "30-3084-23",
+    "kind": "shirt",
+    "generated": true
+  },
+  "shirt:15-1501-23": {
+    "image": "merchant-models/shirt-15-1501-23.webp",
+    "fabricCode": "15-1501-23",
+    "kind": "shirt",
+    "generated": true
+  },
+  "shirt:25-2540-01": {
+    "image": "merchant-models/shirt-25-2540-01.webp",
+    "fabricCode": "25-2540-01",
+    "kind": "shirt",
+    "generated": true
+  },
+  "shirt:15-1516-07": {
+    "image": "merchant-models/shirt-15-1516-07.webp",
+    "fabricCode": "15-1516-07",
+    "kind": "shirt",
+    "generated": true
+  },
+  "shirt:10-1065-07": {
+    "image": "merchant-models/shirt-10-1065-07.webp",
+    "fabricCode": "10-1065-07",
+    "kind": "shirt",
+    "generated": true
+  },
+  "shirt:15-1515-26": {
+    "image": "merchant-models/shirt-15-1515-26.webp",
+    "fabricCode": "15-1515-26",
+    "kind": "shirt",
+    "generated": true
+  },
+  "shirt:30-3097-06": {
+    "image": "merchant-models/shirt-30-3097-06.webp",
+    "fabricCode": "30-3097-06",
+    "kind": "shirt",
+    "generated": true
+  },
+  "shirt:10-1202-23": {
+    "image": "merchant-models/shirt-10-1202-23.webp",
+    "fabricCode": "10-1202-23",
+    "kind": "shirt",
+    "generated": true
+  },
+  "shirt:10-1232-07": {
+    "image": "merchant-models/shirt-10-1232-07.webp",
+    "fabricCode": "10-1232-07",
+    "kind": "shirt",
+    "generated": true
+  },
+  "shirt:10-1230-07": {
+    "image": "merchant-models/shirt-10-1230-07.webp",
+    "fabricCode": "10-1230-07",
+    "kind": "shirt",
+    "generated": true
+  },
+  "shirt:15-1508-07": {
+    "image": "merchant-models/shirt-15-1508-07.webp",
+    "fabricCode": "15-1508-07",
+    "kind": "shirt",
+    "generated": true
+  },
+  "shirt:15-1509-07": {
+    "image": "merchant-models/shirt-15-1509-07.webp",
+    "fabricCode": "15-1509-07",
+    "kind": "shirt",
+    "generated": true
+  },
+  "shirt:30-3414-20": {
+    "image": "merchant-models/shirt-30-3414-20.webp",
+    "fabricCode": "30-3414-20",
+    "kind": "shirt",
+    "generated": true
+  },
+  "shirt:30-3187-10": {
+    "image": "merchant-models/shirt-30-3187-10.webp",
+    "fabricCode": "30-3187-10",
+    "kind": "shirt",
+    "generated": true
+  },
+  "shirt:30-3454-10": {
+    "image": "merchant-models/shirt-30-3454-10.webp",
+    "fabricCode": "30-3454-10",
+    "kind": "shirt",
+    "generated": true
+  },
+  "shirt:30-3467-21": {
+    "image": "merchant-models/shirt-30-3467-21.webp",
+    "fabricCode": "30-3467-21",
+    "kind": "shirt",
+    "generated": true
+  },
+  "shirt:30-3471-05": {
+    "image": "merchant-models/shirt-30-3471-05.webp",
+    "fabricCode": "30-3471-05",
+    "kind": "shirt",
+    "generated": true
+  },
+  "shirt:10-1200-05": {
+    "image": "merchant-models/shirt-10-1200-05.webp",
+    "fabricCode": "10-1200-05",
+    "kind": "shirt",
+    "generated": true
+  },
+  "shirt:10-1206-06": {
+    "image": "merchant-models/shirt-10-1206-06.webp",
+    "fabricCode": "10-1206-06",
+    "kind": "shirt",
+    "generated": true
+  },
+  "shirt:10-1207-03": {
+    "image": "merchant-models/shirt-10-1207-03.webp",
+    "fabricCode": "10-1207-03",
+    "kind": "shirt",
+    "generated": true
+  },
+  "shirt:10-1208-23": {
+    "image": "merchant-models/shirt-10-1208-23.webp",
+    "fabricCode": "10-1208-23",
+    "kind": "shirt",
+    "generated": true
+  },
+  "shirt:10-1209-07": {
+    "image": "merchant-models/shirt-10-1209-07.webp",
+    "fabricCode": "10-1209-07",
+    "kind": "shirt",
+    "generated": true
+  },
+  "shirt:10-1211-05": {
+    "image": "merchant-models/shirt-10-1211-05.webp",
+    "fabricCode": "10-1211-05",
+    "kind": "shirt",
+    "generated": true
+  },
+  "shirt:10-1241-23": {
+    "image": "merchant-models/shirt-10-1241-23.webp",
+    "fabricCode": "10-1241-23",
+    "kind": "shirt",
+    "generated": true
+  },
+  "shirt:10-1246-07": {
+    "image": "merchant-models/shirt-10-1246-07.webp",
+    "fabricCode": "10-1246-07",
+    "kind": "shirt",
+    "generated": true
+  },
+  "shirt:30-3447-22": {
+    "image": "merchant-models/shirt-30-3447-22.webp",
+    "fabricCode": "30-3447-22",
+    "kind": "shirt",
+    "generated": true
+  },
+  "shirt:25-2509-07": {
+    "image": "merchant-models/shirt-25-2509-07.webp",
+    "fabricCode": "25-2509-07",
+    "kind": "shirt",
+    "generated": true
+  },
+  "shirt:25-2516-26": {
+    "image": "merchant-models/shirt-25-2516-26.webp",
+    "fabricCode": "25-2516-26",
+    "kind": "shirt",
+    "generated": true
+  },
+  "shirt:25-2517-26": {
+    "image": "merchant-models/shirt-25-2517-26.webp",
+    "fabricCode": "25-2517-26",
+    "kind": "shirt",
+    "generated": true
+  },
+  "shirt:25-2518-20": {
+    "image": "merchant-models/shirt-25-2518-20.webp",
+    "fabricCode": "25-2518-20",
+    "kind": "shirt",
+    "generated": true
+  },
+  "shirt:25-2521-20": {
+    "image": "merchant-models/shirt-25-2521-20.webp",
+    "fabricCode": "25-2521-20",
+    "kind": "shirt",
+    "generated": true
+  }
+}

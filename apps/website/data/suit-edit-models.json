@@ -1,0 +1,482 @@
+{
+  "wool-EB11127": {
+    "image": "merchant-models/wool-EB11127-individual.webp",
+    "casting": "Black man age 32 with deep brown skin, close-cropped hair, clean-shaven face, tall athletic build",
+    "group": "wool",
+    "fabricCode": "EB11127"
+  },
+  "wool-EN54229": {
+    "image": "merchant-models/wool-EN54229-individual.webp",
+    "casting": "East Asian man age 28 with light warm skin, straight black side-parted hair, clean-shaven oval face, lean build",
+    "group": "wool",
+    "fabricCode": "EN54229"
+  },
+  "wool-ER33214": {
+    "image": "merchant-models/wool-ER33214-individual.webp",
+    "casting": "South Asian man age 40 with medium brown skin, short salt-and-pepper hair, neatly trimmed full beard, broad shoulders",
+    "group": "wool",
+    "fabricCode": "ER33214"
+  },
+  "wool-EG23537": {
+    "image": "merchant-models/wool-EG23537-individual.webp",
+    "casting": "white European man age 52 with silver hair, clean-shaven angular face, medium build",
+    "group": "wool",
+    "fabricCode": "EG23537"
+  },
+  "wool-EO43411": {
+    "image": "merchant-models/wool-EO43411-individual.webp",
+    "casting": "Latino man age 35 with tan skin, wavy shoulder-length dark hair, light stubble, lean build",
+    "group": "wool",
+    "fabricCode": "EO43411"
+  },
+  "wool-EO43426": {
+    "image": "merchant-models/wool-EO43426-individual.webp",
+    "casting": "Black man age 45 with dark skin, shaved head, salt-and-pepper beard, broad muscular build",
+    "group": "wool",
+    "fabricCode": "EO43426"
+  },
+  "wool-EO43474": {
+    "image": "merchant-models/wool-EO43474-individual.webp",
+    "casting": "Middle Eastern man age 30 with olive skin, short curly black hair, clean-shaven round face, average build",
+    "group": "wool",
+    "fabricCode": "EO43474"
+  },
+  "wool-EB13179": {
+    "image": "merchant-models/wool-EB13179-individual.webp",
+    "casting": "white man age 27 with fair freckled skin, short copper red hair, clean-shaven face, tall slim build",
+    "group": "wool",
+    "fabricCode": "EB13179"
+  },
+  "wool-ER33191": {
+    "image": "merchant-models/wool-ER33191-individual.webp",
+    "casting": "East Asian man age 48 with medium warm skin, short black hair graying at temples, rectangular glasses, clean-shaven face, medium build",
+    "group": "wool",
+    "fabricCode": "ER33191"
+  },
+  "wool-EN54255": {
+    "image": "merchant-models/wool-EN54255-individual.webp",
+    "casting": "South Asian man age 33 with dark brown skin, medium-length thick curly hair, thin mustache, lean athletic build",
+    "group": "wool",
+    "fabricCode": "EN54255"
+  },
+  "linen-KR32024": {
+    "image": "merchant-models/linen-KR32024-individual.webp",
+    "casting": "Black man age 32 with deep brown skin, close-cropped hair, clean-shaven face, tall athletic build",
+    "group": "linen",
+    "fabricCode": "KR32024"
+  },
+  "linen-KO42029": {
+    "image": "merchant-models/linen-KO42029-individual.webp",
+    "casting": "East Asian man age 28 with light warm skin, straight black side-parted hair, clean-shaven oval face, lean build",
+    "group": "linen",
+    "fabricCode": "KO42029"
+  },
+  "linen-KO42030": {
+    "image": "merchant-models/linen-KO42030-individual.webp",
+    "casting": "South Asian man age 40 with medium brown skin, short salt-and-pepper hair, neatly trimmed full beard, broad shoulders",
+    "group": "linen",
+    "fabricCode": "KO42030"
+  },
+  "linen-KO42032": {
+    "image": "merchant-models/linen-KO42032-individual.webp",
+    "casting": "white European man age 52 with silver hair, clean-shaven angular face, medium build",
+    "group": "linen",
+    "fabricCode": "KO42032"
+  },
+  "linen-KO42086": {
+    "image": "merchant-models/linen-KO42086-individual.webp",
+    "casting": "Latino man age 35 with tan skin, wavy shoulder-length dark hair, light stubble, lean build",
+    "group": "linen",
+    "fabricCode": "KO42086"
+  },
+  "linen-KO42053": {
+    "image": "merchant-models/linen-KO42053-individual.webp",
+    "casting": "Black man age 45 with dark skin, shaved head, salt-and-pepper beard, broad muscular build",
+    "group": "linen",
+    "fabricCode": "KO42053"
+  },
+  "linen-EB13039": {
+    "image": "merchant-models/linen-EB13039-individual.webp",
+    "casting": "Middle Eastern man age 30 with olive skin, short curly black hair, clean-shaven round face, average build",
+    "group": "linen",
+    "fabricCode": "EB13039"
+  },
+  "linen-EG23687": {
+    "image": "merchant-models/linen-EG23687-individual.webp",
+    "casting": "white man age 27 with fair freckled skin, short copper red hair, clean-shaven face, tall slim build",
+    "group": "linen",
+    "fabricCode": "EG23687"
+  },
+  "linen-EO10151": {
+    "image": "merchant-models/linen-EO10151-individual.webp",
+    "casting": "East Asian man age 48 with medium warm skin, short black hair graying at temples, rectangular glasses, clean-shaven face, medium build",
+    "group": "linen",
+    "fabricCode": "EO10151"
+  },
+  "linen-KR32026": {
+    "image": "merchant-models/linen-KR32026-individual.webp",
+    "casting": "South Asian man age 33 with dark brown skin, medium-length thick curly hair, thin mustache, lean athletic build",
+    "group": "linen",
+    "fabricCode": "KR32026"
+  },
+  "cotton-EO43008": {
+    "image": "merchant-models/cotton-EO43008-individual.webp",
+    "casting": "Black man age 32 with deep brown skin, close-cropped hair, clean-shaven face, tall athletic build",
+    "group": "cotton",
+    "fabricCode": "EO43008"
+  },
+  "cotton-EO43053": {
+    "image": "merchant-models/cotton-EO43053-individual.webp",
+    "casting": "East Asian man age 28 with light warm skin, straight black side-parted hair, clean-shaven oval face, lean build",
+    "group": "cotton",
+    "fabricCode": "EO43053"
+  },
+  "cotton-EN53333": {
+    "image": "merchant-models/cotton-EN53333-individual.webp",
+    "casting": "South Asian man age 40 with medium brown skin, short salt-and-pepper hair, neatly trimmed full beard, broad shoulders",
+    "group": "cotton",
+    "fabricCode": "EN53333"
+  },
+  "cotton-EO43115": {
+    "image": "merchant-models/cotton-EO43115-individual.webp",
+    "casting": "white European man age 52 with silver hair, clean-shaven angular face, medium build",
+    "group": "cotton",
+    "fabricCode": "EO43115"
+  },
+  "cotton-EO43117": {
+    "image": "merchant-models/cotton-EO43117-individual.webp",
+    "casting": "Latino man age 35 with tan skin, wavy shoulder-length dark hair, light stubble, lean build",
+    "group": "cotton",
+    "fabricCode": "EO43117"
+  },
+  "cotton-EG23010": {
+    "image": "merchant-models/cotton-EG23010-individual.webp",
+    "casting": "Black man age 45 with dark skin, shaved head, salt-and-pepper beard, broad muscular build",
+    "group": "cotton",
+    "fabricCode": "EG23010"
+  },
+  "cotton-EB13125": {
+    "image": "merchant-models/cotton-EB13125-individual.webp",
+    "casting": "Middle Eastern man age 30 with olive skin, short curly black hair, clean-shaven round face, average build",
+    "group": "cotton",
+    "fabricCode": "EB13125"
+  },
+  "cotton-EO43393": {
+    "image": "merchant-models/cotton-EO43393-individual.webp",
+    "casting": "white man age 27 with fair freckled skin, short copper red hair, clean-shaven face, tall slim build",
+    "group": "cotton",
+    "fabricCode": "EO43393"
+  },
+  "cotton-KO42098": {
+    "image": "merchant-models/cotton-KO42098-individual.webp",
+    "casting": "East Asian man age 48 with medium warm skin, short black hair graying at temples, rectangular glasses, clean-shaven face, medium build",
+    "group": "cotton",
+    "fabricCode": "KO42098"
+  },
+  "cotton-KO42099": {
+    "image": "merchant-models/cotton-KO42099-individual.webp",
+    "casting": "South Asian man age 33 with dark brown skin, medium-length thick curly hair, thin mustache, lean athletic build",
+    "group": "cotton",
+    "fabricCode": "KO42099"
+  },
+  "corduroy-EO43473": {
+    "image": "merchant-models/corduroy-EO43473-individual.webp",
+    "casting": "Black man age 32 with deep brown skin, close-cropped hair, clean-shaven face, tall athletic build",
+    "group": "corduroy",
+    "fabricCode": "EO43473"
+  },
+  "corduroy-EN54245": {
+    "image": "merchant-models/corduroy-EN54245-individual.webp",
+    "casting": "East Asian man age 28 with light warm skin, straight black side-parted hair, clean-shaven oval face, lean build",
+    "group": "corduroy",
+    "fabricCode": "EN54245"
+  },
+  "corduroy-EB13123": {
+    "image": "merchant-models/corduroy-EB13123-individual.webp",
+    "casting": "South Asian man age 40 with medium brown skin, short salt-and-pepper hair, neatly trimmed full beard, broad shoulders",
+    "group": "corduroy",
+    "fabricCode": "EB13123"
+  },
+  "corduroy-EG23535": {
+    "image": "merchant-models/corduroy-EG23535-individual.webp",
+    "casting": "white European man age 52 with silver hair, clean-shaven angular face, medium build",
+    "group": "corduroy",
+    "fabricCode": "EG23535"
+  },
+  "corduroy-ER33160": {
+    "image": "merchant-models/corduroy-ER33160-individual.webp",
+    "casting": "Latino man age 35 with tan skin, wavy shoulder-length dark hair, light stubble, lean build",
+    "group": "corduroy",
+    "fabricCode": "ER33160"
+  },
+  "corduroy-EO43383": {
+    "image": "merchant-models/corduroy-EO43383-individual.webp",
+    "casting": "Black man age 45 with dark skin, shaved head, salt-and-pepper beard, broad muscular build",
+    "group": "corduroy",
+    "fabricCode": "EO43383"
+  },
+  "corduroy-EN54246": {
+    "image": "merchant-models/corduroy-EN54246-individual.webp",
+    "casting": "Middle Eastern man age 30 with olive skin, short curly black hair, clean-shaven round face, average build",
+    "group": "corduroy",
+    "fabricCode": "EN54246"
+  },
+  "corduroy-EO43332": {
+    "image": "merchant-models/corduroy-EO43332-individual.webp",
+    "casting": "white man age 27 with fair freckled skin, short copper red hair, clean-shaven face, tall slim build",
+    "group": "corduroy",
+    "fabricCode": "EO43332"
+  },
+  "corduroy-EO43406": {
+    "image": "merchant-models/corduroy-EO43406-individual.webp",
+    "casting": "East Asian man age 48 with medium warm skin, short black hair graying at temples, rectangular glasses, clean-shaven face, medium build",
+    "group": "corduroy",
+    "fabricCode": "EO43406"
+  },
+  "corduroy-EO43398": {
+    "image": "merchant-models/corduroy-EO43398-individual.webp",
+    "casting": "South Asian man age 33 with dark brown skin, medium-length thick curly hair, thin mustache, lean athletic build",
+    "group": "corduroy",
+    "fabricCode": "EO43398"
+  },
+  "wedding-CB11047": {
+    "image": "merchant-models/wedding-CB11047-individual.webp",
+    "casting": "Black man age 32 with deep brown skin, close-cropped hair, clean-shaven face, tall athletic build",
+    "group": "wedding",
+    "fabricCode": "CB11047"
+  },
+  "wedding-CG21272": {
+    "image": "merchant-models/wedding-CG21272-individual.webp",
+    "casting": "East Asian man age 28 with light warm skin, straight black side-parted hair, clean-shaven oval face, lean build",
+    "group": "wedding",
+    "fabricCode": "CG21272"
+  },
+  "wedding-CN51261": {
+    "image": "merchant-models/wedding-CN51261-individual.webp",
+    "casting": "South Asian man age 40 with medium brown skin, short salt-and-pepper hair, neatly trimmed full beard, broad shoulders",
+    "group": "wedding",
+    "fabricCode": "CN51261"
+  },
+  "wedding-EO43347": {
+    "image": "merchant-models/wedding-EO43347-individual.webp",
+    "casting": "white European man age 52 with silver hair, clean-shaven angular face, medium build",
+    "group": "wedding",
+    "fabricCode": "EO43347"
+  },
+  "wedding-EO43363": {
+    "image": "merchant-models/wedding-EO43363-individual.webp",
+    "casting": "Latino man age 35 with tan skin, wavy shoulder-length dark hair, light stubble, lean build",
+    "group": "wedding",
+    "fabricCode": "EO43363"
+  },
+  "wedding-CO41017": {
+    "image": "merchant-models/wedding-CO41017-individual.webp",
+    "casting": "Black man age 45 with dark skin, shaved head, salt-and-pepper beard, broad muscular build",
+    "group": "wedding",
+    "fabricCode": "CO41017"
+  },
+  "wedding-KG22026": {
+    "image": "merchant-models/wedding-KG22026-individual.webp",
+    "casting": "Middle Eastern man age 30 with olive skin, short curly black hair, clean-shaven round face, average build",
+    "group": "wedding",
+    "fabricCode": "KG22026"
+  },
+  "wedding-EB13152": {
+    "image": "merchant-models/wedding-EB13152-individual.webp",
+    "casting": "white man age 27 with fair freckled skin, short copper red hair, clean-shaven face, tall slim build",
+    "group": "wedding",
+    "fabricCode": "EB13152"
+  },
+  "wedding-KB12033": {
+    "image": "merchant-models/wedding-KB12033-individual.webp",
+    "casting": "East Asian man age 48 with medium warm skin, short black hair graying at temples, rectangular glasses, clean-shaven face, medium build",
+    "group": "wedding",
+    "fabricCode": "KB12033"
+  },
+  "wedding-KN52018": {
+    "image": "merchant-models/wedding-KN52018-individual.webp",
+    "casting": "South Asian man age 33 with dark brown skin, medium-length thick curly hair, thin mustache, lean athletic build",
+    "group": "wedding",
+    "fabricCode": "KN52018"
+  },
+  "double-EB11127": {
+    "image": "merchant-models/double-EB11127-individual.webp",
+    "casting": "Black man age 32 with deep brown skin, close-cropped hair, clean-shaven face, tall athletic build",
+    "group": "double",
+    "fabricCode": "EB11127"
+  },
+  "double-EN54229": {
+    "image": "merchant-models/double-EN54229-individual.webp",
+    "casting": "East Asian man age 28 with light warm skin, straight black side-parted hair, clean-shaven oval face, lean build",
+    "group": "double",
+    "fabricCode": "EN54229"
+  },
+  "double-ER33214": {
+    "image": "merchant-models/double-ER33214-individual.webp",
+    "casting": "South Asian man age 40 with medium brown skin, short salt-and-pepper hair, neatly trimmed full beard, broad shoulders",
+    "group": "double",
+    "fabricCode": "ER33214"
+  },
+  "double-EG23537": {
+    "image": "merchant-models/double-EG23537-individual.webp",
+    "casting": "white European man age 52 with silver hair, clean-shaven angular face, medium build",
+    "group": "double",
+    "fabricCode": "EG23537"
+  },
+  "double-EO43411": {
+    "image": "merchant-models/double-EO43411-individual.webp",
+    "casting": "Latino man age 35 with tan skin, wavy shoulder-length dark hair, light stubble, lean build",
+    "group": "double",
+    "fabricCode": "EO43411"
+  },
+  "double-EO43426": {
+    "image": "merchant-models/double-EO43426-individual.webp",
+    "casting": "Black man age 45 with dark skin, shaved head, salt-and-pepper beard, broad muscular build",
+    "group": "double",
+    "fabricCode": "EO43426"
+  },
+  "double-EO43474": {
+    "image": "merchant-models/double-EO43474-individual.webp",
+    "casting": "Middle Eastern man age 30 with olive skin, short curly black hair, clean-shaven round face, average build",
+    "group": "double",
+    "fabricCode": "EO43474"
+  },
+  "double-EB13179": {
+    "image": "merchant-models/double-EB13179-individual.webp",
+    "casting": "white man age 27 with fair freckled skin, short copper red hair, clean-shaven face, tall slim build",
+    "group": "double",
+    "fabricCode": "EB13179"
+  },
+  "double-ER33191": {
+    "image": "merchant-models/double-ER33191-individual.webp",
+    "casting": "East Asian man age 48 with medium warm skin, short black hair graying at temples, rectangular glasses, clean-shaven face, medium build",
+    "group": "double",
+    "fabricCode": "ER33191"
+  },
+  "double-EN54255": {
+    "image": "merchant-models/double-EN54255-individual.webp",
+    "casting": "South Asian man age 33 with dark brown skin, medium-length thick curly hair, thin mustache, lean athletic build",
+    "group": "double",
+    "fabricCode": "EN54255"
+  },
+  "tuxedo-CB11047": {
+    "image": "merchant-models/tuxedo-CB11047-individual.webp",
+    "casting": "Black man age 32 with deep brown skin, close-cropped hair, clean-shaven face, tall athletic build",
+    "group": "tuxedo",
+    "fabricCode": "CB11047"
+  },
+  "tuxedo-CG21272": {
+    "image": "merchant-models/tuxedo-CG21272-individual.webp",
+    "casting": "East Asian man age 28 with light warm skin, straight black side-parted hair, clean-shaven oval face, lean build",
+    "group": "tuxedo",
+    "fabricCode": "CG21272"
+  },
+  "tuxedo-CN51261": {
+    "image": "merchant-models/tuxedo-CN51261-individual.webp",
+    "casting": "South Asian man age 40 with medium brown skin, short salt-and-pepper hair, neatly trimmed full beard, broad shoulders",
+    "group": "tuxedo",
+    "fabricCode": "CN51261"
+  },
+  "tuxedo-EO43347": {
+    "image": "merchant-models/tuxedo-EO43347-individual.webp",
+    "casting": "white European man age 52 with silver hair, clean-shaven angular face, medium build",
+    "group": "tuxedo",
+    "fabricCode": "EO43347"
+  },
+  "tuxedo-EO43363": {
+    "image": "merchant-models/tuxedo-EO43363-individual.webp",
+    "casting": "Latino man age 35 with tan skin, wavy shoulder-length dark hair, light stubble, lean build",
+    "group": "tuxedo",
+    "fabricCode": "EO43363"
+  },
+  "tuxedo-CO41017": {
+    "image": "merchant-models/tuxedo-CO41017-individual.webp",
+    "casting": "Black man age 45 with dark skin, shaved head, salt-and-pepper beard, broad muscular build",
+    "group": "tuxedo",
+    "fabricCode": "CO41017"
+  },
+  "tuxedo-KG22026": {
+    "image": "merchant-models/tuxedo-KG22026-individual.webp",
+    "casting": "Middle Eastern man age 30 with olive skin, short curly black hair, clean-shaven round face, average build",
+    "group": "tuxedo",
+    "fabricCode": "KG22026"
+  },
+  "tuxedo-EB13152": {
+    "image": "merchant-models/tuxedo-EB13152-individual.webp",
+    "casting": "white man age 27 with fair freckled skin, short copper red hair, clean-shaven face, tall slim build",
+    "group": "tuxedo",
+    "fabricCode": "EB13152"
+  },
+  "tuxedo-KB12033": {
+    "image": "merchant-models/tuxedo-KB12033-individual.webp",
+    "casting": "East Asian man age 48 with medium warm skin, short black hair graying at temples, rectangular glasses, clean-shaven face, medium build",
+    "group": "tuxedo",
+    "fabricCode": "KB12033"
+  },
+  "tuxedo-KN52018": {
+    "image": "merchant-models/tuxedo-KN52018-individual.webp",
+    "casting": "South Asian man age 33 with dark brown skin, medium-length thick curly hair, thin mustache, lean athletic build",
+    "group": "tuxedo",
+    "fabricCode": "KN52018"
+  },
+  "boys-EO43008": {
+    "image": "merchant-models/boys-EO43008-individual.webp",
+    "casting": "Black boy age 10 with short coiled hair",
+    "group": "boys",
+    "fabricCode": "EO43008"
+  },
+  "boys-EO43053": {
+    "image": "merchant-models/boys-EO43053-individual.webp",
+    "casting": "East Asian boy age 11 with straight black hair",
+    "group": "boys",
+    "fabricCode": "EO43053"
+  },
+  "boys-EN53333": {
+    "image": "merchant-models/boys-EN53333-individual.webp",
+    "casting": "South Asian boy age 9 with short wavy hair",
+    "group": "boys",
+    "fabricCode": "EN53333"
+  },
+  "boys-EO43115": {
+    "image": "merchant-models/boys-EO43115-individual.webp",
+    "casting": "white boy age 12 with short blond hair and freckles",
+    "group": "boys",
+    "fabricCode": "EO43115"
+  },
+  "boys-EO43117": {
+    "image": "merchant-models/boys-EO43117-individual.webp",
+    "casting": "Latino boy age 10 with dark curly hair",
+    "group": "boys",
+    "fabricCode": "EO43117"
+  },
+  "boys-EO43426": {
+    "image": "merchant-models/boys-EO43426-individual.webp",
+    "casting": "Black boy age 12 with a short fade haircut",
+    "group": "boys",
+    "fabricCode": "EO43426"
+  },
+  "boys-EO43474": {
+    "image": "merchant-models/boys-EO43474-individual.webp",
+    "casting": "Middle Eastern boy age 11 with short curly hair",
+    "group": "boys",
+    "fabricCode": "EO43474"
+  },
+  "boys-EB13179": {
+    "image": "merchant-models/boys-EB13179-individual.webp",
+    "casting": "white boy age 9 with short red hair",
+    "group": "boys",
+    "fabricCode": "EB13179"
+  },
+  "boys-ER33191": {
+    "image": "merchant-models/boys-ER33191-individual.webp",
+    "casting": "East Asian boy age 12 with a neat side-parted haircut",
+    "group": "boys",
+    "fabricCode": "ER33191"
+  },
+  "boys-EN54255": {
+    "image": "merchant-models/boys-EN54255-individual.webp",
+    "casting": "South Asian boy age 10 with medium-length curls",
+    "group": "boys",
+    "fabricCode": "EN54255"
+  }
+}

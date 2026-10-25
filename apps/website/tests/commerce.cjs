@@ -1,0 +1,33 @@
+const assert=require('node:assert/strict'),fs=require('node:fs'),ts=require('typescript'),Module=require('node:module');
+const path=require('node:path'),file=path.resolve('lib/commerce.ts'),m=new Module(file,module);m.filename=file;m.paths=module.paths;
+m._compile(ts.transpileModule(fs.readFileSync(file,'utf8'),{compilerOptions:{target:ts.ScriptTarget.ES2022,module:ts.ModuleKind.CommonJS,esModuleInterop:true}}).outputText,file);const {commerce}=m.exports;
+class DB{constructor(){this.rows=[]}prepare(sql){const self=this;return{bind(...args){return{async first(){if(sql.includes('owner=? AND idempotency_key=?'))return self.rows.find(r=>r.owner===args[0]&&r.idempotency_key===args[1])||null;if(sql.includes('id=? AND owner=?'))return self.rows.find(r=>r.id===args[0]&&r.owner===args[1])||null;return self.rows.find(r=>r.id===args[0])||null},async run(){if(sql.startsWith('INSERT')){const keys=['id','owner','idempotency_key','items','shipping','subtotal_cents','shipping_cents','tax_cents','total_cents','status','created_at'];self.rows.push(Object.fromEntries(keys.map((k,i)=>[k,args[i]])))}if(sql.startsWith('UPDATE')){const row=self.rows.find(r=>r.id===args[1]&&r.status==='pending');if(row){row.status='paid';row.transaction_id=args[0]}}return{success:true}}}}}}}
+const db=new DB,env={ANET_API_LOGIN_ID:'test-login',ANET_TRANSACTION_KEY:'test-transaction-key',ANET_SIGNATURE_KEY:'AB'.repeat(64),DB:db};let providerAmount,tx;
+global.fetch=async(_url,init)=>{const data=JSON.parse(init.body);if(data.getHostedPaymentPageRequest){providerAmount=data.getHostedPaymentPageRequest.transactionRequest.amount;return Response.json({messages:{resultCode:'Ok'},token:'mock-hosted-token'})}if(data.getTransactionDetailsRequest)return Response.json({messages:{resultCode:'Ok'},transaction:tx});throw Error('Unexpected network request')};
+const shipping={email:'tester@example.com',firstName:'Test',lastName:'Customer',address:'1 Test Street',city:'New York',state:'NY',zip:'10017',country:'US'};
+const input={items:[{product:16,price:1,profile:{name:'No measurements required',method:'none'}}],shipping};
+const req=(route,body,owner='owner-1',key='test-attempt-00000001')=>new Request('https://shop.example'+route,{method:body?'POST':'GET',headers:{Origin:'https://shop.example','oai-authenticated-user-id':owner,'Idempotency-Key':key,'Content-Type':'application/json'},...(body?{body:JSON.stringify(body)}:{})});
+(async()=>{
+ let r=await commerce(req('/api/payment/config'),{});assert.deepEqual(await r.json(),{ready:false,mode:'demo'});
+ r=await commerce(req('/api/checkout',input,''),env);assert.equal(r.status,401);
+ const badOrigin=req('/api/checkout',input);badOrigin.headers.set('Origin','https://other.example');assert.equal((await commerce(badOrigin,env)).status,403);
+ r=await commerce(req('/api/checkout',input),env);assert.equal(r.status,200);const token=await r.json();assert.equal(token.token,'mock-hosted-token');assert.equal(providerAmount,'79.00','Server prices ignore tampered client prices');assert.equal(db.rows.length,1);
+ assert.equal((await commerce(req('/api/checkout',input),env)).status,200);assert.equal(db.rows.length,1,'Retries reuse one order');
+ assert.equal((await commerce(req('/api/checkout',{...input,shipping:{...shipping,city:'Albany'}}),env)).status,409);
+ assert.equal((await commerce(req('/api/checkout',{...input,items:[{product:0}]},'owner-1','test-attempt-00000002'),env)).status,400);
+ assert.equal((await commerce(req('/api/checkout',{...input,items:[{product:0,profile:{method:'ready',ready:{jacket:'999',length:'Regular',trouser:'34'}}}]},'owner-1','invalid-ready-000000001'),env)).status,400);
+ assert.equal((await commerce(req('/api/checkout',{...input,items:[{product:18,gift:{amount:100,recipient:'Test',email:'bad'}}]},'owner-1','invalid-gift-000000001'),env)).status,400);
+ assert.equal((await commerce(req('/api/orders/'+token.orderId,undefined,'other-owner'),env)).status,404);
+ let payload=JSON.stringify({eventType:'net.authorize.payment.authcapture.created',payload:{id:'12345'}});
+ const webhook=signature=>new Request('https://shop.example/api/authorize/webhook',{method:'POST',headers:{'X-ANET-Signature':signature},body:payload});
+ assert.equal((await commerce(webhook('invalid'),env)).status,401);
+ const crypto=require('node:crypto'),signature='sha512='+crypto.createHmac('sha512',env.ANET_SIGNATURE_KEY).update(payload).digest('hex');
+ tx={order:{invoiceNumber:token.orderId},authAmount:'1.00',transactionStatus:'capturedPendingSettlement'};
+ assert.equal((await commerce(webhook(signature),env)).status,409);assert.equal(db.rows[0].status,'pending');
+ tx.authAmount='79.00';assert.equal((await commerce(webhook(signature),env)).status,200);assert.equal(db.rows[0].status,'paid');
+ assert.equal((await commerce(webhook(signature),env)).status,200);assert.equal(db.rows.length,1);
+ assert.equal((await commerce(req('/api/checkout',input),env)).status,409,'Paid orders cannot reopen payment');
+ const cloth=require('../lib/catalog.json').find(p=>p.fabricCode);
+ r=await commerce(req('/api/checkout',{...input,items:[{product:cloth.id,fabricCode:'TAMPERED',price:1,profile:{name:'Test fit',method:'ready',ready:{jacket:'40',length:'Regular',trouser:'34'}}}]},'owner-1','merchant-fabric-000000001'),env);assert.equal(r.status,200);assert.equal(JSON.parse(db.rows.at(-1).items)[0].fabricCode,cloth.fabricCode,'Fabric code is taken from server catalog');
+ console.log('Commerce contract checks passed: authentication, origin, server pricing, required profiles, idempotency, owner access, signed webhook verification, amount matching, paid-order replay.');
+})().catch(e=>{console.error(e);process.exit(1)});

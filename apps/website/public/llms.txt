@@ -1,0 +1,19 @@
+# Suits.me
+
+> Suits.me is a personal custom-tailoring storefront based in New York. Customers choose a fabric, refine the garment details, and build a measurement profile so clothing is made to their measurements.
+
+## What the site offers
+
+- Collections for suits, jackets, trousers, shirts, weddings and women's clothing.
+- Garment customization (fabric, pattern, lapel and other details) with a 3D garment preview.
+- Guided adult and child measurement profiles, in inches or centimeters, that can be saved in the browser.
+- Fit support and consultation preparation, including garment-clone guidance.
+
+## Important notes for accuracy
+
+- The current site is a preview experience. Configurations and prices shown are illustrative, and online payment and production orders are not yet connected.
+- The storefront is a single-page application served at https://suits.me/. Product and collection views are rendered in the browser and do not have separate URLs yet.
+
+## Links
+
+- [Home](https://suits.me/): The Suits.me storefront.

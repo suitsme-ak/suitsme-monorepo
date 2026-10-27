@@ -329,4 +329,54 @@ function makeWorld(seed={}){
   assert.equal(w.bag()[0].profile.method,'body','no standard size profile is bagged for the Women garment');
 }
 
+// ---------------------------------------------------------------- J10
+// Listing model labels (CAT-02): from the rendered menus, a fabric
+// listing announces itself as fabrics and a design listing as designs,
+// and a product opens from each. This journey needs the full live script
+// composition (navigation.js and merchant.js included), so it builds its
+// own world the same way the listing-labels feature suite does.
+{
+  const store=new Map();
+  const localStorage={getItem:k=>store.has(k)?store.get(k):null,setItem:(k,v)=>store.set(k,String(v)),removeItem:k=>store.delete(k)};
+  const elements=new Map();
+  const elFor=s=>{if(!elements.has(s))elements.set(s,makeEl());return elements.get(s)};
+  const documentStub={title:'',querySelector:s=>elFor(s),querySelectorAll:()=>[],getElementById:id=>elFor('#'+id),addEventListener(){},createElement:()=>makeEl(),body:makeEl()};
+  class J10FormData{constructor(form){this.data=(form&&form.__data)||{}}get(k){return k in this.data?this.data[k]:null}}
+  const sandbox={console,localStorage,document:documentStub,location:{hash:'#home'},setTimeout,clearTimeout,crypto:require('node:crypto').webcrypto,fetch:()=>Promise.resolve({ok:false,json:async()=>null}),FormData:J10FormData,addEventListener(){},scrollTo(){}};
+  sandbox.window=sandbox;
+  const ctx=vm.createContext(sandbox);
+  for(const f of ['app.js','complete.js','catalog-data.js','expanded.js','navigation-data.js','navigation.js','gallery.js','quick-add.js','merchant-data.js','merchant.js'])vm.runInContext(fs.readFileSync('public/'+f,'utf8'),ctx,{filename:f});
+  const run=s=>vm.runInContext(s,ctx);
+  const navHtml=elFor('#catalogNav').innerHTML;
+  const menuAnchors=name=>{
+    const chunk=navHtml.split('<details class="nav-item"').slice(1).find(c=>c.includes(`data-menu="${name}"`));
+    assert.ok(chunk,'the '+name+' menu renders');
+    return[...chunk.matchAll(/<a href="([^"]+)">([^<]+)<\/a>/g)].map(m=>({href:m[1],label:m[2]}));
+  };
+  // Fabric listing: Suits, Wool Suits, a fabric led collection.
+  const wool=menuAnchors('Suits').find(a=>a.href==='#collection/Suits/Wool%20Suits');
+  assert.ok(wool,'the Suits menu links to Wool Suits');
+  const fabricHtml=run(`categoryCollection('${wool.href}')`);
+  assert.ok(fabricHtml.includes('<span class="eyebrow">Fabrics</span>'),'the fabric listing is eyebrowed Fabrics');
+  assert.ok(fabricHtml.includes('<p>Choose a fabric, then design your garment around it.</p>'),'the fabric listing explains the fabric model');
+  assert.ok(!fabricHtml.includes('<span class="eyebrow">Designs</span>'),'the fabric listing never claims to be designs');
+  const fabricCard=/href="#product\/(\d+)"/.exec(fabricHtml);
+  assert.ok(fabricCard,'the fabric listing offers products to open');
+  run(`location.hash='#product/${fabricCard[1]}';render(false)`);
+  assert.ok(elFor('#main').innerHTML.includes('product-page'),'a product opens from the fabric listing');
+  // Design listing: Women, Suits, the destination the audit found reading
+  // as a fabric collection while listing designs.
+  const womenSuits=menuAnchors('Women').find(a=>a.href==='#collection/Women/Suits');
+  assert.ok(womenSuits,'the Women menu links to Women Suits');
+  const designHtml=run(`categoryCollection('${womenSuits.href}')`);
+  assert.ok(designHtml.includes('<span class="eyebrow">Designs</span>'),'the design listing is eyebrowed Designs');
+  assert.ok(designHtml.includes('<p>Finished designs, ready to customize.</p>'),'the design listing explains the design model');
+  assert.ok(!designHtml.includes('<span class="eyebrow">Fabrics</span>'),'the design listing never claims to be fabrics');
+  const designCard=/href="#product\/(\d+)"/.exec(designHtml);
+  assert.ok(designCard,'the design listing offers products to open');
+  run(`location.hash='#product/${designCard[1]}';render(false)`);
+  assert.ok(elFor('#main').innerHTML.includes('product-page'),'a product opens from the design listing');
+  console.log('E2E J10 passed: menu to fabric listing shows the Fabrics signal, menu to design listing shows the Designs signal, and a product opens from each.');
+}
+
 console.log('E2E journey checks passed: menu to product, standard size and body measurement journeys, method switching, quick add, bag edit with checkout rendering, and the Women body-only rule all hold end to end.');

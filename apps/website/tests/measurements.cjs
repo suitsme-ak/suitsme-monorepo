@@ -69,10 +69,14 @@ run('measureNext()');
 assert.ok(errorBox().innerHTML.includes('between 66 and 178 cm'),'chest range is reported in cm');
 assert.equal(marked('chest'),'true');
 
-// The standard size flow is untouched by body validation: it advances without
-// any body values present.
-run(`draft.method='ready';draft.step=1;draft.unit='in';draft.values={}`);
+// The standard size flow is untouched by body validation: with sizes chosen
+// (fresh sizes start unselected since SIZ-01) it advances without any body
+// values present, and without chosen sizes the SIZ-01 guard blocks it.
+run(`draft.method='ready';draft.step=1;draft.unit='in';draft.values={};draft.ready={jacket:'',length:'',trouser:''}`);
 run('measureNext()');
-assert.equal(run('draft.step'),2,'standard size step advances as before');
+assert.equal(run('draft.step'),1,'standard size step stays blocked until sizes are chosen');
+run(`draft.ready={jacket:'40',length:'Regular',trouser:'34'}`);
+run('measureNext()');
+assert.equal(run('draft.step'),2,'standard size step advances once sizes are chosen');
 
 console.log('Measurement validation checks passed: every invalid body field is reported together with its range, single problems keep the original message, invalid inputs are marked, and valid steps advance.');

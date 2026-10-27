@@ -1,4 +1,4 @@
-# Suits.me storefront — source handoff
+# Suits.me storefront - source handoff
 
 A responsive custom-tailoring storefront with the Suits.me palette, original generated imagery, StudioSuits reference menu structure, garment detail/customization screens with thumbnail image galleries, enlarged viewing and front/back/detail views, guided measurements, saved profiles, bag, demo checkout, order history, gift configuration, customer care, showroom directory and geometric 3D garment studio.
 

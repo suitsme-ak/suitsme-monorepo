@@ -329,4 +329,28 @@ function makeWorld(seed={}){
   assert.equal(w.bag()[0].profile.method,'body','no standard size profile is bagged for the Women garment');
 }
 
+// ---------------------------------------------------------------- J9
+// Delivery estimate journey (CAT-03): the estimate built from the one
+// DELIVERY_ESTIMATE_WEEKS config value appears on the product page, and
+// the same estimate appears in the checkout order summary once the item
+// is in the bag.
+{
+  const ready={id:'p-ready',name:'Ready profile',method:'ready',wearer:'Men',fit:'Tailored',ready:{jacket:'40',length:'Regular',trouser:'34'},created:'2026-01-01T00:00:00.000Z'};
+  const w=makeWorld({profiles:[ready]});
+  w.run('chooseProduct(0)');
+  assert.equal(w.run('location.hash'),'#product/0','the journey lands on the product page');
+  const page=w.run('productPage(0)');
+  assert.ok(page.includes('Made to order. Delivery in about 1 week.'),'the product page shows the delivery estimate by the purchase controls');
+  w.run('beginDesign(0)');
+  w.run('nextConfig()');w.run('nextConfig()');
+  w.elFor('#profileSelect').value='p-ready';
+  w.run('nextConfig()');
+  assert.equal(w.bag().length,1,'the configured suit is bagged');
+  w.run("location.hash='#checkout'");
+  const checkout=w.run('checkoutPage()');
+  assert.ok(checkout.includes('Delivery in about 1 week.'),'the checkout order summary shows the same delivery estimate as the product page');
+  assert.ok(checkout.indexOf('Delivery in about 1 week.')>checkout.indexOf('order-summary'),'the estimate appears inside the checkout order summary area');
+}
+
 console.log('E2E journey checks passed: menu to product, standard size and body measurement journeys, method switching, quick add, bag edit with checkout rendering, and the Women body-only rule all hold end to end.');
+console.log('J9 delivery estimate journey passed: the product page and the checkout order summary show the same estimate from the one config value.');

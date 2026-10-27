@@ -2,6 +2,8 @@
 const uid=()=>Array.from(crypto.getRandomValues(new Uint8Array(16)),v=>v.toString(16).padStart(2,'0')).join('');
 const $=s=>document.querySelector(s),esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const read=(k,d)=>{try{return JSON.parse(localStorage.getItem(k))??d}catch{return d}},write=(k,v)=>{try{localStorage.setItem(k,JSON.stringify(v))}catch{toast('Browser storage is unavailable. Keep this page open to retain your progress.')}};
+const DELIVERY_ESTIMATE_WEEKS=1;
+const deliveryEstimateText=()=>'Delivery in about '+DELIVERY_ESTIMATE_WEEKS+' '+(DELIVERY_ESTIMATE_WEEKS===1?'week':'weeks')+'.';
 const products=[{name:'The Everyday Navy',fabric:'Wool',color:'Navy',price:399,img:'model-navy.webp',tag:'THE EVERYDAY ESSENTIAL'},{name:'The Modern Charcoal',fabric:'Wool',color:'Charcoal',price:449,img:'model-charcoal.webp',tag:'A CONSIDERED CLASSIC'},{name:'The Signature Blue',fabric:'Wool',color:'Blue',price:499,img:'model-blue.webp',tag:'YOUR NEXT SIGNATURE'},{name:'The Occasion Suit',fabric:'Linen',color:'Sand',price:479,img:'model-sand.webp',tag:'FOR THE MOMENT'}];
 let filter='All suits',sort='featured',config=read('suits-config',{product:0,fabric:'Navy',lapel:'Notch',closure:'Two button',fit:'Tailored',lining:'Tonal',monogram:''}),stage=0;
 let draft=read('suits-draft',{step:0,method:'body',unit:'in',values:{},name:'My measurements',fit:'Tailored',ready:{jacket:'',length:'',trouser:''}});let profiles=read('suits-profiles',[]),bag=read('suits-bag',[]),returnToSuit=false,editingBagId=null;

@@ -13,6 +13,7 @@ const assert=require('node:assert/strict'),fs=require('node:fs'),vm=require('nod
 // J6 bag edit journey (CRT-02, CRT-01)
 // J7 women journey (SIZ-02 rule)
 // J11 size guide journey (SIZ-03)
+// J12 cross product customizer state journey (CUS-07)
 
 function makeEl(){const el={innerHTML:'',textContent:'',value:'',checked:false,open:false,style:{},attrs:{},classList:{add(){},remove(){},toggle(){return false}},setAttribute(k,v){el.attrs[k]=String(v)},removeAttribute(k){delete el.attrs[k]},getAttribute(k){return k in el.attrs?el.attrs[k]:null},addEventListener(){},getBoundingClientRect:()=>({left:0,right:0,top:0,bottom:0}),showModal(){el.open=true},close(){el.open=false},scrollIntoView(){}};return el}
 
@@ -512,6 +513,46 @@ function makeWorld(seed={}){
 }
 
 console.log('E2E journey J11 passed: the size guide is consulted in inches and cm inside the standard size flow, then the profile is saved and the garment bagged.');
+
+// ---------------------------------------------------------------- J12
+// Cross product state journey (CUS-07): the shopper designs one suit with
+// distinctive options and a monogram and bags it, then opens a second
+// product page directly (the path card links take) and starts designing
+// it: none of the first product's options or monogram may appear. Bag
+// Edit of the first suit still restores its exact configuration.
+{
+  const body={id:'p-body',name:'Body profile',method:'body',unit:'in',wearer:'Men',fit:'Tailored',values:{chest:40,waist:34,shoulder:18,sleeve:25,jacket:29,seat:40,trouserWaist:34,thigh:24,inseam:32,outseam:42},ready:{jacket:'40',length:'Regular',trouser:'34'},created:'2026-01-01T00:00:00.000Z'};
+  const w=makeWorld({profiles:[body]});
+  w.run('beginDesign(0)');
+  w.run(`setOption('fit','Slim');setOption('lapel','Peak');setOption('closure','One button');setOption('lining','Burgundy');config.monogram='E2E';saveConfig();stage=2;render(false)`);
+  w.elFor('#profileSelect').value='p-body';
+  w.run('nextConfig()');
+  assert.equal(w.bag().length,1,'the first suit is bagged with its distinctive options');
+  const first=w.bag()[0];
+  assert.equal(first.monogram,'E2E','the first suit keeps its own monogram');
+
+  w.run(`location.hash='#product/1';render()`);
+  assert.ok(w.elFor('#main').innerHTML.includes('The Modern Charcoal'),'the journey lands on the second product page');
+  w.run('beginDesign(1)');
+  const started=JSON.parse(w.run('JSON.stringify(config)'));
+  assert.deepEqual({lapel:started.lapel,closure:started.closure,fit:started.fit,lining:started.lining,monogram:started.monogram},{lapel:'Notch',closure:'Two button',fit:'Tailored',lining:'Tonal',monogram:''},'the second product starts from its own defaults');
+  const personalize=w.run('stage=1;customize()');
+  assert.ok(!personalize.includes('E2E'),'the first product monogram is absent from the second product customizer');
+  assert.ok(personalize.includes(`class="choice active" aria-pressed="true" onclick="setOption('lining','Tonal')"`),'the second product shows its default lining as the active choice');
+  w.run('stage=2;render(false)');
+  w.elFor('#profileSelect').value='p-body';
+  w.run('nextConfig()');
+  assert.equal(w.bag().length,2,'the second product is bagged as its own line');
+  assert.equal(w.bag()[1].monogram,'','the bagged second product carries no monogram from the first');
+  assert.equal(w.bag()[1].lining,'Tonal','the bagged second product carries its default lining');
+
+  w.run(`editBagItem('${first.id}')`);
+  const restored=JSON.parse(w.run('JSON.stringify(config)'));
+  assert.deepEqual({lapel:restored.lapel,closure:restored.closure,fit:restored.fit,lining:restored.lining,monogram:restored.monogram},{lapel:'Peak',closure:'One button',fit:'Slim',lining:'Burgundy',monogram:'E2E'},'bag Edit restores the first suit configuration exactly');
+  assert.ok(w.run('customize()').includes('editing an item from your bag'),'the customizer shows the edit in progress');
+}
+
+console.log('E2E journey J12 passed: designing a second product starts clean with no options or monogram from the first, the bagged second line carries only its own defaults, and bag Edit restores the first product configuration.');
 
 
 console.log('E2E journey checks passed: menu to product, standard size and body measurement journeys, method switching, quick add, bag edit with checkout rendering, the Women body-only rule, and the unified listing controls journey all hold end to end.');

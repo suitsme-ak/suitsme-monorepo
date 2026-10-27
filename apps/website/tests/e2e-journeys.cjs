@@ -329,6 +329,73 @@ function makeWorld(seed={}){
   assert.equal(w.bag()[0].profile.method,'body','no standard size profile is bagged for the Women garment');
 }
 
+// ---------------------------------------------------------------- J8
+// Listing controls journey (CAT-01): from a menu destination open a fabric
+// listing, use search, a filter and a sort, and open a product from the
+// narrowed results; then open a design listing and repeat the same control
+// sequence, asserting the same controls exist with the same labels. This
+// world additionally loads the merchant scripts, completing the live page
+// composition, because fabric listings are rendered by merchant.js.
+{
+  const w=makeWorld();
+  w.run(fs.readFileSync('public/merchant-data.js','utf8'));
+  w.run(fs.readFileSync('public/merchant.js','utf8'));
+  const show=hash=>{w.run(`location.hash=${JSON.stringify(hash)};render()`);return w.elFor('#main').innerHTML};
+  const again=()=>{w.run('render(false)');return w.elFor('#main').innerHTML};
+  const signature=html=>[...html.matchAll(/aria-label="(Filter by [^"]+|Sort products)"/g)].map(m=>m[1]);
+  const count=html=>Number(/<p class="listing-count" role="status">(\d+) results?/.exec(html)[1]);
+  const grid=html=>html.slice(html.indexOf('<div class="products"'));
+  const prices=html=>[...grid(html).matchAll(/<strong>\$([\d,]+)<\/strong>/g)].map(m=>Number(m[1].replace(/,/g,'')));
+  const firstProduct=html=>Number(/href="#product\/(\d+)"/.exec(grid(html))[1]);
+  const openProduct=html=>{const id=firstProduct(html);w.run(`location.hash='#product/${id}';render()`);const page=w.elFor('#main').innerHTML;assert.ok(page.includes(`beginDesign(${id})`),'the product page offers to design the opened product');w.run(`beginDesign(${id})`);assert.equal(w.run('location.hash'),'#customize','the product opens into the customizer');assert.equal(w.run('config.product'),id,'the opened product is the first narrowed result');return id};
+  const searchTextOf=p=>[p.name,p.sku,p.fabricCode,p.fabric,p.color,p.colorFamily,p.pattern,p.sourceCategory].filter(Boolean).join(' ').toLowerCase();
+  const partialWord=items=>{const counts={};for(const p of items)for(const word of new Set(searchTextOf(p).split(/\s+/)))counts[word]=(counts[word]||0)+1;const word=Object.keys(counts).filter(x=>x.length>=3&&counts[x]>0&&counts[x]<items.length).sort((a,b)=>b.length-a.length)[0];assert.ok(word,'a narrowing search word exists');return word};
+  const partialValue=(items,field)=>{const counts={};for(const p of items)counts[p[field]]=(counts[p[field]]||0)+1;const value=Object.keys(counts).find(k=>counts[k]>0&&counts[k]<items.length);assert.ok(value,'a narrowing filter value exists');return value};
+
+  // Fabric listing: Wool Suits, a Suits menu destination.
+  let html=show('#collection/Suits/Wool Suits');
+  const fabricSignature=signature(html);
+  assert.deepEqual(fabricSignature,['Filter by fabric','Filter by color','Filter by pattern','Sort products'],'the fabric listing exposes the unified control set');
+  const wool=JSON.parse(w.run(`JSON.stringify(merchantSuitCollections['Wool Suits'].ids.map(i=>products[i]))`));
+  assert.equal(count(html),wool.length,'the fabric listing starts with every Wool Suits design');
+  const woolColor=partialValue(wool,'colorFamily');
+  const woolFiltered=wool.filter(p=>p.colorFamily===woolColor);
+  w.run(`fabricColor=${JSON.stringify(woolColor)}`);html=again();
+  assert.equal(count(html),woolFiltered.length,'the fabric Color filter narrows the listing');
+  const woolTerm=partialWord(woolFiltered);
+  const woolSearched=woolFiltered.filter(p=>searchTextOf(p).includes(woolTerm));
+  w.run(`fabricSearch=${JSON.stringify(woolTerm)}`);html=again();
+  assert.equal(count(html),woolSearched.length,'fabric search narrows the filtered listing further');
+  w.run(`fabricSort='low'`);html=again();
+  assert.deepEqual(prices(html),woolSearched.map(p=>p.price).sort((a,b)=>a-b),'fabric sort orders the narrowed results by price, low to high');
+  openProduct(html);
+  w.run('location.hash="#collection/Suits/Wool Suits";render()');
+  w.run('resetMerchantFilters()');html=again();
+  assert.equal(count(html),wool.length,'clearing restores the full fabric listing');
+
+  // Design listing: Women, repeating the same control sequence.
+  html=show('#collection/Women');
+  assert.deepEqual(signature(html),fabricSignature,'the design listing exposes the same controls with the same labels');
+  const women=JSON.parse(w.run(`JSON.stringify(resolveCollection('#collection/Women').ids.map(i=>products[i]))`));
+  assert.equal(count(html),women.length,'the design listing starts with every Women design');
+  const womenColor=partialValue(women,'color');
+  const womenFiltered=women.filter(p=>p.color===womenColor);
+  w.run(`catalogColor=${JSON.stringify(womenColor)}`);html=again();
+  assert.equal(count(html),womenFiltered.length,'the design Color filter narrows the listing');
+  const womenTerm=partialWord(womenFiltered);
+  const womenSearched=womenFiltered.filter(p=>searchTextOf(p).includes(womenTerm));
+  w.run(`searchText=${JSON.stringify(womenTerm)}`);html=again();
+  assert.equal(count(html),womenSearched.length,'design search narrows the filtered listing further');
+  w.run(`catalogSort='high'`);html=again();
+  assert.equal(prices(html)[0],Math.max(...womenSearched.map(p=>p.price)),'design sort puts the highest priced narrowed result first');
+  assert.deepEqual(prices(html),prices(html).slice().sort((a,b)=>b-a),'design sort orders the page by price, high to low');
+  openProduct(html);
+  w.run('location.hash="#collection/Women";render()');
+  w.run('resetCatalogFilters()');html=again();
+  assert.equal(count(html),women.length,'clearing restores the full design listing');
+}
+
+
 // ---------------------------------------------------------------- J9
 // Delivery estimate journey (CAT-03): the estimate built from the one
 // DELIVERY_ESTIMATE_WEEKS config value appears on the product page, and
@@ -352,5 +419,5 @@ function makeWorld(seed={}){
   assert.ok(checkout.indexOf('Delivery in about 1 week.')>checkout.indexOf('order-summary'),'the estimate appears inside the checkout order summary area');
 }
 
-console.log('E2E journey checks passed: menu to product, standard size and body measurement journeys, method switching, quick add, bag edit with checkout rendering, and the Women body-only rule all hold end to end.');
+console.log('E2E journey checks passed: menu to product, standard size and body measurement journeys, method switching, quick add, bag edit with checkout rendering, the Women body-only rule, and the unified listing controls journey all hold end to end.');
 console.log('J9 delivery estimate journey passed: the product page and the checkout order summary show the same estimate from the one config value.');

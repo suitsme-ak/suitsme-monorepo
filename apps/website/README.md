@@ -6,7 +6,7 @@ A responsive custom-tailoring storefront with the Suits.me palette, original gen
 - Readable 18px body typography, 17–18px menu/form text and larger labels and controls across the storefront.
 - Seven navigation categories with all reference options recorded in `data/reference-navigation.json`.
 - 99 unique menu destinations: 92 shopping destinations and seven service/configurator destinations. Repeated navigation links resolve to the same destination.
-- 1,759 sample SKUs, including 19 preserved original IDs. Every shopping menu destination contains at least 36 distinct design configurations; lists show 36 per page. Broad collections and Shop All share existing SKUs.
+- 2,245 sample SKUs, including 19 preserved original IDs. Every shopping menu destination contains at least 36 distinct design configurations; lists show 36 per page. Broad collections and Shop All share existing SKUs.
 - Six colors and six patterns per collection design family. Model photography is a silhouette reference; swatches/specifications identify each configuration. These are illustrative designs, not verified merchant inventory or branded cloth.
 - Guided adult and child body measurements, inch/centimeter conversion, standard US men's sizes, separate profile groups, browser persistence and validation.
 - Three.js garment geometry with rotation, zoom, color/pattern/lapel controls and front/back/reset views. Browsers without WebGL use a software-rendered 3D shape; the selected cloth pattern remains visible in a swatch. This is an illustrative geometric model, not a photorealistic garment simulator or production pattern engine.

@@ -1,8 +1,8 @@
 # Verification record
 
-Date: 2026-10-23, remote development environment.
+Date: 2026-10-27, remote development environment.
 
-- Catalog contracts: 1,759 unique SKUs; all 92 shopping menu destinations have at least 36 distinct configurations, without duplicate IDs, names or design signatures within a collection; all image references resolve; frontend and server prices agree; original IDs remain stable; browser scripts parse.
+- Catalog contracts: 2,245 unique SKUs; all 92 shopping menu destinations have at least 36 distinct configurations, without duplicate IDs, names or design signatures within a collection; all image references resolve; frontend and server prices agree; original IDs remain stable; browser scripts parse.
 - Browser menu audit: 99 unique menu destinations, zero missing headings or underpopulated shopping screens.
 - Pagination: 36 designs on each of the first two Shop All pages, with no repeated SKU between pages.
 - Collection search: no-match state and Clear filters recovery verified.

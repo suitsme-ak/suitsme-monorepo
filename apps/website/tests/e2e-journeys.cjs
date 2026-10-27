@@ -12,6 +12,7 @@ const assert=require('node:assert/strict'),fs=require('node:fs'),vm=require('nod
 // J5 quick add journey (SIZ-02, CRT-01, CRT-02)
 // J6 bag edit journey (CRT-02, CRT-01)
 // J7 women journey (SIZ-02 rule)
+// J11 size guide journey (SIZ-03)
 
 function makeEl(){const el={innerHTML:'',textContent:'',value:'',checked:false,open:false,style:{},attrs:{},classList:{add(){},remove(){},toggle(){return false}},setAttribute(k,v){el.attrs[k]=String(v)},removeAttribute(k){delete el.attrs[k]},getAttribute(k){return k in el.attrs?el.attrs[k]:null},addEventListener(){},getBoundingClientRect:()=>({left:0,right:0,top:0,bottom:0}),showModal(){el.open=true},close(){el.open=false},scrollIntoView(){}};return el}
 
@@ -468,6 +469,49 @@ function makeWorld(seed={}){
   assert.ok(elFor('#main').innerHTML.includes('product-page'),'a product opens from the design listing');
   console.log('E2E J10 passed: menu to fabric listing shows the Fabrics signal, menu to design listing shows the Designs signal, and a product opens from each.');
 }
+
+// ---------------------------------------------------------------- J11
+// Size guide journey (SIZ-03): inside the Studio standard size flow the
+// shopper opens the size guide, checks jacket 40 against a 40 in chest,
+// switches the Studio unit to cm and reads 102, then chooses the sizes,
+// saves the profile, and bags the garment.
+{
+  const w=makeWorld();
+  w.run('chooseProduct(0)');w.run('beginDesign(0)');
+  w.run('nextConfig()');w.run('nextConfig()'); // stage 0 to 1 to 2, Measurements
+  w.run("setCustomizerMethod('ready')");
+  w.run('startMeasurements()');
+  assert.equal(w.run('location.hash'),'#measure','the Studio opens from the customizer');
+  w.run('measureNext()'); // method step to sizes step
+  assert.equal(w.run('draft.step'),1,'the Studio reaches the sizes step');
+  let sizesHtml=w.run('measure()');
+  assert.ok(sizesHtml.includes('aria-expanded="false"'),'the size guide starts collapsed');
+  assert.ok(!sizesHtml.includes('id="sizeGuide"'),'no guide tables render while collapsed');
+  w.run('toggleSizeGuide()');
+  sizesHtml=w.run('measure()');
+  assert.ok(sizesHtml.includes('aria-expanded="true"'),'the size guide opens from its toggle');
+  assert.ok(sizesHtml.includes('<tr><td>40</td><td>40</td></tr>'),'jacket 40 matches a body chest of 40 in (rule D1)');
+  w.run("changeUnit('cm')");
+  sizesHtml=w.run('measure()');
+  assert.ok(sizesHtml.includes('Body chest (cm)'),'the guide follows the Studio unit switch to cm');
+  assert.ok(sizesHtml.includes('<tr><td>40</td><td>102</td></tr>'),'jacket 40 reads chest 102 cm after the switch');
+  w.run("changeUnit('in')");
+  // The size selects write draft.ready through their onchange handlers.
+  w.run("draft.ready.jacket='40';draft.ready.length='Regular';draft.ready.trouser='34';saveDraft()");
+  w.run('measureNext()');
+  assert.equal(w.run('draft.step'),2,'Continue advances to review after choosing sizes read from the guide');
+  w.run("draft.name='E2E size guide'");
+  w.elFor('#confirmMeasures').checked=true;
+  w.run('measureNext()');
+  assert.equal(w.run('profiles.length'),1,'the profile is saved after using the guide');
+  assert.equal(w.run('profiles[0].ready.jacket'),'40','the saved profile carries the jacket size read from the guide');
+  w.elFor('#profileSelect').value=w.run('profiles[0].id');
+  w.run('nextConfig()');
+  assert.equal(w.bag().length,1,'the garment is bagged with the guide informed profile');
+  assert.ok(w.run('lineHtml(bag[0])').includes('Jacket size 40'),'the bag line shows the chosen jacket size');
+}
+
+console.log('E2E journey J11 passed: the size guide is consulted in inches and cm inside the standard size flow, then the profile is saved and the garment bagged.');
 
 
 console.log('E2E journey checks passed: menu to product, standard size and body measurement journeys, method switching, quick add, bag edit with checkout rendering, the Women body-only rule, and the unified listing controls journey all hold end to end.');

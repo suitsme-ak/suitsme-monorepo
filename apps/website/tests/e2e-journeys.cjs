@@ -14,8 +14,9 @@ const assert=require('node:assert/strict'),fs=require('node:fs'),vm=require('nod
 // J7 women journey (SIZ-02 rule)
 // J11 size guide journey (SIZ-03)
 // J12 cross product customizer state journey (CUS-07)
-// J13 women suit trouser front journey (CUS-06)
+// J13 women suit trouser front journey (CUS-06, Pleats group since 3.2)
 // J14 jacket core options journey (CUS-01)
+// J15 trousers options journey (CUS-01)
 
 function makeEl(){const el={innerHTML:'',textContent:'',value:'',checked:false,open:false,style:{},attrs:{},classList:{add(){},remove(){},toggle(){return false}},setAttribute(k,v){el.attrs[k]=String(v)},removeAttribute(k){delete el.attrs[k]},getAttribute(k){return k in el.attrs?el.attrs[k]:null},addEventListener(){},getBoundingClientRect:()=>({left:0,right:0,top:0,bottom:0}),showModal(){el.open=true},close(){el.open=false},scrollIntoView(){}};return el}
 
@@ -559,9 +560,12 @@ console.log('E2E journey J12 passed: designing a second product starts clean wit
 
 // ---------------------------------------------------------------- J13
 // Women suit trouser front journey (CUS-06): a Women suit includes
-// trousers, so its Personalize step offers the Trouser front group the
-// standalone trousers offer; the choice is stored on the bagged item and
-// shows on the bag line and at checkout, next to the jacket choices.
+// trousers, so its Personalize step offers trouser personalization; the
+// choice is stored on the bagged item and shows on the bag line and at
+// checkout, next to the jacket choices. Since package 3.2 the choice is
+// the Pleats group of the trousers section, which contains the CUS-06
+// Trouser front choices, and it stores in the pleats slot; the
+// trouserFront preselect remains as the legacy fallback.
 {
   const womenBody={id:'p-women-body',name:'Women body',method:'body',wearer:'Women',unit:'in',fit:'Tailored',values:{chest:36,waist:29,shoulder:15,sleeve:24,jacket:28,seat:38,trouserWaist:29,thigh:22,inseam:31,outseam:41},created:'2026-01-01T00:00:00.000Z'};
   const w=makeWorld({profiles:[womenBody]});
@@ -574,20 +578,20 @@ console.log('E2E journey J12 passed: designing a second product starts clean wit
   assert.equal(w.run('stage'),1,'the journey reaches the Personalize step');
   assert.equal(w.run('config.trouserFront'),'Flat front','the trouser front starts at Flat front, as standalone trousers do');
   const personalize=w.run('customize()');
-  assert.ok(personalize.includes('<div class="option-title">Trouser front</div>'),'the Personalize step offers a Trouser front group for the Women suit');
-  assert.ok(personalize.includes("setOption('trouserFront','Single pleat')"),'the Single pleat choice is offered');
+  assert.ok(personalize.includes('<div class="option-title">Pleats</div>'),'the Personalize step offers a Pleats group for the Women suit');
+  assert.ok(personalize.includes("setOption('pleats','Single pleat')"),'the Single pleat choice is offered');
   assert.ok(personalize.includes('<div class="option-title">Jacket closure</div>'),'the jacket closure group is still offered');
-  w.run("setOption('trouserFront','Single pleat')");
+  w.run("setOption('pleats','Single pleat')");
   w.run('nextConfig()'); // stage 1 to 2, Measurements
   w.elFor('#profileSelect').value='p-women-body';
   w.run('nextConfig()');
   assert.equal(w.bag().length,1,'the Women suit is bagged');
-  assert.equal(w.bag()[0].trouserFront,'Single pleat','the bagged item stores the chosen trouser front');
+  assert.equal(w.bag()[0].pleats,'Single pleat','the bagged item stores the chosen trouser front in the pleats slot');
   assert.equal(w.bag()[0].closure,'Two button','the bagged item keeps the jacket closure in its own slot');
   assert.ok(w.run('lineHtml(bag[0])').includes('Single pleat'),'the bag line shows the trouser front');
   w.run("location.hash='#checkout'");
   assert.ok(w.run('checkoutPage()').includes('Single pleat'),'the checkout selection shows the trouser front');
-  console.log('E2E journey J13 passed: the Women suit Personalize step offers Trouser front, and the choice reaches the bag line and checkout.');
+  console.log('E2E journey J13 passed: the Women suit Personalize step offers trouser personalization through the Pleats group, and the choice reaches the bag line and checkout.');
 }
 
 // ---------------------------------------------------------------- J14
@@ -627,6 +631,72 @@ console.log('E2E journey J12 passed: designing a second product starts clean wit
   assert.ok(checkout.includes('Patch pocket'),'the checkout selection shows the pocket accent');
   assert.ok(checkout.includes('$'+(base+15)),'the checkout total includes the modifier');
   console.log('E2E journey J14 passed: the suit Personalize step offers the jacket core groups with defaults selected, and a priced pocket accent raises the customizer, bag and checkout prices by exactly its modifier.');
+}
+
+// ---------------------------------------------------------------- J15
+// Trousers options journey (CUS-01, package 3.2): from a suit product
+// page, the Personalize step offers a Trousers section with five groups
+// and their defaults selected; choosing a priced lining and a forward
+// pleat raises the customizer, bag and checkout prices by exactly their
+// modifiers. A Boys suit offers the same section, and standalone
+// trousers keep their Trouser front group, gain the other four groups,
+// and price a front lining the same way.
+{
+  const ready={id:'p-ready',name:'Ready profile',method:'ready',wearer:'Men',fit:'Tailored',ready:{jacket:'40',length:'Regular',trouser:'34'},created:'2026-01-01T00:00:00.000Z'};
+  const w=makeWorld({profiles:[ready]});
+  w.run('chooseProduct(0)');
+  assert.equal(w.run('location.hash'),'#product/0','the journey lands on the product page');
+  const base=w.run('products[0].price');
+  w.run('beginDesign(0)');
+  w.run('nextConfig()'); // stage 0 to 1, Personalize
+  assert.equal(w.run('stage'),1,'the journey reaches the Personalize step');
+  const personalize=w.run('customize()');
+  for(const title of ['Pants lining','Pocket style','Pleats','Back pockets','Belt loops'])assert.ok(personalize.includes(`<div class="option-title">${title}</div>`),`the Personalize step offers the ${title} group`);
+  assert.ok(personalize.includes(`aria-pressed="true" onclick="setOption('pantsLining','No lining')"`),'No lining starts selected');
+  assert.ok(personalize.includes(`aria-pressed="true" onclick="setOption('pleats','Flat front')"`),'Flat front starts selected');
+  assert.ok(personalize.includes('Front and back lining · +$10'),'the Front and back lining choice shows its modifier');
+  w.run("setOption('pantsLining','Front and back lining');setOption('pleats','Forward single pleat')");
+  assert.ok(w.run('customize()').includes('$'+(base+15)),'the customizer price rises by the two modifiers');
+  w.run('nextConfig()'); // stage 1 to 2, Measurements
+  w.elFor('#profileSelect').value='p-ready';
+  w.run('nextConfig()');
+  assert.equal(w.bag().length,1,'the configured suit is bagged');
+  assert.equal(w.bag()[0].pantsLining,'Front and back lining','the bagged item stores the pants lining');
+  assert.equal(w.bag()[0].pleats,'Forward single pleat','the bagged item stores the pleats');
+  assert.ok(w.run('lineDescription(bag[0])').includes('Front and back lining'),'the bag line shows the pants lining');
+  assert.ok(w.run('lineDescription(bag[0])').includes('Forward single pleat'),'the bag line shows the pleats');
+  assert.equal(w.run('subtotal()'),base+15,'the subtotal includes both modifiers');
+  w.run("location.hash='#checkout'");
+  const checkout=w.run('checkoutPage()');
+  assert.ok(checkout.includes('Front and back lining')&&checkout.includes('Forward single pleat'),'the checkout selection shows the trousers choices');
+  assert.ok(checkout.includes('$'+(base+15)),'the checkout total includes both modifiers');
+  // A Boys suit offers the same Trousers section.
+  const boysIdx=w.run("products.findIndex(p=>p.kind==='suit'&&p.silhouette==='Boys two-piece')");
+  assert.ok(boysIdx>=0,'the catalog holds a Boys suit for the journey');
+  w.run(`beginDesign(${boysIdx})`);
+  w.run('nextConfig()');
+  const boysPersonalize=w.run('customize()');
+  for(const title of ['Pants lining','Pleats','Belt loops'])assert.ok(boysPersonalize.includes(`<div class="option-title">${title}</div>`),`the Boys suit Personalize step offers the ${title} group`);
+  // Standalone trousers: Trouser front stays, four groups join it, and a
+  // priced front lining flows to the bag total.
+  const pantsIdx=w.run("products.findIndex(p=>p.kind==='pants')");
+  assert.ok(pantsIdx>=0,'the catalog holds standalone trousers for the journey');
+  const pantsBase=w.run(`products[${pantsIdx}].price`);
+  w.run(`beginDesign(${pantsIdx})`);
+  w.run('nextConfig()');
+  const pantsPersonalize=w.run('customize()');
+  assert.ok(pantsPersonalize.includes('<div class="option-title">Trouser front</div>'),'standalone trousers keep the Trouser front group');
+  for(const title of ['Pants lining','Pocket style','Back pockets','Belt loops'])assert.ok(pantsPersonalize.includes(`<div class="option-title">${title}</div>`),`standalone trousers offer the ${title} group`);
+  assert.ok(!pantsPersonalize.includes('<div class="option-title">Pleats</div>'),'standalone trousers have no Pleats group');
+  w.run("setOption('pantsLining','Front lining')");
+  w.run('nextConfig()');
+  w.elFor('#profileSelect').value='p-ready';
+  w.run('nextConfig()');
+  const pantsLine=w.bag().find(x=>x.product===pantsIdx);
+  assert.ok(pantsLine,'the configured trousers are bagged');
+  assert.equal(pantsLine.pantsLining,'Front lining','the trousers line stores the pants lining');
+  assert.ok(w.run(`lineHtml(bag.find(x=>x.product===${pantsIdx}))`).includes('$'+(pantsBase+5)),'the trousers bag line price includes the $5 front lining');
+  console.log('E2E journey J15 passed: the suit Personalize step offers the five trousers groups with defaults selected, priced lining and pleats choices raise the customizer, bag and checkout prices by exactly their modifiers, a Boys suit offers the same section, and standalone trousers gain four groups with the same lining pricing.');
 }
 
 console.log('E2E journey checks passed: menu to product, standard size and body measurement journeys, method switching, quick add, bag edit with checkout rendering, the Women body-only rule, and the unified listing controls journey all hold end to end.');

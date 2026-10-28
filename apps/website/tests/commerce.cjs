@@ -1,7 +1,7 @@
 const assert=require('node:assert/strict'),fs=require('node:fs'),ts=require('typescript'),Module=require('node:module');
 const path=require('node:path'),file=path.resolve('lib/commerce.ts'),m=new Module(file,module);m.filename=file;m.paths=module.paths;
 m._compile(ts.transpileModule(fs.readFileSync(file,'utf8'),{compilerOptions:{target:ts.ScriptTarget.ES2022,module:ts.ModuleKind.CommonJS,esModuleInterop:true}}).outputText,file);const {commerce}=m.exports;
-class DB{constructor(){this.rows=[]}prepare(sql){const self=this;return{bind(...args){return{async first(){if(sql.includes('owner=? AND idempotency_key=?'))return self.rows.find(r=>r.owner===args[0]&&r.idempotency_key===args[1])||null;if(sql.includes('id=? AND owner=?'))return self.rows.find(r=>r.id===args[0]&&r.owner===args[1])||null;return self.rows.find(r=>r.id===args[0])||null},async run(){if(sql.startsWith('INSERT')){const keys=['id','owner','idempotency_key','items','shipping','subtotal_cents','shipping_cents','tax_cents','total_cents','status','created_at'];self.rows.push(Object.fromEntries(keys.map((k,i)=>[k,args[i]])))}if(sql.startsWith('UPDATE')){const row=self.rows.find(r=>r.id===args[1]&&r.status==='pending');if(row){row.status='paid';row.transaction_id=args[0]}}return{success:true}}}}}}}
+class DB{constructor(){this.rows=[];this.sessions=[];this.users=[]}prepare(sql){const self=this;return{bind(...args){return{async first(){if(sql.includes('FROM sessions'))return self.sessions.find(r=>r.token_hash===args[0])||null;if(sql.includes('FROM users'))return self.users.find(r=>r.id===args[0])||null;if(sql.includes('owner=? AND idempotency_key=?'))return self.rows.find(r=>r.owner===args[0]&&r.idempotency_key===args[1])||null;if(sql.includes('id=? AND owner=?'))return self.rows.find(r=>r.id===args[0]&&r.owner===args[1])||null;return self.rows.find(r=>r.id===args[0])||null},async run(){if(sql.startsWith('INSERT')){const keys=['id','owner','idempotency_key','items','shipping','subtotal_cents','shipping_cents','tax_cents','total_cents','status','created_at'];self.rows.push(Object.fromEntries(keys.map((k,i)=>[k,args[i]])))}if(sql.startsWith('UPDATE')){const row=self.rows.find(r=>r.id===args[1]&&r.status==='pending');if(row){row.status='paid';row.transaction_id=args[0]}}return{success:true}}}}}}}
 const db=new DB,env={ANET_API_LOGIN_ID:'test-login',ANET_TRANSACTION_KEY:'test-transaction-key',ANET_SIGNATURE_KEY:'AB'.repeat(64),DB:db};let providerAmount,tx;
 global.fetch=async(_url,init)=>{const data=JSON.parse(init.body);if(data.getHostedPaymentPageRequest){providerAmount=data.getHostedPaymentPageRequest.transactionRequest.amount;return Response.json({messages:{resultCode:'Ok'},token:'mock-hosted-token'})}if(data.getTransactionDetailsRequest)return Response.json({messages:{resultCode:'Ok'},transaction:tx});throw Error('Unexpected network request')};
 const shipping={email:'tester@example.com',firstName:'Test',lastName:'Customer',address:'1 Test Street',city:'New York',state:'NY',zip:'10017',country:'US'};
@@ -47,5 +47,27 @@ const req=(route,body,owner='owner-1',key='test-attempt-00000001')=>new Request(
  assert.equal((await commerce(req('/api/checkout',{...input,items:[{product:cloth.id,profile:{name:'Body test',method:'body',unit:'in',wearer:'Men',values:missingValues}}]},'owner-1','body-missing-00000000001'),env)).status,400,'Body profile with a missing measurement is rejected');
  assert.equal((await commerce(req('/api/checkout',{...input,items:[{product:cloth.id,profile:{name:'Body test',method:'body',unit:'in',wearer:'Men',values:{...bodyValues,chest:250}}}]},'owner-1','body-range-000000000001'),env)).status,400,'Body profile with an out of range measurement is rejected');
  assert.equal(db.rows.length,rowsBeforeBodyTests+1,'Rejected body profiles create no orders');
- console.log('Commerce contract checks passed: authentication, origin, server pricing, required profiles, body measurement profiles, idempotency, owner access, signed webhook verification, amount matching, paid-order replay.');
+ // Package 5.6 (design section 1.1): commerce resolves its owner
+ // through the shared resolver in lib/accounts.ts. The header cases
+ // above are unmodified and behave exactly as before; the cases
+ // below add the cookie path and the precedence rule. The fake DB
+ // gained sessions and users reads for the resolver; no existing
+ // case sends a cookie, so none of them reach those reads.
+ const nodeCrypto=require('node:crypto');
+ const appDb=new DB,appEnv={...env,DB:appDb};
+ const appUserId='U0123456789abcdef0123456789abcdef',appToken='app-session-'+'token-for-tests',appNow=new Date().toISOString();
+ appDb.users.push({id:appUserId,email:'app@example.com',display_name:'App Customer',email_verified_at:appNow,created_at:appNow,updated_at:appNow,deleted_at:null});
+ appDb.sessions.push({token_hash:nodeCrypto.createHash('sha256').update(appToken).digest('hex'),user_id:appUserId,created_at:appNow,last_seen_at:appNow,expires_at:new Date(Date.now()+29*24*60*60*1000).toISOString()});
+ const cookieReq=(route,body,key)=>new Request('https://shop.example'+route,{method:body?'POST':'GET',headers:{Origin:'https://shop.example',Cookie:'suitsme-session='+appToken,...(body?{'Idempotency-Key':key,'Content-Type':'application/json'}:{})},...(body?{body:JSON.stringify(body)}:{})});
+ r=await commerce(cookieReq('/api/checkout',input,'app-cookie-attempt-001'),appEnv);assert.equal(r.status,200,'Checkout succeeds under the app session cookie alone');
+ const cookieResult=await r.json();assert.equal(cookieResult.token,'mock-hosted-token');
+ assert.equal(appDb.rows.length,1);assert.equal(appDb.rows[0].owner,'app:'+appUserId,'The cookie checkout writes the order with owner app:<user id>');
+ const bothReq=cookieReq('/api/checkout',input,'app-both-attempt-00001');bothReq.headers.set('oai-authenticated-user-id','gateway-1');
+ r=await commerce(bothReq,appEnv);assert.equal(r.status,200);assert.equal(appDb.rows.length,2);assert.equal(appDb.rows[1].owner,'app:'+appUserId,'With both identities present, the app owner wins over the gateway header');
+ r=await commerce(cookieReq('/api/orders/'+cookieResult.orderId),appEnv);assert.equal(r.status,200,'The order reads back under cookie auth, the payment return path');
+ r=await commerce(req('/api/orders/'+cookieResult.orderId,undefined,'gateway-1'),appEnv);assert.equal(r.status,404,'The gateway identity cannot read the app order');
+ const badCookieReq=cookieReq('/api/checkout',input,'app-bad-cookie-0000001');badCookieReq.headers.set('Cookie','suitsme-session=not-a-real-token');
+ assert.equal((await commerce(badCookieReq,appEnv)).status,401,'An unknown session cookie with no gateway header is still the guest 401');
+ assert.equal(appDb.rows.length,2,'The refused attempts wrote no orders');
+ console.log('Commerce contract checks passed: authentication, origin, server pricing, required profiles, body measurement profiles, idempotency, owner access, signed webhook verification, amount matching, paid-order replay, plus the package 5.6 cookie owner path and its precedence over the gateway header.');
 })().catch(e=>{console.error(e);process.exit(1)});

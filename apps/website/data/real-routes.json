@@ -147,6 +147,7 @@
     "/collections/women/shop-all-women": "/collections/women/suits"
   },
   "reverse": {
+    "#account": "/account",
     "#charges": "/charges",
     "#checkout": "/checkout",
     "#clone": "/clone",
@@ -299,6 +300,7 @@
     "#collection/Women/Tuxedos": "/collections/women/tuxedos",
     "#customize": "/customize",
     "#fit-support": "/fit-support",
+    "#forgot-password": "/forgot-password",
     "#gift-cards": "/gift-cards",
     "#help": "/help",
     "#home": "/",
@@ -307,15 +309,21 @@
     "#orders": "/orders",
     "#payment-return": "/payment-return",
     "#privacy": "/privacy",
+    "#register": "/register",
+    "#reset-password": "/reset-password",
     "#shipping": "/shipping",
-    "#terms": "/terms"
+    "#sign-in": "/sign-in",
+    "#terms": "/terms",
+    "#verify-email": "/verify-email"
   },
   "pages": {
+    "/account": "#account",
     "/charges": "#charges",
     "/checkout": "#checkout",
     "/clone": "#clone",
     "/customize": "#customize",
     "/fit-support": "#fit-support",
+    "/forgot-password": "#forgot-password",
     "/gift-cards": "#gift-cards",
     "/help": "#help",
     "/locations": "#locations",
@@ -323,8 +331,12 @@
     "/orders": "#orders",
     "/payment-return": "#payment-return",
     "/privacy": "#privacy",
+    "/register": "#register",
+    "/reset-password": "#reset-password",
     "/shipping": "#shipping",
-    "/terms": "#terms"
+    "/sign-in": "#sign-in",
+    "/terms": "#terms",
+    "/verify-email": "#verify-email"
   },
   "families": {
     "fabrics": {
@@ -760,6 +772,11 @@
       }
     },
     "pages": {
+      "/account": {
+        "title": "Your account | Suits.me",
+        "description": "Your Suits.me account: your details, your measurement profiles and your orders.",
+        "robots": "noindex"
+      },
       "/charges": {
         "title": "Other charges | Suits.me",
         "description": "The other charges that can apply to a Suits.me order, explained before you check out.",
@@ -784,6 +801,11 @@
         "title": "Fit support | Suits.me",
         "description": "Get your fit right with Suits.me fit support: measurement help, fit guarantee guidance, and stylist advice before your garment is made.",
         "robots": "index"
+      },
+      "/forgot-password": {
+        "title": "Forgot password | Suits.me",
+        "description": "Ask for a password reset link for your Suits.me account.",
+        "robots": "noindex"
       },
       "/gift-cards": {
         "title": "Gift cards | Suits.me",
@@ -820,15 +842,35 @@
         "description": "What the Suits.me experience saves, what a configured checkout shares with the payment provider, and how to clear your saved details.",
         "robots": "index"
       },
+      "/register": {
+        "title": "Create your account | Suits.me",
+        "description": "Create a Suits.me account to keep your measurement profiles with you on any device. We email you a link to confirm your address.",
+        "robots": "noindex"
+      },
+      "/reset-password": {
+        "title": "Reset password | Suits.me",
+        "description": "Choose a new password for your Suits.me account.",
+        "robots": "noindex"
+      },
       "/shipping": {
         "title": "Delivery and garment care | Suits.me",
         "description": "How delivery works for custom tailoring, how to confirm the estimate for your order, and how to care for your tailored garments.",
         "robots": "index"
       },
+      "/sign-in": {
+        "title": "Sign in | Suits.me",
+        "description": "Sign in to your Suits.me account to use your saved measurement profiles and see your orders on any device.",
+        "robots": "noindex"
+      },
       "/terms": {
         "title": "Terms | Suits.me",
         "description": "The terms of the Suits.me storefront experience, from the preview catalog and demo orders to the business terms for live orders.",
         "robots": "index"
+      },
+      "/verify-email": {
+        "title": "Confirm your email | Suits.me",
+        "description": "Confirm your email address to finish creating your Suits.me account.",
+        "robots": "noindex"
       }
     },
     "families": {

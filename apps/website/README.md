@@ -35,6 +35,8 @@ This application's payment ownership uses the trusted `oai-authenticated-user-id
 Set server-side runtime secrets; never put credentials in JavaScript, git or chat:
 - `ANET_ENV`: `sandbox` or `production`
 - `ANET_API_LOGIN_ID`, `ANET_TRANSACTION_KEY`, `ANET_SIGNATURE_KEY`
+- `EMAIL_API_URL`, `EMAIL_API_KEY`, `EMAIL_FROM`: the transactional email settings for account verification and password reset mail. Standalone accounts (Wave 5) stay disabled until all three are set alongside the D1 binding: the auth endpoints then answer 503 and no sign in entry point is shown.
+- `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET`: the Google sign in settings. The Google button and routes stay disabled until these are set in addition to the email settings. Register the redirect URI `<origin>/api/auth/google/callback` in the Google Cloud console; `/callback` belongs to the Sites gateway auth, not to this app.
 - Register `/api/authorize/webhook` for `net.authorize.payment.authcapture.created` at a publicly reachable HTTPS callback approved by the merchant. The current owner-private Site blocks external webhook senders. Public storefront access and callback routing require configuration before real provider testing.
 
 Production readiness additionally requires `COMMERCE_APPROVED=true`, an approved `SHIPPING_CENTS` value and an HTTPS `TAX_QUOTE_URL`. The tax service receives `{shipping,items,subtotalCents,shippingCents}` and returns `{taxCents}`; optional `TAX_QUOTE_TOKEN` authenticates it. Final delivery/tax charges appear on the hosted payment form.

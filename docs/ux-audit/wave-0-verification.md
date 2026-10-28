@@ -72,3 +72,8 @@ New and adjusted conclusions for the plan:
 5. NAV-08: provisional; needs the mobile viewport check before it can be planned responsibly.
 
 Nothing in this addendum authorizes build work. The approval gate in the implementation plan still stands.
+
+## Resolution update (2026-10-27, Wave 3)
+
+- CUS-06 is implemented: PR #26 gave women's suits the Trouser front group, and PR #30 extended it into the full Pleats group inside the new Trousers section that all suits now carry.
+- CUS-07 is implemented: PR #25 resets per product customization state (lapel, closure, fit, lining, monogram, and every option slot added since) whenever the product changes, while same product work and bag Edit restore are unchanged.

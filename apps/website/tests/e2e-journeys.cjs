@@ -20,6 +20,7 @@ const assert=require('node:assert/strict'),fs=require('node:fs'),vm=require('nod
 // J16 jacket finishes journey (CUS-01)
 // J17 priced extras, tier and monogram fields journey (CUS-02)
 // J18 detail add ons, tailor changes and comments journey (CUS-02)
+// J19 real URL entry journey (NAV-01)
 
 function makeEl(){const el={innerHTML:'',textContent:'',value:'',checked:false,open:false,style:{},attrs:{},classList:{add(){},remove(){},toggle(){return false}},setAttribute(k,v){el.attrs[k]=String(v)},removeAttribute(k){delete el.attrs[k]},getAttribute(k){return k in el.attrs?el.attrs[k]:null},addEventListener(){},getBoundingClientRect:()=>({left:0,right:0,top:0,bottom:0}),showModal(){el.open=true},close(){el.open=false},scrollIntoView(){}};return el}
 
@@ -884,6 +885,62 @@ console.log('E2E journey J12 passed: designing a second product starts clean wit
   w.run("setOption('pickStitch','Yes')");
   assert.equal(w.run('itemPrice(config)'),jacketBase+10,'the jacket prices its pick stitch detail');
   console.log('E2E journey J18 passed: the suit Personalize step offers the Jacket details and Trouser details toggles, the Side tabs group, the tailor changes consent and the comments field, the chosen details raise the customizer, bag and checkout prices by exactly their combined modifier, the consent and comments reach the bag and checkout, and a standalone jacket offers the jacket details only.');
+}
+
+// ---------------------------------------------------------------- J19
+// Real URL entry journey (NAV-01, Wave 4 stage 2): the shopper lands
+// on a collection through its real URL instead of a hash link, and
+// the whole purchase path works from that entry: the boot script
+// translates the path into the collection's hash route, a product
+// opens, the customizer personalizes it, a saved profile measures
+// it, and the configured garment reaches the bag and checkout with
+// its selections intact. The world loads the full script composition
+// the live page loads, boot data first, in document order.
+{
+  const ready={id:'p-ready',name:'Ready profile',method:'ready',wearer:'Men',fit:'Tailored',ready:{jacket:'40',length:'Regular',trouser:'34'},created:'2026-01-01T00:00:00.000Z'};
+  const store=new Map();
+  const localStorage={getItem:k=>store.has(k)?store.get(k):null,setItem:(k,v)=>store.set(k,String(v)),removeItem:k=>store.delete(k)};
+  localStorage.setItem('suits-profiles',JSON.stringify([ready]));
+  const elements=new Map();
+  const elFor=s=>{if(!elements.has(s))elements.set(s,makeEl());return elements.get(s)};
+  const documentStub={title:'',querySelector:s=>elFor(s),querySelectorAll:()=>[],getElementById:id=>elFor('#'+id),addEventListener(){},createElement:()=>makeEl(),body:makeEl()};
+  class J19FormData{constructor(form){this.data=(form&&form.__data)||{}}get(k){return k in this.data?this.data[k]:null}}
+  const location={hash:'',pathname:'/collections/suits/wool-suits'};
+  const sandbox={console,localStorage,document:documentStub,location,setTimeout,clearTimeout,crypto:require('node:crypto').webcrypto,fetch:()=>Promise.resolve({ok:false,json:async()=>null}),FormData:J19FormData,addEventListener(){},scrollTo(){}};
+  sandbox.window=sandbox;
+  const ctx=vm.createContext(sandbox);
+  for(const f of ['real-routes-data.js','real-routes.js','app.js','complete.js','catalog-data.js','expanded.js','navigation-data.js','navigation.js','gallery.js','quick-add.js','merchant-data.js','merchant.js'])vm.runInContext(fs.readFileSync('public/'+f,'utf8'),ctx,{filename:f});
+  const run=s=>vm.runInContext(s,ctx);
+  const bag=()=>JSON.parse(store.get('suits-bag')||'[]');
+
+  assert.equal(location.hash,'#collection/Suits/Wool%20Suits','entering at the real URL boots into the Wool Suits hash route');
+  const listing=elFor('#main').innerHTML;
+  assert.ok(listing.includes('<h1>Wool Suits.</h1>'),'the real URL entry renders the Wool Suits collection');
+  assert.ok(listing.includes('10 results'),'the listing shows the ten Wool Suits designs');
+  const firstId=run("merchantSuitCollections['Wool Suits'].ids[0]");
+  run(`chooseProduct(${firstId})`);
+  assert.equal(run('location.hash'),'#product/'+firstId,'opening a product from the real URL entry navigates');
+  const productName=run(`products[${firstId}].name`);
+  assert.ok(run(`productPage(${firstId})`).includes(productName),'the product page renders for '+productName);
+  run(`beginDesign(${firstId})`);
+  assert.equal(run('location.hash'),'#customize','designing from the product page lands on the customize route');
+  assert.equal(run('config.product'),firstId,'the customizer opens on the chosen product');
+  run('nextConfig()'); // stage 0 to 1, Personalize
+  assert.ok(run('customize()').includes(`onclick="setOption('lining','Wine')">Wine · +$15`),'the Personalize step offers the Wine lining at its tier price');
+  run("setOption('lining','Wine')");
+  run('nextConfig()'); // stage 1 to 2, Measurements
+  elFor('#profileSelect').value='p-ready';
+  run('nextConfig()'); // Add to Bag
+  assert.equal(bag().length,1,'Add to Bag creates exactly one bag line');
+  const line=run('lineHtml(bag[0])');
+  assert.ok(line.includes(productName),'the bag line names the product chosen from the real URL entry');
+  assert.ok(line.includes('Wine lining'),'the bag line shows the lining chosen at the Personalize step');
+  assert.ok(line.includes('Standard sizes'),'the bag line shows the saved profile summary');
+  run("location.hash='#checkout'");
+  const checkout=run('checkoutPage()');
+  assert.ok(checkout.includes(productName),'the checkout shows the product from the real URL entry');
+  assert.ok(checkout.includes('Wine lining'),'the checkout shows the chosen lining');
+  console.log('E2E journey J19 passed: entering at the real Wool Suits URL boots into its collection, a product opens, the customizer personalizes it, a saved profile measures it, and the configured garment reaches the bag and checkout intact.');
 }
 
 console.log('E2E journey checks passed: menu to product, standard size and body measurement journeys, method switching, quick add, bag edit with checkout rendering, the Women body-only rule, and the unified listing controls journey all hold end to end.');

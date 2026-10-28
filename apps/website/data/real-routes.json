@@ -147,6 +147,9 @@
     "/collections/women/shop-all-women": "/collections/women/suits"
   },
   "reverse": {
+    "#charges": "/charges",
+    "#checkout": "/checkout",
+    "#clone": "/clone",
     "#collection": "/collections/suits",
     "#collection/Accessories": "/collections/accessories",
     "#collection/Fabrics": "/collections/fabrics",
@@ -293,6 +296,60 @@
     "#collection/Women/Shop%20all%20women": "/collections/women/suits",
     "#collection/Women/Suits": "/collections/women/suits",
     "#collection/Women/Trousers": "/collections/women/trousers",
-    "#collection/Women/Tuxedos": "/collections/women/tuxedos"
+    "#collection/Women/Tuxedos": "/collections/women/tuxedos",
+    "#customize": "/customize",
+    "#fit-support": "/fit-support",
+    "#gift-cards": "/gift-cards",
+    "#help": "/help",
+    "#home": "/",
+    "#locations": "/locations",
+    "#measure": "/measure",
+    "#orders": "/orders",
+    "#payment-return": "/payment-return",
+    "#privacy": "/privacy",
+    "#shipping": "/shipping",
+    "#terms": "/terms"
+  },
+  "pages": {
+    "/charges": "#charges",
+    "/checkout": "#checkout",
+    "/clone": "#clone",
+    "/customize": "#customize",
+    "/fit-support": "#fit-support",
+    "/gift-cards": "#gift-cards",
+    "/help": "#help",
+    "/locations": "#locations",
+    "/measure": "#measure",
+    "/orders": "#orders",
+    "/payment-return": "#payment-return",
+    "/privacy": "#privacy",
+    "/shipping": "#shipping",
+    "/terms": "#terms"
+  },
+  "families": {
+    "fabrics": {
+      "kinds": [
+        "shirt",
+        "suit"
+      ]
+    },
+    "studio": {
+      "kinds": [
+        "jacket",
+        "pants",
+        "suit"
+      ]
+    },
+    "product": {
+      "idRanges": [
+        [
+          0,
+          2244
+        ]
+      ]
+    },
+    "orders": {
+      "anySingleSegment": true
+    }
   }
 }

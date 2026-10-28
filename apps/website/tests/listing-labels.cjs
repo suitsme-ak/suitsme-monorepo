@@ -9,6 +9,10 @@ const assert=require('node:assert/strict'),fs=require('node:fs'),vm=require('nod
 // menu destination against the audited inventory: 87 collection
 // destinations, 20 fabric listings and 67 design listings, 94 distinct
 // destinations across 96 rendered anchors, unchanged by this package.
+// Wave 4 stage 3a moved the rendered menu hrefs to real URLs; the
+// anchors are resolved back through the generated route map
+// (data/real-routes.json) to the hash destinations they name, and the
+// inventory counts are asserted unchanged.
 
 function makeEl(){const el={innerHTML:'',textContent:'',value:'',checked:false,open:false,style:{},attrs:{},classList:{add(){},remove(){},toggle(){return false}},setAttribute(k,v){el.attrs[k]=String(v)},removeAttribute(k){delete el.attrs[k]},getAttribute(k){return k in el.attrs?el.attrs[k]:null},addEventListener(){},getBoundingClientRect:()=>({left:0,right:0,top:0,bottom:0}),showModal(){el.open=true},close(){el.open=false},scrollIntoView(){}};return el}
 
@@ -21,7 +25,7 @@ class FakeFormData{constructor(form){this.data=(form&&form.__data)||{}}get(k){re
 const sandbox={console,localStorage,document:documentStub,location:{hash:'#home'},setTimeout,clearTimeout,crypto:require('node:crypto').webcrypto,fetch:()=>Promise.resolve({ok:false,json:async()=>null}),FormData:FakeFormData,addEventListener(){},scrollTo(){}};
 sandbox.window=sandbox;
 const ctx=vm.createContext(sandbox);
-for(const f of ['app.js','complete.js','catalog-data.js','expanded.js','navigation-data.js','navigation.js','gallery.js','quick-add.js','merchant-data.js','merchant.js'])vm.runInContext(fs.readFileSync('public/'+f,'utf8'),ctx,{filename:f});
+for(const f of ['real-routes-data.js','real-routes.js','app.js','complete.js','catalog-data.js','expanded.js','navigation-data.js','navigation.js','gallery.js','quick-add.js','merchant-data.js','merchant.js'])vm.runInContext(fs.readFileSync('public/'+f,'utf8'),ctx,{filename:f});
 const run=s=>vm.runInContext(s,ctx);
 
 const FABRIC_EYEBROW='<span class="eyebrow">Fabrics</span>',FABRIC_NOTE='<p>Choose a fabric, then design your garment around it.</p>';
@@ -60,11 +64,17 @@ const menus=navHtml.split('<details class="nav-item"').slice(1).map(chunk=>{
 });
 assert.deepEqual(menus.map(m=>m.name),['Suits','Jackets','Trousers','Shirts','Weddings','More','Women'],'all seven menus render in order');
 let anchors=0,fabrics=0,designs=0;const destinations=new Set();
+const routeMap=require('../data/real-routes.json');
+const pathToHash={...routeMap.pages};
+for(const [path,hash] of Object.entries(routeMap.paths))pathToHash[path]=hash;
+for(const [alias,target] of Object.entries(routeMap.aliases))pathToHash[alias]=routeMap.paths[target];
 for(const menu of menus)for(const a of menu.anchors){
   anchors++;destinations.add(a.href);
-  if(!a.href.startsWith('#collection/'))continue;
-  const kind=expectedKind(a.href);
-  const html=run(`categoryCollection(${JSON.stringify(a.href)})`);
+  assert.ok(a.href.startsWith('/'),'every rendered menu href is a real path: '+a.href);
+  const hash=pathToHash[a.href];
+  if(!hash||!hash.startsWith('#collection/'))continue;
+  const kind=expectedKind(hash);
+  const html=run(`categoryCollection(${JSON.stringify(hash)})`);
   assertSignal(html,kind,a.href);
   if(kind==='fabric')fabrics++;else designs++;
 }

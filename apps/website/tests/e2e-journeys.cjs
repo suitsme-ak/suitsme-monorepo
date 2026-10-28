@@ -21,6 +21,7 @@ const assert=require('node:assert/strict'),fs=require('node:fs'),vm=require('nod
 // J17 priced extras, tier and monogram fields journey (CUS-02)
 // J18 detail add ons, tailor changes and comments journey (CUS-02)
 // J19 real URL entry journey (NAV-01)
+// J20 real product URL entry journey (NAV-01, Wave 4 stage 3a)
 
 function makeEl(){const el={innerHTML:'',textContent:'',value:'',checked:false,open:false,style:{},attrs:{},classList:{add(){},remove(){},toggle(){return false}},setAttribute(k,v){el.attrs[k]=String(v)},removeAttribute(k){delete el.attrs[k]},getAttribute(k){return k in el.attrs?el.attrs[k]:null},addEventListener(){},getBoundingClientRect:()=>({left:0,right:0,top:0,bottom:0}),showModal(){el.open=true},close(){el.open=false},scrollIntoView(){}};return el}
 
@@ -54,6 +55,10 @@ function makeWorld(seed={}){
 {
   const navEl=makeEl();
   const navCtx=vm.createContext({console,$:()=>navEl,document:{querySelectorAll:()=>[],addEventListener(){}},window:{addEventListener(){}},location:{hash:'#home'}});
+  // The boot translator loads first, as in the served document, so
+  // menuLink renders the real URLs the migration ships.
+  vm.runInContext(fs.readFileSync('public/real-routes-data.js','utf8'),navCtx);
+  vm.runInContext(fs.readFileSync('public/real-routes.js','utf8'),navCtx);
   vm.runInContext(fs.readFileSync('public/navigation-data.js','utf8'),navCtx);
   vm.runInContext(fs.readFileSync('public/navigation.js','utf8'),navCtx);
   const html=navEl.innerHTML;
@@ -82,19 +87,23 @@ function makeWorld(seed={}){
   assert.ok(menus.find(m=>m.name==='More').headings.includes('Services and Extras'),'More has a Services and Extras heading');
   const threeD={};
   for(const menu of menus)for(const a of menu.anchors)if(a.label.includes('3D'))threeD[a.label]=a.href;
-  assert.deepEqual(threeD,{'3D Suit Configurator':'#studio/suit','3D Jacket Configurator':'#studio/jacket','3D Trousers Configurator':'#studio/pants'},'the three 3D entries use the unified names and lead to the studio destinations');
+  assert.deepEqual(threeD,{'3D Suit Configurator':'/studio/suit','3D Jacket Configurator':'/studio/jacket','3D Trousers Configurator':'/studio/pants'},'the three 3D entries use the unified names and lead to the studio destinations');
+  for(const menu of menus)for(const a of menu.anchors)assert.ok(a.href.startsWith('/'),'every rendered menu href is now a real path: '+a.href);
 
   // Follow one rendered destination to its collection and open a product.
   const suits=menus.find(m=>m.name==='Suits');
-  const link=suits.anchors.find(a=>a.href.startsWith('#collection/Suits/'));
+  const link=suits.anchors.find(a=>a.href.startsWith('/collections/suits/'));
   assert.ok(link,'Suits menu offers a collection destination');
   const collections=require('../data/collections.json');
-  const collection=collections[link.href];
+  const routeMap=require('../data/real-routes.json');
+  const linkHash=routeMap.paths[link.href];
+  assert.ok(linkHash,'rendered destination is a canonical real path in the generated map: '+link.href);
+  const collection=collections[linkHash];
   assert.ok(collection,'rendered destination resolves to a real collection: '+link.href);
   assert.ok(collection.ids.length>=36,'collection holds at least 36 designs: '+link.href);
   const firstId=collection.ids[0];
   const world=makeWorld();
-  assert.equal(world.run(`resolveCollection('${link.href}').ids[0]`),firstId,'the runtime collection resolver agrees with the catalog data for '+link.href);
+  assert.equal(world.run(`resolveCollection('${linkHash}').ids[0]`),firstId,'the runtime collection resolver agrees with the catalog data for '+link.href);
   assert.ok(world.run(`resolveCollection('${link.href}').ids.length`)>=36,'the runtime collection holds at least 36 designs');
   world.run(`chooseProduct(${firstId})`);
   assert.equal(world.run('config.product'),firstId,'opening the product selects it');
@@ -355,7 +364,7 @@ function makeWorld(seed={}){
   const count=html=>Number(/<p class="listing-count" role="status">(\d+) results?/.exec(html)[1]);
   const grid=html=>html.slice(html.indexOf('<div class="products"'));
   const prices=html=>[...grid(html).matchAll(/<strong>\$([\d,]+)<\/strong>/g)].map(m=>Number(m[1].replace(/,/g,'')));
-  const firstProduct=html=>Number(/href="#product\/(\d+)"/.exec(grid(html))[1]);
+  const firstProduct=html=>Number(/href="\/product\/(\d+)"/.exec(grid(html))[1]);
   const openProduct=html=>{const id=firstProduct(html);w.run(`location.hash='#product/${id}';render()`);const page=w.elFor('#main').innerHTML;assert.ok(page.includes(`beginDesign(${id})`),'the product page offers to design the opened product');w.run(`beginDesign(${id})`);assert.equal(w.run('location.hash'),'#customize','the product opens into the customizer');assert.equal(w.run('config.product'),id,'the opened product is the first narrowed result');return id};
   const searchTextOf=p=>[p.name,p.sku,p.fabricCode,p.fabric,p.color,p.colorFamily,p.pattern,p.sourceCategory].filter(Boolean).join(' ').toLowerCase();
   const partialWord=items=>{const counts={};for(const p of items)for(const word of new Set(searchTextOf(p).split(/\s+/)))counts[word]=(counts[word]||0)+1;const word=Object.keys(counts).filter(x=>x.length>=3&&counts[x]>0&&counts[x]<items.length).sort((a,b)=>b.length-a.length)[0];assert.ok(word,'a narrowing search word exists');return word};
@@ -444,7 +453,7 @@ function makeWorld(seed={}){
   const sandbox={console,localStorage,document:documentStub,location:{hash:'#home'},setTimeout,clearTimeout,crypto:require('node:crypto').webcrypto,fetch:()=>Promise.resolve({ok:false,json:async()=>null}),FormData:J10FormData,addEventListener(){},scrollTo(){}};
   sandbox.window=sandbox;
   const ctx=vm.createContext(sandbox);
-  for(const f of ['app.js','complete.js','catalog-data.js','expanded.js','navigation-data.js','navigation.js','gallery.js','quick-add.js','merchant-data.js','merchant.js'])vm.runInContext(fs.readFileSync('public/'+f,'utf8'),ctx,{filename:f});
+  for(const f of ['real-routes-data.js','real-routes.js','app.js','complete.js','catalog-data.js','expanded.js','navigation-data.js','navigation.js','gallery.js','quick-add.js','merchant-data.js','merchant.js'])vm.runInContext(fs.readFileSync('public/'+f,'utf8'),ctx,{filename:f});
   const run=s=>vm.runInContext(s,ctx);
   const navHtml=elFor('#catalogNav').innerHTML;
   const menuAnchors=name=>{
@@ -452,26 +461,29 @@ function makeWorld(seed={}){
     assert.ok(chunk,'the '+name+' menu renders');
     return[...chunk.matchAll(/<a href="([^"]+)">([^<]+)<\/a>/g)].map(m=>({href:m[1],label:m[2]}));
   };
-  // Fabric listing: Suits, Wool Suits, a fabric led collection.
-  const wool=menuAnchors('Suits').find(a=>a.href==='#collection/Suits/Wool%20Suits');
-  assert.ok(wool,'the Suits menu links to Wool Suits');
-  const fabricHtml=run(`categoryCollection('${wool.href}')`);
+  const routeMap=require('../data/real-routes.json');
+  // Fabric listing: Suits, Wool Suits, a fabric led collection. The
+  // menu now links to the real URL; the listing dispatch still takes
+  // the hash route the generated map pairs with it.
+  const wool=menuAnchors('Suits').find(a=>a.href==='/collections/suits/wool-suits');
+  assert.ok(wool,'the Suits menu links to Wool Suits at its real URL');
+  const fabricHtml=run(`categoryCollection('${routeMap.paths[wool.href]}')`);
   assert.ok(fabricHtml.includes('<span class="eyebrow">Fabrics</span>'),'the fabric listing is eyebrowed Fabrics');
   assert.ok(fabricHtml.includes('<p>Choose a fabric, then design your garment around it.</p>'),'the fabric listing explains the fabric model');
   assert.ok(!fabricHtml.includes('<span class="eyebrow">Designs</span>'),'the fabric listing never claims to be designs');
-  const fabricCard=/href="#product\/(\d+)"/.exec(fabricHtml);
+  const fabricCard=/href="\/product\/(\d+)"/.exec(fabricHtml);
   assert.ok(fabricCard,'the fabric listing offers products to open');
   run(`location.hash='#product/${fabricCard[1]}';render(false)`);
   assert.ok(elFor('#main').innerHTML.includes('product-page'),'a product opens from the fabric listing');
   // Design listing: Women, Suits, the destination the audit found reading
   // as a fabric collection while listing designs.
-  const womenSuits=menuAnchors('Women').find(a=>a.href==='#collection/Women/Suits');
-  assert.ok(womenSuits,'the Women menu links to Women Suits');
-  const designHtml=run(`categoryCollection('${womenSuits.href}')`);
+  const womenSuits=menuAnchors('Women').find(a=>a.href==='/collections/women/suits');
+  assert.ok(womenSuits,'the Women menu links to Women Suits at its real URL');
+  const designHtml=run(`categoryCollection('${routeMap.paths[womenSuits.href]}')`);
   assert.ok(designHtml.includes('<span class="eyebrow">Designs</span>'),'the design listing is eyebrowed Designs');
   assert.ok(designHtml.includes('<p>Finished designs, ready to customize.</p>'),'the design listing explains the design model');
   assert.ok(!designHtml.includes('<span class="eyebrow">Fabrics</span>'),'the design listing never claims to be fabrics');
-  const designCard=/href="#product\/(\d+)"/.exec(designHtml);
+  const designCard=/href="\/product\/(\d+)"/.exec(designHtml);
   assert.ok(designCard,'the design listing offers products to open');
   run(`location.hash='#product/${designCard[1]}';render(false)`);
   assert.ok(elFor('#main').innerHTML.includes('product-page'),'a product opens from the design listing');
@@ -941,6 +953,61 @@ console.log('E2E journey J12 passed: designing a second product starts clean wit
   assert.ok(checkout.includes(productName),'the checkout shows the product from the real URL entry');
   assert.ok(checkout.includes('Wine lining'),'the checkout shows the chosen lining');
   console.log('E2E journey J19 passed: entering at the real Wool Suits URL boots into its collection, a product opens, the customizer personalizes it, a saved profile measures it, and the configured garment reaches the bag and checkout intact.');
+}
+
+// ---------------------------------------------------------------- J20
+// Real product URL entry journey (NAV-01, Wave 4 stage 3a): the
+// shopper lands directly on a product through its real URL, the form
+// the migrated internal links now take, and the whole purchase path
+// works from that entry: the boot script translates the path into the
+// product's hash route, the product page renders with real URL links,
+// the customizer personalizes it, a saved profile measures it, and
+// the configured garment reaches the bag and checkout with its
+// selections intact.
+{
+  const ready={id:'p-ready',name:'Ready profile',method:'ready',wearer:'Men',fit:'Tailored',ready:{jacket:'40',length:'Regular',trouser:'34'},created:'2026-01-01T00:00:00.000Z'};
+  const store=new Map();
+  const localStorage={getItem:k=>store.has(k)?store.get(k):null,setItem:(k,v)=>store.set(k,String(v)),removeItem:k=>store.delete(k)};
+  localStorage.setItem('suits-profiles',JSON.stringify([ready]));
+  const elements=new Map();
+  const elFor=s=>{if(!elements.has(s))elements.set(s,makeEl());return elements.get(s)};
+  const documentStub={title:'',querySelector:s=>elFor(s),querySelectorAll:()=>[],getElementById:id=>elFor('#'+id),addEventListener(){},createElement:()=>makeEl(),body:makeEl()};
+  class J20FormData{constructor(form){this.data=(form&&form.__data)||{}}get(k){return k in this.data?this.data[k]:null}}
+  const location={hash:'',pathname:'/product/1964'};
+  const sandbox={console,localStorage,document:documentStub,location,setTimeout,clearTimeout,crypto:require('node:crypto').webcrypto,fetch:()=>Promise.resolve({ok:false,json:async()=>null}),FormData:J20FormData,addEventListener(){},scrollTo(){}};
+  sandbox.window=sandbox;
+  const ctx=vm.createContext(sandbox);
+  for(const f of ['real-routes-data.js','real-routes.js','app.js','complete.js','catalog-data.js','expanded.js','navigation-data.js','navigation.js','gallery.js','quick-add.js','merchant-data.js','merchant.js'])vm.runInContext(fs.readFileSync('public/'+f,'utf8'),ctx,{filename:f});
+  const run=s=>vm.runInContext(s,ctx);
+  const bag=()=>JSON.parse(store.get('suits-bag')||'[]');
+  const catalog=require('../data/catalog.json');
+  const productName=catalog[1964].name;
+
+  assert.equal(location.hash,'#product/1964','entering at the real product URL boots into the product hash route');
+  const page=elFor('#main').innerHTML;
+  assert.ok(page.includes('product-page'),'the real product URL entry renders the product page');
+  assert.ok(page.includes(productName),'the product page names the product the URL identifies');
+  assert.ok(page.includes('href="/collections/suits"'),'the product page breadcrumb links to the real collection URL');
+  assert.ok(page.includes('href="/measure"'),'the product page links to the measurement studio at its real URL');
+  assert.ok(page.includes('href="/product/'),'the product page offers related products at real URLs');
+  assert.ok(!page.includes('href="#'),'the rendered product page carries no hash hrefs');
+  run('beginDesign(1964)');
+  assert.equal(run('location.hash'),'#customize','designing from the real URL entry lands on the customize route');
+  assert.equal(run('config.product'),1964,'the customizer opens on the product from the URL');
+  run('nextConfig()'); // stage 0 to 1, Personalize
+  run("setOption('lining','Wine')");
+  run('nextConfig()'); // stage 1 to 2, Measurements
+  elFor('#profileSelect').value='p-ready';
+  run('nextConfig()'); // Add to Bag
+  assert.equal(bag().length,1,'Add to Bag creates exactly one bag line');
+  const line=run('lineHtml(bag[0])');
+  assert.ok(line.includes(productName),'the bag line names the product chosen from the real product URL entry');
+  assert.ok(line.includes('Wine lining'),'the bag line shows the lining chosen at the Personalize step');
+  run("location.hash='#checkout'");
+  const checkout=run('checkoutPage()');
+  assert.ok(checkout.includes(productName),'the checkout shows the product from the real product URL entry');
+  assert.ok(checkout.includes('Wine lining'),'the checkout shows the chosen lining');
+  console.log('E2E journey J20 passed: entering at a real product URL boots into its product page with real URL links throughout, the customizer personalizes it, a saved profile measures it, and the configured garment reaches the bag and checkout intact.');
 }
 
 console.log('E2E journey checks passed: menu to product, standard size and body measurement journeys, method switching, quick add, bag edit with checkout rendering, the Women body-only rule, and the unified listing controls journey all hold end to end.');

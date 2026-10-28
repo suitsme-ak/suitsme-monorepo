@@ -44,7 +44,7 @@ w.run('beginDesign(1)');
 assert.deepEqual(w.config(),{product:1,fabric:'Charcoal',lapel:'Notch',closure:'Two button',fit:'Tailored',lining:'Tonal',monogram:'',profileId:'profile-1'},'starting product 1 begins from defaults, not from product 0 options');
 const freshHtml=w.run('stage=1;customize()');
 assert.ok(!freshHtml.includes('AB'),'the monogram from product 0 is nowhere in the product 1 customizer');
-assert.ok(freshHtml.includes(`class="choice active" aria-pressed="true" onclick="setOption('lining','Tonal')"`),'the default lining is the active choice for product 1');
+assert.ok(freshHtml.includes(`class="choice active" aria-pressed="true" onclick="setOption('lining','Default')"`),'the Default lining choice is the active choice for product 1 (the stored Tonal default shows as Default since package 3.3)');
 assert.ok(freshHtml.includes(`class="choice active" aria-pressed="true" onclick="setOption('lapel','Notch')"`),'the default lapel is the active choice for product 1');
 assert.ok(!freshHtml.includes(`aria-pressed="true" onclick="setOption('lining','Burgundy')"`),'product 0 lining is not active for product 1');
 

@@ -2,6 +2,9 @@ const assert=require('node:assert/strict'),fs=require('node:fs'),vm=require('nod
 // CRT-02: bag Edit restores a configured item into the customizer and saving
 // updates that same item in place. Drives the real storefront scripts in a vm
 // with stubbed DOM and storage, in the style of the other suites.
+// Note (Wave 3 package 3.3): the suit configured below wears a Peak lapel,
+// which OPTION_PRICES now prices at +$10, so the two subtotal expectations
+// carry that modifier; every other behavior asserted here is unchanged.
 function makeEl(){return{innerHTML:'',textContent:'',value:'',checked:false,open:false,classList:{add(){},remove(){},toggle(){return false}},addEventListener(){},setAttribute(){},getBoundingClientRect:()=>({left:0,top:0,right:0,bottom:0}),showModal(){this.open=true},close(){this.open=false},scrollIntoView(){}}}
 const els=new Map();const elFor=s=>{if(!els.has(s))els.set(s,makeEl());return els.get(s)};
 const store=new Map();
@@ -34,7 +37,7 @@ bag=bagState();
 assert.equal(bag.length,2,'quick add appends a second line');
 const jacket=bag[1];
 assert.equal(jacket.lapel,'Notch');assert.equal(jacket.lining,'Tonal');assert.deepEqual(jacket.profile,profile);
-assert.equal(run('subtotal()'),399+279,'subtotal covers both lines');
+assert.equal(run('subtotal()'),399+10+279,'subtotal covers both lines (the Peak lapel adds its $10 modifier)');
 
 // Edit the suit: change exactly one option (lining) and save.
 run(`editBagItem('${suit.id}')`);
@@ -99,5 +102,5 @@ assert.ok(!run(`lineHtml(bag[3])`).includes('editBagItem'),'gift card line has n
 assert.ok(run(`lineHtml(bag[0])`).includes('>Edit</button>'),'garment line renders an Edit button');
 run(`editBagItem('${bag[2].id}')`);
 assert.equal(run('editingBagId'),null,'editBagItem is a no-op for non garment items');
-assert.equal(run('subtotal()'),399+279+79+100,'totals still cover every kind of line');
+assert.equal(run('subtotal()'),399+10+279+79+100,'totals still cover every kind of line');
 console.log('Bag edit checks passed: edit restores every selection, saving updates the same line in place with only the changed option different, cancel and the profile guard leave the bag untouched, quick add items are editable, and gift/accessory/swatch lines offer no Edit.');

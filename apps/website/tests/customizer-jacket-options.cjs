@@ -130,16 +130,18 @@ function bagCurrentWorld(w){w.run('stage=2;render(false)');w.elFor('#profileSele
 }
 
 // World 5: a legacy bag item and config, saved before the new fields
-// existed, load, render, price and edit exactly as before.
+// existed, load and render exactly as before. Its price follows the
+// current table only through the Peak lapel modifier that package 3.3
+// deliberately prices (Peak at +$10); the 3.3 suite pins that rule down.
 {
   const legacy={id:'legacy-1',product:0,fabric:'Navy',lapel:'Peak',closure:'One button',fit:'Slim',lining:'Burgundy',monogram:'AB',profile:JSON.parse(JSON.stringify(profile))};
   const w=makeWorld({bag:[legacy],config:{product:0,fabric:'Navy',lapel:'Peak',closure:'One button',fit:'Slim',lining:'Burgundy',monogram:'AB'}});
   assert.equal(w.run('lineDescription(bag[0])'),'Navy · Peak lapel · Slim fit · One button · Burgundy lining · Monogram AB','a legacy line keeps its exact previous description');
-  assert.equal(w.run('optionCharge(bag[0])'),0,'a legacy line carries no option charge');
-  assert.equal(w.run('itemPrice(bag[0])'),399,'a legacy line is priced at the product base');
-  assert.equal(w.run('subtotal()'),399,'the legacy subtotal is unchanged');
+  assert.equal(w.run('optionCharge(bag[0])'),10,'a legacy line charges only the Peak lapel modifier package 3.3 adds');
+  assert.equal(w.run('itemPrice(bag[0])'),409,'a legacy line is priced at the product base plus the Peak modifier');
+  assert.equal(w.run('subtotal()'),409,'the legacy subtotal follows the same rule');
   w.run("location.hash='#checkout'");
-  assert.ok(w.run('checkoutPage()').includes('$399'),'the legacy item checks out at its base price');
+  assert.ok(w.run('checkoutPage()').includes('$409'),'the legacy item checks out at its base price plus the Peak modifier');
   w.run("editBagItem('legacy-1')");
   w.run("setOption('lining','Midnight')");
   bagCurrentWorld(w);
@@ -177,5 +179,5 @@ function bagCurrentWorld(w){w.run('stage=2;render(false)');w.elFor('#profileSele
   const pantsIdx=catalog.findIndex(p=>p.kind==='pants'),pants=catalog[pantsIdx];
   r=await commerce(req({items:[{product:pantsIdx,fabric:'Wool',lapel:'',closure:'Flat front',pocketAccent:'Patch pocket',fit:'Tailored',lining:'',monogram:'',profile:readyProfile}],shipping},'jacket-options-00000003'),env);
   assert.equal((await r.json()).totalCents,pants.priceCents,'a pocket accent value on trousers is never priced');
-  console.log('Customizer jacket option checks passed: suits and jackets render Vents, Jacket cuff buttons and Pocket accent with Included or priced labels and preselected defaults, the closure offers five styles, pocket accent prices flow from the one table to the customizer, bag, checkout and server order, bag Edit restores the selections, a product switch resets them, and legacy items are untouched.');
+  console.log('Customizer jacket option checks passed: suits and jackets render Vents, Jacket cuff buttons and Pocket accent with Included or priced labels and preselected defaults, the closure offers five styles, pocket accent prices flow from the one table to the customizer, bag, checkout and server order, bag Edit restores the selections, a product switch resets them, and legacy items render unchanged, repricing only through the Peak lapel rule package 3.3 documents.');
 })().catch(e=>{console.error(e);process.exit(1)});

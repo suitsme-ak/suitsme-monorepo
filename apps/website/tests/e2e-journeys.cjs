@@ -18,6 +18,7 @@ const assert=require('node:assert/strict'),fs=require('node:fs'),vm=require('nod
 // J14 jacket core options journey (CUS-01)
 // J15 trousers options journey (CUS-01)
 // J16 jacket finishes journey (CUS-01)
+// J17 priced extras, tier and monogram fields journey (CUS-02)
 
 function makeEl(){const el={innerHTML:'',textContent:'',value:'',checked:false,open:false,style:{},attrs:{},classList:{add(){},remove(){},toggle(){return false}},setAttribute(k,v){el.attrs[k]=String(v)},removeAttribute(k){delete el.attrs[k]},getAttribute(k){return k in el.attrs?el.attrs[k]:null},addEventListener(){},getBoundingClientRect:()=>({left:0,right:0,top:0,bottom:0}),showModal(){el.open=true},close(){el.open=false},scrollIntoView(){}};return el}
 
@@ -752,6 +753,72 @@ console.log('E2E journey J12 passed: designing a second product starts clean wit
   const jacketPersonalize=w.run('customize()');
   for(const title of ['Lapel','Buttons','Lining','Lining type','Elbow patches'])assert.ok(jacketPersonalize.includes(`<div class="option-title">${title}</div>`),`the jacket Personalize step offers the ${title} group`);
   console.log('E2E journey J16 passed: the suit Personalize step offers the expanded lapel and lining groups plus lining type, buttons and elbow patches with defaults selected, one priced choice from each area raises the customizer, bag and checkout prices by exactly the combined modifier, and a standalone jacket offers the same finish areas.');
+}
+
+// ---------------------------------------------------------------- J17
+// Priced extras journey (CUS-02, package 3.4): from a suit product page,
+// the Personalize step opens with the Tier group, the Extras section
+// offers the vest, additional pants and square and tie set with prices
+// showing and nothing preselected on, and the three monogram fields sit
+// below; choosing everything raises the customizer, bag and checkout
+// prices by exactly the combined extras total, and a standalone jacket
+// offers the tier and the set but no vest.
+{
+  const ready={id:'p-ready',name:'Ready profile',method:'ready',wearer:'Men',fit:'Tailored',ready:{jacket:'40',length:'Regular',trouser:'34'},created:'2026-01-01T00:00:00.000Z'};
+  const w=makeWorld({profiles:[ready]});
+  w.run('chooseProduct(0)');
+  assert.equal(w.run('location.hash'),'#product/0','the journey lands on the product page');
+  const base=w.run('products[0].price');
+  w.run('beginDesign(0)');
+  w.run('nextConfig()'); // stage 0 to 1, Personalize
+  assert.equal(w.run('stage'),1,'the journey reaches the Personalize step');
+  const personalize=w.run('customize()');
+  assert.ok(personalize.indexOf('<div class="option-title">Tier</div>')<personalize.indexOf('<div class="option-title">Lapel</div>'),'the Tier group opens the Personalize step');
+  assert.ok(personalize.includes(`aria-pressed="true" onclick="setOption('tier','Regular')"`),'the Regular tier starts selected');
+  assert.ok(personalize.includes('Make it a tuxedo · +$50'),'the tuxedo tier shows its price');
+  assert.ok(personalize.includes('<h3>Extras</h3>'),'the Extras section is offered');
+  assert.ok(personalize.includes('Classic vest · +$99'),'the vest styles show their price');
+  assert.ok(personalize.includes(`aria-pressed="true" onclick="setOption('vest','No vest')"`),'no vest starts selected: nothing is preselected on');
+  assert.ok(personalize.includes('Yes · +$140'),'additional pants show their price');
+  assert.ok(personalize.includes('Yes · +$39'),'the square and tie set shows its price');
+  assert.ok(personalize.includes('placeholder="Line 2"'),'the second monogram line is offered');
+  assert.ok(personalize.includes('Collar monogram'),'the collar monogram is offered');
+  w.run("setOption('tier','Make it a tuxedo');setOption('vest','Classic vest')");
+  assert.ok(w.run('customize()').includes('<div class="option-title">Waistcoat back</div>'),'choosing a vest reveals the waistcoat back group');
+  w.run("setOption('vestFabricBack','Fabric back');setOption('additionalPants','Yes');setOption('squareAndTie','Yes');config.monogram='AB';config.monogram2='CD';config.collarMonogram='EF';saveConfig()");
+  assert.ok(w.run('customize()').includes('$'+(base+368)),'the customizer price rises by every extra (50+99+20+140+39+10+10)');
+  w.run('nextConfig()'); // stage 1 to 2, Measurements
+  w.elFor('#profileSelect').value='p-ready';
+  w.run('nextConfig()');
+  assert.equal(w.bag().length,1,'the configured suit is bagged');
+  const item=w.bag()[0];
+  assert.equal(item.tier,'Make it a tuxedo','the bagged item stores the tier');
+  assert.equal(item.vest,'Classic vest','the bagged item stores the vest');
+  assert.equal(item.vestFabricBack,'Fabric back','the bagged item stores the fabric back');
+  assert.equal(item.additionalPants,'Yes','the bagged item stores additional pants');
+  assert.equal(item.squareAndTie,'Yes','the bagged item stores the square and tie set');
+  assert.equal(item.monogram2,'CD','the bagged item stores the second monogram line');
+  assert.equal(item.collarMonogram,'EF','the bagged item stores the collar monogram');
+  const line=w.run('lineDescription(bag[0])');
+  for(const part of ['Make it a tuxedo','Classic vest','Fabric back','Additional pants','Square and tie','Monogram AB / CD','Collar monogram EF'])assert.ok(line.includes(part),`the bag line names ${part}`);
+  assert.equal(w.run('subtotal()'),base+368,'the subtotal includes every extra');
+  w.run("location.hash='#checkout'");
+  const checkout=w.run('checkoutPage()');
+  assert.ok(checkout.includes('Classic vest'),'the checkout selection shows the vest');
+  assert.ok(checkout.includes('$'+(base+368)),'the checkout total includes every extra');
+  // A standalone jacket offers the tier and the set, but no vest.
+  const jacketIdx=w.run("products.findIndex(p=>p.kind==='jacket')");
+  assert.ok(jacketIdx>=0,'the catalog holds a standalone jacket for the journey');
+  const jacketBase=w.run(`products[${jacketIdx}].price`);
+  w.run(`beginDesign(${jacketIdx})`);
+  w.run('nextConfig()');
+  const jacketPersonalize=w.run('customize()');
+  assert.ok(jacketPersonalize.includes('<div class="option-title">Tier</div>'),'the jacket Personalize step offers the Tier group');
+  assert.ok(jacketPersonalize.includes('<div class="option-title">Square and tie</div>'),'the jacket offers the square and tie set');
+  assert.ok(!jacketPersonalize.includes('<div class="option-title">Add a vest</div>'),'the jacket offers no vest');
+  w.run("setOption('squareAndTie','Yes')");
+  assert.equal(w.run('itemPrice(config)'),jacketBase+39,'the jacket prices the square and tie set');
+  console.log('E2E journey J17 passed: the suit Personalize step opens with the Tier group, offers the vest, additional pants and square and tie extras with prices showing and nothing preselected on, and the three monogram fields, the combined extras raise the customizer, bag and checkout prices by exactly their total, and a standalone jacket offers the tier and the set but no vest.');
 }
 
 console.log('E2E journey checks passed: menu to product, standard size and body measurement journeys, method switching, quick add, bag edit with checkout rendering, the Women body-only rule, and the unified listing controls journey all hold end to end.');

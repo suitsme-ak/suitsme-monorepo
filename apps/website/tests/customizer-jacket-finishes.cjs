@@ -15,6 +15,9 @@ const assert=require('node:assert/strict'),fs=require('node:fs'),vm=require('nod
 // and stored lining values Tonal, Burgundy and Midnight, which are not
 // in the captured list, price at $0 and keep rendering as before; Tonal
 // shows as the Default choice selected, without being rewritten.
+// Package 3.4 adds a third deliberate rule, pinned in its own suite: a
+// filled inside monogram now prices at +$10, so the legacy Peak world
+// below, whose item also carries a monogram, totals both modifiers.
 function makeEl(){return{innerHTML:'',textContent:'',value:'',checked:false,open:false,classList:{add(){},remove(){},toggle(){return false}},addEventListener(){},setAttribute(){},getBoundingClientRect:()=>({left:0,top:0,right:0,bottom:0}),showModal(){this.open=true},close(){this.open=false},scrollIntoView(){}}}
 const profile={id:'profile-1',name:'Test fit',method:'body',unit:'in',wearer:'Men',fit:'Tailored',values:{chest:40,waist:34,shoulder:18,sleeve:25,jacket:29,seat:40,trouserWaist:34,thigh:24,inseam:32,outseam:42},ready:{jacket:'40',length:'Regular',trouser:'34'},created:'2026-10-27T00:00:00.000Z'};
 function makeWorld(seed={}){
@@ -150,11 +153,11 @@ function bagCurrentWorld(w){w.run('stage=2;render(false)');w.elFor('#profileSele
   const legacy={id:'legacy-peak',product:0,fabric:'Navy',lapel:'Peak',closure:'One button',fit:'Slim',lining:'Burgundy',monogram:'AB',profile:JSON.parse(JSON.stringify(profile))};
   const w=makeWorld({bag:[legacy],config:{product:0,fabric:'Navy',lapel:'Peak',closure:'One button',fit:'Slim',lining:'Burgundy',monogram:'AB'}});
   assert.equal(w.run('lineDescription(bag[0])'),'Navy · Peak lapel · Slim fit · One button · Burgundy lining · Monogram AB','the legacy Peak line keeps its exact previous description');
-  assert.equal(w.run('optionCharge(bag[0])'),10,'the legacy Peak line charges the Peak modifier and nothing else');
-  assert.equal(w.run('itemPrice(bag[0])'),409,'the legacy Peak line prices at base plus $10');
-  assert.equal(w.run('subtotal()'),409,'the legacy subtotal follows the Peak rule');
+  assert.equal(w.run('optionCharge(bag[0])'),20,'the legacy Peak line charges the Peak modifier and the filled monogram charge package 3.4 adds');
+  assert.equal(w.run('itemPrice(bag[0])'),419,'the legacy Peak line prices at base plus both modifiers');
+  assert.equal(w.run('subtotal()'),419,'the legacy subtotal follows both repricing rules');
   w.run("location.hash='#checkout'");
-  assert.ok(w.run('checkoutPage()').includes('$409'),'the legacy Peak item checks out at base plus $10');
+  assert.ok(w.run('checkoutPage()').includes('$419'),'the legacy Peak item checks out at base plus both modifiers');
   w.run("editBagItem('legacy-peak')");
   w.run('stage=1');
   const html=w.run('customize()');

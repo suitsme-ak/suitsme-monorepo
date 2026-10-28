@@ -19,6 +19,7 @@ const assert=require('node:assert/strict'),fs=require('node:fs'),vm=require('nod
 // J15 trousers options journey (CUS-01)
 // J16 jacket finishes journey (CUS-01)
 // J17 priced extras, tier and monogram fields journey (CUS-02)
+// J18 detail add ons, tailor changes and comments journey (CUS-02)
 
 function makeEl(){const el={innerHTML:'',textContent:'',value:'',checked:false,open:false,style:{},attrs:{},classList:{add(){},remove(){},toggle(){return false}},setAttribute(k,v){el.attrs[k]=String(v)},removeAttribute(k){delete el.attrs[k]},getAttribute(k){return k in el.attrs?el.attrs[k]:null},addEventListener(){},getBoundingClientRect:()=>({left:0,right:0,top:0,bottom:0}),showModal(){el.open=true},close(){el.open=false},scrollIntoView(){}};return el}
 
@@ -819,6 +820,70 @@ console.log('E2E journey J12 passed: designing a second product starts clean wit
   w.run("setOption('squareAndTie','Yes')");
   assert.equal(w.run('itemPrice(config)'),jacketBase+39,'the jacket prices the square and tie set');
   console.log('E2E journey J17 passed: the suit Personalize step opens with the Tier group, offers the vest, additional pants and square and tie extras with prices showing and nothing preselected on, and the three monogram fields, the combined extras raise the customizer, bag and checkout prices by exactly their total, and a standalone jacket offers the tier and the set but no vest.');
+}
+
+// ---------------------------------------------------------------- J18
+// Detail add ons journey (CUS-02, package 3.5): from a suit product
+// page, the Personalize step offers the Jacket details toggles, the
+// Trouser details toggles and the Side tabs group, the tailor changes
+// consent and the comments field; choosing details from both sections
+// raises the customizer, bag and checkout prices by exactly their
+// combined modifier, the consent and comments reach the bag and
+// checkout, and a standalone jacket offers the jacket details but no
+// trouser details or consent.
+{
+  const ready={id:'p-ready',name:'Ready profile',method:'ready',wearer:'Men',fit:'Tailored',ready:{jacket:'40',length:'Regular',trouser:'34'},created:'2026-01-01T00:00:00.000Z'};
+  const w=makeWorld({profiles:[ready]});
+  w.run('chooseProduct(0)');
+  assert.equal(w.run('location.hash'),'#product/0','the journey lands on the product page');
+  const base=w.run('products[0].price');
+  w.run('beginDesign(0)');
+  w.run('nextConfig()'); // stage 0 to 1, Personalize
+  assert.equal(w.run('stage'),1,'the journey reaches the Personalize step');
+  const personalize=w.run('customize()');
+  assert.ok(personalize.includes('<h3>Jacket details</h3>'),'the Personalize step offers the Jacket details section');
+  assert.ok(personalize.includes('<div class="option-title">Handmade Milanese lapel buttonhole</div>'),'the Personalize step offers the Milanese buttonhole detail');
+  assert.ok(personalize.includes(`onclick="setOption('milaneseButtonhole','Yes')">Yes · +$75`),'the priciest jacket detail shows its price');
+  assert.ok(personalize.includes(`aria-pressed="true" onclick="setOption('workingCuffButtons','No')"`),'the jacket detail toggles start off');
+  assert.ok(personalize.includes('<h3>Trouser details</h3>'),'the Personalize step offers the Trouser details section');
+  assert.ok(personalize.includes('Venice side tabs · +$20'),'the top side tab tier shows its price');
+  assert.ok(personalize.includes(`aria-pressed="true" onclick="setOption('tailorChanges','Yes, change if required')"`),'the tailor changes default starts selected');
+  assert.ok(personalize.includes('<textarea maxlength="200"'),'the comments field is offered');
+  w.run("setOption('workingCuffButtons','Yes');setOption('boatPocket','Yes');setOption('suspenderButtons','Yes');setOption('sideTabs','Milan side tabs');setOption('tailorChanges','No, contact me');config.comments='Please rush for a wedding.';saveConfig()");
+  assert.ok(w.run('customize()').includes('$'+(base+52)),'the customizer price rises by the combined detail modifiers (5+25+2+20)');
+  w.run('nextConfig()'); // stage 1 to 2, Measurements
+  w.elFor('#profileSelect').value='p-ready';
+  w.run('nextConfig()');
+  assert.equal(w.bag().length,1,'the configured suit is bagged');
+  const item=w.bag()[0];
+  assert.equal(item.workingCuffButtons,'Yes','the bagged item stores the working cuff buttons toggle');
+  assert.equal(item.boatPocket,'Yes','the bagged item stores the boat pocket toggle');
+  assert.equal(item.suspenderButtons,'Yes','the bagged item stores the suspender buttons toggle');
+  assert.equal(item.sideTabs,'Milan side tabs','the bagged item stores the side tabs');
+  assert.equal(item.tailorChanges,'No, contact me','the bagged item stores the tailor changes consent');
+  assert.equal(item.comments,'Please rush for a wedding.','the bagged item stores the comments');
+  const line=w.run('lineDescription(bag[0])');
+  for(const part of ['Working cuff buttons','Italian boat pocket','Suspender buttons','Milan side tabs','Tailor changes: No, contact me'])assert.ok(line.includes(part),`the bag line names ${part}`);
+  assert.ok(w.run('lineHtml(bag[0])').includes('Comments: Please rush for a wedding.'),'the bag line markup shows the comments');
+  assert.equal(w.run('subtotal()'),base+52,'the subtotal includes the detail modifiers');
+  w.run("location.hash='#checkout'");
+  const checkout=w.run('checkoutPage()');
+  assert.ok(checkout.includes('Comments: Please rush for a wedding.'),'the checkout shows the comments');
+  assert.ok(checkout.includes('$'+(base+52)),'the checkout total includes the detail modifiers');
+  // A standalone jacket offers the jacket details, but no trouser
+  // details and no tailor changes consent.
+  const jacketIdx=w.run("products.findIndex(p=>p.kind==='jacket')");
+  assert.ok(jacketIdx>=0,'the catalog holds a standalone jacket for the journey');
+  const jacketBase=w.run(`products[${jacketIdx}].price`);
+  w.run(`beginDesign(${jacketIdx})`);
+  w.run('nextConfig()');
+  const jacketPersonalize=w.run('customize()');
+  assert.ok(jacketPersonalize.includes('<h3>Jacket details</h3>'),'the jacket Personalize step offers the Jacket details section');
+  assert.ok(!jacketPersonalize.includes('<h3>Trouser details</h3>'),'the jacket offers no Trouser details section');
+  assert.ok(!jacketPersonalize.includes('<div class="option-title">Tailor changes</div>'),'the jacket offers no tailor changes consent');
+  w.run("setOption('pickStitch','Yes')");
+  assert.equal(w.run('itemPrice(config)'),jacketBase+10,'the jacket prices its pick stitch detail');
+  console.log('E2E journey J18 passed: the suit Personalize step offers the Jacket details and Trouser details toggles, the Side tabs group, the tailor changes consent and the comments field, the chosen details raise the customizer, bag and checkout prices by exactly their combined modifier, the consent and comments reach the bag and checkout, and a standalone jacket offers the jacket details only.');
 }
 
 console.log('E2E journey checks passed: menu to product, standard size and body measurement journeys, method switching, quick add, bag edit with checkout rendering, the Women body-only rule, and the unified listing controls journey all hold end to end.');

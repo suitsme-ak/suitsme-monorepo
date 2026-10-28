@@ -34,8 +34,8 @@ const req=(route,body,owner='owner-1',key='test-attempt-00000001')=>new Request(
  r=await commerce(req('/api/checkout',{...input,items:[{product:cloth.id,price:1,fabric:'Wool',lapel:'Notch',closure:'Two button',fit:'Tailored',lining:'Burgundy',monogram:'TEST',profile:{name:'Body test',method:'body',unit:'in',wearer:'Men',values:bodyValues}}]},'owner-1','body-profile-00000000001'),env);
  assert.equal(r.status,200,'Body profile checkout succeeds');
  const bodyResult=await r.json();assert.equal(bodyResult.token,'mock-hosted-token');
- assert.equal(providerAmount,(cloth.priceCents/100).toFixed(2),'Body profile order is priced from the server catalog');
- assert.equal(bodyResult.totalCents,cloth.priceCents);
+ assert.equal(providerAmount,((cloth.priceCents+1000)/100).toFixed(2),'Body profile order is priced from the server catalog, plus $10 for its filled monogram (Wave 3 package 3.4)');
+ assert.equal(bodyResult.totalCents,cloth.priceCents+1000,'The total is the server catalog price plus the monogram charge');
  const bodyItem=JSON.parse(db.rows.at(-1).items)[0];
  assert.equal(bodyItem.lining,'Burgundy','Lining selection is persisted alongside the body profile');
  assert.equal(bodyItem.lapel,'Notch');assert.equal(bodyItem.closure,'Two button');assert.equal(bodyItem.fit,'Tailored');assert.equal(bodyItem.monogram,'TEST');

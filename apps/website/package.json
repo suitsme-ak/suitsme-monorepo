@@ -12,7 +12,7 @@
     "start": "node --import ./scripts/sites-env.mjs ./node_modules/wrangler/bin/wrangler.js dev --config dist/server/wrangler.json --local --persist-to .wrangler/state --ip 127.0.0.1 --inspector-port 0",
     "lint": "eslint . --ignore-pattern dist --ignore-pattern .next",
     "db:generate": "drizzle-kit generate",
-    "test": "node tests/catalog.cjs && node tests/suit-edits.cjs && node tests/commerce.cjs && node tests/standard-sizes.cjs && node tests/measurements.cjs && node tests/bag-lines.cjs && node tests/bag-edit.cjs && node tests/customizer-method.cjs && node tests/e2e-journeys.cjs && node tests/listing-controls.cjs && node tests/delivery-estimate.cjs && node tests/listing-labels.cjs && node tests/size-guide.cjs && node tests/customizer-state.cjs && node tests/women-trouser-front.cjs && node tests/customizer-jacket-options.cjs && node tests/customizer-trouser-options.cjs"
+    "test": "node tests/catalog.cjs && node tests/suit-edits.cjs && node tests/commerce.cjs && node tests/standard-sizes.cjs && node tests/measurements.cjs && node tests/bag-lines.cjs && node tests/bag-edit.cjs && node tests/customizer-method.cjs && node tests/e2e-journeys.cjs && node tests/listing-controls.cjs && node tests/delivery-estimate.cjs && node tests/listing-labels.cjs && node tests/size-guide.cjs && node tests/customizer-state.cjs && node tests/women-trouser-front.cjs && node tests/customizer-jacket-options.cjs && node tests/customizer-trouser-options.cjs && node tests/customizer-jacket-finishes.cjs"
   },
   "dependencies": {
     "@base-ui/react": "^1.7.0",

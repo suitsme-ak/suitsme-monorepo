@@ -13,7 +13,7 @@ A responsive custom-tailoring storefront with the Suits.me palette, original gen
 - Fit support, garment-clone consultation preparation and service-charge guidance. Consultation notes save locally; they do not send requests or book appointments.
 
 ## Project map
-`public/` contains frontend scripts, CSS, imagery and the generated 3D bundle. `web/index.html` is the HTML served by `app/route.ts` and mirrors `public/index.html`. `studio/` contains authored Three.js source. `data/` contains the sample catalog, collections and menu mapping. `scripts/generate-catalog.cjs` regenerates browser data and server prices while keeping the first 19 product IDs stable. `lib/commerce.ts` implements the payment API; `app/api/` exposes its routes. `db/` and `drizzle/` contain the D1 schema and migrations. `tests/` contains catalog and mocked payment contracts.
+`public/` contains frontend scripts, CSS, imagery and the generated 3D bundle. `public/index.html` is the single source of the shell document: the route handlers import it directly (the former `web/index.html` mirror was retired in Wave 4 stage 3b). `studio/` contains authored Three.js source. `data/` contains the sample catalog, collections and menu mapping. `scripts/generate-catalog.cjs` regenerates browser data and server prices while keeping the first 19 product IDs stable. `lib/commerce.ts` implements the payment API; `app/api/` exposes its routes. `db/` and `drizzle/` contain the D1 schema and migrations. `tests/` contains catalog and mocked payment contracts.
 
 ## Development and deployment
 This project uses Node 22.13+ and pnpm 11.25.0. The user does not need to run these commands; they are provided for a future developer.

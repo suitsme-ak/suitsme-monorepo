@@ -13,6 +13,9 @@
 // Outputs:
 //   data/real-routes.json      consumed by the server routes
 //                              (validation, canonical redirects, 404s)
+//                              and, since stage 3b, by lib/route-head.ts
+//                              for the per route heads and by
+//                              scripts/build-sitemap.cjs
 //   public/real-routes-data.js consumed by public/real-routes.js, the
 //                              boot script that translates a real path
 //                              into the hash route the storefront
@@ -104,6 +107,46 @@ const PAGES={
 // order records the shell cannot list), so the orders family carries
 // no validation data and its route serves any single segment id.
 const FAMILY_KINDS={fabrics:['shirt','suit'],studio:['jacket','pants','suit']};
+
+// Stage 3b (NAV-01): per route head copy for the server side head
+// injection in lib/route-head.ts. Collection titles and descriptions
+// are derived in buildRealRoutes from each canonical destination's
+// menu label and category, so they can never drift from the menu.
+// Page and family copy is written here, once, in the site's voice.
+// The state screens (customize, checkout, orders, payment return)
+// are marked noindex; the content screens are indexable. A page or
+// family kind without copy, or copy without a page, fails the build
+// loudly, the same discipline as a missing canonical destination.
+// The heads live only in data/real-routes.json: the boot script does
+// not need them, and carrying collection and page copy in
+// public/real-routes-data.js would bloat every page load.
+const PAGE_HEADS={
+  '/customize':{title:'Customize your garment | Suits.me',description:'Refine the fabric, lapel, lining, and finishing details of your tailored garment, then find your fit.',robots:'noindex'},
+  '/measure':{title:'Measurement Studio | Suits.me',description:'Build your measurement profile with guided body measurements or standard US sizes. Switch between inches and centimetres, save your profile, and reuse it on every tailored order.',robots:'index'},
+  '/checkout':{title:'Checkout | Suits.me',description:'Review your tailored selections, delivery details, and measurement profiles, then complete your order.',robots:'noindex'},
+  '/orders':{title:'Your orders | Suits.me',description:'The orders you have placed with Suits.me, saved on this browser.',robots:'noindex'},
+  '/gift-cards':{title:'Gift cards | Suits.me',description:'Give the gift of personal style. A Suits.me gift card lets them choose the fabric, the details, and the moment.',robots:'index'},
+  '/help':{title:'Help and FAQs | Suits.me',description:'Answers about finding your measurements, saving fit profiles, checking out, caring for your garments, and talking to a stylist.',robots:'index'},
+  '/locations':{title:'Showrooms and locations | Suits.me',description:'Meet a stylist, explore cloth in person, and talk through every detail at a Suits.me showroom.',robots:'index'},
+  '/shipping':{title:'Delivery and garment care | Suits.me',description:'How delivery works for custom tailoring, how to confirm the estimate for your order, and how to care for your tailored garments.',robots:'index'},
+  '/privacy':{title:'Privacy | Suits.me',description:'What the Suits.me experience saves, what a configured checkout shares with the payment provider, and how to clear your saved details.',robots:'index'},
+  '/terms':{title:'Terms | Suits.me',description:'The terms of the Suits.me storefront experience, from the preview catalog and demo orders to the business terms for live orders.',robots:'index'},
+  '/fit-support':{title:'Fit support | Suits.me',description:'Get your fit right with Suits.me fit support: measurement help, fit guarantee guidance, and stylist advice before your garment is made.',robots:'index'},
+  '/clone':{title:'Clone a garment | Suits.me',description:'Recreate a garment you already love. Suits.me clone guidance helps a stylist match its fit and details in new cloth.',robots:'index'},
+  '/charges':{title:'Other charges | Suits.me',description:'The other charges that can apply to a Suits.me order, explained before you check out.',robots:'index'},
+  '/payment-return':{title:'Payment confirmation | Suits.me',description:'We are confirming your payment securely with the payment provider.',robots:'noindex'},
+};
+const FAMILY_HEADS={
+  fabrics:{
+    suit:{title:'Suit fabrics | Suits.me',description:'Browse the suit fabrics at Suits.me and start a custom tailored suit in the cloth you choose.'},
+    shirt:{title:'Shirt fabrics | Suits.me',description:'Browse the shirt fabrics at Suits.me and start a custom tailored shirt in the cloth you choose.'},
+  },
+  studio:{
+    suit:{title:'3D suit configurator | Suits.me',description:'Design your suit in the Suits.me 3D configurator: cloth, lapel, lining, and details, previewed as you choose.'},
+    jacket:{title:'3D jacket configurator | Suits.me',description:'Design your jacket in the Suits.me 3D configurator: cloth, lapel, lining, and details, previewed as you choose.'},
+    pants:{title:'3D trousers configurator | Suits.me',description:'Design your trousers in the Suits.me 3D configurator: cloth, fit, and details, previewed as you choose.'},
+  },
+};
 
 function productIdRanges(catalog){
   if(!Array.isArray(catalog))throw new Error('real routes: data/catalog.json is not an array');
@@ -230,16 +273,47 @@ function buildRealRoutes(menus,collections,catalog){
     orders:{anySingleSegment:true},
   };
 
+  // Stage 3b: the per route heads. Collection values are derived
+  // from the canonical destination's hash: the category segment and,
+  // for a topic destination, the decoded menu label. Page and family
+  // values come from the copy tables above, validated both ways so
+  // copy and routes cannot drift apart silently.
+  const heads={collections:{},pages:{},families:{fabrics:{},studio:{}}};
+  for(const [path,hash] of Object.entries(paths)){
+    const dec=s=>{try{return decodeURIComponent(s)}catch{return s}};
+    const parts=hash.split('/');
+    const category=dec(parts[1]||'');
+    const topic=parts.length>2?dec(parts.slice(2).join('/')):null;
+    const label=topic||category;
+    heads.collections[path]={
+      title:`${label} | Suits.me`,
+      description:topic
+        ?`Explore ${label} in the ${category} collection at Suits.me: custom tailoring made to your measurements. Choose your fabric, refine the details, and build your fit profile.`
+        :`Explore the ${category} collection at Suits.me: custom tailoring made to your measurements. Choose your fabric, refine the details, and build your fit profile.`,
+    };
+  }
+  for(const path of Object.keys(pages)){
+    if(!PAGE_HEADS[path])throw new Error(`real routes: page ${path} has no head copy in PAGE_HEADS`);
+    heads.pages[path]=PAGE_HEADS[path];
+  }
+  for(const path of Object.keys(PAGE_HEADS))
+    if(!(path in pages))throw new Error(`real routes: head copy exists for ${path}, which is not a page`);
+  for(const family of Object.keys(FAMILY_KINDS))for(const kind of FAMILY_KINDS[family]){
+    const head=FAMILY_HEADS[family]&&FAMILY_HEADS[family][kind];
+    if(!head)throw new Error(`real routes: ${family} kind ${kind} has no head copy in FAMILY_HEADS`);
+    heads.families[family][kind]=head;
+  }
+
   const sortObj=o=>Object.fromEntries(Object.entries(o).sort(([a],[b])=>a<b?-1:a>b?1:0));
-  return{paths:sortObj(paths),aliases:sortObj(aliases),reverse:sortObj(reverse),pages,families};
+  return{paths:sortObj(paths),aliases:sortObj(aliases),reverse:sortObj(reverse),pages,families,heads};
 }
 
 function main(){
   const menus=JSON.parse(fs.readFileSync('data/reference-navigation.json','utf8'));
   const collections=JSON.parse(fs.readFileSync('data/collections.json','utf8'));
   const catalog=JSON.parse(fs.readFileSync('data/catalog.json','utf8'));
-  const{paths,aliases,reverse,pages,families}=buildRealRoutes(menus,collections,catalog);
-  fs.writeFileSync('data/real-routes.json',JSON.stringify({paths,aliases,reverse,pages,families},null,2)+'\n');
+  const{paths,aliases,reverse,pages,families,heads}=buildRealRoutes(menus,collections,catalog);
+  fs.writeFileSync('data/real-routes.json',JSON.stringify({paths,aliases,reverse,pages,families,heads},null,2)+'\n');
   const header='// Generated by scripts/build-real-routes.cjs from data/reference-navigation.json,\n// data/collections.json and data/catalog.json. Do not edit by hand; the build\n// regenerates it.\n';
   fs.writeFileSync('public/real-routes-data.js',
     header+

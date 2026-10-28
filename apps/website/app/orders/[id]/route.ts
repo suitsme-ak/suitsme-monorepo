@@ -1,4 +1,5 @@
-import html from "../../../web/index.html?raw";
+import html from "../../../public/index.html?raw";
+import { headForOrderDetail, shellResponse } from "../../../lib/route-head";
 
 // Wave 4 stage 3a (NAV-01), Mechanic A: order detail at a real URL.
 //
@@ -10,11 +11,11 @@ import html from "../../../web/index.html?raw";
 // route does today: it renders the order when the id is one of the
 // shopper's own orders and its own not found state (the orders list)
 // when it is not. No id is ever confirmed or denied here.
-export async function GET() {
-  return new Response(html, {
-    headers: {
-      "Content-Type": "text/html; charset=utf-8",
-      "Cache-Control": "no-cache",
-    },
-  });
+//
+// Stage 3b adds the head injection (lib/route-head.ts): order detail
+// is shopper state, so the served head always carries noindex, with
+// the page's own URL as its canonical.
+export async function GET(request: Request) {
+  const path = new URL(request.url).pathname.replace(/\/+$/, "");
+  return shellResponse(html, headForOrderDetail(path));
 }

@@ -15,6 +15,7 @@ const assert=require('node:assert/strict'),fs=require('node:fs'),vm=require('nod
 // J11 size guide journey (SIZ-03)
 // J12 cross product customizer state journey (CUS-07)
 // J13 women suit trouser front journey (CUS-06)
+// J14 jacket core options journey (CUS-01)
 
 function makeEl(){const el={innerHTML:'',textContent:'',value:'',checked:false,open:false,style:{},attrs:{},classList:{add(){},remove(){},toggle(){return false}},setAttribute(k,v){el.attrs[k]=String(v)},removeAttribute(k){delete el.attrs[k]},getAttribute(k){return k in el.attrs?el.attrs[k]:null},addEventListener(){},getBoundingClientRect:()=>({left:0,right:0,top:0,bottom:0}),showModal(){el.open=true},close(){el.open=false},scrollIntoView(){}};return el}
 
@@ -587,6 +588,45 @@ console.log('E2E journey J12 passed: designing a second product starts clean wit
   w.run("location.hash='#checkout'");
   assert.ok(w.run('checkoutPage()').includes('Single pleat'),'the checkout selection shows the trouser front');
   console.log('E2E journey J13 passed: the Women suit Personalize step offers Trouser front, and the choice reaches the bag line and checkout.');
+}
+
+// ---------------------------------------------------------------- J14
+// Jacket core options journey (CUS-01): from a suit product page, the
+// Personalize step offers the extended closure and the new Vents, Jacket
+// cuff buttons and Pocket accent groups with their defaults selected;
+// choosing a priced pocket accent raises the price on the customizer,
+// the bag line and the checkout total by exactly its modifier.
+{
+  const ready={id:'p-ready',name:'Ready profile',method:'ready',wearer:'Men',fit:'Tailored',ready:{jacket:'40',length:'Regular',trouser:'34'},created:'2026-01-01T00:00:00.000Z'};
+  const w=makeWorld({profiles:[ready]});
+  w.run('chooseProduct(0)');
+  assert.equal(w.run('location.hash'),'#product/0','the journey lands on the product page');
+  const base=w.run('products[0].price');
+  w.run('beginDesign(0)');
+  w.run('nextConfig()'); // stage 0 to 1, Personalize
+  assert.equal(w.run('stage'),1,'the journey reaches the Personalize step');
+  const personalize=w.run('customize()');
+  for(const title of ['Vents','Jacket cuff buttons','Pocket accent'])assert.ok(personalize.includes(`<div class="option-title">${title}</div>`),`the Personalize step offers the ${title} group`);
+  assert.ok(personalize.includes("setOption('closure','Three button')")&&personalize.includes("setOption('closure','Four button')"),'the closure group offers the extended styles');
+  assert.ok(personalize.includes(`aria-pressed="true" onclick="setOption('vents','Single vent')"`),'Single vent starts selected');
+  assert.ok(personalize.includes(`aria-pressed="true" onclick="setOption('cuffButtons','Three')"`),'Three cuff buttons starts selected');
+  assert.ok(personalize.includes('Patch pocket · +$15'),'the Patch pocket choice shows its modifier');
+  w.run("setOption('vents','Double vent');setOption('pocketAccent','Patch pocket')");
+  assert.ok(w.run('customize()').includes('$'+(base+15)),'the customizer price rises by the modifier');
+  w.run('nextConfig()'); // stage 1 to 2, Measurements
+  w.elFor('#profileSelect').value='p-ready';
+  w.run('nextConfig()');
+  assert.equal(w.bag().length,1,'the configured suit is bagged');
+  assert.equal(w.bag()[0].pocketAccent,'Patch pocket','the bagged item stores the pocket accent');
+  assert.equal(w.bag()[0].vents,'Double vent','the bagged item stores the vents');
+  assert.ok(w.run('lineHtml(bag[0])').includes('$'+(base+15)),'the bag line price includes the modifier');
+  assert.ok(w.run('lineDescription(bag[0])').includes('Patch pocket'),'the bag line shows the pocket accent');
+  assert.equal(w.run('subtotal()'),base+15,'the subtotal includes the modifier');
+  w.run("location.hash='#checkout'");
+  const checkout=w.run('checkoutPage()');
+  assert.ok(checkout.includes('Patch pocket'),'the checkout selection shows the pocket accent');
+  assert.ok(checkout.includes('$'+(base+15)),'the checkout total includes the modifier');
+  console.log('E2E journey J14 passed: the suit Personalize step offers the jacket core groups with defaults selected, and a priced pocket accent raises the customizer, bag and checkout prices by exactly its modifier.');
 }
 
 console.log('E2E journey checks passed: menu to product, standard size and body measurement journeys, method switching, quick add, bag edit with checkout rendering, the Women body-only rule, and the unified listing controls journey all hold end to end.');

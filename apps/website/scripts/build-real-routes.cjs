@@ -80,8 +80,11 @@ function pathFor(cat,topic){
 // the hash route the render dispatch serves today (complete.js:
 // customize, measure, checkout, orders, gift cards, help, locations,
 // the three policy pages and the payment return; expanded.js: fit
-// support, clone, charges). One canonical path per screen; there are
-// no aliases for these.
+// support, clone, charges). Wave 5 package 5.4 adds the account
+// screens the same way (sign in, register, forgot and reset password,
+// verify email, account), each one a noindex state page whose entry
+// points stay hidden until the accounts gate opens. One canonical
+// path per screen; there are no aliases for these.
 const PAGES={
   '/customize':'#customize',
   '/measure':'#measure',
@@ -97,6 +100,12 @@ const PAGES={
   '/clone':'#clone',
   '/charges':'#charges',
   '/payment-return':'#payment-return',
+  '/sign-in':'#sign-in',
+  '/register':'#register',
+  '/forgot-password':'#forgot-password',
+  '/reset-password':'#reset-password',
+  '/verify-email':'#verify-email',
+  '/account':'#account',
 };
 // Parameterised family kinds, mirroring the client dispatch:
 // merchant.js renders the #fabrics/ listings for suit and shirt only,
@@ -113,8 +122,9 @@ const FAMILY_KINDS={fabrics:['shirt','suit'],studio:['jacket','pants','suit']};
 // are derived in buildRealRoutes from each canonical destination's
 // menu label and category, so they can never drift from the menu.
 // Page and family copy is written here, once, in the site's voice.
-// The state screens (customize, checkout, orders, payment return)
-// are marked noindex; the content screens are indexable. A page or
+// The state screens (customize, checkout, orders, payment return,
+// and the Wave 5 account screens) are marked noindex; the content
+// screens are indexable. A page or
 // family kind without copy, or copy without a page, fails the build
 // loudly, the same discipline as a missing canonical destination.
 // The heads live only in data/real-routes.json: the boot script does
@@ -135,6 +145,12 @@ const PAGE_HEADS={
   '/clone':{title:'Clone a garment | Suits.me',description:'Recreate a garment you already love. Suits.me clone guidance helps a stylist match its fit and details in new cloth.',robots:'index'},
   '/charges':{title:'Other charges | Suits.me',description:'The other charges that can apply to a Suits.me order, explained before you check out.',robots:'index'},
   '/payment-return':{title:'Payment confirmation | Suits.me',description:'We are confirming your payment securely with the payment provider.',robots:'noindex'},
+  '/sign-in':{title:'Sign in | Suits.me',description:'Sign in to your Suits.me account to use your saved measurement profiles and see your orders on any device.',robots:'noindex'},
+  '/register':{title:'Create your account | Suits.me',description:'Create a Suits.me account to keep your measurement profiles with you on any device. We email you a link to confirm your address.',robots:'noindex'},
+  '/forgot-password':{title:'Forgot password | Suits.me',description:'Ask for a password reset link for your Suits.me account.',robots:'noindex'},
+  '/reset-password':{title:'Reset password | Suits.me',description:'Choose a new password for your Suits.me account.',robots:'noindex'},
+  '/verify-email':{title:'Confirm your email | Suits.me',description:'Confirm your email address to finish creating your Suits.me account.',robots:'noindex'},
+  '/account':{title:'Your account | Suits.me',description:'Your Suits.me account: your details, your measurement profiles and your orders.',robots:'noindex'},
 };
 const FAMILY_HEADS={
   fabrics:{

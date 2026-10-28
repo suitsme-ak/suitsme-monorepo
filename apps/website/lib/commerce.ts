@@ -1,4 +1,5 @@
 import catalog from './catalog.json';
+import { resolveOwner } from './accounts.ts';
 type Env=Record<string,any>;
 const reply=(data:any,status=200)=>Response.json(data,{status,headers:{'Cache-Control':'no-store','X-Content-Type-Options':'nosniff'}});
 function settings(env:Env){const live=env.ANET_ENV==='production';const ready=!!(env.ANET_API_LOGIN_ID&&env.ANET_TRANSACTION_KEY&&env.ANET_SIGNATURE_KEY&&env.DB)&&(!live||env.COMMERCE_APPROVED==='true'&&env.TAX_QUOTE_URL&&/^\d+$/.test(env.SHIPPING_CENTS||''));return{ready,mode:ready?(live?'live':'sandbox'):'demo',live};}
@@ -58,7 +59,14 @@ export async function commerce(request:Request,env:Env){
  try{
   if(path==='/api/payment/config'){const {ready,mode}=settings(env);return reply({ready,mode});}
   if(path==='/api/authorize/webhook'&&request.method==='POST')return await verifyWebhook(request,env);
-  const owner=request.headers.get('oai-authenticated-user-id');
+  // Owner resolution is the one shared resolver (design section
+  // 1.1, package 5.6): a valid app session cookie wins, keyed
+  // app:<user id>; else the gateway header exactly as this file
+  // read it before; else the request is a guest and reads as the
+  // same 401 it always has. Nothing else in commerce changes:
+  // pricing, idempotency, order reads and the webhook keep their
+  // existing behaviour under whichever owner the resolver returns.
+  const {owner}=await resolveOwner(request,env);
   if(!owner)return reply({error:'Please sign in to continue.'},401);
   if(path.startsWith('/api/orders/')&&request.method==='GET'){
    if(!env.DB)return reply({error:'Order storage is unavailable.'},503);

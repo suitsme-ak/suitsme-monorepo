@@ -90,7 +90,7 @@ const catalog=require('../data/catalog.json');
 const REAL_PATH='/collections/suits/wool-suits';
 const WOOL_HASH='#collection/Suits/Wool%20Suits';
 const woolIds=require('../data/suit-collections.json')['Wool Suits'].ids;
-const EXPECTED_PAGES={'/customize':'#customize','/measure':'#measure','/checkout':'#checkout','/orders':'#orders','/gift-cards':'#gift-cards','/help':'#help','/locations':'#locations','/shipping':'#shipping','/privacy':'#privacy','/terms':'#terms','/fit-support':'#fit-support','/clone':'#clone','/charges':'#charges','/payment-return':'#payment-return'};
+const EXPECTED_PAGES={'/customize':'#customize','/measure':'#measure','/checkout':'#checkout','/orders':'#orders','/gift-cards':'#gift-cards','/help':'#help','/locations':'#locations','/shipping':'#shipping','/privacy':'#privacy','/terms':'#terms','/fit-support':'#fit-support','/clone':'#clone','/charges':'#charges','/payment-return':'#payment-return','/sign-in':'#sign-in','/register':'#register','/forgot-password':'#forgot-password','/reset-password':'#reset-password','/verify-email':'#verify-email','/account':'#account'};
 
 function makeEl(){const el={innerHTML:'',textContent:'',value:'',checked:false,open:false,style:{},attrs:{},classList:{add(){},remove(){},toggle(){return false}},setAttribute(k,v){el.attrs[k]=String(v)},removeAttribute(k){delete el.attrs[k]},getAttribute(k){return k in el.attrs?el.attrs[k]:null},addEventListener(){},getBoundingClientRect:()=>({left:0,right:0,top:0,bottom:0}),showModal(){el.open=true},close(){el.open=false},scrollIntoView(){}};return el}
 
@@ -419,6 +419,18 @@ const productDoc=id=>{const p=catalog[id];return expectedDoc({title:`${p.name} |
   assert.ok(checkoutDoc.includes('<link rel="canonical" href="https://suits.me/checkout">'),'literal: the checkout canonical points at its own URL');
   const paymentDoc=await (await (await routeGet('app/payment-return/route.ts'))('/payment-return')).text();
   assert.ok(paymentDoc.includes('<meta name="robots" content="noindex,nofollow">'),'literal: the payment return carries noindex');
+  // Wave 5 package 5.4: the account screens join the page set as
+  // noindex state pages with their own heads, exactly like checkout.
+  const signInDoc=await (await (await routeGet('app/sign-in/route.ts'))('/sign-in')).text();
+  assert.ok(signInDoc.includes('<title>Sign in | Suits.me</title>'),'literal: the sign in title');
+  assert.ok(signInDoc.includes('<meta name="robots" content="noindex,nofollow">'),'literal: the sign in page carries noindex');
+  assert.ok(signInDoc.includes('<link rel="canonical" href="https://suits.me/sign-in">'),'literal: the sign in canonical points at its own URL');
+  const accountDoc2=await (await (await routeGet('app/account/route.ts'))('/account')).text();
+  assert.ok(accountDoc2.includes('<title>Your account | Suits.me</title>'),'literal: the account title');
+  assert.ok(accountDoc2.includes('<meta name="robots" content="noindex,nofollow">'),'literal: the account page carries noindex');
+  const verifyDoc=await (await (await routeGet('app/verify-email/route.ts'))('/verify-email')).text();
+  assert.ok(verifyDoc.includes('<title>Confirm your email | Suits.me</title>'),'literal: the verify email title');
+  assert.ok(verifyDoc.includes('<meta name="robots" content="noindex,nofollow">'),'literal: the verify email page carries noindex');
 
   // Fabrics and studio: valid kinds serve, unknown kinds 404,
   // non-canonical forms of valid kinds redirect.

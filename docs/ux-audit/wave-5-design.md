@@ -376,3 +376,277 @@ Only decisions the design cannot make for itself:
 - Whether `cf-connecting-ip` is visible to the worker on this hosting. Nothing in the repo reads it. Package 5.2 designs for its absence.
 - Whether the hosting plan offers a native email sending binding (option 2 in section 4). Nothing in the repo evidences one. Owner confirmation would change package 5.3's settings, not its flows.
 - `node:crypto` scrypt availability under `nodejs_compat` in the deployed worker. The flag appears in `vite.config.ts`'s plugin binding config; runtime support is not provable from repo files. Package 5.0, only if the PBKDF2 result motivates it.
+
+## Addendum: package 5.0 verification spike (2026-10-28)
+
+Status: complete. This addendum settles the two runtime questions section 3.1 and the appendix register left open: the PBKDF2 iteration ceiling on the built worker, and scrypt availability under `nodejs_compat`. It closes both register entries. The committed parameters at the end of this addendum are the exact constants package 5.2 implements; section 3.1's "highest verified count" language is now resolved to a number.
+
+### Method
+
+- A throwaway route, `app/api/probe-hash/route.ts`, was added to a spike worktree based on main `ee67f33`. It never touched product code paths: one GET handler that runs the derivations and returns JSON. The full probe source is preserved at the end of this addendum so the experiment can be rebuilt exactly.
+- The site was built with the normal root build (`pnpm build`, exit 0; the probe route appears in the build's route table), then served with the repo's own `pnpm start`: wrangler dev against the built output (`dist/server/wrangler.json`), which is real workerd, the same runtime family as the deployment. Node's WebCrypto was never used for these numbers.
+- The built worker's config, read from `dist/server/wrangler.json` after the build: `compatibility_date` `2026-05-15`, `compatibility_flags` `["nodejs_compat"]`. So the flag section 0.3 saw in `vite.config.ts` does reach the built worker that was probed.
+- The probe derived PBKDF2 HMAC SHA-256 keys (16 byte random salt, 256 bit output, a fixed probe password) at escalating iteration counts, timing each derivation with `performance.now()` inside the worker. Iteration counts and scrypt N values were query overridable, so the high end was probed without rebuilds.
+- After the measurements were captured, the probe route was deleted. The committed spike branch contains only this addendum; the probe source below is the evidence trail.
+
+### PBKDF2 results (workerd, built worker)
+
+| Iterations | Result | Wall time |
+| --- | --- | --- |
+| 100,000 | ok, 32 bytes derived | 33 ms |
+| 200,000 | ok | 48 ms |
+| 310,000 | ok | 73 ms |
+| 400,000 | ok | 92 ms |
+| 500,000 | ok | 115 ms |
+| 600,000 | ok | 144 ms (repeats: 143 ms, 140 ms, 146 ms) |
+| 800,000 | ok | 192 ms |
+| 1,000,000 | ok | 232 ms |
+| 2,000,000 | ok | 508 ms |
+| 5,000,000 | ok | 1,333 ms |
+| 10,000,000 | ok | 2,349 ms |
+
+No iteration ceiling was encountered. Every count from 100,000 to 10,000,000 derived successfully, and cost is linear at roughly 0.24 ms per 1,000 iterations. The OWASP target of 600,000 iterations for PBKDF2 HMAC SHA-256 is reachable with more than an order of magnitude of headroom, so the design commits to the full target, not a reduced runtime compromise. There is no shortfall to record against section 3.1.
+
+### scrypt fallback results (node:crypto under nodejs_compat)
+
+`node:crypto` imports inside the worker and both `scrypt` and `scryptSync` are functions. The fallback is real, with one operational catch: the default `maxmem` rejects any parameter set whose memory need (about 128 x N x r bytes) crosses the 32 MiB default, and the failure is a generic `Error: Scrypt failed` with no code. With `maxmem` raised explicitly, every tested parameter set works:
+
+| N (r=8, p=1, keylen 32) | Default maxmem | maxmem 256 MiB |
+| --- | --- | --- |
+| 16,384 | ok, 51 ms | ok, 43 ms |
+| 32,768 | fails (Scrypt failed) | ok, 107 ms |
+| 65,536 | fails (Scrypt failed) | ok, 219 ms |
+| 131,072 | fails (Scrypt failed) | ok, 449 ms |
+
+Verdict: scrypt is a viable fallback in this runtime, but it is not needed, because PBKDF2 meets the OWASP target directly. If a future algorithm swap ever uses it, the working parameter set measured here is N=65,536, r=8, p=1, keylen 32, `maxmem` 268,435,456 (219 ms), and the `maxmem` option must always be passed explicitly.
+
+### Session token primitives
+
+Confirmed in the same probe run: `crypto.getRandomValues` returns 32 bytes (two consecutive draws distinct), `crypto.subtle.digest('SHA-256', token)` returns a 64 character hex digest, and the base64url encoding of 32 bytes is 43 characters, exactly as section 3.3 specifies. Total time for the whole primitive check was about 1 ms, so token minting and hashing are free next to one password derivation.
+
+### Latency budget for the auth endpoints
+
+One PBKDF2 derivation at the committed parameters costs about 145 ms of worker time. Per endpoint, from the flows in section 2:
+
+- Register: 1 derivation (hash the new password), about 145 ms.
+- Sign in: 1 derivation to verify, about 145 ms. The dummy verification for an unknown email (section 3.5) is the same single derivation at the same parameters, so the timing equalisation the design promises holds by construction. A sign in that triggers a parameter upgrade rehash costs 2 derivations, about 290 ms, once per account per parameter change.
+- Verify email: no derivation (token hash lookup only).
+- Reset password: 1 derivation (hash the new password), about 145 ms.
+- Change password: 2 derivations (verify current, hash new), about 290 ms.
+
+These are interactive latencies a shopper will not notice inside a sign in round trip, and they are the deliberate cost of the KDF: an attacker guessing passwords pays the same 145 ms per attempt before the section 3.4 lockout even engages.
+
+One honest limit on this evidence: local wrangler does not enforce whatever CPU budget the deployed hosting plan sets, so the probe settles the API ceiling and the per derivation cost, not the plan limit. The number a plan budget would have to accommodate is about 145 ms of native crypto work per derivation. Package 5.2's first deployment check should confirm a live sign in round trip on the deployed worker before the gate opens; if a plan level CPU cap ever made 600,000 iterations impossible in production, the self describing hash format (section 3.1) and the rehash on sign in rule absorb a parameter change without a redesign, and the scrypt parameters above are the measured alternative.
+
+### Committed parameters (package 5.2 implements exactly these)
+
+```
+Password hashing (WebCrypto, crypto.subtle)
+  algorithm        PBKDF2, hash SHA-256 (deriveBits)
+  iterations       600000
+  salt             16 bytes from crypto.getRandomValues, per password
+  derived key      32 bytes (deriveBits length 256)
+  stored format    pbkdf2-sha256:<iterations>:<salt base64url>:<hash base64url>
+  comparison       constant time equality over the full 32 bytes
+  measured cost    about 145 ms per derivation on the built worker
+
+Session and one time tokens
+  token            32 bytes from crypto.getRandomValues, base64url (43 chars)
+  stored           SHA-256 hex of the token only, never the token
+
+Named fallback (not adopted; measured and available)
+  scrypt via node:crypto, N=65536, r=8, p=1, keylen 32,
+  maxmem 268435456 passed explicitly, about 219 ms per derivation
+```
+
+### Probe source (as run; deleted from the branch after measurement)
+
+```ts
+// THROWAWAY Wave 5 package 5.0 probe. Not part of the product.
+// Runs inside the built worker under wrangler (real workerd runtime) and
+// reports: PBKDF2 HMAC SHA-256 deriveBits at escalating iteration counts,
+// node:crypto scrypt availability and limits under nodejs_compat, and the
+// session token primitives (32 random bytes, SHA-256). Deleted before the
+// spike branch is committed; the addendum in docs/ux-audit/wave-5-design.md
+// records the method and carries this source so it can be rebuilt exactly.
+
+const enc = new TextEncoder();
+
+function errInfo(e: unknown) {
+  const anyE = e as { name?: string; message?: string; code?: string };
+  return {
+    name: anyE?.name ?? typeof e,
+    code: anyE?.code ?? null,
+    message: anyE?.message ?? String(e),
+  };
+}
+
+async function pbkdf2Once(iterations: number, salt: Uint8Array) {
+  const t0 = performance.now();
+  const key = await crypto.subtle.importKey(
+    "raw",
+    enc.encode("probe-password-0123456789"),
+    "PBKDF2",
+    false,
+    ["deriveBits"],
+  );
+  const bits = await crypto.subtle.deriveBits(
+    { name: "PBKDF2", salt, iterations, hash: "SHA-256" },
+    key,
+    256,
+  );
+  const ms = performance.now() - t0;
+  return { bytes: new Uint8Array(bits).length, ms: Math.round(ms * 10) / 10 };
+}
+
+export async function GET(request: Request) {
+  const url = new URL(request.url);
+  const out: Record<string, unknown> = {};
+
+  // --- PBKDF2 ladder -------------------------------------------------------
+  const counts = (url.searchParams.get("pbkdf2") ?? "100000,200000,310000,400000,500000,600000,800000,1000000")
+    .split(",")
+    .map((s) => parseInt(s, 10))
+    .filter((n) => Number.isFinite(n) && n > 0);
+  const salt = crypto.getRandomValues(new Uint8Array(16));
+  const pbkdf2: Record<string, unknown>[] = [];
+  for (const iterations of counts) {
+    try {
+      const r = await pbkdf2Once(iterations, salt);
+      pbkdf2.push({ iterations, ok: true, derivedBytes: r.bytes, ms: r.ms });
+    } catch (e) {
+      pbkdf2.push({ iterations, ok: false, error: errInfo(e) });
+    }
+  }
+  out.pbkdf2 = pbkdf2;
+
+  // --- Session token primitives -------------------------------------------
+  try {
+    const t0 = performance.now();
+    const a = crypto.getRandomValues(new Uint8Array(32));
+    const b = crypto.getRandomValues(new Uint8Array(32));
+    const digest = await crypto.subtle.digest("SHA-256", a);
+    const hex = [...new Uint8Array(digest)]
+      .map((x) => x.toString(16).padStart(2, "0"))
+      .join("");
+    const b64url = Buffer.from(a).toString("base64url");
+    out.tokenPrimitives = {
+      ok: true,
+      randomBytes: a.length,
+      twoDrawsDistinct: Buffer.from(a).toString("hex") !== Buffer.from(b).toString("hex"),
+      sha256HexLength: hex.length,
+      base64urlLength: b64url.length,
+      ms: Math.round((performance.now() - t0) * 100) / 100,
+    };
+  } catch (e) {
+    out.tokenPrimitives = { ok: false, error: errInfo(e) };
+  }
+
+  // --- scrypt via node:crypto (nodejs_compat) ------------------------------
+  try {
+    const mod = (await import("node:crypto")) as Record<string, unknown>;
+    out.scryptModule = {
+      scryptType: typeof mod.scrypt,
+      scryptSyncType: typeof mod.scryptSync,
+    };
+    const scryptFn = mod.scrypt as (
+      password: string,
+      salt: Uint8Array,
+      keylen: number,
+      options: Record<string, number>,
+      cb: (err: Error | null, key: Uint8Array) => void,
+    ) => void;
+    if (typeof scryptFn === "function") {
+      const run = (
+        N: number,
+        options: Record<string, number>,
+      ): Promise<Record<string, unknown>> =>
+        new Promise((resolve) => {
+          const t0 = performance.now();
+          try {
+            scryptFn(
+              "probe-password-0123456789",
+              salt,
+              32,
+              options,
+              (err, key) => {
+                if (err) resolve({ ok: false, error: errInfo(err) });
+                else
+                  resolve({
+                    ok: true,
+                    derivedBytes: key.length,
+                    ms: Math.round((performance.now() - t0) * 10) / 10,
+                  });
+              },
+            );
+          } catch (e) {
+            resolve({ ok: false, error: errInfo(e) });
+          }
+        });
+      const Ns = (url.searchParams.get("scrypt") ?? "16384,32768,65536,131072")
+        .split(",")
+        .map((s) => parseInt(s, 10))
+        .filter((n) => Number.isFinite(n) && n > 0);
+      const rows: Record<string, unknown>[] = [];
+      for (const N of Ns) {
+        const base = { N, r: 8, p: 1 };
+        const withDefaultMem = await run(N, base);
+        const withRaisedMem = await run(N, { ...base, maxmem: 256 * 1024 * 1024 });
+        rows.push({ N, r: 8, p: 1, defaultMaxmem: withDefaultMem, maxmem256MiB: withRaisedMem });
+      }
+      out.scrypt = rows;
+    }
+  } catch (e) {
+    out.scryptModule = { importError: errInfo(e) };
+  }
+
+  return Response.json(out);
+}
+```
+
+## Verification summary: package 5.8 parity gate (2026-10-28)
+
+Status: the gate passes. It ran on the stacked local Wave 5 branches (packages 5.1, 5.2, 5.4, 5.5 and 5.6, with this package on top), as local commits only: nothing in this wave has been pushed or opened as a PR yet, and accounts remain gated off for shoppers until the email settings of section 4 exist. The gap analysis status updates for ACC-01 and SIZ-04 belong to the wave closeout when these packages ship to main; this summary records the test evidence the closeout will cite.
+
+### API journeys (tests/accounts.cjs, with A5 cases also in tests/commerce.cjs)
+
+The section 6 checklist was audited journey by journey against the assertions actually in the suites, not against the suites' own summaries:
+
+- **A1, lifecycle:** covered (package 5.2). Register returns the uniform 202 and creates no session, the emailed token verifies and mints the first session, `me` returns the user, sign out deletes the session and the old cookie reads as a guest, and sign in returns a fresh, different token.
+- **A2, enumeration:** covered (package 5.2). Unknown email and wrong password sign ins are byte identical; the locked identifier case returns the same body, asserted in the A3 block against the same literal; register and forgot password return identical 202 bodies for existing and non existing emails; bad verify and bad reset tokens share one 400 body.
+- **A3, lockout:** covered (package 5.2). Five failures lock the submitted email for 15 minutes (duration asserted), the correct password during lockout returns the uniform 401, a different email is unaffected until 20 failures lock the IP key, and the same account still signs in from another IP.
+- **A4, reset:** covered (package 5.2). Reset changes the password, revokes all prior sessions (old cookies return null from `me`), mints one fresh session, and the token cannot be used twice. Change password follows the same discipline.
+- **A5, owner resolution:** covered (package 5.6). Driven through the real commerce dispatcher sharing one fake D1 with the accounts lib: a cookie only checkout writes owner `app:<user id>`, the gateway header alone keys the order exactly as before, both together resolve to the app owner, and neither is the 401 of today. Read backs refuse each identity the other's orders, and the merged account orders endpoint serves the app keyed rows with the imported snapshots marked demo and imported, never a gateway row.
+- **A6, profiles and import:** covered (package 5.5). Upsert creates and replaces by client id with the transient step field dropped, validation mirrors the commerce profile checks, another user's profile id deletes as the same 404 as a missing one, an import of three profiles and two demo orders returns counts 3 and 2, a repeat returns 0 imported and all skipped without overwriting, and the snapshots store the local orders verbatim with their demo marking.
+- **A7, CSRF:** covered, and completed by this package. Packages 5.2 and 5.5 proved the foreign origin status for every auth route and for both account POSTs, with state assertions on the routes they drive individually, and the missing origin status for register. The audit found the remaining combinations unproven end to end: missing origin on the other routes, and a whole surface state assertion. This package adds exactly that: every POST under `/api/auth/*` and `/api/account/*` is driven with a missing origin and with a foreign origin against a live session, all returning 403, with the database tables and the mail outbox snapshotted before and after and asserted unchanged, the session still live, and the password still working afterwards. No gap remains in A7 as designed.
+- **A8, gating:** covered (package 5.1). With email settings absent, `accountsEnabled` is false in every partial configuration, register returns 503 with the design body, and `me` returns `{user: null, enabled: false}`.
+
+### Storefront journeys (tests/account-screens.cjs)
+
+One placement note, recorded honestly: section 6 names `tests/e2e-journeys.cjs` as the home of J24 to J26, but packages 5.4 to 5.6 built the Wave 5 storefront harness in `tests/account-screens.cjs` around the fake accounts API, and J25 landed there in package 5.5. J24 and J26 sit beside J25 in that suite, where the signed in worlds they need already exist. `tests/e2e-journeys.cjs` itself is unmodified by this wave, so J1 to J23 stand untouched exactly as section 6 requires; the listing and menu parity J24 needs is asserted directly, byte for byte, rather than by re running the listing suites.
+
+- **J24, signed in parity:** passes (this package). Against an enabled guest world on the same seed: the rendered menus are byte identical (byte level, as the design demands), and so are the home screen, the Wool Suits, Trousers and Women collection listings, a product page, and the customizer at the fabric, personalize and measurements stages. The priced customization J17 drives (tuxedo tier, vest with fabric back, additional pants, square and tie, all three monogram fields) is then driven in both worlds: the bagged items are identical apart from their random line ids, both subtotals are the Wave 3 total of base + 368, and the bag lines are byte identical. Checkout is byte identical once the account strip line is set aside, and each world's strip is the copy its state requires (the guest prompt with a checkout returnTo, the signed in line naming the account). The bag then persists byte for byte across re renders while signed in, and the demo checkout completes to the order page with the order total at base + 368.
+- **J25, migration:** passes (package 5.5, re run green at this gate). The offer is made once in the design's words, the import carries exactly the local arrays, the counts are confirmed, local profiles, orders and the bag are untouched, and the dismiss path is remembered under the design's flag with the account page button as the way back in.
+- **J26, sign out restores the guest:** passes (this package). After sign out the header shows Sign in again and the account menu is gone, and the restored guest is byte identical to a fresh guest world holding the same browser data across the header slot, the menus, home, a listing, checkout with its guest strip, the orders page and the profiles modal. The journey then continues as that guest down the J1 path: the menu's Wool Suits destination, its first product, the customizer with the seeded local profile driving the measurements and a priced lining chosen, added to the bag that was already on the browser, and a demo checkout that completes on the order page with the local profile untouched by the whole sign in, sign out and purchase cycle.
+
+Supporting screen journeys S1 to S9 (packages 5.4 to 5.6) also pass at this gate, including S1's byte identity between the disabled site and a world whose fetch never answers, which is the guest path unchanged proof for the gate closed state.
+
+### Parity outcome
+
+The gate found no parity defect in the package 5.4 to 5.6 client code and none in the package 5.1 to 5.2 server code. Every designed difference between the signed in and guest experiences is one the design itself names: the header account slot (a Sign in link for guests, the account menu when signed in), the checkout account strip line, the profiles modal status line, and the signed in orders page with its merged history. Everything else the shopper sees is byte identical, before sign in, while signed in, and after sign out. No production code changed in this package; the only code changes are the A7 completion block in `tests/accounts.cjs`, journeys J24 and J26 in `tests/account-screens.cjs`, and this summary.
+
+### Suite and build results
+
+- Full test chain (`pnpm test`): exit 0, all 23 suites pass, the 21 pre existing suites from before this wave plus `tests/accounts.cjs` and `tests/account-screens.cjs`.
+- Root build (`pnpm build`): exit 0.
+
+### What remains open in Wave 5, and why
+
+- **Package 5.3, email sending:** owner blocked. It needs the owner's email provider choice, the provider account and API key as server secrets, and the sender domain's SPF and DKIM records (open question 1 in section 8). Until it lands, the `accountsEnabled` gate stays closed and nothing in this wave is shopper visible; the flows above were all proven against the stubbed mailer, exactly as the design's critical path allows.
+- **Package 5.7, Google sign in:** owner blocked. It needs the owner's Google Cloud OAuth client and the redirect URI registered for `/api/auth/google/callback` (open question 2 in section 8), and the separate decision of whether Google ships in v1 or as a fast follow. The Google gate stays independently closed; the routes return 503 without the Google settings.
+- **Deployed worker live sign in check:** unverified, pending a deployment. The package 5.0 addendum assigns it to the first deployment: a live sign in round trip on the deployed worker, confirming the hosting plan's CPU budget accommodates the roughly 145 ms of native crypto work per derivation, before the accounts gate opens.
+- **D1 migration application:** unverified, platform behaviour. The build ships the migration in `dist/.openai/drizzle/` (verified in package 5.1), but how and when the hosting control plane applies it to the production database cannot be confirmed from this repo; confirming the eight tables exist on the deployed database is a pre-launch check, and it only matters once the owner provides the email settings for package 5.3.
+- **cf-connecting-ip visibility:** unverified on this hosting (appendix register). Package 5.2's IP lockout is built on the header when it is present and degrades to a shared bucket when it is absent, with the email key carrying the posture either way, so nothing in the shipped design waits on this answer.
+- **Production gateway behaviour:** unverified (appendix register). Whether the production gateway strips client supplied `oai-authenticated-user-*` headers and passes the `suitsme-session` cookie through untouched is platform side; the dev plugin does both. The owner resolver's precedence (app session first) means an app account's own requests resolve correctly either way; the check belongs with the first deployment checks above.
+- **Owner decisions still open from section 8:** account deletion and data export posture at launch (question 3), and whether gateway orders should ever be claimable by a matching app account (question 4; v1 does not do it).
+

@@ -22,6 +22,9 @@ const assert=require('node:assert/strict'),fs=require('node:fs'),vm=require('nod
 // J18 detail add ons, tailor changes and comments journey (CUS-02)
 // J19 real URL entry journey (NAV-01)
 // J20 real product URL entry journey (NAV-01, Wave 4 stage 3a)
+// J21 category spot entry journeys (NAV-01, Wave 4 stage 4)
+// J22 real URL entry to demo order, payment return boot (NAV-01)
+// J23 hash entry parity with the real URL entry (NAV-01)
 
 function makeEl(){const el={innerHTML:'',textContent:'',value:'',checked:false,open:false,style:{},attrs:{},classList:{add(){},remove(){},toggle(){return false}},setAttribute(k,v){el.attrs[k]=String(v)},removeAttribute(k){delete el.attrs[k]},getAttribute(k){return k in el.attrs?el.attrs[k]:null},addEventListener(){},getBoundingClientRect:()=>({left:0,right:0,top:0,bottom:0}),showModal(){el.open=true},close(){el.open=false},scrollIntoView(){}};return el}
 
@@ -47,6 +50,29 @@ function makeWorld(seed={}){
   const run=s=>vm.runInContext(s,ctx);
   const bag=()=>JSON.parse(store.get('suits-bag')||'[]');
   return{run,elFor,store,bag};
+}
+
+// A fresh storefront world entered the way the live server delivers it:
+// at a real pathname (or at / with a hash), with the full script
+// composition the served document loads, boot translator and route data
+// first, in document order. Used by the Wave 4 stage 4 entry journeys;
+// J19 and J20 above carry their own inline copies of this setup.
+function makeEntryWorld({pathname='/',hash='',profiles=null}={}){
+  const store=new Map();
+  const localStorage={getItem:k=>store.has(k)?store.get(k):null,setItem:(k,v)=>store.set(k,String(v)),removeItem:k=>store.delete(k)};
+  if(profiles)localStorage.setItem('suits-profiles',JSON.stringify(profiles));
+  const elements=new Map();
+  const elFor=s=>{if(!elements.has(s))elements.set(s,makeEl());return elements.get(s)};
+  const documentStub={title:'',querySelector:s=>elFor(s),querySelectorAll:()=>[],getElementById:id=>elFor('#'+id),addEventListener(){},createElement:()=>makeEl(),body:makeEl()};
+  class EntryFormData{constructor(form){this.data=(form&&form.__data)||{}}get(k){return k in this.data?this.data[k]:null}}
+  const location={hash,pathname};
+  const sandbox={console,localStorage,document:documentStub,location,setTimeout,clearTimeout,crypto:require('node:crypto').webcrypto,fetch:()=>Promise.resolve({ok:false,json:async()=>null}),FormData:EntryFormData,addEventListener(){},scrollTo(){}};
+  sandbox.window=sandbox;
+  const ctx=vm.createContext(sandbox);
+  for(const f of ['real-routes-data.js','real-routes.js','app.js','complete.js','catalog-data.js','expanded.js','navigation-data.js','navigation.js','gallery.js','quick-add.js','merchant-data.js','merchant.js'])vm.runInContext(fs.readFileSync('public/'+f,'utf8'),ctx,{filename:f});
+  const run=s=>vm.runInContext(s,ctx);
+  const bag=()=>JSON.parse(store.get('suits-bag')||'[]');
+  return{run,elFor,store,bag,location};
 }
 
 // ---------------------------------------------------------------- J1
@@ -1008,6 +1034,128 @@ console.log('E2E journey J12 passed: designing a second product starts clean wit
   assert.ok(checkout.includes(productName),'the checkout shows the product from the real product URL entry');
   assert.ok(checkout.includes('Wine lining'),'the checkout shows the chosen lining');
   console.log('E2E journey J20 passed: entering at a real product URL boots into its product page with real URL links throughout, the customizer personalizes it, a saved profile measures it, and the configured garment reaches the bag and checkout intact.');
+}
+
+// ---------------------------------------------------------------- J21
+// Category spot entries (NAV-01, Wave 4 stage 4): the stage 2 and 3a
+// suites proved the Suits entries in depth; this journey proves the
+// same entry shape for three more categories (Women, Trousers and
+// Weddings). Each category is entered at its real collection URL,
+// taken from the generated route map rather than written out here,
+// and the first product the collection data names is opened and
+// carried into the customizer with that product loaded.
+{
+  const routeMap=require('../data/real-routes.json');
+  const collections=require('../data/collections.json');
+  const catalog=require('../data/catalog.json');
+  for(const cat of ['Women','Trousers','Weddings']){
+    const hash='#collection/'+cat;
+    const path=routeMap.reverse[hash];
+    assert.ok(path,'the generated map gives '+cat+' a real collection URL');
+    assert.equal(routeMap.paths[path],hash,'the map resolves '+path+' back to '+hash);
+    const w=makeEntryWorld({pathname:path});
+    assert.equal(w.location.hash,hash,'entering at '+path+' boots into '+hash);
+    const firstId=collections[hash].ids[0];
+    assert.equal(w.run(`resolveCollection('${hash}').ids[0]`),firstId,'the runtime collection resolver agrees with the catalog data for '+cat);
+    const listing=w.elFor('#main').innerHTML;
+    assert.ok(listing.includes(catalog[firstId].name),'the '+cat+' real URL entry renders its collection, first product '+catalog[firstId].name);
+    w.run(`chooseProduct(${firstId})`);
+    assert.equal(w.location.hash,'#product/'+firstId,'opening a product from the '+cat+' entry navigates');
+    assert.ok(w.run(`productPage(${firstId})`).includes(catalog[firstId].name),'the product page renders for '+catalog[firstId].name);
+    w.run(`beginDesign(${firstId})`);
+    assert.equal(w.location.hash,'#customize','designing from the '+cat+' entry lands on the customize route');
+    assert.equal(w.run('config.product'),firstId,'the customizer opens on the '+cat+' product from the URL entry');
+    assert.ok(w.run('customize()').includes(catalog[firstId].name),'the customizer shows the '+cat+' product chosen from the entry');
+  }
+  console.log('E2E journey J21 passed: Women, Trousers and Weddings each enter at their real collection URL from the generated map, render the collection, open its first product, and reach the customizer with that product loaded.');
+}
+
+// ---------------------------------------------------------------- J22
+// Real URL entry to a placed demo order (NAV-01, Wave 4 stage 4): J19
+// stops at the checkout page; this journey completes the demo
+// checkout from a real URL entry, with a priced option configured,
+// and lands on the order page. It then boots the payment return path
+// fresh, with no pending order on the browser, and proves the screen
+// a returning shopper would meet in demo mode renders without error:
+// the Wave 6 critical path the migration had to leave intact.
+{
+  const routeMap=require('../data/real-routes.json');
+  const ready={id:'p-ready',name:'Ready profile',method:'ready',wearer:'Men',fit:'Tailored',ready:{jacket:'40',length:'Regular',trouser:'34'},created:'2026-01-01T00:00:00.000Z'};
+  const hash='#collection/Suits/Wool%20Suits';
+  const path=routeMap.reverse[hash];
+  assert.ok(path,'the generated map gives Wool Suits a real collection URL');
+  const w=makeEntryWorld({pathname:path,profiles:[ready]});
+  assert.equal(w.location.hash,hash,'entering at '+path+' boots into the Wool Suits hash route');
+  const firstId=w.run("merchantSuitCollections['Wool Suits'].ids[0]");
+  const productName=w.run(`products[${firstId}].name`);
+  const basePrice=w.run(`products[${firstId}].price`);
+  w.run(`chooseProduct(${firstId})`);
+  w.run(`beginDesign(${firstId})`);
+  w.run('nextConfig()'); // stage 0 to 1, Personalize
+  assert.ok(w.run('customize()').includes(`onclick="setOption('lining','Wine')">Wine · +$15`),'the Personalize step offers the Wine lining at its tier price');
+  w.run("setOption('lining','Wine')");
+  w.run('nextConfig()'); // stage 1 to 2, Measurements
+  w.elFor('#profileSelect').value='p-ready';
+  w.run('nextConfig()'); // Add to Bag
+  assert.equal(w.bag().length,1,'Add to Bag creates exactly one bag line');
+  const expectedTotal=w.run('itemPrice(bag[0])');
+  assert.equal(expectedTotal,basePrice+15,'the configured price carries the priced lining over the base price');
+  w.run("location.hash='#checkout';render()");
+  assert.ok(w.elFor('#main').innerHTML.includes('checkoutForm'),'the checkout opens on the delivery form');
+  w.run(`saveCheckoutForm({__data:{email:'e2e@example.com',firstName:'E2E',lastName:'Shopper',address:'1 Main Street',city:'New York',state:'NY',zip:'10001',country:'US'}})`);
+  assert.equal(w.run('checkoutStage'),1,'submitting the delivery form advances to review and payment');
+  const review=w.elFor('#main').innerHTML;
+  assert.ok(review.includes(productName),'the review shows the product from the real URL entry');
+  assert.ok(review.includes('Wine lining'),'the review shows the priced lining chosen at the Personalize step');
+  w.elFor('#orderConsent').checked=true;
+  w.run('submitCheckout()');
+  const orders=JSON.parse(w.store.get('suits-orders')||'[]');
+  assert.equal(orders.length,1,'the demo checkout records exactly one order');
+  assert.equal(orders[0].demo,true,'the recorded order is a demo order');
+  assert.equal(orders[0].total,expectedTotal,'the order total is the configured price, priced lining included');
+  assert.equal(orders[0].items[0].lining,'Wine','the order item keeps the chosen lining');
+  assert.equal(w.location.hash,'#order/'+orders[0].id,'placing the demo order lands on its order route');
+  const landed=w.elFor('#main').innerHTML;
+  assert.ok(landed.includes('DEMONSTRATION COMPLETE'),'the order page renders the demo completion screen');
+  assert.ok(landed.includes(orders[0].id),'the order page shows the recorded order id');
+  assert.ok(landed.includes(productName),'the order page shows the product from the real URL entry');
+  assert.equal(w.bag().length,0,'the bag is empty after the demo order is placed');
+
+  const back=makeEntryWorld({pathname:routeMap.reverse['#payment-return']});
+  assert.equal(back.location.hash,'#payment-return','entering at /payment-return boots into the payment return route');
+  const screen=back.elFor('#main').innerHTML;
+  assert.ok(screen.includes('No pending payment was found on this browser.'),'the payment return path renders its no pending order screen in demo mode');
+  assert.ok(screen.includes('href="/orders"'),'the payment return screen links onward to the orders page at its real URL');
+  console.log('E2E journey J22 passed: a real URL entry configures a garment with a priced lining, completes the demo checkout onto the order page with the configured total intact, and a fresh /payment-return boot renders its demo mode screen without error.');
+}
+
+// ---------------------------------------------------------------- J23
+// Hash entry parity (NAV-01, Wave 4 stage 4): the compatibility side
+// of the migration. The same shopper arriving at / with the Wool
+// Suits hash URL, the form every pre migration bookmark takes, must
+// meet exactly what the real URL entry renders: the boot script
+// leaves an existing hash untouched, the rendered collection is
+// byte identical to the real URL entry's, and the first product is
+// the same, after which the journey continues as J19's does.
+{
+  const routeMap=require('../data/real-routes.json');
+  const hash='#collection/Suits/Wool%20Suits';
+  const path=routeMap.reverse[hash];
+  assert.ok(path,'the generated map gives Wool Suits a real collection URL');
+  const real=makeEntryWorld({pathname:path});
+  const viaHash=makeEntryWorld({pathname:'/',hash});
+  assert.equal(real.location.hash,hash,'the real URL entry boots into the Wool Suits hash route');
+  assert.equal(viaHash.location.hash,hash,'the boot script never overrides an existing hash');
+  assert.equal(viaHash.elFor('#main').innerHTML,real.elFor('#main').innerHTML,'the hash entry at / renders a collection identical to the real URL entry');
+  const firstId=real.run("merchantSuitCollections['Wool Suits'].ids[0]");
+  assert.equal(viaHash.run("merchantSuitCollections['Wool Suits'].ids[0]"),firstId,'the hash entry names the same first product as the real URL entry');
+  viaHash.run(`chooseProduct(${firstId})`);
+  assert.equal(viaHash.location.hash,'#product/'+firstId,'opening the first product from the hash entry navigates');
+  assert.ok(viaHash.run(`productPage(${firstId})`).includes(viaHash.run(`products[${firstId}].name`)),'the product page renders from the hash entry');
+  viaHash.run(`beginDesign(${firstId})`);
+  assert.equal(viaHash.location.hash,'#customize','designing from the hash entry lands on the customize route');
+  assert.equal(viaHash.run('config.product'),firstId,'the customizer opens on the same product from the hash entry');
+  console.log('E2E journey J23 passed: entering at / with the Wool Suits hash URL renders a collection byte identical to the real URL entry, names the same first product, and continues into the product and customizer unchanged.');
 }
 
 console.log('E2E journey checks passed: menu to product, standard size and body measurement journeys, method switching, quick add, bag edit with checkout rendering, the Women body-only rule, and the unified listing controls journey all hold end to end.');

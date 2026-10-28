@@ -12,7 +12,7 @@
 ## Important notes for accuracy
 
 - The current site is a preview experience. Configurations and prices shown are illustrative, and online payment and production orders are not yet connected.
-- The storefront is a single-page application served at https://suits.me/. Product and collection views are rendered in the browser and do not have separate URLs yet.
+- The storefront is served at https://suits.me/, and its views have real URLs of their own: collections live under https://suits.me/collections/ (for example https://suits.me/collections/suits/wool-suits), and each product has its own page at https://suits.me/product/ followed by its product id. The older in-page hash links open the same views.
 
 ## Links
 

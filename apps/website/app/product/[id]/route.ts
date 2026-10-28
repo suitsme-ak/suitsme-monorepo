@@ -1,5 +1,11 @@
-import html from "../../../web/index.html?raw";
+import html from "../../../public/index.html?raw";
 import routeMap from "../../../data/real-routes.json";
+import catalog from "../../../data/catalog.json";
+import {
+  headForProduct,
+  shellResponse,
+  type ProductHeadSource,
+} from "../../../lib/route-head";
 
 // Wave 4 stage 3a (NAV-01), Mechanic A: product detail at a real URL.
 // The id is the stable numeric catalog id the hash route #product/<id>
@@ -10,8 +16,11 @@ import routeMap from "../../../data/real-routes.json";
 //
 // - A canonical path for an existing id (/product/1964) serves the
 //   same storefront document as the root route in app/route.ts, with
-//   the same headers. The document boots from its pathname when no
-//   hash is present (public/real-routes.js).
+//   the same headers, its head rewritten for the product it names
+//   (stage 3b: lib/route-head.ts, values looked up in
+//   data/catalog.json, the same data the page renders). Redirects
+//   and 404s are never injected. The document boots from its
+//   pathname when no hash is present (public/real-routes.js).
 // - A non-canonical spelling of an existing id (leading zeros, a
 //   trailing slash the framework let through) answers with a
 //   permanent redirect to the canonical path.
@@ -19,6 +28,9 @@ import routeMap from "../../../data/real-routes.json";
 //   genuine 404. Unknown products are never served the shell, so bad
 //   links fail loudly instead of rendering an empty product page.
 const ranges: [number, number][] = routeMap.families.product.idRanges as [number, number][];
+const productsById = new Map<number, ProductHeadSource>(
+  (catalog as unknown as (ProductHeadSource & { id: number })[]).map((p) => [p.id, p]),
+);
 
 function redirect(to: string) {
   return new Response(null, { status: 308, headers: { Location: to } });
@@ -38,12 +50,7 @@ export async function GET(request: Request) {
     if (ranges.some(([lo, hi]) => id >= lo && id <= hi)) {
       const canonical = "/product/" + id;
       if (raw !== canonical) return redirect(canonical);
-      return new Response(html, {
-        headers: {
-          "Content-Type": "text/html; charset=utf-8",
-          "Cache-Control": "no-cache",
-        },
-      });
+      return shellResponse(html, headForProduct(productsById.get(id), id));
     }
   }
   return new Response("Not Found", {

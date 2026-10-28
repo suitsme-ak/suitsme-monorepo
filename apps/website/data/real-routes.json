@@ -351,5 +351,511 @@
     "orders": {
       "anySingleSegment": true
     }
+  },
+  "heads": {
+    "collections": {
+      "/collections/suits": {
+        "title": "Suits | Suits.me",
+        "description": "Explore the Suits collection at Suits.me: custom tailoring made to your measurements. Choose your fabric, refine the details, and build your fit profile."
+      },
+      "/collections/suits/shop-all": {
+        "title": "Shop All | Suits.me",
+        "description": "Explore Shop All in the Suits collection at Suits.me: custom tailoring made to your measurements. Choose your fabric, refine the details, and build your fit profile."
+      },
+      "/collections/suits/popular-suits": {
+        "title": "Popular Suits | Suits.me",
+        "description": "Explore Popular Suits in the Suits collection at Suits.me: custom tailoring made to your measurements. Choose your fabric, refine the details, and build your fit profile."
+      },
+      "/collections/suits/linen-suits": {
+        "title": "Linen Suits | Suits.me",
+        "description": "Explore Linen Suits in the Suits collection at Suits.me: custom tailoring made to your measurements. Choose your fabric, refine the details, and build your fit profile."
+      },
+      "/collections/suits/tweed-suits": {
+        "title": "Tweed Suits | Suits.me",
+        "description": "Explore Tweed Suits in the Suits collection at Suits.me: custom tailoring made to your measurements. Choose your fabric, refine the details, and build your fit profile."
+      },
+      "/collections/suits/new-arrivals": {
+        "title": "New Arrivals | Suits.me",
+        "description": "Explore New Arrivals in the Suits collection at Suits.me: custom tailoring made to your measurements. Choose your fabric, refine the details, and build your fit profile."
+      },
+      "/collections/suits/wool-suits": {
+        "title": "Wool Suits | Suits.me",
+        "description": "Explore Wool Suits in the Suits collection at Suits.me: custom tailoring made to your measurements. Choose your fabric, refine the details, and build your fit profile."
+      },
+      "/collections/suits/italian-limited-edition": {
+        "title": "Italian Limited Edition | Suits.me",
+        "description": "Explore Italian Limited Edition in the Suits collection at Suits.me: custom tailoring made to your measurements. Choose your fabric, refine the details, and build your fit profile."
+      },
+      "/collections/suits/luxury-suits": {
+        "title": "Luxury Suits | Suits.me",
+        "description": "Explore Luxury Suits in the Suits collection at Suits.me: custom tailoring made to your measurements. Choose your fabric, refine the details, and build your fit profile."
+      },
+      "/collections/suits/cotton-suits": {
+        "title": "Cotton Suits | Suits.me",
+        "description": "Explore Cotton Suits in the Suits collection at Suits.me: custom tailoring made to your measurements. Choose your fabric, refine the details, and build your fit profile."
+      },
+      "/collections/suits/corduroy-suits": {
+        "title": "Corduroy Suits | Suits.me",
+        "description": "Explore Corduroy Suits in the Suits collection at Suits.me: custom tailoring made to your measurements. Choose your fabric, refine the details, and build your fit profile."
+      },
+      "/collections/suits/wedding-suits": {
+        "title": "Wedding Suits | Suits.me",
+        "description": "Explore Wedding Suits in the Suits collection at Suits.me: custom tailoring made to your measurements. Choose your fabric, refine the details, and build your fit profile."
+      },
+      "/collections/suits/business-suits": {
+        "title": "Business Suits | Suits.me",
+        "description": "Explore Business Suits in the Suits collection at Suits.me: custom tailoring made to your measurements. Choose your fabric, refine the details, and build your fit profile."
+      },
+      "/collections/suits/tuxedos": {
+        "title": "Tuxedos | Suits.me",
+        "description": "Explore Tuxedos in the Suits collection at Suits.me: custom tailoring made to your measurements. Choose your fabric, refine the details, and build your fit profile."
+      },
+      "/collections/suits/cocktail-and-evening-suits": {
+        "title": "Cocktail & Evening Suits | Suits.me",
+        "description": "Explore Cocktail & Evening Suits in the Suits collection at Suits.me: custom tailoring made to your measurements. Choose your fabric, refine the details, and build your fit profile."
+      },
+      "/collections/suits/red-carpet-suits": {
+        "title": "Red Carpet Suits | Suits.me",
+        "description": "Explore Red Carpet Suits in the Suits collection at Suits.me: custom tailoring made to your measurements. Choose your fabric, refine the details, and build your fit profile."
+      },
+      "/collections/suits/leather-suits": {
+        "title": "Leather Suits | Suits.me",
+        "description": "Explore Leather Suits in the Suits collection at Suits.me: custom tailoring made to your measurements. Choose your fabric, refine the details, and build your fit profile."
+      },
+      "/collections/suits/double-breasted-suits": {
+        "title": "Double Breasted Suits | Suits.me",
+        "description": "Explore Double Breasted Suits in the Suits collection at Suits.me: custom tailoring made to your measurements. Choose your fabric, refine the details, and build your fit profile."
+      },
+      "/collections/suits/boys-suits": {
+        "title": "Boys Suits | Suits.me",
+        "description": "Explore Boys Suits in the Suits collection at Suits.me: custom tailoring made to your measurements. Choose your fabric, refine the details, and build your fit profile."
+      },
+      "/collections/suits/look-book-all": {
+        "title": "Look Book (All) | Suits.me",
+        "description": "Explore Look Book (All) in the Suits collection at Suits.me: custom tailoring made to your measurements. Choose your fabric, refine the details, and build your fit profile."
+      },
+      "/collections/suits/shop-by-style": {
+        "title": "Shop By Style | Suits.me",
+        "description": "Explore Shop By Style in the Suits collection at Suits.me: custom tailoring made to your measurements. Choose your fabric, refine the details, and build your fit profile."
+      },
+      "/collections/suits/napolean-wool-suits": {
+        "title": "Napolean Wool Suits | Suits.me",
+        "description": "Explore Napolean Wool Suits in the Suits collection at Suits.me: custom tailoring made to your measurements. Choose your fabric, refine the details, and build your fit profile."
+      },
+      "/collections/suits/murano-suits": {
+        "title": "Murano Suits | Suits.me",
+        "description": "Explore Murano Suits in the Suits collection at Suits.me: custom tailoring made to your measurements. Choose your fabric, refine the details, and build your fit profile."
+      },
+      "/collections/suits/sale": {
+        "title": "Sale | Suits.me",
+        "description": "Explore Sale in the Suits collection at Suits.me: custom tailoring made to your measurements. Choose your fabric, refine the details, and build your fit profile."
+      },
+      "/collections/jackets": {
+        "title": "Jackets | Suits.me",
+        "description": "Explore the Jackets collection at Suits.me: custom tailoring made to your measurements. Choose your fabric, refine the details, and build your fit profile."
+      },
+      "/collections/jackets/shop-all": {
+        "title": "Shop All | Suits.me",
+        "description": "Explore Shop All in the Jackets collection at Suits.me: custom tailoring made to your measurements. Choose your fabric, refine the details, and build your fit profile."
+      },
+      "/collections/jackets/popular-jackets": {
+        "title": "Popular Jackets | Suits.me",
+        "description": "Explore Popular Jackets in the Jackets collection at Suits.me: custom tailoring made to your measurements. Choose your fabric, refine the details, and build your fit profile."
+      },
+      "/collections/jackets/tweed-jackets": {
+        "title": "Tweed Jackets | Suits.me",
+        "description": "Explore Tweed Jackets in the Jackets collection at Suits.me: custom tailoring made to your measurements. Choose your fabric, refine the details, and build your fit profile."
+      },
+      "/collections/jackets/linen-jackets": {
+        "title": "Linen Jackets | Suits.me",
+        "description": "Explore Linen Jackets in the Jackets collection at Suits.me: custom tailoring made to your measurements. Choose your fabric, refine the details, and build your fit profile."
+      },
+      "/collections/jackets/wool-jackets": {
+        "title": "Wool Jackets | Suits.me",
+        "description": "Explore Wool Jackets in the Jackets collection at Suits.me: custom tailoring made to your measurements. Choose your fabric, refine the details, and build your fit profile."
+      },
+      "/collections/jackets/new-arrivals": {
+        "title": "New Arrivals | Suits.me",
+        "description": "Explore New Arrivals in the Jackets collection at Suits.me: custom tailoring made to your measurements. Choose your fabric, refine the details, and build your fit profile."
+      },
+      "/collections/jackets/cotton-jackets": {
+        "title": "Cotton Jackets | Suits.me",
+        "description": "Explore Cotton Jackets in the Jackets collection at Suits.me: custom tailoring made to your measurements. Choose your fabric, refine the details, and build your fit profile."
+      },
+      "/collections/jackets/velvet-jackets": {
+        "title": "Velvet Jackets | Suits.me",
+        "description": "Explore Velvet Jackets in the Jackets collection at Suits.me: custom tailoring made to your measurements. Choose your fabric, refine the details, and build your fit profile."
+      },
+      "/collections/jackets/corduroy-jackets": {
+        "title": "Corduroy Jackets | Suits.me",
+        "description": "Explore Corduroy Jackets in the Jackets collection at Suits.me: custom tailoring made to your measurements. Choose your fabric, refine the details, and build your fit profile."
+      },
+      "/collections/jackets/italian-limited-edition": {
+        "title": "Italian Limited Edition | Suits.me",
+        "description": "Explore Italian Limited Edition in the Jackets collection at Suits.me: custom tailoring made to your measurements. Choose your fabric, refine the details, and build your fit profile."
+      },
+      "/collections/jackets/sport-coats": {
+        "title": "Sport Coats | Suits.me",
+        "description": "Explore Sport Coats in the Jackets collection at Suits.me: custom tailoring made to your measurements. Choose your fabric, refine the details, and build your fit profile."
+      },
+      "/collections/jackets/double-breasted": {
+        "title": "Double Breasted | Suits.me",
+        "description": "Explore Double Breasted in the Jackets collection at Suits.me: custom tailoring made to your measurements. Choose your fabric, refine the details, and build your fit profile."
+      },
+      "/collections/jackets/overcoats": {
+        "title": "Overcoats | Suits.me",
+        "description": "Explore Overcoats in the Jackets collection at Suits.me: custom tailoring made to your measurements. Choose your fabric, refine the details, and build your fit profile."
+      },
+      "/collections/jackets/tuxedo-jackets": {
+        "title": "Tuxedo Jackets | Suits.me",
+        "description": "Explore Tuxedo Jackets in the Jackets collection at Suits.me: custom tailoring made to your measurements. Choose your fabric, refine the details, and build your fit profile."
+      },
+      "/collections/jackets/red-carpet-bold": {
+        "title": "Red Carpet Bold | Suits.me",
+        "description": "Explore Red Carpet Bold in the Jackets collection at Suits.me: custom tailoring made to your measurements. Choose your fabric, refine the details, and build your fit profile."
+      },
+      "/collections/jackets/leather-blazers": {
+        "title": "Leather Blazers | Suits.me",
+        "description": "Explore Leather Blazers in the Jackets collection at Suits.me: custom tailoring made to your measurements. Choose your fabric, refine the details, and build your fit profile."
+      },
+      "/collections/jackets/leather-jackets": {
+        "title": "Leather Jackets | Suits.me",
+        "description": "Explore Leather Jackets in the Jackets collection at Suits.me: custom tailoring made to your measurements. Choose your fabric, refine the details, and build your fit profile."
+      },
+      "/collections/jackets/luxury-brands": {
+        "title": "Luxury Brands | Suits.me",
+        "description": "Explore Luxury Brands in the Jackets collection at Suits.me: custom tailoring made to your measurements. Choose your fabric, refine the details, and build your fit profile."
+      },
+      "/collections/jackets/shop-by-style": {
+        "title": "Shop by Style | Suits.me",
+        "description": "Explore Shop by Style in the Jackets collection at Suits.me: custom tailoring made to your measurements. Choose your fabric, refine the details, and build your fit profile."
+      },
+      "/collections/jackets/look-book-all": {
+        "title": "Look Book (All) | Suits.me",
+        "description": "Explore Look Book (All) in the Jackets collection at Suits.me: custom tailoring made to your measurements. Choose your fabric, refine the details, and build your fit profile."
+      },
+      "/collections/jackets/sale": {
+        "title": "Sale | Suits.me",
+        "description": "Explore Sale in the Jackets collection at Suits.me: custom tailoring made to your measurements. Choose your fabric, refine the details, and build your fit profile."
+      },
+      "/collections/jackets/waistcoats": {
+        "title": "Waistcoats | Suits.me",
+        "description": "Explore Waistcoats in the Jackets collection at Suits.me: custom tailoring made to your measurements. Choose your fabric, refine the details, and build your fit profile."
+      },
+      "/collections/trousers": {
+        "title": "Trousers | Suits.me",
+        "description": "Explore the Trousers collection at Suits.me: custom tailoring made to your measurements. Choose your fabric, refine the details, and build your fit profile."
+      },
+      "/collections/trousers/shop-all": {
+        "title": "Shop All | Suits.me",
+        "description": "Explore Shop All in the Trousers collection at Suits.me: custom tailoring made to your measurements. Choose your fabric, refine the details, and build your fit profile."
+      },
+      "/collections/trousers/popular-trousers": {
+        "title": "Popular Trousers | Suits.me",
+        "description": "Explore Popular Trousers in the Trousers collection at Suits.me: custom tailoring made to your measurements. Choose your fabric, refine the details, and build your fit profile."
+      },
+      "/collections/trousers/tweed-trousers": {
+        "title": "Tweed Trousers | Suits.me",
+        "description": "Explore Tweed Trousers in the Trousers collection at Suits.me: custom tailoring made to your measurements. Choose your fabric, refine the details, and build your fit profile."
+      },
+      "/collections/trousers/wool-trousers": {
+        "title": "Wool Trousers | Suits.me",
+        "description": "Explore Wool Trousers in the Trousers collection at Suits.me: custom tailoring made to your measurements. Choose your fabric, refine the details, and build your fit profile."
+      },
+      "/collections/trousers/linen-trousers": {
+        "title": "Linen Trousers | Suits.me",
+        "description": "Explore Linen Trousers in the Trousers collection at Suits.me: custom tailoring made to your measurements. Choose your fabric, refine the details, and build your fit profile."
+      },
+      "/collections/trousers/cotton-dress-trousers": {
+        "title": "Cotton Dress Trousers | Suits.me",
+        "description": "Explore Cotton Dress Trousers in the Trousers collection at Suits.me: custom tailoring made to your measurements. Choose your fabric, refine the details, and build your fit profile."
+      },
+      "/collections/trousers/corduroy-trousers": {
+        "title": "Corduroy Trousers | Suits.me",
+        "description": "Explore Corduroy Trousers in the Trousers collection at Suits.me: custom tailoring made to your measurements. Choose your fabric, refine the details, and build your fit profile."
+      },
+      "/collections/trousers/luxury-brands": {
+        "title": "Luxury Brands | Suits.me",
+        "description": "Explore Luxury Brands in the Trousers collection at Suits.me: custom tailoring made to your measurements. Choose your fabric, refine the details, and build your fit profile."
+      },
+      "/collections/trousers/italian-limited-edition": {
+        "title": "Italian Limited Edition | Suits.me",
+        "description": "Explore Italian Limited Edition in the Trousers collection at Suits.me: custom tailoring made to your measurements. Choose your fabric, refine the details, and build your fit profile."
+      },
+      "/collections/trousers/look-book-all": {
+        "title": "Look Book (All) | Suits.me",
+        "description": "Explore Look Book (All) in the Trousers collection at Suits.me: custom tailoring made to your measurements. Choose your fabric, refine the details, and build your fit profile."
+      },
+      "/collections/trousers/gurkha-trousers": {
+        "title": "Gurkha Trousers | Suits.me",
+        "description": "Explore Gurkha Trousers in the Trousers collection at Suits.me: custom tailoring made to your measurements. Choose your fabric, refine the details, and build your fit profile."
+      },
+      "/collections/trousers/easy-trousers": {
+        "title": "Easy Trousers | Suits.me",
+        "description": "Explore Easy Trousers in the Trousers collection at Suits.me: custom tailoring made to your measurements. Choose your fabric, refine the details, and build your fit profile."
+      },
+      "/collections/trousers/washed-chino-trousers": {
+        "title": "Washed Chino Trousers | Suits.me",
+        "description": "Explore Washed Chino Trousers in the Trousers collection at Suits.me: custom tailoring made to your measurements. Choose your fabric, refine the details, and build your fit profile."
+      },
+      "/collections/trousers/leather-trousers": {
+        "title": "Leather Trousers | Suits.me",
+        "description": "Explore Leather Trousers in the Trousers collection at Suits.me: custom tailoring made to your measurements. Choose your fabric, refine the details, and build your fit profile."
+      },
+      "/collections/trousers/custom-jeans": {
+        "title": "Custom Jeans | Suits.me",
+        "description": "Explore Custom Jeans in the Trousers collection at Suits.me: custom tailoring made to your measurements. Choose your fabric, refine the details, and build your fit profile."
+      },
+      "/collections/trousers/shorts": {
+        "title": "Shorts | Suits.me",
+        "description": "Explore Shorts in the Trousers collection at Suits.me: custom tailoring made to your measurements. Choose your fabric, refine the details, and build your fit profile."
+      },
+      "/collections/trousers/sale": {
+        "title": "Sale | Suits.me",
+        "description": "Explore Sale in the Trousers collection at Suits.me: custom tailoring made to your measurements. Choose your fabric, refine the details, and build your fit profile."
+      },
+      "/collections/trousers/new-arrivals": {
+        "title": "New Arrivals | Suits.me",
+        "description": "Explore New Arrivals in the Trousers collection at Suits.me: custom tailoring made to your measurements. Choose your fabric, refine the details, and build your fit profile."
+      },
+      "/collections/shirts": {
+        "title": "Shirts | Suits.me",
+        "description": "Explore the Shirts collection at Suits.me: custom tailoring made to your measurements. Choose your fabric, refine the details, and build your fit profile."
+      },
+      "/collections/shirts/shop-all": {
+        "title": "Shop All | Suits.me",
+        "description": "Explore Shop All in the Shirts collection at Suits.me: custom tailoring made to your measurements. Choose your fabric, refine the details, and build your fit profile."
+      },
+      "/collections/shirts/popular-shirts": {
+        "title": "Popular Shirts | Suits.me",
+        "description": "Explore Popular Shirts in the Shirts collection at Suits.me: custom tailoring made to your measurements. Choose your fabric, refine the details, and build your fit profile."
+      },
+      "/collections/shirts/long-sleeve-shirts": {
+        "title": "Long Sleeve Shirts | Suits.me",
+        "description": "Explore Long Sleeve Shirts in the Shirts collection at Suits.me: custom tailoring made to your measurements. Choose your fabric, refine the details, and build your fit profile."
+      },
+      "/collections/shirts/short-sleeve-shirts": {
+        "title": "Short Sleeve Shirts | Suits.me",
+        "description": "Explore Short Sleeve Shirts in the Shirts collection at Suits.me: custom tailoring made to your measurements. Choose your fabric, refine the details, and build your fit profile."
+      },
+      "/collections/shirts/shop-by-style": {
+        "title": "Shop By Style | Suits.me",
+        "description": "Explore Shop By Style in the Shirts collection at Suits.me: custom tailoring made to your measurements. Choose your fabric, refine the details, and build your fit profile."
+      },
+      "/collections/shirts/tuxedo-shirt": {
+        "title": "Tuxedo Shirt | Suits.me",
+        "description": "Explore Tuxedo Shirt in the Shirts collection at Suits.me: custom tailoring made to your measurements. Choose your fabric, refine the details, and build your fit profile."
+      },
+      "/collections/shirts/new-arrivals": {
+        "title": "New Arrivals | Suits.me",
+        "description": "Explore New Arrivals in the Shirts collection at Suits.me: custom tailoring made to your measurements. Choose your fabric, refine the details, and build your fit profile."
+      },
+      "/collections/shirts/linen-shirts": {
+        "title": "Linen Shirts | Suits.me",
+        "description": "Explore Linen Shirts in the Shirts collection at Suits.me: custom tailoring made to your measurements. Choose your fabric, refine the details, and build your fit profile."
+      },
+      "/collections/shirts/buy-one-get-one-free-shirts": {
+        "title": "Buy One Get One Free Shirts | Suits.me",
+        "description": "Explore Buy One Get One Free Shirts in the Shirts collection at Suits.me: custom tailoring made to your measurements. Choose your fabric, refine the details, and build your fit profile."
+      },
+      "/collections/shirts/overshirts": {
+        "title": "Overshirts | Suits.me",
+        "description": "Explore Overshirts in the Shirts collection at Suits.me: custom tailoring made to your measurements. Choose your fabric, refine the details, and build your fit profile."
+      },
+      "/collections/shirts/silk-shirts": {
+        "title": "Silk Shirts | Suits.me",
+        "description": "Explore Silk Shirts in the Shirts collection at Suits.me: custom tailoring made to your measurements. Choose your fabric, refine the details, and build your fit profile."
+      },
+      "/collections/shirts/business-shirts": {
+        "title": "Business Shirts | Suits.me",
+        "description": "Explore Business Shirts in the Shirts collection at Suits.me: custom tailoring made to your measurements. Choose your fabric, refine the details, and build your fit profile."
+      },
+      "/collections/shirts/liberty-london-shirts": {
+        "title": "Liberty London Shirts | Suits.me",
+        "description": "Explore Liberty London Shirts in the Shirts collection at Suits.me: custom tailoring made to your measurements. Choose your fabric, refine the details, and build your fit profile."
+      },
+      "/collections/weddings": {
+        "title": "Weddings | Suits.me",
+        "description": "Explore the Weddings collection at Suits.me: custom tailoring made to your measurements. Choose your fabric, refine the details, and build your fit profile."
+      },
+      "/collections/weddings/all-wedding-suits": {
+        "title": "All Wedding Suits | Suits.me",
+        "description": "Explore All Wedding Suits in the Weddings collection at Suits.me: custom tailoring made to your measurements. Choose your fabric, refine the details, and build your fit profile."
+      },
+      "/collections/weddings/linen-wedding-suits": {
+        "title": "Linen Wedding Suits | Suits.me",
+        "description": "Explore Linen Wedding Suits in the Weddings collection at Suits.me: custom tailoring made to your measurements. Choose your fabric, refine the details, and build your fit profile."
+      },
+      "/collections/weddings/tweed-wedding-suits": {
+        "title": "Tweed Wedding Suits | Suits.me",
+        "description": "Explore Tweed Wedding Suits in the Weddings collection at Suits.me: custom tailoring made to your measurements. Choose your fabric, refine the details, and build your fit profile."
+      },
+      "/collections/weddings/wool-wedding-suits": {
+        "title": "Wool Wedding Suits | Suits.me",
+        "description": "Explore Wool Wedding Suits in the Weddings collection at Suits.me: custom tailoring made to your measurements. Choose your fabric, refine the details, and build your fit profile."
+      },
+      "/collections/weddings/seersucker-wedding-suits": {
+        "title": "Seersucker Wedding Suits | Suits.me",
+        "description": "Explore Seersucker Wedding Suits in the Weddings collection at Suits.me: custom tailoring made to your measurements. Choose your fabric, refine the details, and build your fit profile."
+      },
+      "/collections/more": {
+        "title": "More | Suits.me",
+        "description": "Explore the More collection at Suits.me: custom tailoring made to your measurements. Choose your fabric, refine the details, and build your fit profile."
+      },
+      "/collections/more/accessories": {
+        "title": "Accessories | Suits.me",
+        "description": "Explore Accessories in the More collection at Suits.me: custom tailoring made to your measurements. Choose your fabric, refine the details, and build your fit profile."
+      },
+      "/collections/more/fabric-samples": {
+        "title": "Fabric Samples | Suits.me",
+        "description": "Explore Fabric Samples in the More collection at Suits.me: custom tailoring made to your measurements. Choose your fabric, refine the details, and build your fit profile."
+      },
+      "/collections/more/waist-coat": {
+        "title": "Waist Coat | Suits.me",
+        "description": "Explore Waist Coat in the More collection at Suits.me: custom tailoring made to your measurements. Choose your fabric, refine the details, and build your fit profile."
+      },
+      "/collections/women": {
+        "title": "Women | Suits.me",
+        "description": "Explore the Women collection at Suits.me: custom tailoring made to your measurements. Choose your fabric, refine the details, and build your fit profile."
+      },
+      "/collections/women/suits": {
+        "title": "Suits | Suits.me",
+        "description": "Explore Suits in the Women collection at Suits.me: custom tailoring made to your measurements. Choose your fabric, refine the details, and build your fit profile."
+      },
+      "/collections/women/jackets": {
+        "title": "Jackets | Suits.me",
+        "description": "Explore Jackets in the Women collection at Suits.me: custom tailoring made to your measurements. Choose your fabric, refine the details, and build your fit profile."
+      },
+      "/collections/women/trousers": {
+        "title": "Trousers | Suits.me",
+        "description": "Explore Trousers in the Women collection at Suits.me: custom tailoring made to your measurements. Choose your fabric, refine the details, and build your fit profile."
+      },
+      "/collections/women/shirts": {
+        "title": "Shirts | Suits.me",
+        "description": "Explore Shirts in the Women collection at Suits.me: custom tailoring made to your measurements. Choose your fabric, refine the details, and build your fit profile."
+      },
+      "/collections/women/leather-jackets": {
+        "title": "Leather Jackets | Suits.me",
+        "description": "Explore Leather Jackets in the Women collection at Suits.me: custom tailoring made to your measurements. Choose your fabric, refine the details, and build your fit profile."
+      },
+      "/collections/women/leather-trousers": {
+        "title": "Leather Trousers | Suits.me",
+        "description": "Explore Leather Trousers in the Women collection at Suits.me: custom tailoring made to your measurements. Choose your fabric, refine the details, and build your fit profile."
+      },
+      "/collections/women/overcoats": {
+        "title": "Overcoats | Suits.me",
+        "description": "Explore Overcoats in the Women collection at Suits.me: custom tailoring made to your measurements. Choose your fabric, refine the details, and build your fit profile."
+      },
+      "/collections/women/tuxedos": {
+        "title": "Tuxedos | Suits.me",
+        "description": "Explore Tuxedos in the Women collection at Suits.me: custom tailoring made to your measurements. Choose your fabric, refine the details, and build your fit profile."
+      },
+      "/collections/accessories": {
+        "title": "Accessories | Suits.me",
+        "description": "Explore the Accessories collection at Suits.me: custom tailoring made to your measurements. Choose your fabric, refine the details, and build your fit profile."
+      },
+      "/collections/fabrics": {
+        "title": "Fabrics | Suits.me",
+        "description": "Explore the Fabrics collection at Suits.me: custom tailoring made to your measurements. Choose your fabric, refine the details, and build your fit profile."
+      }
+    },
+    "pages": {
+      "/charges": {
+        "title": "Other charges | Suits.me",
+        "description": "The other charges that can apply to a Suits.me order, explained before you check out.",
+        "robots": "index"
+      },
+      "/checkout": {
+        "title": "Checkout | Suits.me",
+        "description": "Review your tailored selections, delivery details, and measurement profiles, then complete your order.",
+        "robots": "noindex"
+      },
+      "/clone": {
+        "title": "Clone a garment | Suits.me",
+        "description": "Recreate a garment you already love. Suits.me clone guidance helps a stylist match its fit and details in new cloth.",
+        "robots": "index"
+      },
+      "/customize": {
+        "title": "Customize your garment | Suits.me",
+        "description": "Refine the fabric, lapel, lining, and finishing details of your tailored garment, then find your fit.",
+        "robots": "noindex"
+      },
+      "/fit-support": {
+        "title": "Fit support | Suits.me",
+        "description": "Get your fit right with Suits.me fit support: measurement help, fit guarantee guidance, and stylist advice before your garment is made.",
+        "robots": "index"
+      },
+      "/gift-cards": {
+        "title": "Gift cards | Suits.me",
+        "description": "Give the gift of personal style. A Suits.me gift card lets them choose the fabric, the details, and the moment.",
+        "robots": "index"
+      },
+      "/help": {
+        "title": "Help and FAQs | Suits.me",
+        "description": "Answers about finding your measurements, saving fit profiles, checking out, caring for your garments, and talking to a stylist.",
+        "robots": "index"
+      },
+      "/locations": {
+        "title": "Showrooms and locations | Suits.me",
+        "description": "Meet a stylist, explore cloth in person, and talk through every detail at a Suits.me showroom.",
+        "robots": "index"
+      },
+      "/measure": {
+        "title": "Measurement Studio | Suits.me",
+        "description": "Build your measurement profile with guided body measurements or standard US sizes. Switch between inches and centimetres, save your profile, and reuse it on every tailored order.",
+        "robots": "index"
+      },
+      "/orders": {
+        "title": "Your orders | Suits.me",
+        "description": "The orders you have placed with Suits.me, saved on this browser.",
+        "robots": "noindex"
+      },
+      "/payment-return": {
+        "title": "Payment confirmation | Suits.me",
+        "description": "We are confirming your payment securely with the payment provider.",
+        "robots": "noindex"
+      },
+      "/privacy": {
+        "title": "Privacy | Suits.me",
+        "description": "What the Suits.me experience saves, what a configured checkout shares with the payment provider, and how to clear your saved details.",
+        "robots": "index"
+      },
+      "/shipping": {
+        "title": "Delivery and garment care | Suits.me",
+        "description": "How delivery works for custom tailoring, how to confirm the estimate for your order, and how to care for your tailored garments.",
+        "robots": "index"
+      },
+      "/terms": {
+        "title": "Terms | Suits.me",
+        "description": "The terms of the Suits.me storefront experience, from the preview catalog and demo orders to the business terms for live orders.",
+        "robots": "index"
+      }
+    },
+    "families": {
+      "fabrics": {
+        "shirt": {
+          "title": "Shirt fabrics | Suits.me",
+          "description": "Browse the shirt fabrics at Suits.me and start a custom tailored shirt in the cloth you choose."
+        },
+        "suit": {
+          "title": "Suit fabrics | Suits.me",
+          "description": "Browse the suit fabrics at Suits.me and start a custom tailored suit in the cloth you choose."
+        }
+      },
+      "studio": {
+        "jacket": {
+          "title": "3D jacket configurator | Suits.me",
+          "description": "Design your jacket in the Suits.me 3D configurator: cloth, lapel, lining, and details, previewed as you choose."
+        },
+        "pants": {
+          "title": "3D trousers configurator | Suits.me",
+          "description": "Design your trousers in the Suits.me 3D configurator: cloth, fit, and details, previewed as you choose."
+        },
+        "suit": {
+          "title": "3D suit configurator | Suits.me",
+          "description": "Design your suit in the Suits.me 3D configurator: cloth, lapel, lining, and details, previewed as you choose."
+        }
+      }
+    }
   }
 }

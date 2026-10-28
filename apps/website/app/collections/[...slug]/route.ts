@@ -1,5 +1,6 @@
-import html from "../../../web/index.html?raw";
+import html from "../../../public/index.html?raw";
 import routeMap from "../../../data/real-routes.json";
+import { headForCollection, shellResponse } from "../../../lib/route-head";
 
 // Wave 4 stage 2 (NAV-01), Mechanic A: one catch all route serves
 // every real collection URL, replacing the spike's single explicit
@@ -8,10 +9,13 @@ import routeMap from "../../../data/real-routes.json";
 // catalog collection data) decides what exists:
 //
 // - A canonical path serves the same storefront document as the root
-//   route in app/route.ts, with the same headers. The document boots
-//   from its pathname when no hash is present (public/real-routes.js),
-//   and its <base href="/"> element keeps every relative asset,
-//   stylesheet and script URL resolving from the site root.
+//   route in app/route.ts, with the same headers, its head rewritten
+//   for the collection it names (stage 3b: lib/route-head.ts, values
+//   from the generated map). Redirects and 404s are never injected.
+//   The document boots from its pathname when no hash is present
+//   (public/real-routes.js), and its <base href="/"> element keeps
+//   every relative asset, stylesheet and script URL resolving from
+//   the site root.
 // - An alias path (legacy spellings, the retired Pants wording)
 //   answers with a permanent redirect to the canonical path.
 // - A path whose normalised form differs from its canonical form
@@ -38,12 +42,7 @@ export async function GET(request: Request) {
   const canonical = raw.replace(/\/+$/, "").toLowerCase();
   if (canonical in paths) {
     if (raw !== canonical) return redirect(canonical);
-    return new Response(html, {
-      headers: {
-        "Content-Type": "text/html; charset=utf-8",
-        "Cache-Control": "no-cache",
-      },
-    });
+    return shellResponse(html, headForCollection(canonical));
   }
   if (canonical in aliases) return redirect(aliases[canonical]);
   return new Response("Not Found", {

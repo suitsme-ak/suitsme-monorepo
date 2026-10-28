@@ -12,7 +12,8 @@ for(const route of routes){shopping++;const c=collections[route];assert.ok(c.ids
 for(const [i,p] of catalog.entries()){assert.equal(p.id,i);assert.equal(prices[i].priceCents,p.price*100);assert.ok(fs.existsSync('public/assets/'+p.img),p.img);assert.ok(p.price>0);assert.ok(p.sku);}
 assert.equal(new Set(catalog.map(p=>p.sku)).size,catalog.length);assert.equal(catalog[0].name,'The Everyday Navy');assert.equal(catalog[18].kind,'gift');
 for(const file of ['app.js','complete.js','expanded.js','navigation.js','catalog-data.js','navigation-data.js','gallery.js','quick-add.js','merchant.js','merchant-data.js'])new vm.Script(fs.readFileSync('public/'+file,'utf8'),{filename:file});
-assert.equal(fs.readFileSync('web/index.html','utf8'),fs.readFileSync('public/index.html','utf8'));
+assert.ok(fs.existsSync('public/index.html'),'the shell document exists at public/index.html');
+assert.ok(!fs.existsSync('web/index.html'),'the web/index.html mirror is retired (Wave 4 stage 3b): public/index.html is the single shell source the route handlers import');
 console.log(`Catalog checks passed: ${catalog.length} unique SKUs, ${shopping} shopping menu destinations, ${services} service links, minimum 36 distinct designs per collection, server prices, source syntax, assets, stable legacy IDs.`);
 
 const galleryContext=vm.createContext({productPage(){return ""},render(){},document:{addEventListener(){}}});vm.runInContext(fs.readFileSync("public/gallery.js","utf8")+";globalThis.views=productImages;",galleryContext);

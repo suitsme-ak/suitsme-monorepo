@@ -22,6 +22,24 @@ const assert=require('node:assert/strict'),fs=require('node:fs'),vm=require('nod
 //   realUrlForHash, with labels, ordering and destination sets
 //   identical to the pre migration baseline.
 //
+// Stage 3b completes the rollout: per route head injection, the
+// generated sitemap, and the two copies question:
+//
+// - the generated map also carries per route heads (collection heads
+//   derived from the menu label and category, page and family copy
+//   from the generator's tables, state pages marked noindex), and
+//   the handlers rewrite the served head through the shared helper
+//   lib/route-head.ts: route specific title, description, canonical
+//   and robots, with product values looked up in the catalog;
+// - scripts/build-sitemap.cjs generates public/sitemap.xml from the
+//   route map and the catalog (home, 101 collections, 2,245
+//   products, the indexable pages), chained into the build;
+// - the web/index.html mirror is retired: every handler imports
+//   public/index.html directly, proven against the built server
+//   before the mirror was deleted (identical bytes on every family,
+//   redirects and 404s unchanged; see the stage 3b addendum in
+//   docs/ux-audit/wave-4-spike.md).
+//
 // This suite proves:
 //  1. the committed generated map equals a fresh generation, every one
 //     of the 147 catalog collection keys resolves through it to
@@ -49,7 +67,18 @@ const assert=require('node:assert/strict'),fs=require('node:fs'),vm=require('nod
 //     baseline, with every href now a real path that resolves through
 //     the generated map or a family pattern;
 //  6. the pre migration behaviour is unchanged: hash URLs at the root
-//     render as before and the root boot sets no hash.
+//     render as before and the root boot sets no hash;
+//  7. the served head is rewritten per route: the document each
+//     handler returns equals the shell with exactly the expected
+//     title, description, canonical and robots injected (an
+//     independent injector below computes the expectation), literal
+//     spot checks pin one route of each family, alias and
+//     non-canonical redirects carry no injection, and the root route
+//     serves the shell with its own home head;
+//  8. the sitemap is fresh (it equals a fresh generation), lists
+//     exactly the canonical indexable URLs counted from source data
+//     (home, every collection, every product, the indexable pages),
+//     never lists a state page, and robots.txt points at it.
 // Live server evidence (status codes from the built wrangler server)
 // is recorded in docs/ux-audit/wave-4-spike.md, stage 3a addendum.
 
@@ -92,16 +121,59 @@ function bootLoc(location){
 // Compile a route handler the way the stage 2 checks do: the shared
 // document and the generated map are substituted for the imports, the
 // TypeScript is transpiled, and GET is invoked with a real Request.
-const shellHtml=fs.readFileSync('web/index.html','utf8');
-function routeGet(rel){
-  const source=fs.readFileSync(rel,'utf8');
+// Stage 3b adds two substitutions in the same style: the shared head
+// helper lib/route-head.ts is compiled once (with the committed map
+// substituted for its import) and its exports are handed to each
+// handler, and the product handler's catalog import is substituted
+// with the committed catalog.
+const shellHtml=fs.readFileSync('public/index.html','utf8');
+const routeHeadExports=(()=>{
+  const source=fs.readFileSync('lib/route-head.ts','utf8');
   const js=ts.transpileModule(source
-    .replace(/import html from "[^"]+";/,`const html=${JSON.stringify(shellHtml)};`)
     .replace(/import routeMap from "[^"]+";/,`const routeMap=${JSON.stringify(committedMap)};`),
     {compilerOptions:{target:ts.ScriptTarget.ES2022,module:ts.ModuleKind.CommonJS}}).outputText;
   const m={exports:{}};vm.runInNewContext(js,{module:m,exports:m.exports,Response,URL});
+  return m.exports;
+})();
+function routeGet(rel){
+  let source=fs.readFileSync(rel,'utf8');
+  source=source
+    .replace(/import html from "[^"]+";/,`const html=${JSON.stringify(shellHtml)};`)
+    .replace(/import routeMap from "[^"]+";/,`const routeMap=${JSON.stringify(committedMap)};`)
+    .replace(/import \{[^}]+\} from "[^"]*route-head";/,`const {shellResponse,headForCollection,headForPage,headForFamily,headForProduct,headForOrderDetail}=__routeHead;`);
+  if(source.includes('data/catalog.json'))
+    source=source.replace(/import catalog from "[^"]+";/,`const catalog=${JSON.stringify(catalog)};`);
+  const js=ts.transpileModule(source,
+    {compilerOptions:{target:ts.ScriptTarget.ES2022,module:ts.ModuleKind.CommonJS}}).outputText;
+  const m={exports:{}};vm.runInNewContext(js,{module:m,exports:m.exports,Response,URL,__routeHead:routeHeadExports});
   return async path=>m.exports.GET(new Request('http://spike.test'+path));
 }
+
+// Stage 3b: an independent injector, used only to compute the
+// documents the handlers are expected to serve. It re-implements the
+// head rewrite from the shell and the expected values, so a bug in
+// lib/route-head.ts cannot make the expectation wrong in the same
+// way; literal spot checks in section 3 pin the values themselves.
+const escAttr=s=>String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+function expectedDoc({title,description,canonicalPath,robots}){
+  const t=escAttr(title),d=escAttr(description),c=escAttr('https://suits.me'+canonicalPath);
+  const r=robots==='noindex'?'noindex,nofollow':'index,follow,max-image-preview:large';
+  return shellHtml
+    .replace(/<title>[\s\S]*?<\/title>/,`<title>${t}</title>`)
+    .replace(/<meta name="description" content="[^"]*">/,`<meta name="description" content="${d}">`)
+    .replace(/<link rel="canonical" href="[^"]*">/,`<link rel="canonical" href="${c}">`)
+    .replace(/<meta name="robots" content="[^"]*">/,`<meta name="robots" content="${r}">`)
+    .replace(/<meta property="og:title" content="[^"]*">/,`<meta property="og:title" content="${t}">`)
+    .replace(/<meta property="og:description" content="[^"]*">/,`<meta property="og:description" content="${d}">`)
+    .replace(/<meta property="og:url" content="[^"]*">/,`<meta property="og:url" content="${c}">`)
+    .replace(/<meta name="twitter:title" content="[^"]*">/,`<meta name="twitter:title" content="${t}">`)
+    .replace(/<meta name="twitter:description" content="[^"]*">/,`<meta name="twitter:description" content="${d}">`);
+}
+const collectionDoc=path=>expectedDoc({title:committedMap.heads.collections[path].title,description:committedMap.heads.collections[path].description,canonicalPath:path,robots:'index'});
+const pageDoc=path=>{const h=committedMap.heads.pages[path];return expectedDoc({title:h.title,description:h.description,canonicalPath:path,robots:h.robots})};
+const familyDoc=(family,kind)=>{const h=committedMap.heads.families[family][kind];return expectedDoc({title:h.title,description:h.description,canonicalPath:`/${family}/${kind}`,robots:'index'})};
+const PRODUCT_NOUNS={suit:'suit',jacket:'jacket',waistcoat:'waistcoat',pants:'trousers',shirt:'shirt',accessory:'accessory set',swatch:'fabric swatch set',gift:'gift card'};
+const productDoc=id=>{const p=catalog[id];return expectedDoc({title:`${p.name} | Suits.me`,description:`${p.name} at Suits.me: a ${p.fabric} ${PRODUCT_NOUNS[p.kind]||'garment'} from the ${p.category} collection, custom tailored to your measurements. Choose your details and build your fit profile.`,canonicalPath:`/product/${id}`,robots:'index'})};
 
 (async()=>{
 
@@ -159,6 +231,26 @@ function routeGet(rel){
   const catalogIds=new Set(catalog.map(p=>p.id));
   for(const id of catalogIds)assert.ok(inRanges(id),`catalog product id ${id} is covered by the generated ranges`);
   for(const [lo,hi] of committedMap.families.product.idRanges)for(let id=lo;id<=hi;id++)assert.ok(catalogIds.has(id),`the generated ranges claim product id ${id}, which the catalog does not hold`);
+  // Stage 3b: the generated heads cover exactly the routes they
+  // describe, collection values derive from the destination's menu
+  // label and category, and the state pages are the noindex ones.
+  assert.deepEqual(Object.keys(committedMap.heads.collections).sort(),Object.keys(committedMap.paths).sort(),'every canonical collection path carries a head, and no other path does');
+  for(const [path,head] of Object.entries(committedMap.heads.collections)){
+    const hash=committedMap.paths[path];
+    const dec=s=>{try{return decodeURIComponent(s)}catch{return s}};
+    const parts=hash.split('/');
+    const label=parts.length>2?dec(parts.slice(2).join('/')):dec(parts[1]);
+    assert.equal(head.title,`${label} | Suits.me`,`the ${path} head title derives from its menu label`);
+    assert.ok(head.description.includes(label),`the ${path} head description names its label`);
+    assert.ok(head.description.includes('Suits.me'),`the ${path} head description names the site`);
+  }
+  assert.deepEqual(Object.keys(committedMap.heads.pages).sort(),Object.keys(committedMap.pages).sort(),'every page carries a head, and no other path does');
+  for(const path of ['/customize','/checkout','/orders','/payment-return'])
+    assert.equal(committedMap.heads.pages[path].robots,'noindex',`the state page ${path} is marked noindex`);
+  for(const path of ['/measure','/gift-cards','/help','/locations','/shipping','/privacy','/terms','/fit-support','/clone','/charges'])
+    assert.equal(committedMap.heads.pages[path].robots,'index',`the content page ${path} is indexable`);
+  assert.deepEqual(Object.keys(committedMap.heads.families.fabrics).sort(),[...committedMap.families.fabrics.kinds].sort(),'every fabrics kind carries a head');
+  assert.deepEqual(Object.keys(committedMap.heads.families.studio).sort(),[...committedMap.families.studio.kinds].sort(),'every studio kind carries a head');
   console.log(`Route map checks passed: ${Object.keys(committedMap.paths).length} canonical paths, ${Object.keys(committedMap.aliases).length} alias paths, ${Object.keys(committedMap.pages).length} page paths and the parameterised families generated from source data, all 147 catalog keys resolve to the destinations they name today, slugs unique per category, product ranges covering exactly the ${catalogIds.size} catalog ids.`);
 }
 
@@ -233,10 +325,16 @@ function routeGet(rel){
 {
   assert.ok(!fs.existsSync('app/collections/suits/wool-suits/route.ts'),'the spike explicit Wool Suits route is retired');
   const source=fs.readFileSync('app/collections/[...slug]/route.ts','utf8');
-  assert.ok(source.includes('from "../../../web/index.html?raw"'),'the catch all serves the shared storefront document');
+  assert.ok(source.includes('from "../../../public/index.html?raw"'),'the catch all serves the shared storefront document, imported from its single source');
   assert.ok(source.includes('from "../../../data/real-routes.json"'),'the catch all validates against the generated map');
   const html=shellHtml;
-  assert.equal(fs.readFileSync('public/index.html','utf8'),html,'the two HTML copies stay identical');
+  assert.ok(!fs.existsSync('web/index.html'),'the web/index.html mirror is retired: public/index.html is the single shell source');
+  // Stage 3b: the head injection rewrites nine anchored head
+  // elements; each anchor must occur exactly once in the shell, so a
+  // shell edit that breaks an anchor fails here instead of silently
+  // serving the home head for a route.
+  for(const anchor of ['<title>','name="description"','rel="canonical"','name="robots"','property="og:title"','property="og:description"','property="og:url"','name="twitter:title"','name="twitter:description"'])
+    assert.equal(html.split(anchor).length-1,1,`the shell carries exactly one ${anchor} anchor for the head injection`);
   assert.ok(html.includes('<base href="/">'),'the document resolves relative URLs from the site root');
   assert.ok(html.indexOf('<script src="real-routes-data.js"></script>')>=0,'the generated route data is in the document');
   assert.ok(html.indexOf('real-routes-data.js')<html.indexOf('real-routes.js'),'the route data loads before the boot script');
@@ -250,23 +348,54 @@ function routeGet(rel){
     assert.equal(res.status,200,`${path} serves the shell`);
     assert.equal(res.headers.get('Content-Type'),'text/html; charset=utf-8',`${path} carries the root route content type`);
     assert.equal(res.headers.get('Cache-Control'),'no-cache',`${path} carries the root route cache header`);
-    assert.equal(await res.text(),html,`${path} returns the storefront document byte for byte`);
+    assert.equal(await res.text(),collectionDoc(path),`${path} returns the storefront document with its own head injected`);
   }
+  // Stage 3b: every canonical collection path serves its own head.
+  for(const path of Object.keys(committedMap.paths)){
+    const res=await collectionsGet(path);
+    assert.equal(res.status,200,`${path} serves`);
+    assert.equal(await res.text(),collectionDoc(path),`${path} serves its own injected head`);
+  }
+  // Literal spot checks, independent of the generated data: the
+  // Wool Suits title, canonical and robots, and an ampersand label
+  // escaped in the injected title.
+  const woolDoc=await (await collectionsGet(REAL_PATH)).text();
+  assert.ok(woolDoc.includes('<title>Wool Suits | Suits.me</title>'),'literal: the Wool Suits title');
+  assert.ok(woolDoc.includes('<meta name="description" content="Explore Wool Suits in the Suits collection at Suits.me: custom tailoring made to your measurements. Choose your fabric, refine the details, and build your fit profile.">'),'literal: the Wool Suits description');
+  assert.ok(woolDoc.includes('<link rel="canonical" href="https://suits.me/collections/suits/wool-suits">'),'literal: the Wool Suits canonical');
+  assert.ok(woolDoc.includes('<meta name="robots" content="index,follow,max-image-preview:large">'),'literal: collections are indexable');
+  assert.ok(woolDoc.includes('<meta property="og:url" content="https://suits.me/collections/suits/wool-suits">'),'the Open Graph URL follows the canonical');
+  assert.ok(committedMap.paths['/collections/suits/cocktail-and-evening-suits'],'the cocktail and evening path is canonical');
+  const cocktailDoc=await (await collectionsGet('/collections/suits/cocktail-and-evening-suits')).text();
+  assert.ok(cocktailDoc.includes('<title>Cocktail &amp; Evening Suits | Suits.me</title>'),'an ampersand in a menu label is escaped in the injected title');
+  assert.ok(!cocktailDoc.includes('<title>Cocktail & Evening'),'the unescaped label never reaches the title');
   const alias=await collectionsGet('/collections/pants/wool-pants');
   assert.equal(alias.status,308,'an alias path redirects');
   assert.equal(alias.headers.get('Location'),'/collections/trousers/wool-trousers','the alias redirects to the canonical path');
+  assert.equal(await alias.text(),'','an alias redirect carries no injected document');
   const cased=await collectionsGet('/collections/Suits/Wool-Suits');
   assert.equal(cased.status,308,'a case variant redirects');
   assert.equal(cased.headers.get('Location'),REAL_PATH,'the case variant redirects to the canonical form');
+  assert.equal(await cased.text(),'','a canonicalisation redirect carries no injected document');
   const slashed=await collectionsGet(REAL_PATH+'/');
   assert.equal(slashed.status,308,'a trailing slash that reaches the handler redirects');
   assert.equal(slashed.headers.get('Location'),REAL_PATH);
+  assert.equal(await slashed.text(),'','a trailing slash redirect carries no injected document');
   for(const path of ['/collections/suits/not-a-collection','/collections/not-a-category','/collections/suits/wool-suits/extra','/collections']){
     const res=await collectionsGet(path);
     assert.equal(res.status,404,`${path} is a 404`);
   }
 
+  // The root route serves the shell exactly as it stands: the
+  // shell's own head is the home head (stage 3b injects nothing at
+  // the root).
+  const rootGet=await routeGet('app/route.ts');
+  const rootRes=await rootGet('/');
+  assert.equal(rootRes.status,200,'the root route serves');
+  assert.equal(await rootRes.text(),html,'the root route returns the storefront document byte for byte, with its own home head');
+
   // Stage 3a: every single segment page route serves the shell.
+  // Stage 3b: with the page's own head injected.
   for(const path of Object.keys(committedMap.pages)){
     const seg=path.slice(1);
     const file=`app/${seg}/route.ts`;
@@ -276,8 +405,20 @@ function routeGet(rel){
     assert.equal(res.status,200,`${path} serves the shell`);
     assert.equal(res.headers.get('Content-Type'),'text/html; charset=utf-8',`${path} carries the root route content type`);
     assert.equal(res.headers.get('Cache-Control'),'no-cache',`${path} carries the root route cache header`);
-    assert.equal(await res.text(),html,`${path} returns the storefront document byte for byte`);
+    assert.equal(await res.text(),pageDoc(path),`${path} returns the storefront document with its own head injected`);
   }
+  // Literal spot checks for the two page kinds: a content page
+  // (indexable, its own copy) and a state page (noindex).
+  const measureDoc=await (await (await routeGet('app/measure/route.ts'))('/measure')).text();
+  assert.ok(measureDoc.includes('<title>Measurement Studio | Suits.me</title>'),'literal: the measure title');
+  assert.ok(measureDoc.includes('<link rel="canonical" href="https://suits.me/measure">'),'literal: the measure canonical');
+  assert.ok(measureDoc.includes('<meta name="robots" content="index,follow,max-image-preview:large">'),'literal: the content pages are indexable');
+  const checkoutDoc=await (await (await routeGet('app/checkout/route.ts'))('/checkout')).text();
+  assert.ok(checkoutDoc.includes('<title>Checkout | Suits.me</title>'),'literal: the checkout title');
+  assert.ok(checkoutDoc.includes('<meta name="robots" content="noindex,nofollow">'),'literal: the state pages carry noindex');
+  assert.ok(checkoutDoc.includes('<link rel="canonical" href="https://suits.me/checkout">'),'literal: the checkout canonical points at its own URL');
+  const paymentDoc=await (await (await routeGet('app/payment-return/route.ts'))('/payment-return')).text();
+  assert.ok(paymentDoc.includes('<meta name="robots" content="noindex,nofollow">'),'literal: the payment return carries noindex');
 
   // Fabrics and studio: valid kinds serve, unknown kinds 404,
   // non-canonical forms of valid kinds redirect.
@@ -285,12 +426,16 @@ function routeGet(rel){
   for(const path of ['/fabrics/suit','/fabrics/shirt']){
     const res=await fabricsGet(path);
     assert.equal(res.status,200,`${path} serves the shell`);
-    assert.equal(await res.text(),html,`${path} returns the storefront document byte for byte`);
+    assert.equal(await res.text(),familyDoc('fabrics',path.split('/')[2]),`${path} returns the storefront document with its own head injected`);
   }
+  const fabricsDoc=await (await fabricsGet('/fabrics/suit')).text();
+  assert.ok(fabricsDoc.includes('<title>Suit fabrics | Suits.me</title>'),'literal: the suit fabrics title');
+  assert.ok(fabricsDoc.includes('<link rel="canonical" href="https://suits.me/fabrics/suit">'),'literal: the suit fabrics canonical');
   for(const [path,to] of [['/fabrics/Suit','/fabrics/suit'],['/fabrics/shirt/','/fabrics/shirt']]){
     const res=await fabricsGet(path);
     assert.equal(res.status,308,`${path} redirects`);
     assert.equal(res.headers.get('Location'),to,`${path} redirects to the canonical form`);
+    assert.equal(await res.text(),'','a fabrics redirect carries no injected document');
   }
   for(const path of ['/fabrics/wool','/fabrics','/fabrics/suit/extra']){
     const res=await fabricsGet(path);
@@ -300,11 +445,14 @@ function routeGet(rel){
   for(const path of ['/studio/suit','/studio/jacket','/studio/pants']){
     const res=await studioGet(path);
     assert.equal(res.status,200,`${path} serves the shell`);
-    assert.equal(await res.text(),html,`${path} returns the storefront document byte for byte`);
+    assert.equal(await res.text(),familyDoc('studio',path.split('/')[2]),`${path} returns the storefront document with its own head injected`);
   }
+  const studioDoc=await (await studioGet('/studio/pants')).text();
+  assert.ok(studioDoc.includes('<title>3D trousers configurator | Suits.me</title>'),'literal: the trousers configurator title');
   const studioCased=await studioGet('/studio/Jacket');
   assert.equal(studioCased.status,308,'a cased studio kind redirects');
   assert.equal(studioCased.headers.get('Location'),'/studio/jacket');
+  assert.equal(await studioCased.text(),'','a studio redirect carries no injected document');
   for(const path of ['/studio/tuxedo','/studio']){
     const res=await studioGet(path);
     assert.equal(res.status,404,`${path} is a 404`);
@@ -317,12 +465,21 @@ function routeGet(rel){
     const res=await productGet(path);
     assert.equal(res.status,200,`${path} serves the shell`);
     assert.equal(res.headers.get('Content-Type'),'text/html; charset=utf-8',`${path} carries the root route content type`);
-    assert.equal(await res.text(),html,`${path} returns the storefront document byte for byte`);
+    assert.equal(await res.text(),productDoc(Number(path.split('/')[2])),`${path} returns the storefront document with the product head injected`);
   }
+  // Literal spot checks: the injected product values come from the
+  // catalog entry the page renders.
+  const product1964Doc=await (await productGet('/product/1964')).text();
+  assert.ok(product1964Doc.includes('<title>Black Solid Suit · EB11127 | Suits.me</title>'),'literal: the product title comes from the catalog entry');
+  assert.ok(product1964Doc.includes('<link rel="canonical" href="https://suits.me/product/1964">'),'literal: the product canonical');
+  assert.ok(product1964Doc.includes('a 100% WOOL suit from the Suits collection'),'literal: the product description carries the catalog fabric, kind and category');
+  const product0Doc=await (await productGet('/product/0')).text();
+  assert.ok(product0Doc.includes('<title>The Everyday Navy | Suits.me</title>'),'literal: the first catalog product title');
   for(const [path,to] of [['/product/01964','/product/1964'],['/product/1964/','/product/1964']]){
     const res=await productGet(path);
     assert.equal(res.status,308,`${path} redirects`);
     assert.equal(res.headers.get('Location'),to,`${path} redirects to the canonical form`);
+    assert.equal(await res.text(),'','a product redirect carries no injected document');
   }
   for(const path of ['/product/2245','/product/99999','/product/abc','/product/-1','/product','/product/1964/extra']){
     const res=await productGet(path);
@@ -335,9 +492,12 @@ function routeGet(rel){
   for(const path of ['/orders/DEMO-ABC123','/orders/anything-at-all']){
     const res=await orderGet(path);
     assert.equal(res.status,200,`${path} serves the shell`);
-    assert.equal(await res.text(),html,`${path} returns the storefront document byte for byte`);
+    assert.equal(await res.text(),expectedDoc({title:'Order details | Suits.me',description:'The details of your Suits.me order: items, customization, fit profiles, and status.',canonicalPath:path,robots:'noindex'}),`${path} returns the storefront document with the noindex order head injected`);
   }
-  console.log('Handler checks passed: collections serve, redirect and 404 as in stage 2; every page route serves the shared document with root route headers; fabrics and studio serve their valid kinds and 404 unknown kinds; product serves existing catalog ids and 404s unknown and non-numeric ids; order detail serves any single segment id.');
+  const orderDoc=await (await orderGet('/orders/DEMO-ABC123')).text();
+  assert.ok(orderDoc.includes('<meta name="robots" content="noindex,nofollow">'),'literal: order detail carries noindex');
+  assert.ok(orderDoc.includes('<link rel="canonical" href="https://suits.me/orders/DEMO-ABC123">'),'literal: the order canonical is its own URL');
+  console.log('Handler checks passed: collections serve, redirect and 404 as in stage 2; every page route serves the shared document with root route headers; fabrics and studio serve their valid kinds and 404 unknown kinds; product serves existing catalog ids and 404s unknown and non-numeric ids; order detail serves any single segment id. Stage 3b: every served document carries its own injected head (all 101 collections verified, literal spot checks per family), redirects carry no injection, and the root serves the shell with its own home head.');
 }
 
 // ------------------------------------------------------------------ 4
@@ -492,6 +652,40 @@ function routeGet(rel){
   assert.equal(homeLoc.hash,'','the root boot sets no hash');
   assert.ok(!home.elFor('#main').innerHTML.includes('<h1>Wool Suits.</h1>'),'the root still renders the home page, not the collection');
   console.log('Compatibility checks passed: the existing hash URL renders Wool Suits unchanged and the root boot is untouched.');
+}
+
+// ------------------------------------------------------------------ 7
+{
+  // Stage 3b: the sitemap is generated (scripts/build-sitemap.cjs,
+  // chained into the build after the route map generator). A stale
+  // or hand edited sitemap fails the freshness equality, the same
+  // discipline as the generated route map.
+  const {buildSitemap,ORIGIN}=require('../scripts/build-sitemap.cjs');
+  assert.equal(ORIGIN,'https://suits.me','the sitemap uses the production origin the shell canonical and Open Graph URLs already use');
+  const sitemapXml=fs.readFileSync('public/sitemap.xml','utf8');
+  assert.equal(sitemapXml,buildSitemap(committedMap,catalog),'public/sitemap.xml matches a fresh generation from the route map and the catalog');
+  const locs=[...sitemapXml.matchAll(/<loc>([^<]+)<\/loc>/g)].map(m=>m[1]);
+  const indexablePages=Object.entries(committedMap.heads.pages).filter(([,head])=>head.robots==='index').map(([path])=>path);
+  const familyPaths=Object.entries(committedMap.heads.families).flatMap(([family,kinds])=>Object.keys(kinds).map(kind=>`/${family}/${kind}`));
+  assert.equal(locs.length,1+Object.keys(committedMap.paths).length+catalog.length+indexablePages.length+familyPaths.length,'the sitemap lists the home page, every collection, every product and every indexable page, counted from source data');
+  assert.equal(new Set(locs).size,locs.length,'the sitemap lists no URL twice');
+  assert.equal(locs[0],'https://suits.me/','the home page leads the sitemap');
+  const locPaths=new Set(locs.map(u=>u.slice(ORIGIN.length)));
+  for(const path of Object.keys(committedMap.paths))assert.ok(locPaths.has(path),`the sitemap lists the collection ${path}`);
+  for(const p of catalog)assert.ok(locPaths.has('/product/'+p.id),`the sitemap lists product ${p.id}`);
+  assert.equal(locs.filter(u=>u.startsWith(ORIGIN+'/product/')).length,catalog.length,'the sitemap lists exactly one URL per catalog product');
+  for(const path of [...indexablePages,...familyPaths])assert.ok(locPaths.has(path),`the sitemap lists the indexable page ${path}`);
+  for(const state of ['/customize','/checkout','/orders','/payment-return'])
+    assert.ok(!locPaths.has(state),`the sitemap never lists the noindex state page ${state}`);
+  assert.ok(![...locPaths].some(p=>p.startsWith('/orders/')),'the sitemap never lists order detail URLs');
+  for(const u of locs){
+    assert.ok(u.startsWith(ORIGIN+'/'),'every sitemap URL sits on the canonical origin: '+u);
+    const path=u.slice(ORIGIN.length);
+    assert.equal(path,path.toLowerCase(),'sitemap URLs use the canonical lowercase form: '+u);
+    assert.ok(path==='/'||!path.endsWith('/'),'sitemap URLs carry no trailing slash: '+u);
+  }
+  assert.ok(fs.readFileSync('public/robots.txt','utf8').includes('Sitemap: https://suits.me/sitemap.xml'),'robots.txt points at the sitemap');
+  console.log(`Sitemap checks passed: ${locs.length} URLs generated from the route map and the catalog (home, ${Object.keys(committedMap.paths).length} collections, ${catalog.length} products, ${indexablePages.length+familyPaths.length} indexable pages), canonical forms only, no state pages, fresh against the generator, and robots.txt points at it.`);
 }
 
 })().catch(e=>{console.error(e);process.exit(1)});

@@ -1,5 +1,6 @@
-import html from "../../../web/index.html?raw";
+import html from "../../../public/index.html?raw";
 import routeMap from "../../../data/real-routes.json";
+import { headForFamily, shellResponse } from "../../../lib/route-head";
 
 // Wave 4 stage 3a (NAV-01), Mechanic A: the 3D configurators at real
 // URLs. The generated map in data/real-routes.json (built by
@@ -9,8 +10,11 @@ import routeMap from "../../../data/real-routes.json";
 //
 // - A canonical path (/studio/suit, /studio/jacket, /studio/pants)
 //   serves the same storefront document as the root route in
-//   app/route.ts, with the same headers. The document boots from its
-//   pathname when no hash is present (public/real-routes.js).
+//   app/route.ts, with the same headers, its head rewritten for the
+//   configurator it names (stage 3b: lib/route-head.ts, values from
+//   the generated map). Redirects and 404s are never injected. The
+//   document boots from its pathname when no hash is present
+//   (public/real-routes.js).
 // - A non-canonical form of a valid kind (letter case, a trailing
 //   slash the framework let through) answers with a permanent
 //   redirect to the canonical path.
@@ -35,12 +39,7 @@ export async function GET(request: Request) {
   if (kind && kinds.includes(kind)) {
     const canonical = "/studio/" + kind;
     if (raw !== canonical) return redirect(canonical);
-    return new Response(html, {
-      headers: {
-        "Content-Type": "text/html; charset=utf-8",
-        "Cache-Control": "no-cache",
-      },
-    });
+    return shellResponse(html, headForFamily("studio", kind));
   }
   return new Response("Not Found", {
     status: 404,

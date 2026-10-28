@@ -11,12 +11,30 @@
 // by real path.
 //
 // Outputs:
-//   data/real-routes.json      consumed by the server catch all route
+//   data/real-routes.json      consumed by the server routes
 //                              (validation, canonical redirects, 404s)
 //   public/real-routes-data.js consumed by public/real-routes.js, the
 //                              boot script that translates a real path
 //                              into the hash route the storefront
-//                              renders, when the URL carries no hash.
+//                              renders, when the URL carries no hash,
+//                              and by the link translation the rendered
+//                              pages use to point at real URLs.
+//
+// Stage 3a extends the map beyond collections: the single segment
+// state and content pages (PAGES), and the parameterised families
+// (fabrics and studio kinds, catalog product ids, order detail). The
+// same fail loudly discipline applies: a page path colliding with a
+// collection path, or a catalog entry without a valid numeric id,
+// fails the build instead of shipping a partial map.
+//
+// Chain position matters: this generator must run AFTER every script
+// that writes data/catalog.json (generate-catalog.cjs,
+// build-merchant-catalog.cjs and build-suit-edits.cjs all append to
+// it), or the product id ranges would be generated from an
+// intermediate catalog and real product URLs would 404. The test
+// suite guards the invariant: it regenerates the map from the final
+// catalog and compares it with the committed artifacts, so a chain
+// reorder that breaks this fails the suite after a build.
 //
 // Canonicalisation rules (spike report section 6): slugs are lowercase,
 // spaces become hyphens, & becomes and, parentheses and apostrophes are
@@ -55,7 +73,55 @@ function pathFor(cat,topic){
   return '/collections/'+slug(cat)+(topic?'/'+slug(topic):'');
 }
 
-function buildRealRoutes(menus,collections){
+// Single segment state and content screens, each mapping to exactly
+// the hash route the render dispatch serves today (complete.js:
+// customize, measure, checkout, orders, gift cards, help, locations,
+// the three policy pages and the payment return; expanded.js: fit
+// support, clone, charges). One canonical path per screen; there are
+// no aliases for these.
+const PAGES={
+  '/customize':'#customize',
+  '/measure':'#measure',
+  '/checkout':'#checkout',
+  '/orders':'#orders',
+  '/gift-cards':'#gift-cards',
+  '/help':'#help',
+  '/locations':'#locations',
+  '/shipping':'#shipping',
+  '/privacy':'#privacy',
+  '/terms':'#terms',
+  '/fit-support':'#fit-support',
+  '/clone':'#clone',
+  '/charges':'#charges',
+  '/payment-return':'#payment-return',
+};
+// Parameterised family kinds, mirroring the client dispatch:
+// merchant.js renders the #fabrics/ listings for suit and shirt only,
+// and expanded.js renders #studio/ for suit, jacket and pants. Any
+// other kind is not a route. Product ids are validated against the
+// catalog data in buildRealRoutes; order ids are deliberately not
+// enumerable (they live in the shopper's browser storage or in server
+// order records the shell cannot list), so the orders family carries
+// no validation data and its route serves any single segment id.
+const FAMILY_KINDS={fabrics:['shirt','suit'],studio:['jacket','pants','suit']};
+
+function productIdRanges(catalog){
+  if(!Array.isArray(catalog))throw new Error('real routes: data/catalog.json is not an array');
+  const ids=new Set();
+  for(const p of catalog){
+    if(!p||!Number.isInteger(p.id)||p.id<0)throw new Error('real routes: a catalog entry has no valid numeric id, so /product/ routes cannot be validated');
+    if(ids.has(p.id))throw new Error(`real routes: duplicate catalog product id ${p.id}`);
+    ids.add(p.id);
+  }
+  const ranges=[];
+  for(const id of [...ids].sort((a,b)=>a-b)){
+    const last=ranges[ranges.length-1];
+    if(last&&id===last[1]+1)last[1]=id;else ranges.push([id,id]);
+  }
+  return ranges;
+}
+
+function buildRealRoutes(menus,collections,catalog){
   const entryId=value=>JSON.stringify(value);
   // Group the catalog keys by the entry they render.
   const groups=new Map();
@@ -143,21 +209,46 @@ function buildRealRoutes(menus,collections){
     reverse[key]=resolved;
   }
 
+  // Stage 3a families: the single segment pages and the parameterised
+  // families join the map. A page path that collides with a canonical
+  // or alias collection path, or a page hash that already resolves
+  // somewhere else, fails the build.
+  const pages=Object.fromEntries(Object.entries(PAGES).sort(([a],[b])=>a<b?-1:a>b?1:0));
+  for(const path of Object.keys(pages)){
+    if(path.split('/').filter(Boolean).length!==1)throw new Error(`real routes: page path ${path} is not a single segment`);
+    if(path in paths||path in aliases)throw new Error(`real routes: page path ${path} collides with a collection path`);
+    const hash=pages[path];
+    if(hash in reverse&&reverse[hash]!==path)throw new Error(`real routes: page hash ${hash} already resolves to ${reverse[hash]}`);
+    reverse[hash]=path;
+  }
+  if('#home' in reverse&&reverse['#home']!=='/')throw new Error('real routes: #home already resolves somewhere other than the root');
+  reverse['#home']='/';
+  const families={
+    fabrics:{kinds:[...FAMILY_KINDS.fabrics]},
+    studio:{kinds:[...FAMILY_KINDS.studio]},
+    product:{idRanges:productIdRanges(catalog)},
+    orders:{anySingleSegment:true},
+  };
+
   const sortObj=o=>Object.fromEntries(Object.entries(o).sort(([a],[b])=>a<b?-1:a>b?1:0));
-  return{paths:sortObj(paths),aliases:sortObj(aliases),reverse:sortObj(reverse)};
+  return{paths:sortObj(paths),aliases:sortObj(aliases),reverse:sortObj(reverse),pages,families};
 }
 
 function main(){
   const menus=JSON.parse(fs.readFileSync('data/reference-navigation.json','utf8'));
   const collections=JSON.parse(fs.readFileSync('data/collections.json','utf8'));
-  const{paths,aliases,reverse}=buildRealRoutes(menus,collections);
-  fs.writeFileSync('data/real-routes.json',JSON.stringify({paths,aliases,reverse},null,2)+'\n');
-  const header='// Generated by scripts/build-real-routes.cjs from data/reference-navigation.json\n// and data/collections.json. Do not edit by hand; the build regenerates it.\n';
+  const catalog=JSON.parse(fs.readFileSync('data/catalog.json','utf8'));
+  const{paths,aliases,reverse,pages,families}=buildRealRoutes(menus,collections,catalog);
+  fs.writeFileSync('data/real-routes.json',JSON.stringify({paths,aliases,reverse,pages,families},null,2)+'\n');
+  const header='// Generated by scripts/build-real-routes.cjs from data/reference-navigation.json,\n// data/collections.json and data/catalog.json. Do not edit by hand; the build\n// regenerates it.\n';
   fs.writeFileSync('public/real-routes-data.js',
     header+
     '// Canonical real collection paths and the hash route each one boots into.\nconst realRoutePaths='+JSON.stringify(paths)+';\n'+
-    '// Alias real paths (legacy spellings, the retired Pants wording) and the\n// canonical real path each one resolves to.\nconst realRouteAliases='+JSON.stringify(aliases)+';\n');
-  console.log(JSON.stringify({realPaths:Object.keys(paths).length,aliasPaths:Object.keys(aliases).length,catalogKeys:Object.keys(reverse).length}));
+    '// Alias real paths (legacy spellings, the retired Pants wording) and the\n// canonical real path each one resolves to.\nconst realRouteAliases='+JSON.stringify(aliases)+';\n'+
+    '// Every hash route that has a real URL, mapped to it: the collections,\n// the single segment pages and home. Rendered links translate through\n// realUrlForHash in public/real-routes.js.\nconst realRouteReverse='+JSON.stringify(reverse)+';\n'+
+    '// Single segment real paths (state and content screens) and the hash\n// route each one boots into.\nconst realRoutePages='+JSON.stringify(pages)+';\n'+
+    '// Parameterised families: the valid kinds for the fabrics and studio\n// listings and the catalog product id ranges the product routes\n// validate against. Order detail paths are deliberately absent: any\n// single segment id boots, because order ids are not enumerable.\nconst realRouteFamilies='+JSON.stringify(families)+';\n');
+  console.log(JSON.stringify({realPaths:Object.keys(paths).length,aliasPaths:Object.keys(aliases).length,catalogKeys:Object.keys(collections).length,pagePaths:Object.keys(pages).length,productIds:families.product.idRanges.reduce((n,[lo,hi])=>n+hi-lo+1,0)}));
 }
 
 if(require.main===module)main();

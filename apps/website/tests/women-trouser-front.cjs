@@ -31,7 +31,7 @@ const womenProfile={id:'p-women',name:'Women body',method:'body',wearer:'Women',
 const menProfile={id:'p-men',name:'Men body',method:'body',wearer:'Men',unit:'in',fit:'Tailored',values:{chest:40,waist:34,shoulder:18,sleeve:25,jacket:30,seat:40,trouserWaist:34,thigh:24,inseam:32,outseam:42},created:'2026-01-01T00:00:00.000Z'};
 localStorage.setItem('suits-profiles',JSON.stringify([womenProfile,menProfile]));
 const ctx=vm.createContext({console,localStorage,document:documentStub,location:{hash:'#home'},window:{addEventListener(){},scrollTo(){}},setTimeout,clearTimeout,crypto:require('node:crypto').webcrypto,fetch:()=>Promise.resolve({ok:false,json:async()=>null}),FormData:FakeFormData,fabricBackground:()=>'background:#999;background-image:linear-gradient(#999,#888);'});
-for(const f of ['app.js','complete.js','quick-add.js'])vm.runInContext(fs.readFileSync('public/'+f,'utf8'),ctx,{filename:f});
+for(const f of ['measurement-schema.js','app.js','complete.js','quick-add.js'])vm.runInContext(fs.readFileSync('public/'+f,'utf8'),ctx,{filename:f});
 const run=s=>vm.runInContext(s,ctx);
 const bagState=()=>JSON.parse(store.get('suits-bag')||'[]');
 const womenSuit=run("products.findIndex(p=>p.category==='Women'&&p.kind==='suit')");

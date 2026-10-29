@@ -225,7 +225,7 @@ function makeWorld({pathname='/',hash='',search='',api=neverApi,seed={}}={}){
   const sandbox={console,localStorage,document:documentStub,location,setTimeout,clearTimeout,crypto:require('node:crypto').webcrypto,fetch:api.fetch,FormData:ScreenFormData,addEventListener(){},scrollTo(){}};
   sandbox.window=sandbox;
   const ctx=vm.createContext(sandbox);
-  for(const f of ['real-routes-data.js','real-routes.js','app.js','complete.js','catalog-data.js','expanded.js','navigation-data.js','navigation.js','gallery.js','quick-add.js','merchant-data.js','merchant.js'])vm.runInContext(fs.readFileSync('public/'+f,'utf8'),ctx,{filename:f});
+  for(const f of ['real-routes-data.js','real-routes.js','measurement-schema.js','app.js','complete.js','catalog-data.js','expanded.js','navigation-data.js','navigation.js','gallery.js','quick-add.js','merchant-data.js','merchant.js'])vm.runInContext(fs.readFileSync('public/'+f,'utf8'),ctx,{filename:f});
   const run=s=>vm.runInContext(s,ctx);
   return{run,elFor,store,location,api};
 }

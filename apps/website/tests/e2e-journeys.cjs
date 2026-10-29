@@ -46,7 +46,7 @@ function makeWorld(seed={}){
   const sandbox={console,localStorage,document:documentStub,location:{hash:'#home'},setTimeout,clearTimeout,crypto:require('node:crypto').webcrypto,fetch:()=>Promise.resolve({ok:false,json:async()=>null}),FormData:FakeFormData,fabricBackground:()=>'background:#999;background-image:linear-gradient(#999,#888);',addEventListener(){},scrollTo(){}};
   sandbox.window=sandbox;
   const ctx=vm.createContext(sandbox);
-  for(const f of ['app.js','complete.js','catalog-data.js','expanded.js','gallery.js','quick-add.js'])vm.runInContext(fs.readFileSync('public/'+f,'utf8'),ctx,{filename:f});
+  for(const f of ['measurement-schema.js','app.js','complete.js','catalog-data.js','expanded.js','gallery.js','quick-add.js'])vm.runInContext(fs.readFileSync('public/'+f,'utf8'),ctx,{filename:f});
   const run=s=>vm.runInContext(s,ctx);
   const bag=()=>JSON.parse(store.get('suits-bag')||'[]');
   return{run,elFor,store,bag};
@@ -69,7 +69,7 @@ function makeEntryWorld({pathname='/',hash='',profiles=null}={}){
   const sandbox={console,localStorage,document:documentStub,location,setTimeout,clearTimeout,crypto:require('node:crypto').webcrypto,fetch:()=>Promise.resolve({ok:false,json:async()=>null}),FormData:EntryFormData,addEventListener(){},scrollTo(){}};
   sandbox.window=sandbox;
   const ctx=vm.createContext(sandbox);
-  for(const f of ['real-routes-data.js','real-routes.js','app.js','complete.js','catalog-data.js','expanded.js','navigation-data.js','navigation.js','gallery.js','quick-add.js','merchant-data.js','merchant.js'])vm.runInContext(fs.readFileSync('public/'+f,'utf8'),ctx,{filename:f});
+  for(const f of ['real-routes-data.js','real-routes.js','measurement-schema.js','app.js','complete.js','catalog-data.js','expanded.js','navigation-data.js','navigation.js','gallery.js','quick-add.js','merchant-data.js','merchant.js'])vm.runInContext(fs.readFileSync('public/'+f,'utf8'),ctx,{filename:f});
   const run=s=>vm.runInContext(s,ctx);
   const bag=()=>JSON.parse(store.get('suits-bag')||'[]');
   return{run,elFor,store,bag,location};
@@ -197,6 +197,12 @@ function makeEntryWorld({pathname='/',hash='',profiles=null}={}){
 // Body measurement journey: several invalid values are reported together,
 // then corrected, the profile is saved, and the bag line lists every
 // entered measurement plus the chosen lining.
+// Note (measurements wave, package M1): the suit journey now runs the
+// garment aware studio, so this journey drives the new flow: a name and
+// height preamble, the verified suit set in a jacket part and a trousers
+// part, the in form fit selectors, and a version 2 profile. The bag line
+// lists the version 2 summary: one merged waist, and no inseam, outseam
+// or trouser waist, which the verified form never asks.
 {
   const w=makeWorld();
   w.run('chooseProduct(0)');w.run('beginDesign(0)');
@@ -206,33 +212,36 @@ function makeEntryWorld({pathname='/',hash='',profiles=null}={}){
   w.run("setCustomizerMethod('body')");
   w.run('startMeasurements()');
   w.run('measureNext()');
-  assert.equal(w.run('draft.step'),1,'the Studio advances to the jacket measurements step');
-  // Field inputs write through updateValue, their real oninput handler.
-  w.run("updateValue('chest','200');updateValue('waist','5');updateValue('sleeve','100')");
+  assert.equal(w.run('draft.step'),1,'the Studio advances to the name and height preamble');
+  w.run("draft.wearerName='E2E Shopper';updateValue('height','70')");
   w.run('measureNext()');
-  assert.equal(w.run('draft.step'),1,'Continue is blocked while jacket measurements are invalid');
+  assert.equal(w.run('draft.step'),2,'the Studio advances to the jacket measurements step');
+  // Field inputs write through updateValue, their real oninput handler.
+  w.run("updateValue('chest','200');updateValue('stomach','5');updateValue('sleeve','100')");
+  w.run('measureNext()');
+  assert.equal(w.run('draft.step'),2,'Continue is blocked while jacket measurements are invalid');
   const summary=w.elFor('#measureError').innerHTML;
   assert.equal((summary.match(/<li>/g)||[]).length,5,'all five jacket problems are listed in one message');
-  for(const text of ['Please check chest.','Please check natural waist.','Please check shoulder width.','Please check sleeve length.','Please check jacket length.'])assert.ok(summary.includes(text),'the one message includes: '+text);
+  for(const text of ['Please check chest.','Please check sleeve length.','Please check shoulder width.','Please check jacket length.','Please check stomach.'])assert.ok(summary.includes(text),'the one message includes: '+text);
   assert.equal(w.elFor('#measureInput-chest').getAttribute('aria-invalid'),'true','the out of range chest input is marked invalid');
-  w.run("updateValue('chest','40');updateValue('waist','32');updateValue('shoulder','18');updateValue('sleeve','25');updateValue('jacket','29')");
+  w.run("updateValue('chest','40');updateValue('sleeve','25');updateValue('shoulder','18');updateValue('jacket','29');updateValue('stomach','34')");
   w.run('measureNext()');
-  assert.equal(w.run('draft.step'),2,'valid jacket measurements advance to the trousers step');
-  w.run("updateValue('seat','40');updateValue('trouserWaist','34');updateValue('thigh','24');updateValue('inseam','32');updateValue('outseam','42')");
+  assert.equal(w.run('draft.step'),3,'valid jacket measurements advance to the trousers step');
+  w.run("updateValue('pantsLength','42');updateValue('waist','34');updateValue('seat','40');updateValue('frontRise','11');updateValue('thigh','24')");
   w.run('measureNext()');
-  assert.equal(w.run('draft.step'),3,'valid trouser measurements advance to review');
-  w.run("draft.name='E2E body profile'");
+  assert.equal(w.run('draft.step'),4,'valid trouser measurements advance to review');
   w.elFor('#confirmMeasures').checked=true;
   w.run('measureNext()');
   assert.equal(w.run('profiles.length'),1,'the Studio saves the body measurement profile');
   assert.equal(w.run('profiles[0].method'),'body','the saved profile carries the body method');
+  assert.equal(w.run('profiles[0].version'),2,'the saved suit profile is a version 2 profile');
   assert.equal(w.run('stage'),2,'saving returns to the customizer Measurements step');
   w.elFor('#profileSelect').value=w.run('profiles[0].id');
   w.run('nextConfig()');
   assert.equal(w.bag().length,1,'Add to Bag creates exactly one bag line');
   const lineHtml=w.run('lineHtml(bag[0])');
   assert.ok(lineHtml.includes('Body measurements'),'the bag line shows the body measurement summary');
-  for(const text of ['Chest 40 in','Natural waist 32 in','Shoulder width 18 in','Sleeve length 25 in','Jacket length 29 in','Seat / hips 40 in','Trouser waist 34 in','Thigh 24 in','Inseam 32 in','Outseam 42 in'])assert.ok(lineHtml.includes(text),'the bag line lists the entered measurement: '+text);
+  for(const text of ['Height 70 in','Chest 40 in','Sleeve length 25 in','Shoulder width 18 in','Jacket length 29 in','Stomach 34 in','Pants length 42 in','Waist 34 in','Seat / hips 40 in','Front rise 11 in','Thigh 24 in','Jacket Fit Regular Fit','Trouser Fit Classic Comfort Fit'])assert.ok(lineHtml.includes(text),'the bag line lists the entered measurement: '+text);
   assert.ok(lineHtml.includes('Midnight lining'),'the bag line shows the chosen lining');
 }
 
@@ -241,7 +250,11 @@ function makeEntryWorld({pathname='/',hash='',profiles=null}={}){
 // saved for the same wearer, switching the method card in the customizer
 // changes which profile Add to Bag uses, in both directions.
 {
-  const bodyProfile={id:'p-body',name:'Body profile',method:'body',wearer:'Men',unit:'in',fit:'Tailored',values:{chest:40},created:'2026-01-01T00:00:00.000Z'};
+  // Fixture note (measurements wave, package M1): the body profile a
+  // shopper brings to a suit today is a complete version 2 suit profile,
+  // the shape the garment aware studio saves; the journey's subject is
+  // method switching, not profile completeness.
+  const bodyProfile={id:'p-body',name:'Body profile',method:'body',version:2,garment:'suit',wearer:'Men',wearerName:'E2E Shopper',unit:'in',fit:'Tailored',fits:{jacketFit:'Regular Fit',trouserFit:'Classic Comfort Fit'},values:{height:70,chest:40,sleeve:25,shoulder:18,jacket:29,stomach:34,pantsLength:42,waist:34,seat:40,frontRise:11,thigh:24},created:'2026-01-01T00:00:00.000Z'};
   const readyProfile={id:'p-ready',name:'Ready profile',method:'ready',wearer:'Men',fit:'Tailored',ready:{jacket:'42',length:'Long',trouser:'36'},created:'2026-01-02T00:00:00.000Z'};
   const w=makeWorld({profiles:[bodyProfile,readyProfile],config:{product:0,fabric:'Navy',lapel:'Notch',closure:'Two button',fit:'Tailored',lining:'Tonal',monogram:'',profileId:'p-body'}});
   w.run('chooseProduct(0)');w.run('beginDesign(0)');
@@ -347,12 +360,14 @@ function makeEntryWorld({pathname='/',hash='',profiles=null}={}){
 }
 
 // ---------------------------------------------------------------- J7
-// Women journey: the customizer Measurements step offers only the body
-// method with the explanatory note, and the standard size path cannot be
-// used to bag a Women garment.
+// Women journey: the customizer Measurements step offers both methods
+// for a Women garment, the standard size card keyed to the bust
+// (measurements wave package M4, superseding the pre M4 refusal this
+// journey used to pin), and the Women garment bags through each path
+// with its own wearer's profile.
 {
   const womenBody={id:'p-women-body',name:'Women body',method:'body',wearer:'Women',unit:'in',fit:'Tailored',values:{chest:36},created:'2026-01-01T00:00:00.000Z'};
-  const womenReady={id:'p-women-ready',name:'Women ready',method:'ready',wearer:'Women',fit:'Tailored',ready:{jacket:'38',length:'Regular',trouser:'32'},created:'2026-01-02T00:00:00.000Z'};
+  const womenReady={id:'p-women-ready',name:'Women ready',version:2,method:'ready',garment:'suit',wearer:'Women',unit:'in',fit:'Tailored',ready:{womenSize:'40'},created:'2026-01-02T00:00:00.000Z'};
   const w=makeWorld({profiles:[womenBody,womenReady]});
   const idx=w.run("products.findIndex(p=>p.category==='Women'&&p.kind==='suit')");
   assert.ok(idx>=0,'the catalog holds a Women suit for the journey');
@@ -361,16 +376,24 @@ function makeEntryWorld({pathname='/',hash='',profiles=null}={}){
   w.run('nextConfig()');w.run('nextConfig()');
   const stepHtml=w.run('customize()');
   assert.ok(stepHtml.includes("setCustomizerMethod('body')"),'the body method card is offered for the Women garment');
-  assert.ok(!stepHtml.includes("setCustomizerMethod('ready')"),'no standard size card is offered for the Women garment');
-  assert.ok(stepHtml.includes('Standard sizes are not offered for this garment'),'the step explains standard sizes are not offered for this garment');
-  w.run("setCustomizerMethod('ready')");
-  assert.equal(w.run('draft.method'),'body','a standard size switch is refused for the Women garment');
-  assert.equal(w.run('config.profileId'),'p-women-body','the selection stays on the body profile, not the standard size profile');
-  w.elFor('#profileSelect').value=w.run('config.profileId');
+  assert.ok(stepHtml.includes("setCustomizerMethod('ready')"),'the standard size card is offered for the Women garment');
+  assert.ok(stepHtml.includes('Choose your standard size by bust'),'the standard size card is keyed to the bust');
+  assert.ok(!stepHtml.includes('Standard sizes are not offered'),'the pre M4 refusal note is gone');
+  w.run("chooseCustomizerProfile('p-women-body')");
+  w.elFor('#profileSelect').value='p-women-body';
   w.run('nextConfig()');
   assert.equal(w.bag().length,1,'the Women garment is bagged through the body path');
   assert.equal(w.bag()[0].profile.id,'p-women-body','the bagged profile is the body profile');
-  assert.equal(w.bag()[0].profile.method,'body','no standard size profile is bagged for the Women garment');
+  assert.equal(w.bag()[0].profile.method,'body','the body profile is bagged first');
+  w.run("setCustomizerMethod('ready')");
+  assert.equal(w.run('draft.method'),'ready','a standard size switch is honored for the Women garment');
+  assert.equal(w.run('config.profileId'),'p-women-ready','the selection moves to the saved Women standard size profile');
+  w.elFor('#profileSelect').value='p-women-ready';
+  w.run('nextConfig()');
+  assert.equal(w.bag().length,2,'the Women garment is bagged through the standard size path too');
+  assert.equal(w.bag()[1].profile.id,'p-women-ready','the bagged profile is the standard size profile');
+  assert.equal(w.bag()[1].profile.method,'ready','a standard size profile is bagged for the Women garment');
+  assert.ok(w.run('lineHtml(bag[1])').includes('Women&#39;s size 40 (XL)'),'the bag line shows her bust keyed size with its letter (apostrophe HTML escaped by the renderer)');
 }
 
 // ---------------------------------------------------------------- J8
@@ -479,7 +502,7 @@ function makeEntryWorld({pathname='/',hash='',profiles=null}={}){
   const sandbox={console,localStorage,document:documentStub,location:{hash:'#home'},setTimeout,clearTimeout,crypto:require('node:crypto').webcrypto,fetch:()=>Promise.resolve({ok:false,json:async()=>null}),FormData:J10FormData,addEventListener(){},scrollTo(){}};
   sandbox.window=sandbox;
   const ctx=vm.createContext(sandbox);
-  for(const f of ['real-routes-data.js','real-routes.js','app.js','complete.js','catalog-data.js','expanded.js','navigation-data.js','navigation.js','gallery.js','quick-add.js','merchant-data.js','merchant.js'])vm.runInContext(fs.readFileSync('public/'+f,'utf8'),ctx,{filename:f});
+  for(const f of ['real-routes-data.js','real-routes.js','measurement-schema.js','app.js','complete.js','catalog-data.js','expanded.js','navigation-data.js','navigation.js','gallery.js','quick-add.js','merchant-data.js','merchant.js'])vm.runInContext(fs.readFileSync('public/'+f,'utf8'),ctx,{filename:f});
   const run=s=>vm.runInContext(s,ctx);
   const navHtml=elFor('#catalogNav').innerHTML;
   const menuAnchors=name=>{
@@ -517,10 +540,12 @@ function makeEntryWorld({pathname='/',hash='',profiles=null}={}){
 }
 
 // ---------------------------------------------------------------- J11
-// Size guide journey (SIZ-03): inside the Studio standard size flow the
-// shopper opens the size guide, checks jacket 40 against a 40 in chest,
-// switches the Studio unit to cm and reads 102, then chooses the sizes,
-// saves the profile, and bags the garment.
+// Size guide journey (SIZ-03, rebuilt in measurements package M5):
+// inside the Studio standard size flow the shopper opens the size
+// guide, checks jacket 40 against a 40 in body chest and its adopted
+// finished values, switches the Studio unit to cm and reads the
+// values converted by the one unit rule (101.6 body, 109.2 finished),
+// then chooses the sizes, saves the profile, and bags the garment.
 {
   const w=makeWorld();
   w.run('chooseProduct(0)');w.run('beginDesign(0)');
@@ -536,11 +561,11 @@ function makeEntryWorld({pathname='/',hash='',profiles=null}={}){
   w.run('toggleSizeGuide()');
   sizesHtml=w.run('measure()');
   assert.ok(sizesHtml.includes('aria-expanded="true"'),'the size guide opens from its toggle');
-  assert.ok(sizesHtml.includes('<tr><td>40</td><td>40</td></tr>'),'jacket 40 matches a body chest of 40 in (rule D1)');
+  assert.ok(sizesHtml.includes('<tr><td>40</td><td>40</td><td>43</td><td>18</td><td>40.5</td><td>24.5</td><td>29.5</td></tr>'),'jacket 40 matches a body chest of 40 in (rule D1) and shows the adopted finished values');
   w.run("changeUnit('cm')");
   sizesHtml=w.run('measure()');
   assert.ok(sizesHtml.includes('Body chest (cm)'),'the guide follows the Studio unit switch to cm');
-  assert.ok(sizesHtml.includes('<tr><td>40</td><td>102</td></tr>'),'jacket 40 reads chest 102 cm after the switch');
+  assert.ok(sizesHtml.includes('<tr><td>40</td><td>101.6</td><td>109.2</td>'),'jacket 40 reads body chest 101.6 cm and finished chest 109.2 cm after the switch (the one unit rule, package M5)');
   w.run("changeUnit('in')");
   // The size selects write draft.ready through their onchange handlers.
   w.run("draft.ready.jacket='40';draft.ready.length='Regular';draft.ready.trouser='34';saveDraft()");
@@ -557,7 +582,7 @@ function makeEntryWorld({pathname='/',hash='',profiles=null}={}){
   assert.ok(w.run('lineHtml(bag[0])').includes('Jacket size 40'),'the bag line shows the chosen jacket size');
 }
 
-console.log('E2E journey J11 passed: the size guide is consulted in inches and cm inside the standard size flow, then the profile is saved and the garment bagged.');
+console.log('E2E journey J11 passed: the rebuilt size guide is consulted in inches and cm inside the standard size flow, then the profile is saved and the garment bagged.');
 
 // ---------------------------------------------------------------- J12
 // Cross product state journey (CUS-07): the shopper designs one suit with
@@ -947,7 +972,7 @@ console.log('E2E journey J12 passed: designing a second product starts clean wit
   const sandbox={console,localStorage,document:documentStub,location,setTimeout,clearTimeout,crypto:require('node:crypto').webcrypto,fetch:()=>Promise.resolve({ok:false,json:async()=>null}),FormData:J19FormData,addEventListener(){},scrollTo(){}};
   sandbox.window=sandbox;
   const ctx=vm.createContext(sandbox);
-  for(const f of ['real-routes-data.js','real-routes.js','app.js','complete.js','catalog-data.js','expanded.js','navigation-data.js','navigation.js','gallery.js','quick-add.js','merchant-data.js','merchant.js'])vm.runInContext(fs.readFileSync('public/'+f,'utf8'),ctx,{filename:f});
+  for(const f of ['real-routes-data.js','real-routes.js','measurement-schema.js','app.js','complete.js','catalog-data.js','expanded.js','navigation-data.js','navigation.js','gallery.js','quick-add.js','merchant-data.js','merchant.js'])vm.runInContext(fs.readFileSync('public/'+f,'utf8'),ctx,{filename:f});
   const run=s=>vm.runInContext(s,ctx);
   const bag=()=>JSON.parse(store.get('suits-bag')||'[]');
 
@@ -1003,7 +1028,7 @@ console.log('E2E journey J12 passed: designing a second product starts clean wit
   const sandbox={console,localStorage,document:documentStub,location,setTimeout,clearTimeout,crypto:require('node:crypto').webcrypto,fetch:()=>Promise.resolve({ok:false,json:async()=>null}),FormData:J20FormData,addEventListener(){},scrollTo(){}};
   sandbox.window=sandbox;
   const ctx=vm.createContext(sandbox);
-  for(const f of ['real-routes-data.js','real-routes.js','app.js','complete.js','catalog-data.js','expanded.js','navigation-data.js','navigation.js','gallery.js','quick-add.js','merchant-data.js','merchant.js'])vm.runInContext(fs.readFileSync('public/'+f,'utf8'),ctx,{filename:f});
+  for(const f of ['real-routes-data.js','real-routes.js','measurement-schema.js','app.js','complete.js','catalog-data.js','expanded.js','navigation-data.js','navigation.js','gallery.js','quick-add.js','merchant-data.js','merchant.js'])vm.runInContext(fs.readFileSync('public/'+f,'utf8'),ctx,{filename:f});
   const run=s=>vm.runInContext(s,ctx);
   const bag=()=>JSON.parse(store.get('suits-bag')||'[]');
   const catalog=require('../data/catalog.json');

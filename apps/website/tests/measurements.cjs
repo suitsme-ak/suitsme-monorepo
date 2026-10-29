@@ -14,7 +14,7 @@ const ctx=vm.createContext({
  window:{addEventListener(){},scrollTo(){}},
  setTimeout,clearTimeout,scrollTo(){},
 });
-vm.runInContext(fs.readFileSync('public/app.js','utf8'),ctx);
+vm.runInContext(fs.readFileSync('public/measurement-schema.js','utf8'),ctx);vm.runInContext(fs.readFileSync('public/app.js','utf8'),ctx);
 const run=s=>vm.runInContext(s,ctx);
 const errorBox=()=>elFor('#measureError');
 const clearError=()=>{errorBox().textContent='';errorBox().innerHTML=''};

@@ -1,0 +1,902 @@
+// The shared measurement schema for suits.me (measurements wave,
+// package M0). This file is the single source of truth for:
+//   - the body measurement fields: keys, labels, whether each field
+//     measures the body or names a finished garment target, the
+//     accepted range per field per wearer, and the guidance a shopper
+//     is shown (placement text, the common error to avoid, whether a
+//     helper is needed, and the guidance illustration to draw);
+//   - the per garment field sets, in the order the verified benchmark
+//     forms ask them, with the required and optional split and the
+//     fit selectors each garment carries;
+//   - the garment measurement fields and per garment garment sets
+//     for the measure an existing garment entry mode (package M7),
+//     a second, distinct kind of measurement data;
+//   - the version 1 (legacy) wizard field set, kept so profiles
+//     saved before the schema existed keep loading and ordering;
+//   - the standard size sets, the ready trouser inseam choices, and
+//     the finished garment allowances;
+//   - the one validation rule every consumer shares.
+// Consumers: the browser studio reads the generated copy at
+// public/measurement-schema.js (built by
+// scripts/build-measurement-schema.cjs, which strips the module
+// declarations from this file; never edit the generated copy), and
+// the server validators in lib/commerce.ts and lib/accounts.ts read
+// this file directly. One rule in three places was inconsistency
+// INC-02 in docs/ux-audit/measurements-alignment.md; there is now
+// exactly one rule, here.
+// Style constraint: plain data plus pure functions, no dependencies
+// on the DOM, on Node, or on any other module, so the same text runs
+// in the browser, in the worker, and in the test harnesses.
+// Decisions embodied here (Avenash, 2026-10-29): the per garment
+// field sets are the verified benchmark sets; the two legacy waist
+// fields merge into one body waist; inseam and outseam are not body
+// profile fields; validation reports every problem at once; values
+// are entered in inches or centimeters and stored in inches.
+
+export const PROFILE_SCHEMA_VERSION = 2;
+export const WEARERS = ['Men', 'Women', 'Boys'];
+
+// The profile preamble every body form opens with: the name of the
+// person being measured, then height. Height is stored in values
+// under the key 'height', in total inches; how it is split into feet
+// and inches on screen is a presentation choice for the studio.
+export const PROFILE_PREAMBLE = ['wearerName', 'height'];
+
+// Body and garment fields. kind 'body' measures the person; kind
+// 'garment' names a finished garment target (a length or an opening)
+// the shop cuts to. ranges are inches, per wearer. Women share the
+// adult ranges: no separate published range exists, and inventing
+// one would be a guess. Boys share the adult maximums for now;
+// child specific maximums are set with owner input in package M4
+// (inconsistency INC-11 is about the rule living in one place,
+// which it now does).
+export const MEASUREMENT_FIELDS = {
+  height: { label: 'Height', kind: 'body', ranges: { Men: [48, 95], Women: [48, 95], Boys: [36, 84] }, guidance: { placement: 'Stand barefoot with your back against a wall and measure from the floor to the top of your head.', error: 'Shoes and hairstyles add height that is not yours; measure barefoot.', helper: true, image: { ref: 'height', style: 'diagram' } } },
+  neck: { label: 'Neck', kind: 'body', ranges: { Men: [12, 26], Women: [12, 26], Boys: [9, 20] }, guidance: { placement: 'Measure around the lower part of your neck, where a shirt collar sits, keeping one finger between the tape and your neck.', error: 'A tape pulled tight gives a collar that chokes; the finger gap is the wearing ease.', helper: false, image: { ref: 'neck', style: 'photo' } } },
+  chest: { label: 'Chest', kind: 'body', ranges: { Men: [26, 70], Women: [26, 70], Boys: [18, 70] }, guidance: { placement: 'Measure under your arms around the fullest part of your chest, keeping the tape level.', error: 'Do not puff your chest up or hold your breath; breathe out and stand naturally.', helper: false, image: { ref: 'chest', style: 'photo' } } },
+  sleeve: { label: 'Sleeve length', kind: 'body', ranges: { Men: [17, 40], Women: [17, 40], Boys: [10, 40] }, guidance: { placement: 'Measure from the shoulder tip down to where you want the cuff to end, with your arm relaxed.', error: 'A bent arm or a shrug shortens the reading; keep the arm relaxed at your side.', helper: true, image: { ref: 'sleeve', style: 'photo' } } },
+  shoulder: { label: 'Shoulder width', kind: 'body', ranges: { Men: [12, 28], Women: [12, 28], Boys: [8, 28] }, guidance: { placement: 'Measure across your back from shoulder tip to shoulder tip, following the natural curve.', error: 'Measuring straight across the front, or seam to seam on a jacket, reads short.', helper: true, image: { ref: 'shoulder', style: 'photo' } } },
+  jacket: { label: 'Jacket length', kind: 'garment', ranges: { Men: [22, 42], Women: [22, 42], Boys: [14, 42] }, guidance: { placement: 'Measure from the base of your neck down your back to where you want the jacket to end, usually covering your seat.', error: 'Guessing from your height alone misses your proportions; measure the back.', helper: true, image: { ref: 'jacket-length', style: 'photo' } } },
+  bicep: { label: 'Bicep', kind: 'body', ranges: { Men: [8, 28], Women: [8, 28], Boys: [6, 28] }, guidance: { placement: 'Measure around the fullest part of your upper arm with your arm relaxed at your side.', error: 'Do not flex; a flexed bicep cuts a sleeve that strains.', helper: false, image: { ref: 'bicep', style: 'photo' } } },
+  stomach: { label: 'Stomach', kind: 'body', ranges: { Men: [22, 80], Women: [22, 80], Boys: [18, 80] }, guidance: { placement: 'Measure around the widest part of your stomach, keeping the tape level all the way around.', error: 'Do not hold your stomach in; the jacket has to close on the stomach you have.', helper: false, image: { ref: 'stomach', style: 'photo' } } },
+  waist: { label: 'Waist', kind: 'body', ranges: { Men: [22, 70], Women: [22, 70], Boys: [18, 70] }, guidance: { placement: 'Measure around your waist where you will wear your trousers, keeping the tape snug but not pulling.', error: 'Do not give the size printed on a trouser label; labels are not body measurements.', helper: false, image: { ref: 'waist', style: 'photo' } } },
+  seat: { label: 'Seat / hips', kind: 'body', ranges: { Men: [26, 78], Women: [26, 78], Boys: [20, 78] }, guidance: { placement: 'Measure around the fullest part of your seat with your feet together.', error: 'Empty your pockets first; a wallet in a pocket adds a false inch.', helper: false, image: { ref: 'seat', style: 'photo' } } },
+  pantsLength: { label: 'Pants length', kind: 'garment', ranges: { Men: [25, 52], Women: [25, 52], Boys: [16, 52] }, guidance: { placement: 'Measure from the top of your waist down the outside of your leg to the floor, wearing the shoes you will pair with the trousers.', error: 'Measuring barefoot, then wearing heeled shoes, leaves the hem short.', helper: true, image: { ref: 'pants-length', style: 'diagram' } } },
+  frontRise: { label: 'Front rise', kind: 'body', ranges: { Men: [6, 20], Women: [6, 20], Boys: [5, 20] }, guidance: { placement: 'Measure from the crotch point, where the inseam meets the front and back seams, up the front to the top of the waistband.', error: 'Let the tape follow the front fully; a slack tape shortens the rise.', helper: false, image: { ref: 'front-rise', style: 'diagram' } } },
+  backRise: { label: 'Back rise', kind: 'body', ranges: { Men: [6, 22], Women: [6, 22], Boys: [5, 22] }, guidance: { placement: 'Measure from the crotch point, where the inseam meets the front and back seams, up the back to the top of the waistband.', error: 'Let the tape follow the back fully; a slack tape shortens the rise.', helper: true, image: { ref: 'back-rise', style: 'diagram' } } },
+  thigh: { label: 'Thigh', kind: 'body', ranges: { Men: [15, 42], Women: [15, 42], Boys: [10, 42] }, guidance: { placement: 'Measure around the fullest part of one thigh, just below the crotch.', error: 'Measuring lower down the leg reads small and cuts a tight thigh.', helper: false, image: { ref: 'thigh', style: 'photo' } } },
+  knee: { label: 'Knee', kind: 'body', ranges: { Men: [10, 30], Women: [10, 30], Boys: [8, 30] }, guidance: { placement: 'Measure around your kneecap, snug, with room for one finger under the tape.', error: 'A bent knee changes the reading; stand straight with the leg relaxed.', helper: false, image: { ref: 'knee', style: 'photo' } } },
+  legOpening: { label: 'Leg opening', kind: 'garment', ranges: { Men: [10, 40], Women: [10, 40], Boys: [8, 40] }, guidance: { placement: 'Lay the hem flat and measure straight across the opening, then double the number.', error: 'Measuring around your ankle gives a wider opening than you want; measure the hem itself.', helper: false, image: { ref: 'leg-opening', style: 'diagram' } } },
+  vestLength: { label: 'Vest length', kind: 'garment', ranges: { Men: [18, 36], Women: [18, 36], Boys: [12, 36] }, guidance: { placement: 'Measure from the top of the shoulder, where it joins the neck, down the front to the vest length you want.', error: 'Measure over the shirt you will wear under the vest, not over bare skin.', helper: true, image: { ref: 'vest-length', style: 'diagram' } } },
+  frontLength: { label: 'Front length', kind: 'garment', ranges: { Men: [24, 58], Women: [24, 58], Boys: [16, 58] }, guidance: { placement: 'Measure from the top of the shoulder, where it joins the neck, down the front to the length you want.', error: 'Check the length on a garment you own before deciding; small changes show.', helper: true, image: { ref: 'front-length', style: 'photo' } } },
+  shortsLength: { label: 'Shorts length', kind: 'garment', ranges: { Men: [12, 30], Women: [12, 30], Boys: [10, 30] }, guidance: { placement: 'Measure from the top of the waist down the outside of the leg to the shorts length you want.', error: 'Decide the length against your knee; a guess reads very different on the leg.', helper: false, image: { ref: 'shorts-length', style: 'diagram' } } },
+  knees: { label: 'Knees', kind: 'garment', ranges: { Men: [10, 30], Women: [10, 30], Boys: [8, 30] }, guidance: { placement: 'Measure straight across the leg at the knee, two inches above the halfway point of the inseam, then double the number.', error: 'This is a flat width doubled, not a tape around the knee.', helper: false, image: { ref: 'knees', style: 'diagram' } } }
+};
+
+// Fields a version 1 profile can carry that are not version 2 body
+// fields. trouserWaist is the legacy second waist: the migration
+// carries its value into the single body waist, because it is the
+// one measured where the trousers are worn, and drops the legacy
+// natural waist value rather than guessing which one the shopper
+// meant for the merged field. inseam and outseam are recorded here
+// so version 1 profiles keep validating; in version 2 they belong
+// to the ready size flow and the modify a standard size mode, not
+// to a body profile.
+export const RETIRED_BODY_FIELDS = {
+  trouserWaist: { label: 'Trouser waist', kind: 'body', ranges: { Men: [22, 70], Women: [22, 70], Boys: [18, 70] }, note: 'Version 1 only. Merges into the single body waist on migration.' },
+  inseam: { label: 'Inseam', kind: 'body', ranges: { Men: [20, 42], Women: [20, 42], Boys: [10, 42] }, note: 'Version 1 only. In version 2 it is a ready size and modify mode value, not a body field.' },
+  outseam: { label: 'Outseam', kind: 'body', ranges: { Men: [30, 55], Women: [30, 55], Boys: [18, 55] }, note: 'Version 1 only. Not asked by the verified benchmark body forms.' }
+};
+
+// Guidance that differs for one garment: the fact differs (a shirt
+// sleeve ends at the thumb knuckle; a leather jacket length is a
+// straight shoulder to hem line), so the words and the illustration
+// differ with it. Keys are garment set ids, then field keys; entries
+// merge over the field guidance above.
+export const GUIDANCE_OVERRIDES = {
+  shirt: { sleeve: { placement: 'With your arm relaxed at your side, measure from the tip of your shoulder to the knuckle of your thumb.', error: 'Keep the arm straight at your side; the thumb knuckle is the landmark, not the wrist.' } },
+  'leather-jacket': { jacket: { placement: 'Measure straight down from the shoulder to where the hem of the jacket should end.', image: { ref: 'jacket-length-leather', style: 'diagram' } } },
+  'long-coat': { frontLength: { placement: 'Measure from the top of the shoulder, where it joins the neck, down the front to the coat length you want. Trying one of your own jackets for length first can help.', image: { ref: 'front-length-coat', style: 'diagram' } } }
+};
+
+// The per garment body field sets, exactly as the verified
+// benchmark forms ask them (capture of 2026-10-29): field order,
+// the required and optional split, and the fit selectors with
+// their options and defaults. A field entry is [key, required] or
+// [key, required, labelOverride]. Every set is preceded by the
+// profile preamble (wearerName, then height in values) and a
+// version 2 body profile for the set must name a value for every
+// required field; optional fields may be left empty.
+// For a Women wearer every field in the set is required: that is
+// the verified rule of the benchmark women's suit form, applied to
+// the other women's sets because no separate verified women's
+// jacket or trousers form exists yet (study item U2). Boys use the
+// men's sets with the Boys ranges.
+export const GARMENT_SETS = {
+  suit: { label: 'Suit', fields: [['chest', true], ['sleeve', true], ['shoulder', true], ['jacket', true], ['bicep', false], ['stomach', true], ['pantsLength', true], ['waist', true], ['seat', true], ['frontRise', true], ['backRise', false], ['thigh', true], ['knee', false], ['legOpening', false]], fits: [{ key: 'jacketFit', label: 'Jacket Fit', options: ['Regular Fit', 'Slim fit'], default: 'Regular Fit' }, { key: 'trouserFit', label: 'Trouser Fit', options: ['Classic Comfort Fit', 'Straight Fit', 'Slimmer Straight', 'Baggy', 'Slimmer Tapering'], default: 'Classic Comfort Fit' }] },
+  jacket: { label: 'Jacket', fields: [['chest', true], ['sleeve', true], ['shoulder', true], ['jacket', true], ['bicep', false], ['stomach', true], ['seat', true]], fits: [{ key: 'jacketFit', label: 'Jacket Fit', options: ['Regular Fit', 'Slim fit'], default: 'Regular Fit' }] },
+  waistcoat: { label: 'Waistcoat', fields: [['vestLength', true], ['chest', true], ['stomach', true]], fits: [] },
+  trousers: { label: 'Trousers', fields: [['pantsLength', true], ['waist', true], ['seat', true], ['frontRise', true], ['backRise', false], ['thigh', true], ['knee', false], ['legOpening', false]], fits: [{ key: 'trouserFit', label: 'Trouser Fit', options: ['Classic Comfort Fit', 'Straight Fit', 'Slimmer Straight', 'Baggy', 'Slimmer Tapering'], default: 'Classic Comfort Fit' }] },
+  shirt: { label: 'Shirt', fields: [['neck', true], ['chest', true], ['sleeve', true], ['shoulder', true], ['frontLength', true], ['stomach', true], ['seat', true]], fits: [{ key: 'shirtFit', label: 'Shirt Fit', options: ['Slim Fit', 'Relaxed'], default: 'Relaxed' }] },
+  'long-coat': { label: 'Long coat', fields: [['chest', true], ['sleeve', true], ['shoulder', true], ['frontLength', true], ['bicep', false], ['stomach', true], ['seat', true]], fits: [] },
+  shorts: { label: 'Shorts', fields: [['shortsLength', true], ['waist', true], ['seat', true], ['frontRise', true], ['backRise', false], ['thigh', true], ['legOpening', true, 'Shorts leg opening']], fits: [] },
+  'leather-jacket': { label: 'Leather jacket', fields: [['chest', true], ['sleeve', true], ['shoulder', true], ['jacket', true], ['bicep', false], ['stomach', true], ['seat', true]], fits: [{ key: 'jacketFit', label: 'Jacket Fit', options: ['Regular Fit', 'Slim fit'], default: 'Regular Fit' }] },
+  'leather-pants': { label: 'Leather pants', fields: [['pantsLength', true], ['waist', true], ['seat', true], ['thigh', true], ['frontRise', true], ['knees', true], ['backRise', false], ['legOpening', false]], fits: [] },
+  'womens-suit': { label: "Women's suit", fields: [['chest', true], ['sleeve', true], ['shoulder', true], ['jacket', true], ['stomach', true], ['bicep', true], ['pantsLength', true], ['waist', true], ['seat', true], ['frontRise', true], ['backRise', true], ['thigh', true], ['knee', true], ['legOpening', true]], fits: [{ key: 'jacketFit', label: 'Jacket Fit', options: ['Regular Fit', 'Slim fit'], default: 'Regular Fit' }, { key: 'trouserFit', label: 'Trouser Fit', options: ['Classic Comfort Fit', 'Straight Fit', 'Slimmer Straight', 'Baggy', 'Slimmer Tapering'], default: 'Classic Comfort Fit' }] }
+};
+
+// Catalog kinds to garment sets. Kinds with no body measurement
+// set (accessory, swatch, gift) are absent on purpose. A women's
+// suit is its own set (see setForGarment).
+export const KIND_TO_SET = { suit: 'suit', jacket: 'jacket', waistcoat: 'waistcoat', pants: 'trousers', shirt: 'shirt' };
+
+// Garment measurement fields (measurements wave, package M7): the
+// second entry mode of the benchmark's form, MEASURE EXISTING
+// GARMENT. These are finished garment measurements, taken on a
+// garment the shopper already owns, laid flat: a different kind of
+// data from the body measurements above, never a body value in
+// disguise. Every key carries the g prefix, so a garment value can
+// never land in a body field by accident, and the two kinds are
+// never converted into each other anywhere in the system. Garment
+// profiles validate against these ranges, never against the body
+// ranges: a finished jacket chest is wider than the body it fits
+// by the cutting allowance, and several of these fields are flat
+// widths doubled, not circumferences of a person. The benchmark
+// publishes no ranges for its garment form, so the bounds here
+// are plausible sanity limits in the same spirit as the body
+// ranges of package M0; what the benchmark does publish is the
+// field set itself, recorded in GARMENT_MEASURE_SETS below.
+// Guidance wording is suits.me's own, written for a garment laid
+// flat, and the illustration style is the flat garment line
+// diagram the benchmark's garment mode uses throughout (capture
+// of 2026-10-29, section 4.5 of the alignment study).
+export const GARMENT_MEASUREMENT_FIELDS = {
+  gJacketChest: { label: 'Jacket chest', ranges: { Men: [28, 78], Women: [28, 78], Boys: [20, 78] }, guidance: { placement: 'Fasten the jacket, lay it flat face up, and smooth it out. Measure straight across the chest from one underarm seam to the other, then double the number.', error: 'Measuring around your own chest instead gives a body measurement; this profile is cut from the garment\'s own numbers.', helper: false, image: { ref: 'gJacketChest', style: 'diagram' } } },
+  gShoulderWidth: { label: 'Shoulder width', ranges: { Men: [12, 30], Women: [12, 30], Boys: [9, 30] }, guidance: { placement: 'Turn the jacket over and measure across the back from one shoulder seam to the other, straight across.', error: 'Follow the shoulder seams, not the sleeve caps; the caps add width the shoulders do not have.', helper: false, image: { ref: 'gShoulderWidth', style: 'diagram' } } },
+  gJacketMidsection: { label: 'Jacket midsection', ranges: { Men: [26, 76], Women: [26, 76], Boys: [18, 76] }, guidance: { placement: 'With the jacket fastened and flat, measure straight across at the buttoning point, then double the number.', error: 'Measure at the button, not at the hem or the chest; the midsection is its own line.', helper: false, image: { ref: 'gJacketMidsection', style: 'diagram' } } },
+  gJacketLength: { label: 'Jacket length', ranges: { Men: [20, 44], Women: [20, 44], Boys: [13, 44] }, guidance: { placement: 'On the back of the jacket, measure from the base of the collar straight down the center back to the hem.', error: 'Measure the back from the collar seam; a front measure over the buttons reads long.', helper: false, image: { ref: 'gJacketLength', style: 'diagram' } } },
+  gSleeveLength: { label: 'Sleeve length', ranges: { Men: [15, 42], Women: [15, 42], Boys: [9, 42] }, guidance: { placement: 'Lay the sleeve flat and straight, then measure from the shoulder seam down the outside of the sleeve to the end of the cuff.', error: 'Smooth the sleeve straight first; a bend left in the sleeve shortens the reading.', helper: false, image: { ref: 'gSleeveLength', style: 'diagram' } } },
+  gBicepWidth: { label: 'Bicep width', ranges: { Men: [8, 30], Women: [8, 30], Boys: [6, 30] }, guidance: { placement: 'Measure straight across the sleeve at its widest point, just below the armhole, then double the number.', error: 'This is a flat width doubled, not a tape around your arm.', helper: false, image: { ref: 'gBicepWidth', style: 'diagram' } } },
+  gWaistCircumference: { label: 'Waist circumference', ranges: { Men: [24, 74], Women: [24, 74], Boys: [17, 74] }, guidance: { placement: 'Fasten the trousers and lay them flat. Measure straight across the waistband from side to side, then double the number.', error: 'Do not copy the size printed on the label; labels differ from the garment\'s real waist.', helper: false, image: { ref: 'gWaistCircumference', style: 'diagram' } } },
+  gSleeveOpening: { label: 'Sleeve opening', ranges: { Men: [6, 24], Women: [6, 24], Boys: [5, 24] }, guidance: { placement: 'Measure straight across the cuff opening of the sleeve laid flat, then double the number.', error: 'Measure the opening itself, not around your wrist.', helper: false, image: { ref: 'gSleeveOpening', style: 'diagram' } } },
+  gHipWidth: { label: 'Hip width', ranges: { Men: [28, 80], Women: [28, 80], Boys: [20, 80] }, guidance: { placement: 'With the trousers fastened and flat, measure straight across at the fullest point of the seat, below the waistband, then double the number.', error: 'Keep the measure on the garment\'s seat; this is the garment\'s width, not a measure around your hips.', helper: false, image: { ref: 'gHipWidth', style: 'diagram' } } },
+  gThighWidth: { label: 'Thigh width', ranges: { Men: [12, 44], Women: [12, 44], Boys: [8, 44] }, guidance: { placement: 'Measure straight across one leg just below the crotch seam, then double the number.', error: 'Measure close under the crotch seam; lower down the leg reads narrow.', helper: false, image: { ref: 'gThighWidth', style: 'diagram' } } },
+  gKneeWidth: { label: 'Knee width', ranges: { Men: [8, 32], Women: [8, 32], Boys: [6, 32] }, guidance: { placement: 'Measure straight across the leg at the knee point, halfway down the inseam, then double the number.', error: 'Find the halfway point of the inseam first; guessing the knee position moves the line.', helper: false, image: { ref: 'gKneeWidth', style: 'diagram' } } },
+  gLegOpening: { label: 'Leg opening', ranges: { Men: [10, 40], Women: [10, 40], Boys: [7, 40] }, guidance: { placement: 'Measure straight across the hem opening of the leg laid flat, then double the number.', error: 'Measure the hem itself laid flat, not around your ankle.', helper: false, image: { ref: 'gLegOpening', style: 'diagram' } } },
+  gOutseam: { label: 'Outseam', ranges: { Men: [28, 58], Women: [28, 58], Boys: [16, 58] }, guidance: { placement: 'Measure down the outside of the leg from the very top of the waistband to the hem.', error: 'Start at the top of the waistband, not below it; starting low shortens the trousers.', helper: false, image: { ref: 'gOutseam', style: 'diagram' } } },
+  gInseam: { label: 'Inseam', ranges: { Men: [20, 48], Women: [20, 48], Boys: [12, 48] }, guidance: { placement: 'Measure along the inside seam of the leg from the crotch point straight down to the hem.', error: 'Follow the inside seam, not the outside of the leg; the outside line is the outseam and reads longer.', helper: false, image: { ref: 'gInseam', style: 'diagram' } } },
+  gFrontRise: { label: 'Front rise', ranges: { Men: [6, 22], Women: [6, 22], Boys: [5, 22] }, guidance: { placement: 'From the crotch point, where the inseam meets the front and back seams, measure up the front to the top of the waistband.', error: 'Let the tape follow the front curve; pulling it straight across shortens the rise.', helper: false, image: { ref: 'gFrontRise', style: 'diagram' } } },
+  gBackRise: { label: 'Back rise', ranges: { Men: [6, 24], Women: [6, 24], Boys: [5, 24] }, guidance: { placement: 'From the crotch point, where the inseam meets the front and back seams, measure up the back to the top of the waistband.', error: 'Let the tape follow the back curve; pulling it straight across shortens the rise.', helper: false, image: { ref: 'gBackRise', style: 'diagram' } } },
+  gNeck: { label: 'Neck', ranges: { Men: [10, 26], Women: [10, 26], Boys: [8, 26] }, guidance: { placement: 'Fasten the shirt\'s collar button, lay the collar flat, and measure along the inside of the collar from the button to the far end of the buttonhole.', error: 'Measure the collar of the shirt, not around your neck; the two are different numbers.', helper: false, image: { ref: 'gNeck', style: 'diagram' } } },
+  gChest: { label: 'Chest', ranges: { Men: [28, 78], Women: [28, 78], Boys: [20, 78] }, guidance: { placement: 'Fasten the garment, lay it flat face up, and smooth it out. Measure straight across the chest from one underarm seam to the other, then double the number.', error: 'This is the garment\'s own chest; do not measure around your body instead.', helper: false, image: { ref: 'gChest', style: 'diagram' } } },
+  gFrontLength: { label: 'Front length', ranges: { Men: [22, 60], Women: [22, 60], Boys: [14, 60] }, guidance: { placement: 'Measure down the front from the top of the shoulder, where it joins the collar, straight to the hem.', error: 'Keep the tape on the front placket line; drifting to the side adds length.', helper: false, image: { ref: 'gFrontLength', style: 'diagram' } } },
+  gMidsection: { label: 'Midsection', ranges: { Men: [26, 76], Women: [26, 76], Boys: [18, 76] }, guidance: { placement: 'With the garment fastened and flat, measure straight across at the stomach line, then double the number.', error: 'Measure at the stomach line, not at the hem; the hem sits wider.', helper: false, image: { ref: 'gMidsection', style: 'diagram' } } },
+  gVestLength: { label: 'Vest length', ranges: { Men: [16, 38], Women: [16, 38], Boys: [11, 38] }, guidance: { placement: 'Measure down the front of the waistcoat from the top of the shoulder, where it joins the neck, to the longest point of the front hem.', error: 'Measure to the point of the front, not to the shorter back hem.', helper: false, image: { ref: 'gVestLength', style: 'diagram' } } }
+};
+
+// The per garment garment measurement sets for the measure an
+// existing garment mode, keyed by the same set ids as
+// GARMENT_SETS. Every field is required, as on the benchmark's
+// garment form, and no set carries a fit selector: the benchmark
+// asks for none in this mode. A garment profile is preceded by
+// the same preamble as a body profile (wearerName, then height in
+// values): the benchmark's garment form keeps the name and height
+// preamble, and the height still belongs to the person, not the
+// garment.
+// The suit set is the verified set (capture of 2026-10-29): the
+// fifteen garment fields in the form's order. The other sets are
+// derived, not verified, and are named as such: the jacket set is
+// the suit set's jacket block and the trousers set its trousers
+// block; the women's suit follows the body mode rule for women's
+// suits (the men's suit set, all required, as the garment mode
+// asks everything of everyone); the shirt and waistcoat sets map
+// their verified body sets to their garment counterparts (the
+// shirt's seat has no garment counterpart and drops out).
+export const GARMENT_MEASURE_SETS = {
+  suit: { label: 'Suit', fields: ['gJacketChest', 'gShoulderWidth', 'gJacketMidsection', 'gJacketLength', 'gSleeveLength', 'gBicepWidth', 'gWaistCircumference', 'gSleeveOpening', 'gHipWidth', 'gThighWidth', 'gKneeWidth', 'gLegOpening', 'gOutseam', 'gFrontRise', 'gBackRise'] },
+  jacket: { label: 'Jacket', fields: ['gJacketChest', 'gShoulderWidth', 'gJacketMidsection', 'gJacketLength', 'gSleeveLength', 'gBicepWidth', 'gSleeveOpening'] },
+  trousers: { label: 'Trousers', fields: ['gWaistCircumference', 'gHipWidth', 'gThighWidth', 'gKneeWidth', 'gLegOpening', 'gOutseam', 'gFrontRise', 'gBackRise'] },
+  waistcoat: { label: 'Waistcoat', fields: ['gVestLength', 'gChest', 'gMidsection'] },
+  shirt: { label: 'Shirt', fields: ['gNeck', 'gChest', 'gSleeveLength', 'gShoulderWidth', 'gFrontLength', 'gMidsection'] },
+  'womens-suit': { label: "Women's suit", fields: ['gJacketChest', 'gShoulderWidth', 'gJacketMidsection', 'gJacketLength', 'gSleeveLength', 'gBicepWidth', 'gWaistCircumference', 'gSleeveOpening', 'gHipWidth', 'gThighWidth', 'gKneeWidth', 'gLegOpening', 'gOutseam', 'gFrontRise', 'gBackRise'] }
+};
+
+// The men's standard size sets. Package M5 aligns them to the
+// benchmark's published sets (owner decision O3): jackets 36 to
+// 62 and trousers 30 to 60, in steps of 2, replacing the wider
+// sets suits.me offered before (jackets 30 to 62, trousers 28 to
+// 64). The aligned sets are what the size selects offer, what
+// the size guide lists, and what version 2 ready profiles
+// validate against. Women's and boys' ready sizes are their own
+// sets below (package M4, owner decision O6).
+export const READY_SIZE_SETS = { jacket: Array.from({ length: 14 }, (_, i) => 36 + i * 2), trouser: Array.from({ length: 16 }, (_, i) => 30 + i * 2), lengths: ['Short', 'Regular', 'Long'] };
+
+// The size sets in force before package M5. Version 1 ready
+// profiles were saved while these sets were offered, and they
+// keep validating against them: a saved version 1 profile keeps
+// loading, syncing and ordering with its sizes verbatim, even
+// where a size (a jacket 30 to 34, a trouser 28 or 62 to 64) is
+// no longer offered to new profiles. Nothing rewrites or refuses
+// a saved version 1 profile for carrying a formerly offered size.
+export const LEGACY_READY_SIZE_SETS = { jacket: Array.from({ length: 17 }, (_, i) => 30 + i * 2), trouser: Array.from({ length: 19 }, (_, i) => 28 + i * 2), lengths: ['Short', 'Regular', 'Long'] };
+
+// Ready trousers carry an inseam choice (owner decision O8). The
+// options are recorded here as data; the ready studio flow that
+// offers them lands in package M2, and a version 2 ready profile
+// that carries an inseam is checked against this list.
+export const READY_INSEAM_OPTIONS = ['Unhemmed', 28, 30, 32, 34, 36, 38, 40];
+
+// Ready (standard size) profiles are garment shaped from package
+// M2: a version 2 ready profile records only the size parts its
+// garment needs, so a trousers order never records a jacket size
+// (inconsistency INC-07). Trousers record their trouser size and
+// the inseam choice of O8; a waistcoat records its own chest based
+// size (the waistcoat size values are the jacket size set, the
+// chest number a waistcoat is sized by). A suit genuinely needs
+// all three legacy parts. Garments whose ready flow has not been
+// reshaped yet (jacket, shirt) keep the legacy three parts, named
+// here as READY_DEFAULT_PARTS. Version 1 ready profiles always
+// validate against the legacy three parts, exactly as before M2.
+export const READY_PARTS = {
+  suit: ['jacket', 'length', 'trouser'],
+  trousers: ['trouser', 'inseam'],
+  waistcoat: ['waistcoat']
+};
+export const READY_DEFAULT_PARTS = ['jacket', 'length', 'trouser'];
+export const READY_PART_KEYS = ['jacket', 'length', 'trouser', 'inseam', 'waistcoat', 'womenSize', 'age'];
+
+// Women's and boys' standard sizes (package M4, owner decision
+// O6): like the benchmark, women get standard sizes keyed to the
+// bust and kids get them by age, instead of the men's sets or no
+// standard sizes at all (inconsistency INC-04). A women's ready
+// profile records the one bust keyed size, whichever garment it
+// is for; a boys' ready profile records the one age.
+// The women's ladder is the benchmark's published one: sizes 30
+// (XXS) to 46 (4XL) in steps of 2, each matched to a bust band
+// whose top is the size number (their published example: a 40
+// (XL) suits a bust of 39 to 40 inches). The letter labels run
+// XXS to 4XL across the nine sizes, as published.
+export const READY_WOMEN_SIZES = [30, 32, 34, 36, 38, 40, 42, 44, 46].map((size, i) => ({ size, label: ['XXS', 'XS', 'S', 'M', 'L', 'XL', '2XL', '3XL', '4XL'][i] }));
+// The benchmark's published kids ladder runs by age, 12 months
+// to 10 years. The steps below are the published span read as the
+// usual ladder (12 and 18 months, then whole years); no finer
+// published breakdown was captured, and the set is data the shop
+// can correct in one place.
+export const READY_BOYS_AGES = ['12 months', '18 months', '2 years', '3 years', '4 years', '5 years', '6 years', '7 years', '8 years', '9 years', '10 years'];
+export const READY_WEARER_PARTS = { Women: ['womenSize'], Boys: ['age'] };
+
+// The ready parts a version 2 ready profile records: for a Women
+// or Boys wearer, the wearer's own part, whichever the garment;
+// for Men, the garment's parts (READY_PARTS).
+export function readyPartsFor(setId, wearer) { const wp = READY_WEARER_PARTS[wearer]; if (wp) return wp; return READY_PARTS[setId] || READY_DEFAULT_PARTS; }
+
+// Whether one ready size part carries an allowed choice. The size
+// parts are numbers in the schema sets; the client may carry them
+// as numeric strings, so they are compared as numbers, as the
+// version 1 rule always did. The inseam part is the string
+// 'Unhemmed' or one of the numeric options.
+export function readyPartValid(part, value) {
+  if (value === undefined || value === null || value === '') return false;
+  if (part === 'length') return READY_SIZE_SETS.lengths.includes(value);
+  if (part === 'inseam') return value === 'Unhemmed' || READY_INSEAM_OPTIONS.includes(Number(value));
+  if (part === 'trouser') return READY_SIZE_SETS.trouser.includes(Number(value));
+  if (part === 'womenSize') return READY_WOMEN_SIZES.some(s => s.size === Number(value));
+  if (part === 'age') return READY_BOYS_AGES.includes(value);
+  return READY_SIZE_SETS.jacket.includes(Number(value));
+}
+
+// The garment set a ready profile belongs to: the garment it is
+// being used for when the caller names one, else the garment the
+// profile itself names.
+export function readySetId(profile, garmentKind, wearer) { const kind = garmentKind || (profile && profile.garment); return kind ? setForGarment(kind, wearer) : null; }
+
+// Finished garment allowances over the body value (owner decision
+// O2: the benchmark working values). Only chest and waist carry a
+// published allowance; the finished size tables built on the
+// schema are the SIZE_GUIDE tables below (package M5).
+export const FINISHED_ALLOWANCES = { chest: 3, waist: 2 };
+
+// Size guide tables (package M5). The guide is rebuilt per garment
+// from this data: one row per size in the aligned ready sets, and
+// every table states whether its numbers are body measurements or
+// finished garment measurements. The body column is the ordering
+// rule itself (the size number is the body chest or body waist
+// the size fits). The finished garment columns carry the
+// benchmark's published finished values, adopted by the owner as
+// suits.me's working values (O2), taken from the benchmark's
+// dedicated chart page, the canonical source the alignment study
+// named. Only published values are recorded: a cell the chart
+// page did not publish for that size stays null, and the guide
+// renders it blank rather than interpolated. The finished chest
+// follows the chart's stated rule (the size plus the chest
+// allowance, in every row) and is read through finishedValue;
+// the finished waist follows the chart's own stated rule, the
+// size plus 2 up to size 46 and plus 2.5 above it, and is
+// recorded per row. Jacket sleeve and length are the chart's
+// Regular length values; its Short and Long tables were not
+// captured with values, so no Short or Long numbers are recorded.
+export const SIZE_GUIDE_JACKETS = [
+  { size: 36, shoulder: 17.5, stomach: 36.5, sleeve: 24, length: 29 },
+  { size: 38, shoulder: null, stomach: null, sleeve: null, length: null },
+  { size: 40, shoulder: 18, stomach: 40.5, sleeve: 24.5, length: 29.5 },
+  { size: 42, shoulder: null, stomach: null, sleeve: null, length: null },
+  { size: 44, shoulder: 19, stomach: 44.5, sleeve: 25.25, length: 31 },
+  { size: 46, shoulder: null, stomach: null, sleeve: null, length: null },
+  { size: 48, shoulder: 20, stomach: 48.5, sleeve: 25.5, length: 32 },
+  { size: 50, shoulder: null, stomach: null, sleeve: null, length: null },
+  { size: 52, shoulder: 21, stomach: 53, sleeve: 25.5, length: 33 },
+  { size: 54, shoulder: null, stomach: null, sleeve: null, length: null },
+  { size: 56, shoulder: 22, stomach: 57, sleeve: 26.5, length: 33.5 },
+  { size: 58, shoulder: null, stomach: null, sleeve: null, length: null },
+  { size: 60, shoulder: null, stomach: null, sleeve: null, length: null },
+  { size: 62, shoulder: 23.5, stomach: 63, sleeve: 27, length: 34 }
+];
+export const SIZE_GUIDE_TROUSERS = [
+  { size: 30, finishedWaist: 32, hip: 37, thigh: 23.5, legOpening: 14, frontRise: 10.5 },
+  { size: 32, finishedWaist: 34, hip: null, thigh: null, legOpening: null, frontRise: null },
+  { size: 34, finishedWaist: 36, hip: null, thigh: null, legOpening: null, frontRise: null },
+  { size: 36, finishedWaist: 38, hip: 44.5, thigh: 26.5, legOpening: 15, frontRise: 11 },
+  { size: 38, finishedWaist: 40, hip: null, thigh: null, legOpening: null, frontRise: null },
+  { size: 40, finishedWaist: 42, hip: 48.5, thigh: 28.5, legOpening: 16, frontRise: 12 },
+  { size: 42, finishedWaist: 44, hip: null, thigh: null, legOpening: null, frontRise: null },
+  { size: 44, finishedWaist: 46, hip: null, thigh: null, legOpening: null, frontRise: null },
+  { size: 46, finishedWaist: 48, hip: 55.5, thigh: 31.5, legOpening: 18, frontRise: 13 },
+  { size: 48, finishedWaist: 50.5, hip: null, thigh: null, legOpening: null, frontRise: null },
+  { size: 50, finishedWaist: 52.5, hip: null, thigh: null, legOpening: null, frontRise: null },
+  { size: 52, finishedWaist: 54.5, hip: 62, thigh: 36, legOpening: 19, frontRise: 14 },
+  { size: 54, finishedWaist: 56.5, hip: null, thigh: null, legOpening: null, frontRise: null },
+  { size: 56, finishedWaist: 58.5, hip: null, thigh: null, legOpening: null, frontRise: null },
+  { size: 58, finishedWaist: 60.5, hip: null, thigh: null, legOpening: null, frontRise: null },
+  { size: 60, finishedWaist: 62.5, hip: 70, thigh: 40.5, legOpening: 20, frontRise: 15.25 }
+];
+
+// Waistcoats are sized by the same chest numbers as jackets (US
+// 36 to 62). The one finished relationship the benchmark
+// publishes for waistcoats is the finished chest, the size plus
+// 3.5; its finished stomach and length values were not captured,
+// so the waistcoat guide carries the finished chest column and
+// points to guided body measurements for the rest, rather than
+// inventing stomach and length columns.
+export const SIZE_GUIDE_WAISTCOAT_CHEST_ALLOWANCE = 3.5;
+
+// Shirts are sized by letter, S (36) to 5XL (50). Of the
+// published finished shirt columns (shoulder, front length, full
+// sleeve, chest, stomach), only the L (40) row was captured, so
+// the shirt guide lists that one row and states the ladder,
+// rather than filling the other sizes by inference.
+export const SIZE_GUIDE_SHIRTS = [
+  { size: 'L', us: 40, shoulder: 19, frontLength: 29, fullSleeve: 25, chest: 47, stomach: 46 }
+];
+
+// Women's guide rows, from the published ladder
+// (READY_WOMEN_SIZES): each size is matched to a bust band whose
+// top is the size number (the published example: a 40 (XL) suits
+// a bust of 39 to 40 inches), and the published finished jacket
+// bust is the size plus 4. Both relationships are adopted
+// working values (O2, O6).
+export const SIZE_GUIDE_WOMEN = READY_WOMEN_SIZES.map(s => ({ size: s.size, label: s.label, bustFrom: s.size - 1, bustTo: s.size, finishedBust: s.size + 4 }));
+
+// The one body value the benchmark's kids guide publishes: at
+// age 8 years, the pants waist (a body measurement) ranges from
+// 26 to 28 inches. The rest of the kids table was not captured,
+// so the boys guide lists the age ladder and this value, and
+// nothing more.
+export const SIZE_GUIDE_BOYS_PANTS_WAIST = { age: '8 years', from: 26, to: 28 };
+
+// Modify a standard size (package M8, owner decision O10): the
+// benchmark's third entry mode. The shopper picks a standard size
+// and adjusts garment detail fields to the exact finished
+// dimensions they want; the detail fields start from the chosen
+// size's finished garment values adopted under O2 and recorded in
+// the SIZE_GUIDE tables above, never from invented numbers.
+// The mode was captured for the men's SUIT only (capture of
+// 2026-10-29): four size selectors (jacket size 36 to 62 even,
+// jacket length Regular, Long or Short, trouser waist 30 to 60
+// even, inseam 28 to 40 even) and fifteen detail fields in the
+// order below, every one required except the outseam, which the
+// form marks auto and not required; the form asks for the
+// wearer's name and no height, and carries no fit dropdowns. How
+// selecting a size populates the detail fields on the benchmark
+// was NOT observed (no size was selected during the capture), so
+// the population rule here is suits.me's own design under the
+// study's constraint: a detail field starts filled only where the
+// size guide publishes a finished value for the chosen size (the
+// finished chest and waist rules, which the chart states for
+// every size, and the finished columns it publishes at sample
+// sizes); a field the guide does not publish for that size starts
+// empty for the shopper to enter, and no value is interpolated
+// from neighbouring sizes. The benchmark marks the outseam auto;
+// its auto rule was not observed either, so suits.me does not
+// compute it: the outseam is the mode's one optional field, left
+// for the shopper to enter or leave empty. The other sets are
+// derived from the suit set the way package M7 derived its sets,
+// and are named as derived here: the jacket and trousers sets are
+// the suit set's jacket and trousers blocks, the waistcoat and
+// shirt sets map their measure sets, and the women's suit follows
+// the suit set with her bust keyed size as the base (the one
+// finished value published for women's sizes is the finished
+// bust, so only the jacket chest starts filled for her). Boys get
+// no modify mode: no finished values are published by age, so
+// there is nothing honest to start their fields from.
+
+// The inseam a modify shopper picks as a starting size: the
+// benchmark's modify selector runs 28 to 40 in steps of 2, with
+// no Unhemmed choice (an exact inseam dimension is the point of
+// this mode). The chosen inseam also seeds the inseam detail
+// field: it is the shopper's own selection, shown and editable,
+// not a published value.
+export const MODIFY_INSEAM_OPTIONS = [28, 30, 32, 34, 36, 38, 40];
+
+// The shirt ladder the size guide states, S (36) to 5XL (50) in
+// steps of 2. Only the L (40) row of the shirt guide was
+// published, so only a size 40 base starts any shirt field filled.
+export const MODIFY_SHIRT_SIZES = [36, 38, 40, 42, 44, 46, 48, 50];
+
+// The modify sets, keyed by the same set ids as GARMENT_SETS.
+// fields are garment measurement keys in the form's order;
+// optional names the fields that may be left empty (the outseam).
+// menBase and womenBase name the standard size parts a shopper
+// picks first, per wearer: a wearer with no base list for a set
+// is not offered the mode for that set, which is what keeps Boys
+// (and Women outside the women's suit) out of it.
+export const MODIFY_MEASURE_SETS = {
+  suit: { label: 'Suit', menBase: ['jacket', 'length', 'trouser', 'inseam'], fields: ['gJacketChest', 'gShoulderWidth', 'gJacketMidsection', 'gJacketLength', 'gSleeveLength', 'gBicepWidth', 'gSleeveOpening', 'gWaistCircumference', 'gHipWidth', 'gThighWidth', 'gKneeWidth', 'gLegOpening', 'gFrontRise', 'gInseam', 'gOutseam'], optional: ['gOutseam'] },
+  jacket: { label: 'Jacket', menBase: ['jacket', 'length'], fields: ['gJacketChest', 'gShoulderWidth', 'gJacketMidsection', 'gJacketLength', 'gSleeveLength', 'gBicepWidth', 'gSleeveOpening'], optional: [] },
+  trousers: { label: 'Trousers', menBase: ['trouser', 'inseam'], fields: ['gWaistCircumference', 'gHipWidth', 'gThighWidth', 'gKneeWidth', 'gLegOpening', 'gFrontRise', 'gInseam', 'gOutseam'], optional: ['gOutseam'] },
+  waistcoat: { label: 'Waistcoat', menBase: ['waistcoat'], fields: ['gVestLength', 'gChest', 'gMidsection'], optional: [] },
+  shirt: { label: 'Shirt', menBase: ['shirtSize'], fields: ['gNeck', 'gChest', 'gSleeveLength', 'gShoulderWidth', 'gFrontLength', 'gMidsection'], optional: [] },
+  'womens-suit': { label: "Women's suit", womenBase: ['womenSize'], fields: ['gJacketChest', 'gShoulderWidth', 'gJacketMidsection', 'gJacketLength', 'gSleeveLength', 'gBicepWidth', 'gSleeveOpening', 'gWaistCircumference', 'gHipWidth', 'gThighWidth', 'gKneeWidth', 'gLegOpening', 'gFrontRise', 'gInseam', 'gOutseam'], optional: ['gOutseam'] }
+};
+
+// Every base part name the modify mode knows. A base part the
+// profile's own set and wearer do not use is still checked when
+// present, and a part name outside this list is refused, the same
+// discipline the ready rule keeps.
+export const MODIFY_BASE_PART_KEYS = ['jacket', 'length', 'trouser', 'inseam', 'waistcoat', 'womenSize', 'shirtSize'];
+
+// The base parts a modify profile for this set and wearer
+// records: the men's aligned sets for Men, her bust keyed size
+// for the women's suit, and null where the mode is not offered
+// (Boys for every set, Women outside the women's suit).
+export function modifyBaseParts(setId, wearer) { const set = MODIFY_MEASURE_SETS[setId]; if (!set) return null; if (wearer === 'Women') return set.womenBase || null; if (wearer === 'Men') return set.menBase || null; return null; }
+
+// The choices a base part offers: the aligned ready sets, the
+// modify inseam ladder, her bust keyed ladder, and the shirt
+// ladder, each the same data the ready flows and the size guide
+// already use.
+export function modifyBaseOptions(part) {
+  if (part === 'length') return READY_SIZE_SETS.lengths;
+  if (part === 'inseam') return MODIFY_INSEAM_OPTIONS;
+  if (part === 'trouser') return READY_SIZE_SETS.trouser;
+  if (part === 'womenSize') return READY_WOMEN_SIZES.map(s => s.size);
+  if (part === 'shirtSize') return MODIFY_SHIRT_SIZES;
+  return READY_SIZE_SETS.jacket;
+}
+
+export function modifyBasePartValid(part, value) {
+  if (value === undefined || value === null || value === '') return false;
+  if (part === 'length') return READY_SIZE_SETS.lengths.includes(value);
+  if (part === 'inseam') return MODIFY_INSEAM_OPTIONS.includes(Number(value));
+  if (part === 'trouser') return READY_SIZE_SETS.trouser.includes(Number(value));
+  if (part === 'womenSize') return READY_WOMEN_SIZES.some(s => s.size === Number(value));
+  if (part === 'shirtSize') return MODIFY_SHIRT_SIZES.includes(Number(value));
+  return READY_SIZE_SETS.jacket.includes(Number(value));
+}
+
+// The modify set's detail fields as {key, required, label}. Every
+// field is required except the set's optional ones (the outseam).
+// Unlike the garment sets of package M7 there is no height: the
+// benchmark's modify form asks for the wearer's name only.
+export function modifyMeasureSetFields(setId) { const set = MODIFY_MEASURE_SETS[setId]; if (!set) return []; return set.fields.map(key => ({ key, required: !set.optional.includes(key), label: GARMENT_MEASUREMENT_FIELDS[key].label })); }
+
+// The modify counterpart of validateGarmentValues: the detail
+// values are garment measurements, validated against the garment
+// ranges, and only the modify set's own keys may appear, so a
+// body field or another mode's key is refused here too.
+export function validateModifyValues(values, setId, wearer) {
+  const set = MODIFY_MEASURE_SETS[setId];
+  if (!set) return [{ field: 'garment', code: 'invalid' }];
+  if (!values || typeof values !== 'object' || Array.isArray(values)) return [{ field: 'values', code: 'invalid' }];
+  const problems = [];
+  const allowed = new Set();
+  for (const f of modifyMeasureSetFields(setId)) {
+    allowed.add(f.key);
+    const v = values[f.key];
+    if (v === undefined || v === null) { if (f.required) problems.push({ field: f.key, code: 'missing' }); continue; }
+    if (typeof v !== 'number' || !Number.isFinite(v)) { problems.push({ field: f.key, code: 'invalid' }); continue; }
+    const r = garmentFieldRange(f.key, wearer);
+    if (v < r.min || v > r.max) problems.push({ field: f.key, code: 'range' });
+  }
+  for (const key of Object.keys(values)) if (!allowed.has(key)) problems.push({ field: key, code: 'unknown' });
+  return problems;
+}
+
+// The cleaned detail values a server stores for a modify profile:
+// exactly the set's keys, in set order. Null when invalid.
+export function cleanModifyValues(values, setId, wearer) {
+  if (validateModifyValues(values, setId, wearer).length) return null;
+  const out = {};
+  for (const f of modifyMeasureSetFields(setId)) { const v = values[f.key]; if (v !== undefined && v !== null) out[f.key] = v; }
+  return out;
+}
+
+// The base a modify profile records is validated as strictly as
+// a ready profile's parts: every part of the set and wearer must
+// carry an allowed choice, and no unknown part name is accepted.
+export function validateModifyBase(base, setId, wearer) {
+  const parts = modifyBaseParts(setId, wearer);
+  if (!parts) return [{ field: 'base', code: 'unsupported' }];
+  if (!base || typeof base !== 'object' || Array.isArray(base)) return [{ field: 'base', code: 'invalid' }];
+  const problems = [];
+  for (const part of parts) { const v = base[part]; if (v === undefined || v === null || v === '') problems.push({ field: part, code: 'missing' }); else if (!modifyBasePartValid(part, v)) problems.push({ field: part, code: 'choice' }); }
+  for (const key of Object.keys(base)) { if (!MODIFY_BASE_PART_KEYS.includes(key)) problems.push({ field: key, code: 'unknown' }); else if (!parts.includes(key) && !modifyBasePartValid(key, base[key])) problems.push({ field: key, code: 'choice' }); }
+  return problems;
+}
+
+// The cleaned base a server stores: only the set and wearer's
+// parts, sizes as numbers and the length as its word. Null when
+// the base does not validate.
+export function cleanModifyBase(base, setId, wearer) {
+  if (validateModifyBase(base, setId, wearer).length) return null;
+  const out = {};
+  for (const part of modifyBaseParts(setId, wearer)) out[part] = part === 'length' ? String(base[part]) : Number(base[part]);
+  return out;
+}
+
+// The starting detail values for a chosen base: exactly the
+// finished values the size guide publishes for that size, and
+// nothing else. The finished chest follows the chart's stated
+// rule (the size plus the chest allowance, in every row) and the
+// finished waist reads the trousers table's own per row value;
+// the remaining finished columns exist only at the chart's
+// sample sizes, and a size without a published value for a field
+// starts that field empty. The jacket length starts filled only
+// for the Regular length, the one length whose finished values
+// were published. The inseam detail starts from the shopper's
+// own inseam selection. Nothing here is interpolated, and no
+// body value is ever read.
+export function modifyPrefillFor(setId, base, wearer) {
+  const out = {};
+  if (!setId || !MODIFY_MEASURE_SETS[setId] || !modifyBaseParts(setId, wearer) || !base || typeof base !== 'object') return out;
+  const put = (k, v) => { if (typeof v === 'number' && Number.isFinite(v)) out[k] = v; };
+  if (setId === 'suit' || setId === 'jacket') {
+    const row = SIZE_GUIDE_JACKETS.find(r => r.size === Number(base.jacket));
+    if (row) {
+      put('gJacketChest', finishedValue('chest', row.size));
+      put('gShoulderWidth', row.shoulder);
+      put('gJacketMidsection', row.stomach);
+      put('gSleeveLength', row.sleeve);
+      if (base.length === 'Regular') put('gJacketLength', row.length);
+    }
+  }
+  if (setId === 'suit' || setId === 'trousers') {
+    const row = SIZE_GUIDE_TROUSERS.find(r => r.size === Number(base.trouser));
+    if (row) {
+      put('gWaistCircumference', row.finishedWaist);
+      put('gHipWidth', row.hip);
+      put('gThighWidth', row.thigh);
+      put('gLegOpening', row.legOpening);
+      put('gFrontRise', row.frontRise);
+    }
+    if (MODIFY_INSEAM_OPTIONS.includes(Number(base.inseam))) put('gInseam', Number(base.inseam));
+  }
+  if (setId === 'waistcoat') { const s = Number(base.waistcoat); if (READY_SIZE_SETS.jacket.includes(s)) put('gChest', Math.round((s + SIZE_GUIDE_WAISTCOAT_CHEST_ALLOWANCE) * 10) / 10); }
+  if (setId === 'womens-suit') { const row = SIZE_GUIDE_WOMEN.find(r => r.size === Number(base.womenSize)); if (row) put('gJacketChest', row.finishedBust); }
+  if (setId === 'shirt') { const row = SIZE_GUIDE_SHIRTS.find(r => r.us === Number(base.shirtSize)); if (row) { put('gChest', row.chest); put('gShoulderWidth', row.shoulder); put('gFrontLength', row.frontLength); put('gSleeveLength', row.fullSleeve); put('gMidsection', row.stomach); } }
+  return out;
+}
+
+// The version 1 wizard field set, in its original order, with its
+// original labels, tips and figure lines. The studio still collects
+// this set in M0 (the per garment studio flows are packages M1 to
+// M4), but it now derives the fields, their labels and their ranges
+// from this schema instead of carrying its own copy, and both
+// server validators check version 1 profiles against these ranges
+// instead of the old flat rule.
+// Groups: 1 is the jacket step, 2 is the trousers step.
+export const LEGACY_WIZARD_FIELDS = [
+  { id: "chest", label: "Chest", group: 1, tip: "Wrap the tape around the fullest part of your chest, under your arms. Keep it level across your back. Stand naturally and do not inflate your chest.", line: "M77 133 Q150 160 223 133" },
+  { id: "waist", label: "Natural waist", group: 1, tip: "Measure around your natural waist, near your belly button. Keep the tape comfortably close without pulling it tight.", line: "M95 195 Q150 215 205 195" },
+  { id: "shoulder", label: "Shoulder width", group: 1, tip: "Ask a helper to measure across your back from the outer edge of one shoulder bone to the other. Follow the natural curve of your shoulders.", line: "M77 96 Q150 75 223 96" },
+  { id: "sleeve", label: "Sleeve length", group: 1, tip: "With your arm relaxed and slightly bent, measure from the shoulder point down to the wrist bone. A helper makes this easier.", line: "M223 96 L249 170 L257 243" },
+  { id: "jacket", label: "Jacket length", group: 1, tip: "Measure from the base of your neck beside the shoulder down the front to your preferred jacket hem. Have a helper keep the tape straight.", line: "M130 83 L130 245" },
+  { id: "seat", label: "Seat / hips", group: 2, tip: "Stand with your feet together and measure around the fullest part of your seat. Keep the tape level and your pockets empty.", line: "M93 239 Q150 265 207 239" },
+  { id: "trouserWaist", label: "Trouser waist", group: 2, tip: "Measure around the exact position where you intend to wear your trousers. This is a body measurement, not the size printed on a trouser label.", line: "M95 208 Q150 225 205 208" },
+  { id: "thigh", label: "Thigh", group: 2, tip: "Measure around the fullest part of one upper thigh, just below the crotch. Stand naturally and keep the tape comfortably close.", line: "M98 282 Q118 295 139 282" },
+  { id: "inseam", label: "Inseam", group: 2, tip: "Have a helper measure from the crotch down the inside of your leg to your intended trouser hem. Wear shoes you expect to pair with the suit.", line: "M146 277 L123 428" },
+  { id: "outseam", label: "Outseam", group: 2, tip: "Measure from the top of your intended waistband down the outside of your leg to your preferred hem. Stand straight while your helper measures.", line: "M205 208 L208 428" }
+];
+export const LEGACY_FIELD_KEYS = LEGACY_WIZARD_FIELDS.map(f => f.id);
+
+// ------------------------------------------------------------------
+// The one validation rule. Pure functions: the browser studio, the
+// checkout validator and the account profile validator all call
+// these, so a profile is accepted or refused identically in every
+// place (inconsistency INC-02 closed). Problems are reported as
+// {field, code} entries and every problem is returned at once;
+// code is one of missing, invalid, range, choice, unknown,
+// unsupported.
+
+export function fieldDefinition(key) { return MEASUREMENT_FIELDS[key] || RETIRED_BODY_FIELDS[key] || null; }
+
+export function fieldRange(key, wearer) { const def = fieldDefinition(key); if (!def) return null; const r = def.ranges[wearer] || def.ranges.Men; return { min: r[0], max: r[1] }; }
+
+export function guidanceFor(setId, key) { const base = MEASUREMENT_FIELDS[key] ? MEASUREMENT_FIELDS[key].guidance : null; const over = (GUIDANCE_OVERRIDES[setId] || {})[key]; if (!base) return over || null; return over ? { ...base, ...over } : base; }
+
+export function setForGarment(kind, wearer) { if (wearer === 'Women' && kind === 'suit') return 'womens-suit'; return KIND_TO_SET[kind] || null; }
+
+// The set's fields for a wearer, as {key, required, label}. For a
+// Women wearer every field is required (see GARMENT_SETS).
+export function effectiveSetFields(setId, wearer) { const set = GARMENT_SETS[setId]; if (!set) return []; return set.fields.map(entry => ({ key: entry[0], required: wearer === 'Women' ? true : entry[1] === true, label: entry[2] || MEASUREMENT_FIELDS[entry[0]].label })); }
+
+export function validateBodyValues(values, setId, wearer) {
+  const set = GARMENT_SETS[setId];
+  if (!set) return [{ field: 'garment', code: 'invalid' }];
+  if (!values || typeof values !== 'object' || Array.isArray(values)) return [{ field: 'values', code: 'invalid' }];
+  const problems = [];
+  const allowed = new Set(['height']);
+  const check = (key, required) => {
+    const v = values[key];
+    if (v === undefined || v === null) { if (required) problems.push({ field: key, code: 'missing' }); return; }
+    if (typeof v !== 'number' || !Number.isFinite(v)) { problems.push({ field: key, code: 'invalid' }); return; }
+    const r = fieldRange(key, wearer);
+    if (v < r.min || v > r.max) problems.push({ field: key, code: 'range' });
+  };
+  check('height', true);
+  for (const f of effectiveSetFields(setId, wearer)) { allowed.add(f.key); check(f.key, f.required); }
+  for (const key of Object.keys(values)) if (!allowed.has(key)) problems.push({ field: key, code: 'unknown' });
+  return problems;
+}
+
+// The cleaned values a server stores for a version 2 body profile:
+// exactly the set's keys that are present, plus height, in set
+// order. Null when the values do not validate.
+export function cleanBodyValues(values, setId, wearer) {
+  if (validateBodyValues(values, setId, wearer).length) return null;
+  const out = { height: values.height };
+  for (const f of effectiveSetFields(setId, wearer)) { const v = values[f.key]; if (v !== undefined && v !== null) out[f.key] = v; }
+  return out;
+}
+
+export function garmentFieldDefinition(key) { return GARMENT_MEASUREMENT_FIELDS[key] || null; }
+
+export function garmentFieldRange(key, wearer) { const def = GARMENT_MEASUREMENT_FIELDS[key]; if (!def) return null; const r = def.ranges[wearer] || def.ranges.Men; return { min: r[0], max: r[1] }; }
+
+// The garment set's fields as {key, required, label}. Every field
+// of a garment set is required: the benchmark's garment form asks
+// for all of them, for every wearer.
+export function garmentMeasureSetFields(setId) { const set = GARMENT_MEASURE_SETS[setId]; if (!set) return []; return set.fields.map(key => ({ key, required: true, label: GARMENT_MEASUREMENT_FIELDS[key].label })); }
+
+// The garment mode counterpart of validateBodyValues, with the
+// same problem shape. Only the garment set's own keys, plus the
+// wearer's height from the preamble, may appear: a body field key
+// in a garment profile is an unknown key and is refused, so the
+// two kinds of measurement can never be mixed in one profile.
+export function validateGarmentValues(values, setId, wearer) {
+  const set = GARMENT_MEASURE_SETS[setId];
+  if (!set) return [{ field: 'garment', code: 'invalid' }];
+  if (!values || typeof values !== 'object' || Array.isArray(values)) return [{ field: 'values', code: 'invalid' }];
+  const problems = [];
+  const allowed = new Set(['height']);
+  const check = (key, required, rangeOf) => {
+    const v = values[key];
+    if (v === undefined || v === null) { if (required) problems.push({ field: key, code: 'missing' }); return; }
+    if (typeof v !== 'number' || !Number.isFinite(v)) { problems.push({ field: key, code: 'invalid' }); return; }
+    const r = rangeOf(key);
+    if (v < r.min || v > r.max) problems.push({ field: key, code: 'range' });
+  };
+  check('height', true, k => fieldRange(k, wearer));
+  for (const f of garmentMeasureSetFields(setId)) { allowed.add(f.key); check(f.key, f.required, k => garmentFieldRange(k, wearer)); }
+  for (const key of Object.keys(values)) if (!allowed.has(key)) problems.push({ field: key, code: 'unknown' });
+  return problems;
+}
+
+// The cleaned values a server stores for a version 2 garment
+// profile: exactly the set's keys, plus height, in set order.
+// Null when the values do not validate.
+export function cleanGarmentValues(values, setId, wearer) {
+  if (validateGarmentValues(values, setId, wearer).length) return null;
+  const out = { height: values.height };
+  for (const f of garmentMeasureSetFields(setId)) { const v = values[f.key]; if (v !== undefined && v !== null) out[f.key] = v; }
+  return out;
+}
+
+// The cleaned values a server stores for a version 1 body profile:
+// the ten legacy keys, in wizard order, each inside its schema
+// range. Null when any key is missing or out of range.
+export function cleanLegacyValues(values, wearer) {
+  if (!values || typeof values !== 'object' || Array.isArray(values)) return null;
+  const out = {};
+  for (const key of LEGACY_FIELD_KEYS) {
+    const v = values[key];
+    if (typeof v !== 'number' || !Number.isFinite(v)) return null;
+    const r = fieldRange(key, wearer);
+    if (v < r.min || v > r.max) return null;
+    out[key] = v;
+  }
+  return out;
+}
+
+export function profileVersion(profile) { return profile && profile.version === 2 ? 2 : 1; }
+
+// Validate a whole profile. garmentKind is the catalog kind the
+// profile is being used for (at checkout, the item's kind); when
+// omitted, a version 2 profile's own garment field decides its
+// set. A profile with no version field is a version 1 profile.
+// Version 1 keeps its historical allowances: the wearer may be
+// absent (every consumer has always read it as Men) and extra
+// value keys are ignored. Version 2 is strict from birth: the
+// wearer is an explicit, stored choice, the wearer name and the
+// set's fit selectors are part of the profile, and unknown value
+// keys are refused.
+export function validateProfile(profile, garmentKind) {
+  if (!profile || typeof profile !== 'object' || Array.isArray(profile)) return { ok: false, version: 1, wearer: 'Men', setId: null, problems: [{ field: 'profile', code: 'invalid' }] };
+  const version = profileVersion(profile);
+  const problems = [];
+  const wearerRaw = profile.wearer;
+  if (wearerRaw !== undefined && !WEARERS.includes(wearerRaw)) problems.push({ field: 'wearer', code: 'invalid' });
+  const wearer = WEARERS.includes(wearerRaw) ? wearerRaw : 'Men';
+  if (version === 2 && wearerRaw === undefined) problems.push({ field: 'wearer', code: 'missing' });
+  if (!['body', 'ready', 'garment', 'modify'].includes(profile.method)) { problems.push({ field: 'method', code: 'invalid' }); return { ok: false, version, wearer, setId: null, problems }; }
+  if (profile.method === 'ready') {
+    // Version 1 ready profiles are the historical men's shape and
+    // stay Men only: the old client never offered standard sizes
+    // to Women and Boys, so no such profile was ever honestly
+    // saved. Version 2 ready profiles for Women and Boys record
+    // the wearer's own part instead (READY_WEARER_PARTS, M4).
+    if (version === 1 && wearer !== 'Men') problems.push({ field: 'wearer', code: 'unsupported' });
+    const ready = profile.ready;
+    if (!ready || typeof ready !== 'object' || Array.isArray(ready)) problems.push({ field: 'ready', code: 'invalid' });
+    else if (version === 1) {
+      // Version 1 ready profiles validate against the size sets
+      // in force when they were saved (LEGACY_READY_SIZE_SETS),
+      // not the aligned sets package M5 offers new profiles, so a
+      // formerly offered size never strands a saved profile.
+      if (!LEGACY_READY_SIZE_SETS.jacket.includes(Number(ready.jacket))) problems.push({ field: 'jacket', code: 'choice' });
+      if (!LEGACY_READY_SIZE_SETS.lengths.includes(ready.length)) problems.push({ field: 'length', code: 'choice' });
+      if (!LEGACY_READY_SIZE_SETS.trouser.includes(Number(ready.trouser))) problems.push({ field: 'trouser', code: 'choice' });
+    } else {
+      // Version 2 ready profiles are garment shaped (READY_PARTS)
+      // for Men and wearer shaped (READY_WEARER_PARTS) for Women
+      // and Boys: the profile's own parts must each carry an
+      // allowed choice; a part belonging to another garment or
+      // wearer is still checked when present, so a stray value is
+      // never silently accepted, and a part name the schema does
+      // not know is refused outright.
+      const parts = readyPartsFor(readySetId(profile, garmentKind, wearer), wearer);
+      for (const part of parts) if (!readyPartValid(part, ready[part])) problems.push({ field: part, code: 'choice' });
+      for (const key of Object.keys(ready)) {
+        if (!READY_PART_KEYS.includes(key)) problems.push({ field: key, code: 'unknown' });
+        else if (!parts.includes(key) && !readyPartValid(key, ready[key])) problems.push({ field: key, code: 'choice' });
+      }
+    }
+    return { ok: problems.length === 0, version, wearer, setId: version === 2 ? readySetId(profile, garmentKind, wearer) : (garmentKind ? setForGarment(garmentKind, wearer) : null), problems };
+  }
+  if (profile.method === 'garment') {
+    // Garment profiles (package M7) exist only as version 2: the
+    // measure an existing garment mode is new, so there is no
+    // legacy garment shape to keep loading. The values are
+    // garment measurements, validated against the garment ranges
+    // by validateGarmentValues, never against the body ranges,
+    // and a garment profile carries no fit selectors: the
+    // benchmark's garment form asks for none.
+    if (version !== 2) { problems.push({ field: 'version', code: 'unsupported' }); return { ok: false, version, wearer, setId: null, problems }; }
+    const kind = garmentKind || profile.garment;
+    const setId = kind ? setForGarment(kind, wearer) : null;
+    if (!setId || !GARMENT_MEASURE_SETS[setId]) { problems.push({ field: 'garment', code: 'invalid' }); return { ok: false, version, wearer, setId: null, problems }; }
+    if (typeof profile.wearerName !== 'string' || !profile.wearerName.trim()) problems.push({ field: 'wearerName', code: 'missing' });
+    else if (profile.wearerName.length > 60) problems.push({ field: 'wearerName', code: 'invalid' });
+    problems.push(...validateGarmentValues(profile.values, setId, wearer));
+    const fits = profile.fits;
+    if (fits && typeof fits === 'object' && !Array.isArray(fits) && Object.keys(fits).length) problems.push({ field: 'fits', code: 'unknown' });
+    return { ok: problems.length === 0, version, wearer, setId, problems };
+  }
+  if (profile.method === 'modify') {
+    // Modify a standard size profiles (package M8) exist only as
+    // version 2, like garment profiles: the mode is new. A modify
+    // profile is the record of a deliberate act: the standard size
+    // the shopper picked (its base, validated like a ready
+    // profile's parts) and the finished garment dimensions they
+    // reviewed and saved, whether they started from the size
+    // guide's published values for that size or entered them.
+    // The values are garment measurements, validated against the
+    // garment ranges by validateModifyValues, never the body
+    // ranges, and the profile carries no fit selectors and no
+    // height: the benchmark's modify form asks for neither.
+    if (version !== 2) { problems.push({ field: 'version', code: 'unsupported' }); return { ok: false, version, wearer, setId: null, problems }; }
+    const kind = garmentKind || profile.garment;
+    const setId = kind ? setForGarment(kind, wearer) : null;
+    if (!setId || !MODIFY_MEASURE_SETS[setId]) { problems.push({ field: 'garment', code: 'invalid' }); return { ok: false, version, wearer, setId: null, problems }; }
+    if (typeof profile.wearerName !== 'string' || !profile.wearerName.trim()) problems.push({ field: 'wearerName', code: 'missing' });
+    else if (profile.wearerName.length > 60) problems.push({ field: 'wearerName', code: 'invalid' });
+    problems.push(...validateModifyBase(profile.base, setId, wearer));
+    problems.push(...validateModifyValues(profile.values, setId, wearer));
+    const fits = profile.fits;
+    if (fits && typeof fits === 'object' && !Array.isArray(fits) && Object.keys(fits).length) problems.push({ field: 'fits', code: 'unknown' });
+    return { ok: problems.length === 0, version, wearer, setId, problems };
+  }
+  if (version === 1) {
+    if (!profile.values || typeof profile.values !== 'object' || Array.isArray(profile.values)) problems.push({ field: 'values', code: 'invalid' });
+    else for (const key of LEGACY_FIELD_KEYS) {
+      const v = profile.values[key];
+      if (v === undefined || v === null) problems.push({ field: key, code: 'missing' });
+      else if (typeof v !== 'number' || !Number.isFinite(v)) problems.push({ field: key, code: 'invalid' });
+      else { const r = fieldRange(key, wearer); if (v < r.min || v > r.max) problems.push({ field: key, code: 'range' }); }
+    }
+    return { ok: problems.length === 0, version, wearer, setId: null, problems };
+  }
+  const kind = garmentKind || profile.garment;
+  const setId = kind ? setForGarment(kind, wearer) : null;
+  if (!setId || !GARMENT_SETS[setId]) { problems.push({ field: 'garment', code: 'invalid' }); return { ok: false, version, wearer, setId: null, problems }; }
+  if (typeof profile.wearerName !== 'string' || !profile.wearerName.trim()) problems.push({ field: 'wearerName', code: 'missing' });
+  else if (profile.wearerName.length > 60) problems.push({ field: 'wearerName', code: 'invalid' });
+  problems.push(...validateBodyValues(profile.values, setId, wearer));
+  const set = GARMENT_SETS[setId];
+  const fits = profile.fits;
+  if (set.fits.length) {
+    if (!fits || typeof fits !== 'object' || Array.isArray(fits)) for (const fit of set.fits) problems.push({ field: fit.key, code: 'missing' });
+    else {
+      for (const fit of set.fits) { const v = fits[fit.key]; if (v === undefined || v === null || v === '') problems.push({ field: fit.key, code: 'missing' }); else if (!fit.options.includes(v)) problems.push({ field: fit.key, code: 'invalid' }); }
+      for (const key of Object.keys(fits)) if (!set.fits.some(f => f.key === key)) problems.push({ field: key, code: 'unknown' });
+    }
+  } else if (fits && typeof fits === 'object' && !Array.isArray(fits) && Object.keys(fits).length) problems.push({ field: 'fits', code: 'unknown' });
+  return { ok: problems.length === 0, version, wearer, setId, problems };
+}
+
+// Migration (version 1 body profile to version 2). Which legacy
+// value becomes which version 2 field. The merged waist takes the
+// legacy trouserWaist value: it is the waist measured where the
+// trousers are worn, which is what the single body waist means.
+// The legacy natural waist value is dropped, not reused, and
+// trouserWaist, inseam and outseam do not carry. Nothing else is
+// invented: the wearer name, the height and every required field
+// the legacy set never asked are left absent and reported by
+// missingForCompletion, so the shopper is offered completion
+// instead of being handed padded values.
+const LEGACY_CARRY = { chest: 'chest', waist: 'trouserWaist', shoulder: 'shoulder', sleeve: 'sleeve', jacket: 'jacket', seat: 'seat', thigh: 'thigh' };
+
+export function upgradeLegacyProfile(profile, garmentKind) {
+  if (!profile || typeof profile !== 'object' || profile.method !== 'body') return null;
+  const wearer = WEARERS.includes(profile.wearer) ? profile.wearer : 'Men';
+  const kind = garmentKind || profile.garment || 'suit';
+  const setId = setForGarment(kind, wearer);
+  if (!setId) return null;
+  const src = profile.values && typeof profile.values === 'object' ? profile.values : {};
+  const values = {};
+  for (const target of Object.keys(LEGACY_CARRY)) { const v = src[LEGACY_CARRY[target]]; if (typeof v === 'number' && Number.isFinite(v)) values[target] = v; }
+  const upgraded = { version: 2, method: 'body', garment: kind, wearer, values };
+  if (profile.id !== undefined) upgraded.id = profile.id;
+  if (profile.name !== undefined) upgraded.name = profile.name;
+  if (profile.unit !== undefined) upgraded.unit = profile.unit;
+  if (profile.fit !== undefined) upgraded.fit = profile.fit;
+  if (profile.created !== undefined) upgraded.created = profile.created;
+  const verdict = validateProfile(upgraded, kind);
+  return { profile: upgraded, missing: verdict.problems.filter(p => p.code === 'missing').map(p => p.field) };
+}
+
+// The required fields a body profile still owes before it is a
+// complete version 2 profile for the garment: for a version 2
+// profile, its own missing fields; for a version 1 profile, what
+// its migration would still owe. An empty list means complete.
+// Returns null when completion cannot be assessed (no garment
+// context for a legacy profile, or the garment has no set).
+export function missingForCompletion(profile, garmentKind) {
+  if (!profile || typeof profile !== 'object' || profile.method !== 'body') return [];
+  if (profileVersion(profile) === 2) { const verdict = validateProfile(profile, garmentKind); if (!verdict.setId) return null; return verdict.problems.filter(p => p.code === 'missing').map(p => p.field); }
+  const up = upgradeLegacyProfile(profile, garmentKind);
+  return up ? up.missing : null;
+}
+
+// The one unit rule (inconsistency INC-10): values are stored in
+// inches; a centimeter entry is divided by 2.54 on the way in, and
+// a stored value is shown multiplied by 2.54 and rounded to one
+// decimal place. The studio converts through these functions, and
+// the size guide rebuild in package M5 reads the same rule.
+export function toCanonicalValue(value, unit) { return unit === 'cm' ? value / 2.54 : value; }
+export function fromCanonicalValue(value, unit) { return Math.round(value * (unit === 'cm' ? 2.54 : 1) * 10) / 10; }
+
+// The finished garment value for a body value, where the schema
+// carries a published allowance (chest and waist; see
+// FINISHED_ALLOWANCES). Other fields have no allowance and read
+// back unchanged.
+export function finishedValue(key, bodyValue) { const a = FINISHED_ALLOWANCES[key]; return typeof bodyValue === 'number' && a ? bodyValue + a : bodyValue; }

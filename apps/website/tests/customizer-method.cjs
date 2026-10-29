@@ -15,7 +15,7 @@ const readyProfile={id:'p-ready',name:'Ready profile',method:'ready',wearer:'Men
 localStorage.setItem('suits-profiles',JSON.stringify([bodyProfile,readyProfile]));
 localStorage.setItem('suits-config',JSON.stringify({product:0,fabric:'Navy',lapel:'Notch',closure:'Two button',fit:'Tailored',lining:'Tonal',monogram:'',profileId:'p-body'}));
 const ctx=vm.createContext({console,localStorage,document:documentStub,location:{hash:'#home'},window:{addEventListener(){},scrollTo(){}},setTimeout,clearTimeout,crypto:require('node:crypto').webcrypto,fetch:()=>Promise.resolve({ok:false,json:async()=>null}),FormData:FakeFormData,fabricBackground:()=>'background:#999;background-image:linear-gradient(#999,#888);'});
-for(const f of ['app.js','complete.js','quick-add.js'])vm.runInContext(fs.readFileSync('public/'+f,'utf8'),ctx,{filename:f});
+for(const f of ['measurement-schema.js','app.js','complete.js','quick-add.js'])vm.runInContext(fs.readFileSync('public/'+f,'utf8'),ctx,{filename:f});
 const run=s=>vm.runInContext(s,ctx);
 
 // 1. The method choice renders in the customizer Measurements step, reusing
@@ -56,15 +56,18 @@ run('nextConfig()');
 assert.equal(run('bag.length'),bagLen3,'nothing is bagged without a profile for the chosen method');
 assert.equal(documentStub.querySelector('#configError').textContent,'Choose a saved profile, or take your measurements first.','the clear customizer message still blocks Add to Bag');
 
-// 4. Women: standard sizes are not offered in the customizer, matching the
-// Studio rule, and a programmatic switch to ready is refused.
+// 4. Women: standard sizes are offered in the customizer like every
+// other method choice (measurements wave package M4: women get
+// standard sizes keyed to the bust), and the switch to ready is
+// honored. This supersedes the pre M4 refusal pinned here before.
 run("stage=2;config.product=13;config.profileId='p-body';draft.method='body'");
 const htmlW=run('customize()');
 assert.ok(htmlW.includes("setCustomizerMethod('body')"),'body method card still renders for a Women garment');
-assert.ok(!htmlW.includes("setCustomizerMethod('ready')"),'no standard size card for a Women garment');
-assert.ok(htmlW.includes('Standard sizes are not offered for this garment'),'the Women rule is explained in the step');
+assert.ok(htmlW.includes("setCustomizerMethod('ready')"),'standard size card renders for a Women garment');
+assert.ok(htmlW.includes('Choose your standard size by bust'),'the Women standard size card is keyed to the bust');
+assert.ok(!htmlW.includes('Standard sizes are not offered'),'the pre M4 refusal note is gone');
 run("setCustomizerMethod('ready')");
-assert.equal(run('draft.method'),'body','ready cannot be selected for a Women garment');
+assert.equal(run('draft.method'),'ready','ready can be selected for a Women garment');
 
 // 5. Quick add: no profile chosen shows the clear custom message inside the
 // dialog, and the select no longer leans on the required attribute (the
@@ -84,4 +87,4 @@ run("submitQuickAdd(0,{__data:{profile:'p-body',fit:'Tailored'}})");
 assert.equal(run('bag.length'),bagLen5+1,'quick add still works with a chosen profile');
 assert.equal(run('bag[bag.length-1].profile.id'),'p-body','quick add bags the chosen profile');
 
-console.log('Customizer method checks passed: method choice renders in the Measurements step, switching method updates Studio state and the profile Add to Bag uses, Women garments offer no standard sizes, and quick add explains the missing measurement profile.');
+console.log('Customizer method checks passed: method choice renders in the Measurements step, switching method updates Studio state and the profile Add to Bag uses, Women garments offer standard sizes by bust, and quick add explains the missing measurement profile.');

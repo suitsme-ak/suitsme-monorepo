@@ -12,6 +12,7 @@
 // paths return 404 when accounts are enabled and the gate's 503
 // when they are not. Runtime data access is raw D1 SQL in the
 // commerce style; db/schema.ts stays the migration source of truth.
+import { validateProfile as validateMeasurementProfile } from './measurement-schema.js';
 type Env=Record<string,any>;
 const reply=(data:any,status=200)=>Response.json(data,{status,headers:{'Cache-Control':'no-store','X-Content-Type-Options':'nosniff'}});
 function replyCookie(data:any,status:number,cookie:string){const r=reply(data,status);r.headers.append('Set-Cookie',cookie);return r;}
@@ -275,24 +276,15 @@ async function changePassword(request:Request,env:Env,body:any){
 // Profiles and import (design sections 2.6 and 5, package 5.5).
 // Profiles are the client object stored as JSON, minus the transient
 // step field, keyed by the client uid so the same profile imported
-// or saved from two browsers is one row. Validation mirrors the
-// profile checks cleanItems in lib/commerce.ts already enforces, so
-// a profile the server accepts here is one checkout would accept.
-const PROFILE_VALUE_KEYS=['chest','waist','shoulder','sleeve','jacket','seat','trouserWaist','thigh','inseam','outseam'];
+// or saved from two browsers is one row. Validation is the shared
+// measurement schema (lib/measurement-schema.js), the same rule
+// cleanItems in lib/commerce.ts enforces, so a profile the server
+// accepts here is one checkout accepts for its garment.
 function cleanProfile(input:any){
  if(!input||typeof input!=='object'||Array.isArray(input))return null;
  if(typeof input.id!=='string'||!input.id||input.id.length>80)return null;
- if(!['body','ready'].includes(input.method))return null;
- if(input.wearer!==undefined&&!['Men','Women','Boys'].includes(input.wearer))return null;
- const wearer=['Women','Boys'].includes(input.wearer)?input.wearer:'Men';
- if(input.method==='body'){
-  const values=input.values||{};
-  for(const key of PROFILE_VALUE_KEYS){const v=values[key];if(!Number.isFinite(v)||v<(wearer==='Boys'?8:10)||v>100)return null;}
- }
- if(input.method==='ready'){
-  const jacket=Number(input.ready?.jacket),trouser=Number(input.ready?.trouser);
-  if(!Number.isInteger(jacket)||jacket<30||jacket>62||jacket%2||!Number.isInteger(trouser)||trouser<28||trouser>64||trouser%2||!['Short','Regular','Long'].includes(input.ready?.length)||['Women','Boys'].includes(wearer))return null;
- }
+ if(!['body','ready','garment','modify'].includes(input.method))return null;
+ if(!validateMeasurementProfile(input).ok)return null;
  const stored={...input};delete stored.step;return stored;
 }
 function profileCreatedAt(profile:any,fallback:string){return typeof profile.created==='string'&&profile.created?profile.created:fallback;}

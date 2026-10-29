@@ -7,7 +7,7 @@ const document={querySelector(s){return nodes[s]??=makeNode()},querySelectorAll(
 const store=new Map();
 const localStorage={getItem:k=>store.has(k)?store.get(k):null,setItem:(k,v)=>store.set(k,String(v)),removeItem:k=>store.delete(k)};
 const ctx=vm.createContext({localStorage,crypto:webcrypto,document,location:{hash:'#home'},window:{addEventListener(){},scrollTo(){}},setTimeout,clearTimeout,console});
-vm.runInContext(fs.readFileSync('public/app.js','utf8'),ctx);
+vm.runInContext(fs.readFileSync('public/measurement-schema.js','utf8'),ctx);vm.runInContext(fs.readFileSync('public/app.js','utf8'),ctx);
 const run=code=>vm.runInContext(code,ctx);
 
 // 1. A fresh draft has no standard size preselected.

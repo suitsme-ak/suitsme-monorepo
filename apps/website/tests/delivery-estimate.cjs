@@ -18,7 +18,7 @@ function makeWorld(appSource){
   const sandbox={console,localStorage,document:documentStub,location:{hash:'#home'},setTimeout,clearTimeout,crypto:require('node:crypto').webcrypto,fetch:()=>Promise.resolve({ok:false,json:async()=>null}),FormData:FakeFormData,fabricBackground:()=>'background:#999;background-image:linear-gradient(#999,#888);',addEventListener(){},scrollTo(){}};
   sandbox.window=sandbox;
   const ctx=vm.createContext(sandbox);
-  vm.runInContext(appSource||fs.readFileSync('public/app.js','utf8'),ctx,{filename:'app.js'});
+  vm.runInContext(fs.readFileSync('public/measurement-schema.js','utf8'),ctx,{filename:'measurement-schema.js'});vm.runInContext(appSource||fs.readFileSync('public/app.js','utf8'),ctx,{filename:'app.js'});
   for(const f of ['complete.js','catalog-data.js','expanded.js','gallery.js','quick-add.js'])vm.runInContext(fs.readFileSync('public/'+f,'utf8'),ctx,{filename:f});
   const run=s=>vm.runInContext(s,ctx);
   const bag=()=>JSON.parse(store.get('suits-bag')||'[]');

@@ -853,5 +853,76 @@ const BAG_ITEM={id:'test-item',product:0,fabric:'Navy',fit:'Tailored',lapel:'Not
   console.log('J26 passed: after sign out the header shows Sign in again, the restored guest is byte identical to a fresh guest across the header, menus, home, listing, checkout, orders page and profiles modal, and a full guest purchase down the J1 path completes with the local profile driving the measurements (package 5.8).');
 }
 
-console.log('Account screen checks passed: the gate hides every entry point with byte identical guest screens, the register to verify to signed in journey works from the real URLs, uniform API answers are shown word for word, returnTo is validated, sign out restores the guest, the checkout strip and profiles line follow the account state, reset and change password complete end to end, signed in profile saves and deletes write through with failure surfacing and retry (S8, package 5.5), a second browser pulls the account profiles down with the account copy winning a shared id (S8, package 5.5), and the guest migration offers once, imports exactly the local arrays and leaves local data and the bag untouched (J25, package 5.5), and the signed in orders page renders the merged account history with demo badged snapshots while sign out restores the browser only page (S9, package 5.6), the signed in shopping surfaces are byte identical to the guest surfaces with the priced customization at the Wave 3 totals and demo checkout completing (J24, package 5.8 parity gate), and sign out restores a guest byte identical to a fresh guest that completes the full purchase path again (J26, package 5.8 parity gate).');
+// ---------------------------------------------------------------- S10
+// Wave 6 package 6.0: the sandbox review copy matches what sandbox
+// actually charges. Sandbox mode adds no shipping and no tax (the
+// server totals branch runs only in live mode), so the review step
+// must not tell the shopper that delivery and tax are still to be
+// calculated. Live mode keeps the existing calculated copy until
+// package 6.1 shows the real totals, and the demo copy is untouched.
+{
+  const w=makeWorld({seed:{bag:[BAG_ITEM],profiles:[PROFILE]}});
+  await flush();
+  w.run("paymentConfig={mode:'sandbox',ready:true}");
+  const sandbox=w.run('checkoutPage()');
+  assert.ok(sandbox.includes('Not charged in sandbox'),'sandbox: the review step says delivery and tax are not charged');
+  assert.ok(!sandbox.includes('Calculated by merchant settings')&&!sandbox.includes('Calculated before payment'),'sandbox: no calculated later copy remains');
+  assert.ok(sandbox.includes('<span>Total</span>'),'sandbox: the subtotal is labelled as the total, because it is the total charged');
+  assert.ok(!sandbox.includes('Merchandise total'),'sandbox: the subtotal is not labelled a merchandise only total');
+  w.run("paymentConfig={mode:'live',ready:true}");
+  const live=w.run('checkoutPage()');
+  assert.ok(live.includes('Calculated by merchant settings')&&live.includes('Calculated before payment')&&live.includes('Merchandise total'),'live: the review copy is unchanged until package 6.1');
+  w.run("paymentConfig={mode:'demo',ready:false}");
+  assert.ok(w.run('checkoutPage()').includes('Demo total'),'demo: the review copy is unchanged');
+  console.log('S10 passed: sandbox review copy states that delivery and tax are not charged and labels the subtotal as the total, matching what sandbox charges; live and demo review copy are unchanged (package 6.0).');
+}
+
+// ---------------------------------------------------------------- J32
+// Wave 6 package 6.1: in live mode the review step shows the
+// server quoted shipping, tax and full total before the shopper
+// is sent to the hosted payment page (finding F3: the client
+// never computes or invents tax, it asks POST /api/checkout/quote
+// and renders what the server answers), and the payment return
+// for an order whose 24 hour payment window has closed explains
+// the expiry instead of sitting on the confirming page (F8d).
+// The server half of J32 lives in tests/commerce.cjs.
+{
+  const base=makeFakeAccounts({enabled:false});
+  const quoteCalls=[];
+  let orderReply=null;
+  const api={...base,fetch:async(url,opts={})=>{
+    const path=String(url);
+    if(path==='/api/checkout/quote'){quoteCalls.push(JSON.parse(opts.body));return{ok:true,status:200,json:async()=>({mode:'live',subtotalCents:7900,shippingCents:1200,taxCents:632,totalCents:9732})};}
+    if(path.startsWith('/api/orders/'))return{ok:true,status:200,json:async()=>orderReply};
+    return base.fetch(url,opts);
+  }};
+  const w=makeWorld({api,seed:{bag:[BAG_ITEM],profiles:[PROFILE]}});
+  await flush();
+  w.run("paymentConfig={mode:'live',ready:true}");
+  w.run("location.hash='#checkout';render()");
+  w.run(`saveCheckoutForm({__data:{email:'live@example.com',firstName:'Live',lastName:'Review',address:'3 Main Street',city:'New York',state:'NY',zip:'10001',country:'US'}})`);
+  assert.equal(w.run('checkoutStage'),1,'J32: the delivery form advances to the review step');
+  let html=w.elFor('#main').innerHTML;
+  assert.ok(html.includes('Calculated before payment')&&html.includes('Merchandise total'),'J32: before the quote returns, the review keeps the calculated later copy');
+  assert.equal(quoteCalls.length,1,'J32: entering the review step asks the server for the totals exactly once');
+  assert.equal(quoteCalls[0].shipping.email,'live@example.com','J32: the quote request carries the delivery details');
+  assert.equal(quoteCalls[0].items.length,1,'J32: the quote request carries the bag');
+  await flush();
+  html=w.elFor('#main').innerHTML;
+  assert.ok(html.includes('<span>Delivery</span><span>$12</span>'),'J32: the review shows the server quoted delivery charge');
+  assert.ok(html.includes('<span>Tax</span><span>$6.32</span>'),'J32: the review shows the server quoted tax');
+  assert.ok(html.includes('<span>Total</span><strong>$97.32</strong>'),'J32: the review shows the full server quoted total before the redirect');
+  assert.ok(!html.includes('Merchandise total')&&!html.includes('Calculated before payment'),'J32: the quoted figures replace the calculated later copy');
+  orderReply={id:'SMEXPIRED0000001',created_at:'2026-10-28T00:00:00.000Z',items:[],shipping:{},status:'expired',total_cents:9732};
+  w.store.set('suits-pending-order',JSON.stringify('SMEXPIRED0000001'));
+  await w.run('paymentReturnPage()');
+  html=w.elFor('#main').innerHTML;
+  assert.ok(html.includes('This order has expired.'),'J32: the payment return explains that the order expired');
+  assert.ok(html.includes('SMEXPIRED0000001'),'J32: the expired page keeps the order reference');
+  assert.ok(html.includes('Return to checkout'),'J32: the expired page points the shopper back to checkout to restart');
+  assert.ok(!html.includes('being confirmed'),'J32: an expired order does not sit on the confirming page');
+  console.log('J32 passed: the live review step renders the server quoted delivery, tax and full total in place of the calculated later copy once the quote returns, and the payment return for an expired order explains the closed 24 hour window, keeps the reference and points back to checkout (package 6.1, client half; the server half is in tests/commerce.cjs).');
+}
+
+console.log('Account screen checks passed: the gate hides every entry point with byte identical guest screens, the register to verify to signed in journey works from the real URLs, uniform API answers are shown word for word, returnTo is validated, sign out restores the guest, the checkout strip and profiles line follow the account state, reset and change password complete end to end, signed in profile saves and deletes write through with failure surfacing and retry (S8, package 5.5), a second browser pulls the account profiles down with the account copy winning a shared id (S8, package 5.5), and the guest migration offers once, imports exactly the local arrays and leaves local data and the bag untouched (J25, package 5.5), and the signed in orders page renders the merged account history with demo badged snapshots while sign out restores the browser only page (S9, package 5.6), the signed in shopping surfaces are byte identical to the guest surfaces with the priced customization at the Wave 3 totals and demo checkout completing (J24, package 5.8 parity gate), and sign out restores a guest byte identical to a fresh guest that completes the full purchase path again (J26, package 5.8 parity gate), and the sandbox review copy matches what sandbox actually charges (S10, package 6.0), and the live review step shows the server quoted totals before the redirect and the expired order payment return explains the closed window (J32, package 6.1).');
 })().catch(e=>{console.error(e);process.exit(1)});

@@ -185,7 +185,10 @@ const LEGACY={id:'legacy-1',name:'Legacy fit',method:'body',unit:'in',wearer:'Me
   for(const id of order)assert.ok(fieldsHtml.includes('measureInput-'+id),'the waistcoat flow asks for '+id);
   for(const id of ['waist','seat','sleeve','shoulder','jacket','bicep'])assert.ok(!fieldsHtml.includes('measureInput-'+id),'the waistcoat flow never asks for '+id);
   assert.ok(fieldsHtml.includes('Your waistcoat'),'the progress shows a waistcoat step');
-  assert.ok(fieldsHtml.includes('M140 83 L140 228'),'the figure highlights the vest length line drawn for this field');
+  // Package M9 supersedes the highlighted figure for this field:
+  // vest length is a diagram style field, so the step now opens
+  // on its per field line diagram instead of the studio figure.
+  assert.ok(fieldsHtml.includes('Line diagram showing the vest length measurement'),'the step opens on the vest length line diagram drawn for this field (package M9)');
   w.run('measureNext()');
   assert.equal(w.run('draft.step'),2,'empty waistcoat fields cannot advance');
   assert.equal(liCount(w.elFor('#measureError').innerHTML),3,'all three waistcoat fields are required and reported together');

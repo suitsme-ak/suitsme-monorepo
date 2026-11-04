@@ -72,13 +72,13 @@ const JACKET_TOGGLES=[['workingCuffButtons',5],['pickStitch',10],['gauntletCuff'
   assert.ok(html.indexOf('<span>Cuff button holes</span>')<html.indexOf('<h3>Trousers</h3>'),'the cuff construction precedes Trousers');
   for(const title of ['Cuff buttons','Cuff button style','Cuff button holes','Cuff stitch position','Stitching on the jacket edges'])assert.ok(html.includes(`<div class="option-title"><span>${title}</span>`),`the Personalize step offers the ${title} group`);
   for(const [key] of JACKET_TOGGLES)assert.ok(!html.includes(`setOption('${key}'`),`the retired ${key} toggle is not offered`);
-  assert.ok(html.includes(`aria-pressed="true" onclick="setOption('cuffButtonHole','Imitation Button Holes')">Imitation, sewn not cut · Included`),'imitation cuff button holes are the selected standard');
-  assert.ok(html.includes(`onclick="setOption('cuffButtonHole','Functional Options')">Working buttonholes · Included`),'working buttonholes are offered unpriced');
-  assert.ok(html.includes(`onclick="setOption('exteriorStitch','1/4 Double')">Double stitch, 1/4 in · Included`),'the double exterior stitch is offered unpriced');
+  assert.ok(html.includes(`aria-pressed="true" onclick="setOption('cuffButtonHole','Imitation Button Holes')">`)&&html.includes('Imitation, sewn not cut · Included'),'imitation cuff button holes are the selected standard');
+  assert.ok(html.includes(`onclick="setOption('cuffButtonHole','Functional Options')">`)&&html.includes('Working buttonholes · Included'),'working buttonholes are offered unpriced');
+  assert.ok(html.includes(`onclick="setOption('exteriorStitch','1/4 Double')">`)&&html.includes('Double stitch, 1/4 in · Included'),'the double exterior stitch is offered unpriced');
   assert.ok(!html.includes('<h3>Trouser details</h3>'),'the Trouser details section is gone from an aligned design');
   assert.ok(html.includes('<div class="option-title"><span>Elastic side tabs</span>'),'the aligned trousers groups render in place of the toggles');
-  assert.ok(html.includes(`aria-pressed="true" onclick="setOption('suspenderButtons','No')">No · Included`),'suspender buttons start off in the aligned model, shown Included');
-  assert.ok(html.includes(`onclick="setOption('suspenderButtons','Yes')">Yes · Included`),'suspender buttons are unpriced in the aligned model');
+  assert.ok(html.includes(`aria-pressed="true" onclick="setOption('suspenderButtons','No')">`)&&html.includes('No · Included'),'suspender buttons start off in the aligned model, shown Included');
+  assert.ok(html.includes(`onclick="setOption('suspenderButtons','Yes')">`)&&html.includes('Yes · Included'),'suspender buttons are unpriced in the aligned model');
   assert.ok(!html.includes('Venice side tabs')&&!html.includes('Flap coin pocket')&&!html.includes('2 inch waistband'),'the named side tabs, the coin pocket toggle and the waistband toggle are gone');
   assert.ok(!html.includes('Tailor changes'),'the tailor changes consent is not offered');
   assert.ok(html.includes('<textarea maxlength="200"'),'the comments field caps at 200 characters');

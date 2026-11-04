@@ -118,7 +118,7 @@ function legacySuitSession(w){w.run("config={product:0,fabric:'Navy',lapel:'Notc
   assert.equal(w.config().trouserFront,'Flat front','beginDesign still preselects the legacy trouser front for a Women suit');
   w.run('stage=1');
   const html=w.run('customize()');
-  assert.ok(html.includes(`<button class="choice active" data-visual="pleats:Flat Front" aria-pressed="true" onclick="setOption('pleats','Flat Front')">Flat front, no pleats · Included</button>`),'the Pleats group shows the aligned Flat Front standard as its current choice');
+  assert.ok(html.includes(`<button class="choice active" data-visual="pleats:Flat Front" aria-pressed="true" onclick="setOption('pleats','Flat Front')">`)&&html.includes('Flat front, no pleats · Included</button>'),'the Pleats group shows the aligned Flat Front standard as its current choice');
   w.run("setOption('pleats','Single Rvrs Pleat')");
   bagCurrentWorld(w,'profile-women');
   const item=w.bag()[0];

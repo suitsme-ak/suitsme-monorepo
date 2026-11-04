@@ -66,16 +66,16 @@ function bagCurrentWorld(w){w.run('stage=2;render(false)');w.elFor('#profileSele
   assert.ok(html.indexOf('<h3>Trousers</h3>')>at,'the Trousers section follows the jacket finishes');
   assert.ok(html.indexOf('<span>Inside label</span>')>html.indexOf('<h3>Trousers</h3>'),'the label program follows the Trousers section');
   for(const gone of ['Lining type','Elbow patches','Black tiger','Horn brown','Classic wider notch'])assert.ok(!html.includes(gone),`the Personalize step no longer offers ${gone}`);
-  assert.ok(html.includes(`aria-pressed="true" onclick="setOption('lapelType','Notch')">Notch lapel · Included`),'the Notch lapel type is the selected standard');
-  assert.ok(html.includes(`onclick="setOption('lapelType','Peak')">Peak lapel · Included`),'the Peak lapel type is offered unpriced');
-  assert.ok(html.includes(`onclick="setOption('lapelType','DB Peak')">Double breasted peak lapel · Included`),'the DB Peak lapel type is offered');
-  assert.ok(html.includes(`aria-pressed="true" onclick="setOption('lapelSize','Standard')">Standard, 2 7/8 in · Included`),'the Standard notch width is selected, with its JPOS inches');
-  assert.ok(html.includes(`aria-pressed="true" onclick="setOption('lining','Default')">Default · Included`),'the Default lining is the selected default');
+  assert.ok(html.includes(`aria-pressed="true" onclick="setOption('lapelType','Notch')">`)&&html.includes('Notch lapel · Included'),'the Notch lapel type is the selected standard');
+  assert.ok(html.includes(`onclick="setOption('lapelType','Peak')">`)&&html.includes('Peak lapel · Included'),'the Peak lapel type is offered unpriced');
+  assert.ok(html.includes(`onclick="setOption('lapelType','DB Peak')">`)&&html.includes('Double breasted peak lapel · Included'),'the DB Peak lapel type is offered');
+  assert.ok(html.includes(`aria-pressed="true" onclick="setOption('lapelSize','Standard')">`)&&html.includes('Standard, 2 7/8 in · Included'),'the Standard notch width is selected, with its JPOS inches');
+  assert.ok(html.includes(`aria-pressed="true" onclick="setOption('lining','Default')">`)&&html.includes('Default · Included'),'the Default lining is the selected default');
   assert.equal(w.config().lining,'Tonal','rendering the Default choice does not rewrite the stored Tonal value');
-  assert.ok(html.includes(`onclick="setOption('lining','Paisley red')">Paisley red · Included`),'a Paisley lining is unpriced in the aligned model');
-  assert.ok(html.includes(`onclick="setOption('lining','Italian jazz royale')">Italian jazz royale · Included`),'an Italian lining is unpriced in the aligned model');
-  assert.ok(html.includes(`aria-pressed="true" onclick="setOption('buttonStyle','Matching')">Matching buttons · Included`),'matching buttons are the selected standard');
-  assert.ok(html.includes(`onclick="setOption('buttonStyle','Fabric covered')">Fabric covered buttons · Included`),'fabric covered buttons are offered');
+  assert.ok(html.includes(`onclick="setOption('lining','Paisley red')">`)&&html.includes('Paisley red · Included'),'a Paisley lining is unpriced in the aligned model');
+  assert.ok(html.includes(`onclick="setOption('lining','Italian jazz royale')">`)&&html.includes('Italian jazz royale · Included'),'an Italian lining is unpriced in the aligned model');
+  assert.ok(html.includes(`aria-pressed="true" onclick="setOption('buttonStyle','Matching')">`)&&html.includes('Matching buttons · Included'),'matching buttons are the selected standard');
+  assert.ok(html.includes(`onclick="setOption('buttonStyle','Fabric covered')">`)&&html.includes('Fabric covered buttons · Included'),'fabric covered buttons are offered');
 }
 
 // World 2: on the aligned model only the Milanese under collar

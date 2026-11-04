@@ -92,7 +92,7 @@ const WAISTCOAT_SPEC={vestStyle:'Notch Lapel',vestButtons:'DB 6x3',vestPocketTyp
     w.run('stage=1');
     const html=w.run('customize()');
     for(const title of ['Vest style','Vest buttons','Vest pocket style','Vest pockets','Vest back'])assert.ok(html.includes(`<div class="option-title"><span>${title}</span>`),`the aligned step offers the ${title} group`);
-    assert.ok(html.includes('<span>Vest buttons</span><span class="subtle">5-Button</span>'),'the buttons header states the starting selection in the JPOS spelling');
+    assert.ok(html.includes('<span>Vest buttons</span><span class="subtle">5 buttons</span>'),'the buttons header states the starting selection in buyer words (J8 plain language pass; the stored value keeps the JPOS spelling)');
     assert.ok(html.includes('data-visual="vestButtons:DB 6x3"')&&html.includes('data-visual="vestStyle:Notch Lapel"')&&html.includes('data-visual="vestBack:Fabric"'),'every aligned value carries its visual key for J8');
     assert.ok(html.includes('Double besom pockets · Included'),'the pocket type shows its buyer language label as included, unpriced');
     assert.ok(!html.includes('Five button')&&!html.includes('Six button'),'the retired Front style pair is not offered on an aligned design');
@@ -102,7 +102,7 @@ const WAISTCOAT_SPEC={vestStyle:'Notch Lapel',vestButtons:'DB 6x3',vestPocketTyp
     assert.equal(w.run('optionCharge(config)'),0,'no aligned waistcoat option is charged on the client');
     assert.equal(w.run('itemPrice(config)'),149,'the fully specified aligned waistcoat prices at base');
     const specified=w.run('customize()');
-    assert.ok(specified.includes('<span>Vest buttons</span><span class="subtle">DB 6x3</span>'),'the buttons header follows the chosen buttons');
+    assert.ok(specified.includes('<span>Vest buttons</span><span class="subtle">Double breasted, 6 by 3</span>'),'the buttons header follows the chosen buttons, in buyer words (J8 plain language pass)');
     assert.ok(specified.includes('<span>Vest back</span><span class="subtle">Fabric back</span>'),'the back header states the fabric back in buyer words');
     bagCurrentWorld(w,'profile-men');
     assert.equal(w.bag().length,1,'the configured waistcoat is bagged');

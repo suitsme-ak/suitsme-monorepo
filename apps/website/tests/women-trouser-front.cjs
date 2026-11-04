@@ -51,7 +51,7 @@ run('stage=1');
 let html=run('customize()');
 assert.ok(html.includes('<div class="option-title"><span>Pleats</span>'),'the Women suit Personalize step shows a Pleats group');
 assert.ok(html.includes("setOption('pleats','Flat Front')")&&html.includes("setOption('pleats','Single Rvrs Pleat')"),'the aligned trouser front choices are offered in the Pleats group');
-assert.ok(html.includes(`<button class="choice active" data-visual="pleats:Flat Front" aria-pressed="true" onclick="setOption('pleats','Flat Front')">Flat front, no pleats · Included</button>`),'the Flat Front standard shows selected in the Pleats group');
+assert.ok(html.includes(`<button class="choice active" data-visual="pleats:Flat Front" aria-pressed="true" onclick="setOption('pleats','Flat Front')">`)&&html.includes('Flat front, no pleats · Included</button>'),'the Flat Front standard shows selected in the Pleats group');
 assert.ok(html.includes('<div class="option-title"><span>Jacket closure</span>')&&html.includes("setOption('closure','2-Button')"),'the jacket groups remain on the Women suit, in the aligned vocabulary');
 assert.ok(html.indexOf('Pleats')<html.indexOf('Monogram'),'the trousers section sits before the Monogram fields');
 

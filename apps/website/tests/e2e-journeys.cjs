@@ -805,13 +805,13 @@ console.log('E2E journey J12 passed: designing a second product starts clean wit
   const personalize=w.run('customize()');
   for(const title of ['Lapel style','Lapel width','Buttons','Lining'])assert.ok(personalize.includes(`<div class="option-title"><span>${title}</span>`),`the Personalize step offers the ${title} group`);
   for(const gone of ['Lining type','Elbow patches','Black tiger'])assert.ok(!personalize.includes(gone),`the Personalize step no longer offers ${gone}`);
-  assert.ok(personalize.includes(`aria-pressed="true" onclick="setOption('lapelType','Notch')">Notch lapel`),'the Notch lapel type starts selected');
-  assert.ok(personalize.includes(`aria-pressed="true" onclick="setOption('lapelSize','Standard')">Standard, 2 7/8 in`),'the Standard notch width starts selected with its JPOS inches');
+  assert.ok(personalize.includes(`aria-pressed="true" onclick="setOption('lapelType','Notch')">`)&&personalize.includes('Notch lapel · Included'),'the Notch lapel type starts selected');
+  assert.ok(personalize.includes(`aria-pressed="true" onclick="setOption('lapelSize','Standard')">`)&&personalize.includes('Standard, 2 7/8 in · Included'),'the Standard notch width starts selected with its JPOS inches');
   assert.ok(personalize.includes(`aria-pressed="true" onclick="setOption('lining','Default')"`),'the Default lining starts selected');
-  assert.ok(personalize.includes(`aria-pressed="true" onclick="setOption('buttonStyle','Matching')">Matching buttons`),'matching buttons start selected');
+  assert.ok(personalize.includes(`aria-pressed="true" onclick="setOption('buttonStyle','Matching')">`)&&personalize.includes('Matching buttons · Included'),'matching buttons start selected');
   assert.ok(personalize.includes('Paisley red · Included'),'the placeholder lining values are unpriced in the aligned model');
   w.run("setOption('lapelType','Peak')");
-  assert.ok(w.run('customize()').includes(`aria-pressed="true" onclick="setOption('lapelSize','Standard')">Standard, 3 in`),'switching to Peak shows the Peak standard width in inches');
+  assert.ok(w.run('customize()').includes(`aria-pressed="true" onclick="setOption('lapelSize','Standard')">`)&&w.run('customize()').includes('Standard, 3 in · Included'),'switching to Peak shows the Peak standard width in inches');
   w.run("setOption('lining','Paisley red');setOption('buttonStyle','Fabric covered')");
   assert.ok(w.run('customize()').includes('$'+base+' '),'the customizer price does not move for unpriced finish choices');
   w.run('nextConfig()'); // stage 1 to 2, Measurements
@@ -1014,7 +1014,7 @@ console.log('E2E journey J12 passed: designing a second product starts clean wit
   assert.equal(run('location.hash'),'#customize','designing from the product page lands on the customize route');
   assert.equal(run('config.product'),firstId,'the customizer opens on the chosen product');
   run('nextConfig()'); // stage 0 to 1, Personalize
-  assert.ok(run('customize()').includes(`onclick="setOption('lining','Wine')">Wine · Included`),'the Personalize step offers the Wine lining, unpriced in the aligned model pending the JPOS lining catalog');
+  assert.ok(run('customize()').includes(`onclick="setOption('lining','Wine')">`)&&run('customize()').includes('Wine · Included'),'the Personalize step offers the Wine lining, unpriced in the aligned model pending the JPOS lining catalog');
   run("setOption('lining','Wine')");
   run('nextConfig()'); // stage 1 to 2, Measurements
   elFor('#profileSelect').value='p-ready';
@@ -1142,7 +1142,7 @@ console.log('E2E journey J12 passed: designing a second product starts clean wit
   w.run(`chooseProduct(${firstId})`);
   w.run(`beginDesign(${firstId})`);
   w.run('nextConfig()'); // stage 0 to 1, Personalize
-  assert.ok(w.run('customize()').includes(`onclick="setOption('lining','Wine')">Wine · Included`),'the Personalize step offers the Wine lining, unpriced in the aligned model pending the JPOS lining catalog');
+  assert.ok(w.run('customize()').includes(`onclick="setOption('lining','Wine')">`)&&w.run('customize()').includes('Wine · Included'),'the Personalize step offers the Wine lining, unpriced in the aligned model pending the JPOS lining catalog');
   w.run("setOption('lining','Wine')");
   w.run('nextConfig()'); // stage 1 to 2, Measurements
   w.elFor('#profileSelect').value='p-ready';

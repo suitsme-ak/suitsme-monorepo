@@ -197,12 +197,13 @@ function makeEntryWorld({pathname='/',hash='',profiles=null}={}){
 // Body measurement journey: several invalid values are reported together,
 // then corrected, the profile is saved, and the bag line lists every
 // entered measurement plus the chosen lining.
-// Note (measurements wave, package M1): the suit journey now runs the
-// garment aware studio, so this journey drives the new flow: a name and
-// height preamble, the verified suit set in a jacket part and a trousers
-// part, the in form fit selectors, and a version 2 profile. The bag line
-// lists the version 2 summary: one merged waist, and no inseam, outseam
-// or trouser waist, which the verified form never asks.
+// Note (JPOS consistency wave, package J1): the suit journey runs the
+// garment aware studio on the version 3 schema: a name and height
+// preamble with the optional weight and posture answers, the JPOS suit
+// set in a jacket part and a trousers part (waist split into jacket and
+// trouser waists, sleeve split into left and right inseams), inches
+// entry with a centimeter converter display, no fit selectors, and a
+// version 3 profile. The bag line lists the version 3 summary.
 {
   const w=makeWorld();
   w.run('chooseProduct(0)');w.run('beginDesign(0)');
@@ -213,35 +214,36 @@ function makeEntryWorld({pathname='/',hash='',profiles=null}={}){
   w.run('startMeasurements()');
   w.run('measureNext()');
   assert.equal(w.run('draft.step'),1,'the Studio advances to the name and height preamble');
-  w.run("draft.wearerName='E2E Shopper';updateValue('height','70')");
+  w.run("draft.wearerName='E2E Shopper';updateBodyValue('height','70')");
   w.run('measureNext()');
   assert.equal(w.run('draft.step'),2,'the Studio advances to the jacket measurements step');
-  // Field inputs write through updateValue, their real oninput handler.
-  w.run("updateValue('chest','200');updateValue('stomach','5');updateValue('sleeve','100')");
+  // Field inputs write through updateBodyValue, their real oninput handler.
+  w.run("updateBodyValue('chest','200');updateBodyValue('jacketWaist','5');updateBodyValue('sleeveInseamL','100')");
   w.run('measureNext()');
   assert.equal(w.run('draft.step'),2,'Continue is blocked while jacket measurements are invalid');
   const summary=w.elFor('#measureError').innerHTML;
-  assert.equal((summary.match(/<li>/g)||[]).length,5,'all five jacket problems are listed in one message');
-  for(const text of ['Please check chest.','Please check sleeve length.','Please check shoulder width.','Please check jacket length.','Please check stomach.'])assert.ok(summary.includes(text),'the one message includes: '+text);
+  assert.equal((summary.match(/<li>/g)||[]).length,7,'all seven jacket problems are listed in one message');
+  for(const text of ['Please check chest.','Please check chest over arms.','Please check left sleeve inseam.','Please check right sleeve inseam.','Please check shoulder width.','Please check jacket length.','Please check jacket waist.'])assert.ok(summary.includes(text),'the one message includes: '+text);
   assert.equal(w.elFor('#measureInput-chest').getAttribute('aria-invalid'),'true','the out of range chest input is marked invalid');
-  w.run("updateValue('chest','40');updateValue('sleeve','25');updateValue('shoulder','18');updateValue('jacket','29');updateValue('stomach','34')");
+  w.run("updateBodyValue('chest','40');updateBodyValue('chestOverArm','46');updateBodyValue('sleeveInseamL','18');updateBodyValue('sleeveInseamR','18');updateBodyValue('shoulder','18');updateBodyValue('jacketLength','29');updateBodyValue('jacketWaist','34')");
   w.run('measureNext()');
   assert.equal(w.run('draft.step'),3,'valid jacket measurements advance to the trousers step');
-  w.run("updateValue('pantsLength','42');updateValue('waist','34');updateValue('seat','40');updateValue('frontRise','11');updateValue('thigh','24')");
+  w.run("updateBodyValue('outseam','42');updateBodyValue('trouserWaist','34');updateBodyValue('seat','40');updateBodyValue('frontRise','11');updateBodyValue('thigh','24');updateBodyValue('inseam','32');updateBodyValue('rise','12');updateBodyValue('crotch','10')");
   w.run('measureNext()');
   assert.equal(w.run('draft.step'),4,'valid trouser measurements advance to review');
   w.elFor('#confirmMeasures').checked=true;
   w.run('measureNext()');
   assert.equal(w.run('profiles.length'),1,'the Studio saves the body measurement profile');
   assert.equal(w.run('profiles[0].method'),'body','the saved profile carries the body method');
-  assert.equal(w.run('profiles[0].version'),2,'the saved suit profile is a version 2 profile');
+  assert.equal(w.run('profiles[0].version'),3,'the saved suit profile is a version 3 profile');
   assert.equal(w.run('stage'),2,'saving returns to the customizer Measurements step');
   w.elFor('#profileSelect').value=w.run('profiles[0].id');
   w.run('nextConfig()');
   assert.equal(w.bag().length,1,'Add to Bag creates exactly one bag line');
   const lineHtml=w.run('lineHtml(bag[0])');
   assert.ok(lineHtml.includes('Body measurements'),'the bag line shows the body measurement summary');
-  for(const text of ['Height 70 in','Chest 40 in','Sleeve length 25 in','Shoulder width 18 in','Jacket length 29 in','Stomach 34 in','Pants length 42 in','Waist 34 in','Seat / hips 40 in','Front rise 11 in','Thigh 24 in','Jacket Fit Regular Fit','Trouser Fit Classic Comfort Fit'])assert.ok(lineHtml.includes(text),'the bag line lists the entered measurement: '+text);
+  for(const text of ['Height 70 in','Chest 40 in','Chest over arms 46 in','Left sleeve inseam 18 in','Shoulder width 18 in','Jacket length 29 in','Jacket waist 34 in','Outseam 42 in','Trouser waist 34 in','Seat / hips 40 in','Front rise 11 in','Thigh 24 in','Inseam 32 in'])assert.ok(lineHtml.includes(text),'the bag line lists the entered measurement: '+text);
+  assert.ok(!lineHtml.includes('Jacket Fit'),'the bag line shows no fit selectors for a version 3 profile');
   assert.ok(lineHtml.includes('Midnight lining'),'the bag line shows the chosen lining');
 }
 

@@ -20,6 +20,12 @@ const path=require('node:path');
 // storefront scripts in a Node vm with stubbed DOM and storage,
 // in the style of the other suites, plus a file check that
 // every photo the studio can reference exists on disk.
+// Since the JPOS consistency wave (package J1), the body flow
+// collects the version 3 fields: the photo and diagram cases
+// below follow the version 3 fields to the same produced assets
+// (the sleeve outseam shows the sleeve photograph, the outseam
+// and bottom show their diagrams, and the inseam gained a
+// diagram of its own drawn in the same hand).
 
 function makeEl(){const el={innerHTML:'',textContent:'',value:'',checked:false,open:false,style:{},attrs:{},classList:{add(){},remove(){},toggle(){return false}},setAttribute(k,v){el.attrs[k]=String(v)},removeAttribute(k){delete el.attrs[k]},getAttribute(k){return k in el.attrs?el.attrs[k]:null},addEventListener(){},getBoundingClientRect:()=>({left:0,right:0,top:0,bottom:0}),showModal(){el.open=true},close(){el.open=false},scrollIntoView(){}};return el}
 function makeWorld(seed={}){
@@ -50,7 +56,7 @@ function enterBodyStudio(w,productIdx){
 // The photographs produced for this package, named by schema
 // ref, and the diagram refs drawn for the body flows.
 const PRODUCED_PHOTOS=['neck','chest','sleeve','shoulder','jacket-length','bicep','stomach','thigh','knee'];
-const DIAGRAM_REFS=['height','pants-length','front-rise','back-rise','leg-opening','vest-length'];
+const DIAGRAM_REFS=['height','pants-length','front-rise','back-rise','leg-opening','vest-length','inseam'];
 
 // ---------------------------------------------------------------- files
 // Every ref the studio can turn into a photograph has a real
@@ -66,14 +72,14 @@ const DIAGRAM_REFS=['height','pants-length','front-rise','back-rise','leg-openin
   }
   const diagrams=JSON.parse(w.run('JSON.stringify(Object.keys(BODY_DIAGRAMS))'));
   assert.deepEqual([...diagrams].sort(),[...DIAGRAM_REFS].sort(),'the drawn diagrams are exactly the reachable diagram style body fields');
-  console.log('J-M9 (files) passed: every photograph the studio references exists under public/assets/measure/ with non-trivial size, and the diagram set is exactly the six reachable diagram fields.');
+  console.log('J-M9 (files) passed: every photograph the studio references exists under public/assets/measure/ with non-trivial size, and the diagram set is exactly the reachable diagram fields.');
 }
 
 // ---------------------------------------------------------------- suit body flow
 // Focusing each photo field renders its photograph with the
 // field named in the alt text; the diagram fields render a line
-// diagram and no photograph; waist and seat, whose photographs
-// could not be generated, keep the studio figure.
+// diagram and no photograph; the fields whose photographs
+// could not be generated keep the studio figure.
 {
   const w=makeWorld();
   enterBodyStudio(w,0);
@@ -88,29 +94,34 @@ const DIAGRAM_REFS=['height','pants-length','front-rise','back-rise','leg-openin
 
   const firstDraw=w.run('measure()');
   assert.ok(firstDraw.includes('src="assets/measure/chest.webp"'),'the jacket step opens on the chest photograph');
-  const photoCases=[['chest','chest','Chest'],['sleeve','sleeve','Sleeve length'],['shoulder','shoulder','Shoulder width'],['jacket','jacket-length','Jacket length'],['bicep','bicep','Bicep'],['stomach','stomach','Stomach']];
+  const photoCases=[['chest','chest','Chest'],['sleeveOutseam','sleeve','Sleeve outseam'],['shoulder','shoulder','Shoulder width'],['jacketLength','jacket-length','Jacket length']];
   for(const [key,ref,label] of photoCases){
     const html=focus(w,key);
     assert.ok(html.includes(`<img class="measure-photo" src="assets/measure/${ref}.webp"`),'focusing '+key+' renders the '+ref+' photograph');
     assert.ok(html.includes(`alt="Photograph showing the tape placement for the ${label.toLowerCase()} measurement"`),'the '+key+' photograph alt text names the field and the tape placement');
     assert.ok(!html.includes('<svg'),'focusing '+key+' shows the photograph, not the figure');
   }
+  for(const [key,label] of [['chestOverArm','Chest over arms'],['jacketWaist','Jacket waist']]){
+    const html=focus(w,key);
+    assert.ok(html.includes(`Illustration showing ${label.toLowerCase()} measurement`),'focusing '+key+' keeps the studio figure, no photograph having been produced for it');
+    assert.ok(!html.includes('<img'),'focusing '+key+' shows no photograph');
+  }
   w.run("gShowGuide('chest')");
   assert.ok(w.elFor('#modalContent').innerHTML.includes('src="assets/measure/chest.webp"'),'the How to measure dialog shows the chest photograph');
 
-  w.run("updateValue('chest','40');updateValue('sleeve','25');updateValue('shoulder','18');updateValue('jacket','29');updateValue('stomach','34')");
+  w.run("updateBodyValue('chest','40');updateBodyValue('chestOverArm','46');updateBodyValue('sleeveInseamL','18');updateBodyValue('sleeveInseamR','18');updateBodyValue('shoulder','18');updateBodyValue('jacketLength','29');updateBodyValue('jacketWaist','34')");
   w.run('measureNext()');
   assert.equal(w.run('draft.step'),3,'valid jacket values advance to the trousers fields');
   const trousersDraw=w.run('measure()');
-  assert.ok(trousersDraw.includes('Line diagram showing the pants length measurement'),'the trousers step opens on the pants length diagram');
+  assert.ok(trousersDraw.includes('Line diagram showing the outseam measurement'),'the trousers step opens on the outseam diagram');
   assert.ok(!trousersDraw.includes('<img'),'the trousers step opens with no photograph');
-  for(const [key,label] of [['pantsLength','pants length'],['frontRise','front rise'],['backRise','back rise'],['legOpening','leg opening']]){
+  for(const [key,label] of [['outseam','outseam'],['frontRise','front rise'],['backRise','back rise'],['bottom','leg opening'],['inseam','inseam'],['rise','rise']]){
     const html=focus(w,key);
     assert.ok(html.includes(`Line diagram showing the ${label} measurement`),'focusing '+key+' renders its line diagram');
     assert.ok(html.includes('>START<')&&html.includes('>FINISH<'),'the '+key+' diagram marks start and finish');
     assert.ok(!html.includes('<img'),'focusing '+key+' shows no photograph');
   }
-  for(const [key,label] of [['waist','Waist'],['seat','Seat / hips']]){
+  for(const [key,label] of [['trouserWaist','Trouser waist'],['seat','Seat / hips']]){
     const html=focus(w,key);
     assert.ok(html.includes(`Illustration showing ${label.toLowerCase()} measurement`),'focusing '+key+' keeps the studio figure, its photograph not having been generated');
     assert.ok(!html.includes('<img'),'focusing '+key+' shows no photograph');
@@ -119,7 +130,7 @@ const DIAGRAM_REFS=['height','pants-length','front-rise','back-rise','leg-openin
     const html=focus(w,key);
     assert.ok(html.includes(`src="assets/measure/${ref}.webp"`),'focusing '+key+' renders the '+ref+' photograph');
   }
-  console.log('J-M9 (suit) passed: the suit body flow shows the produced photograph for every photo field with a generated asset, a marked line diagram for every diagram field, and the studio figure for waist and seat.');
+  console.log('J-M9 (suit) passed: the suit body flow shows the produced photograph for every photo field with a generated asset, a marked line diagram for every diagram field, and the studio figure for the fields without a produced asset.');
 }
 
 // ---------------------------------------------------------------- women and boys
@@ -140,8 +151,8 @@ const DIAGRAM_REFS=['height','pants-length','front-rise','back-rise','leg-openin
   const chestHtml=focus(w,'chest');
   assert.ok(!chestHtml.includes('assets/measure/chest'),'the women chest field never renders the men chest photograph');
   assert.ok(chestHtml.includes('Illustration showing chest measurement'),'the women chest field keeps the studio figure until its own photograph exists');
-  assert.ok(focus(w,'sleeve').includes('src="assets/measure/sleeve.webp"'),'the women sleeve field uses the produced photograph');
-  assert.ok(focus(w,'stomach').includes('src="assets/measure/stomach.webp"'),'the women stomach field uses the produced photograph');
+  assert.ok(focus(w,'sleeveOutseam').includes('src="assets/measure/sleeve.webp"'),'the women sleeve outseam field uses the produced photograph');
+  assert.ok(focus(w,'jacketLength').includes('src="assets/measure/jacket-length.webp"'),'the women jacket length field uses the produced photograph');
 
   const wb=makeWorld();
   const bidx=wb.run("products.findIndex(p=>p.silhouette==='Boys two-piece')");

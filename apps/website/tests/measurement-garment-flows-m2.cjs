@@ -1,20 +1,23 @@
 const assert=require('node:assert/strict'),fs=require('node:fs'),vm=require('node:vm'),ts=require('typescript'),Module=require('node:module'),crypto=require('node:crypto');
 const path=require('node:path');
-// Journeys J-M2a, J-M2b and J-M2c (measurements wave, package M2):
-// the garment aware Measurement Studio extends from suits and
-// jackets (M1) to trousers and waistcoats. Trousers only measuring
-// collects the verified 8 field set plus the Trouser Fit selector;
-// waistcoat measuring collects exactly the verified 3 fields with
-// no fit selector; ready (standard size) profiles become garment
-// shaped, so a trousers order records only its trouser size and
-// the new inseam choice (Unhemmed included, owner decision O8) and
-// never a jacket size (inconsistency INC-07), and a waistcoat
-// records only its own size. Legacy completion offers extend to
-// both garments with the M1 design, and Quick Add routes trousers
-// and waistcoats with no suitable profile into the same flow.
-// Driven on the real storefront scripts in a Node vm with stubbed
-// DOM and storage, plus the real checkout module for the stored
-// order shape, in the style of the other suites.
+// Journeys J-M2a, J-M2b and J-M2c (measurements wave, package M2),
+// with the body journeys rebuilt by the JPOS consistency wave
+// (package J1) on the version 3 schema: trousers only measuring
+// collects the JPOS trousers set (outseam beside inseam, the
+// trouser waist, rise and crotch; GARMENT_SETS_V3) with no fit
+// selector; waistcoat measuring collects the JPOS waistcoat set
+// (chest, vest back length, and the half waist the shopper enters
+// as a full waist, plan M4); ready (standard size) profiles stay
+// as M2 built them, garment shaped, so a trousers order records
+// only its trouser size and the inseam choice (Unhemmed included,
+// owner decision O8) and never a jacket size (inconsistency
+// INC-07), and a waistcoat records only its own size. Legacy
+// completion offers extend to both garments, now assessed against
+// the version 3 sets (J0 section D.5), and Quick Add routes
+// trousers and waistcoats with no suitable profile into the same
+// flow. Driven on the real storefront scripts in a Node vm with
+// stubbed DOM and storage, plus the real checkout module for the
+// stored order shape, in the style of the other suites.
 
 function makeEl(){const el={innerHTML:'',textContent:'',value:'',checked:false,open:false,style:{},attrs:{},classList:{add(){},remove(){},toggle(){return false}},setAttribute(k,v){el.attrs[k]=String(v)},removeAttribute(k){delete el.attrs[k]},getAttribute(k){return k in el.attrs?el.attrs[k]:null},addEventListener(){},getBoundingClientRect:()=>({left:0,right:0,top:0,bottom:0}),showModal(){el.open=true},close(){el.open=false},scrollIntoView(){}};return el}
 function makeWorld(seed={}){
@@ -40,10 +43,11 @@ const fieldOrder=(html,ids)=>ids.map(id=>html.indexOf('measureInput-'+id));
 const LEGACY={id:'legacy-1',name:'Legacy fit',method:'body',unit:'in',wearer:'Men',fit:'Tailored',values:{chest:40,waist:32,shoulder:18,sleeve:25,jacket:29,seat:40,trouserWaist:34,thigh:24,inseam:32,outseam:42},created:'2026-01-15T00:00:00.000Z'};
 
 // ---------------------------------------------------------------- J-M2a
-// Trousers only measuring end to end: exactly the verified 8 field
-// set in order, the single merged waist, the Trouser Fit selector,
-// a version 2 trousers profile, and the bag and demo order carrying
-// it. Quick Add and the legacy completion offer cover trousers too.
+// Trousers only measuring end to end: exactly the version 3
+// trousers set in order, the trouser waist split out from the
+// jacket waist, no fit selector, a version 3 trousers profile,
+// and the bag and demo order carrying it. Quick Add and the
+// legacy completion offer cover trousers too.
 {
   const w=makeWorld();
   w.run('chooseProduct(9)');w.run('beginDesign(9)');
@@ -57,41 +61,41 @@ const LEGACY={id:'legacy-1',name:'Legacy fit',method:'body',unit:'in',wearer:'Me
 
   w.run('measureNext()');
   assert.equal(w.run('draft.step'),1,'the Studio advances to the name and height preamble');
-  w.run("draft.wearerName='Alex Kumar';updateValue('height','70')");
+  w.run("draft.wearerName='Alex Kumar';updateBodyValue('height','70')");
   w.run('measureNext()');
   assert.equal(w.run('draft.step'),2,'a completed preamble advances to the trousers fields');
 
-  // Exactly the verified trousers set, in order; no jacket field is
-  // asked, and the retired inseam, outseam and second waist are not.
+  // Exactly the version 3 trousers set, in order; no jacket field
+  // is asked, and the version 2 names are gone.
   const fieldsHtml=w.run('measure()');
-  const order=['pantsLength','waist','seat','frontRise','backRise','thigh','knee','legOpening'];
-  assert.deepEqual(fieldOrder(fieldsHtml,order).slice().sort((a,b)=>a-b),fieldOrder(fieldsHtml,order),'the trouser fields render in the verified order');
+  const order=['outseam','trouserWaist','seat','frontRise','backRise','thigh','knee','bottom','inseam','rise','crotch'];
+  assert.deepEqual(fieldOrder(fieldsHtml,order).slice().sort((a,b)=>a-b),fieldOrder(fieldsHtml,order),'the trouser fields render in the version 3 order');
   for(const id of order)assert.ok(fieldsHtml.includes('measureInput-'+id),'the trousers flow asks for '+id);
-  assert.equal(inputCount(fieldsHtml),8,'the trousers step asks for exactly 8 measurements');
-  for(const id of ['chest','sleeve','shoulder','jacket','bicep','stomach'])assert.ok(!fieldsHtml.includes('measureInput-'+id),'the trousers flow never asks for the jacket field '+id);
-  for(const id of ['inseam','outseam','trouserWaist'])assert.ok(!fieldsHtml.includes('measureInput-'+id),'the trousers flow never asks for the retired '+id);
+  assert.equal(inputCount(fieldsHtml),11,'the trousers step asks for exactly 11 measurements');
+  for(const id of ['chest','sleeve','shoulder','jacket','bicep','stomach'])assert.ok(!fieldsHtml.includes('measureInput-'+id+'"'),'the trousers flow never asks for the jacket field '+id);
+  for(const id of ['pantsLength','legOpening','waist'])assert.ok(!fieldsHtml.includes('measureInput-'+id+'"'),'the trousers flow never asks for the retired '+id);
   assert.ok(fieldsHtml.includes('Your trousers')&&!fieldsHtml.includes('Your jacket'),'the progress shows a trousers step and no jacket step');
   w.run('measureNext()');
   assert.equal(w.run('draft.step'),2,'empty required trouser fields cannot advance');
-  assert.equal(liCount(w.elFor('#measureError').innerHTML),5,'the five required trouser fields are reported together');
-  w.run("updateValue('pantsLength','42');updateValue('waist','34');updateValue('seat','40');updateValue('frontRise','11');updateValue('thigh','24')");
+  assert.equal(liCount(w.elFor('#measureError').innerHTML),8,'the eight required trouser fields are reported together');
+  w.run("updateBodyValue('outseam','42');updateBodyValue('trouserWaist','34');updateBodyValue('seat','40');updateBodyValue('frontRise','11');updateBodyValue('thigh','24');updateBodyValue('inseam','32');updateBodyValue('rise','12');updateBodyValue('crotch','10')");
   w.run('measureNext()');
   assert.equal(w.run('draft.step'),3,'valid trouser values advance to review, optional fields left empty');
 
-  // Review: one Trousers group, the Trouser Fit selector only.
+  // Review: one Trousers group, and no fit selector in version 3.
   const review=w.run('measure()');
   assert.ok(review.includes('>Trousers<'),'the review groups the values under Trousers');
-  assert.ok(review.includes('Trouser Fit')&&!review.includes('Jacket Fit'),'the review carries the trouser fit selector only');
-  assert.equal(w.run('draft.fits.trouserFit'),'Classic Comfort Fit','the trouser fit starts at the benchmark default');
-  w.run("draft.fits.trouserFit='Straight Fit';saveDraft()");
+  assert.ok(!review.includes('Trouser Fit')&&!review.includes('Jacket Fit'),'the version 3 review carries no fit selector');
   w.elFor('#confirmMeasures').checked=true;
   w.run('measureNext()');
   assert.equal(w.run('profiles.length'),1,'the Studio saves the trousers profile');
   const p=JSON.parse(w.run('JSON.stringify(profiles[0])'));
-  assert.equal(p.version,2,'the saved profile is version 2');
+  assert.equal(p.version,3,'the saved profile is version 3');
   assert.equal(p.garment,'pants','the saved profile names its garment');
-  assert.deepEqual(p.values,{height:70,pantsLength:42,waist:34,seat:40,frontRise:11,thigh:24},'the saved values are exactly the trousers set plus height');
-  assert.deepEqual(p.fits,{trouserFit:'Straight Fit'},'the saved profile carries the trouser fit selection only');
+  assert.deepEqual(p.values,{height:70,outseam:42,trouserWaist:34,seat:40,frontRise:11,thigh:24,inseam:32,rise:12,crotch:10},'the saved values are exactly the trousers set plus height');
+  assert.ok(!('fits' in p),'the saved profile carries no fit selections');
+  assert.equal(p.gauge.pantsWaist,34,'the gauge pants waist follows the trouser waist');
+  assert.equal(p.gauge.jacketWaist,null,'a trousers profile has no jacket waist in its gauge block');
   assert.equal(w.run("validateProfile(profiles[0],'pants').ok"),true,'the saved profile passes the shared schema validation');
   assert.equal(w.run('stage'),2,'saving returns to the customizer Measurements step');
 
@@ -100,8 +104,8 @@ const LEGACY={id:'legacy-1',name:'Legacy fit',method:'body',unit:'in',wearer:'Me
   w.run('nextConfig()');
   assert.equal(w.bag().length,1,'Add to Bag creates exactly one bag line');
   const lineHtml=w.run('lineHtml(bag[0])');
-  for(const text of ['Height 70 in','Pants length 42 in','Waist 34 in','Seat / hips 40 in','Front rise 11 in','Trouser Fit Straight Fit'])assert.ok(lineHtml.includes(text),'the bag line lists: '+text);
-  assert.ok(!lineHtml.includes('Jacket Fit'),'the bag line never shows a jacket fit for trousers');
+  for(const text of ['Height 70 in','Outseam 42 in','Trouser waist 34 in','Seat / hips 40 in','Front rise 11 in','Inseam 32 in'])assert.ok(lineHtml.includes(text),'the bag line lists: '+text);
+  assert.ok(!lineHtml.includes('Trouser Fit'),'the bag line never shows a fit selector for trousers');
   w.run("location.hash='#checkout';render()");
   w.run(`saveCheckoutForm({__data:{email:'jm2@example.com',firstName:'Alex',lastName:'Kumar',address:'1 Main Street',city:'New York',state:'NY',zip:'10001',country:'US'}})`);
   w.elFor('#orderConsent').checked=true;
@@ -119,30 +123,31 @@ const LEGACY={id:'legacy-1',name:'Legacy fit',method:'body',unit:'in',wearer:'Me
   assert.equal(wq.run('draft.garment'),'pants','the quick add route carries the trousers garment');
   assert.equal(wq.run('garmentMode()'),true,'the quick add route lands in the garment aware studio');
 
-  // Legacy completion offer for trousers: exactly the owed fields,
-  // cancel byte safe, completion writes version 2 in place.
+  // Legacy completion offer for trousers: exactly the fields the
+  // version 3 upgrade still owes, cancel byte safe, completion
+  // writes version 3 in place.
   const wc=makeWorld({profiles:[LEGACY]});
   wc.run('chooseProduct(9)');wc.run('beginDesign(9)');
   wc.run('nextConfig()');wc.run('nextConfig()');
   wc.run("chooseCustomizerProfile('legacy-1')");
   const offerHtml=wc.run('customize()');
   assert.ok(offerHtml.includes('still needs:'),'selecting the legacy profile for trousers offers completion');
-  for(const label of ['Pants length','Front rise','Trouser Fit'])assert.ok(offerHtml.includes(label),'the trousers offer names the missing: '+label);
-  assert.deepEqual(JSON.parse(wc.run("JSON.stringify(missingForCompletion(profiles[0],'pants'))")),['wearerName','height','pantsLength','frontRise','trouserFit'],'the trousers owed fields are exactly the schema completion list');
+  for(const label of ['Outseam','Front rise','Inseam','Rise','Crotch depth'])assert.ok(offerHtml.includes(label),'the trousers offer names the missing: '+label);
+  assert.deepEqual(JSON.parse(wc.run("JSON.stringify(missingForCompletion(profiles[0],'pants'))")),['wearerName','height','outseam','frontRise','inseam','rise','crotch'],'the trousers owed fields are exactly the version 3 completion list');
   const before=wc.store.get('suits-profiles');
   wc.run("startProfileCompletion('legacy-1')");
-  assert.equal(wc.run('draft.values.waist'),34,'the merged waist is carried from the legacy trouser waist');
+  assert.equal(wc.run('draft.values.trouserWaist'),34,'the merged waist lands on the trouser waist');
   wc.run('cancelCompletion()');
   assert.equal(wc.store.get('suits-profiles'),before,'cancelling leaves the stored legacy profile byte identical');
   wc.run("startProfileCompletion('legacy-1')");
   wc.run('measureNext()');
-  wc.run("draft.wearerName='Sam';updateValue('height','71')");
+  wc.run("draft.wearerName='Sam';updateBodyValue('height','71')");
   wc.run('measureNext()');
   assert.equal(wc.run('draft.step'),2,'the trousers completion advances to the trousers fields');
   wc.run('measureNext()');
   assert.equal(wc.run('draft.step'),2,'the owed trouser fields still block');
-  assert.equal(liCount(wc.elFor('#measureError').innerHTML),2,'exactly the two owed trouser fields are reported');
-  wc.run("updateValue('pantsLength','43');updateValue('frontRise','11')");
+  assert.equal(liCount(wc.elFor('#measureError').innerHTML),5,'exactly the five owed trouser fields are reported');
+  wc.run("updateBodyValue('outseam','43');updateBodyValue('frontRise','11');updateBodyValue('inseam','32');updateBodyValue('rise','12');updateBodyValue('crotch','10')");
   wc.run('measureNext()');
   assert.equal(wc.run('draft.step'),3,'the completed values advance to review');
   wc.elFor('#confirmMeasures').checked=true;
@@ -150,19 +155,22 @@ const LEGACY={id:'legacy-1',name:'Legacy fit',method:'body',unit:'in',wearer:'Me
   assert.equal(wc.run('profiles.length'),1,'completion saves in place, no duplicate profile');
   const cp=JSON.parse(wc.run('JSON.stringify(profiles[0])'));
   assert.equal(cp.id,'legacy-1','the completed profile keeps its id');
-  assert.equal(cp.version,2,'the completed trousers profile is version 2');
+  assert.equal(cp.version,3,'the completed trousers profile is version 3');
   assert.equal(cp.garment,'pants','the completed profile names the trousers garment');
-  assert.equal(cp.values.waist,34,'the merged waist is the legacy trouser waist, as the migration rules');
-  assert.equal(cp.values.pantsLength,43,'the newly measured pants length is stored');
+  assert.equal(cp.values.trouserWaist,34,'the trouser waist is the legacy trouser waist, as the upgrade rules');
+  assert.equal(cp.values.outseam,43,'the newly measured outseam is stored');
   assert.ok(!('chest' in cp.values),'the completed trousers values carry no jacket fields');
   assert.equal(wc.run("validateProfile(profiles[0],'pants').ok"),true,'the completed profile passes the shared schema validation');
-  console.log('J-M2a passed: trousers are measured with exactly the verified 8 field set and the Trouser Fit selector, saved as a version 2 profile through bag and demo order, quick add routes into measuring, and the legacy completion offer covers trousers with byte safe cancel.');
+  console.log('J-M2a passed: trousers are measured with exactly the version 3 trousers set, saved as a version 3 profile through bag and demo order, quick add routes into measuring, and the legacy completion offer covers trousers with byte safe cancel.');
 }
 
 // ---------------------------------------------------------------- J-M2b
-// Waistcoat measuring: exactly the verified 3 fields, all required,
-// no fit selector, saved as a version 2 waistcoat profile. Quick
-// Add and the legacy completion offer cover the waistcoat too.
+// Waistcoat measuring: exactly the version 3 waistcoat set (chest,
+// vest back length, half waist, and the two optional opening
+// measures), the half waist entered as a full waist and stored
+// halved (plan M4), no fit selector, saved as a version 3
+// waistcoat profile. Quick Add and the legacy completion offer
+// cover the waistcoat too.
 {
   const w=makeWorld();
   w.run('chooseProduct(8)');w.run('beginDesign(8)');
@@ -174,44 +182,46 @@ const LEGACY={id:'legacy-1',name:'Legacy fit',method:'body',unit:'in',wearer:'Me
   assert.ok(/^Waistcoat_\d{1,2}\/\d{1,2}\/\d{4}$/.test(w.run('draft.name')),'the profile name is prefilled with the category and date: '+w.run('draft.name'));
   assert.equal(w.run('garmentSteps().length'),4,'the waistcoat flow has method, preamble, one fields step and review');
   w.run('measureNext()');
-  w.run("draft.wearerName='Alex Kumar';updateValue('height','70')");
+  w.run("draft.wearerName='Alex Kumar';updateBodyValue('height','70')");
   w.run('measureNext()');
   assert.equal(w.run('draft.step'),2,'a completed preamble advances to the waistcoat fields');
 
   const fieldsHtml=w.run('measure()');
-  const order=['vestLength','chest','stomach'];
-  assert.deepEqual(fieldOrder(fieldsHtml,order).slice().sort((a,b)=>a-b),fieldOrder(fieldsHtml,order),'the waistcoat fields render in the verified order');
-  assert.equal(inputCount(fieldsHtml),3,'the waistcoat step asks for exactly 3 measurements');
+  const order=['chest','vestBackLength','halfWaist','opening','openingAB'];
+  assert.deepEqual(fieldOrder(fieldsHtml,order).slice().sort((a,b)=>a-b),fieldOrder(fieldsHtml,order),'the waistcoat fields render in the version 3 order');
+  assert.equal(inputCount(fieldsHtml),5,'the waistcoat step asks for exactly 5 measurements');
   for(const id of order)assert.ok(fieldsHtml.includes('measureInput-'+id),'the waistcoat flow asks for '+id);
-  for(const id of ['waist','seat','sleeve','shoulder','jacket','bicep'])assert.ok(!fieldsHtml.includes('measureInput-'+id),'the waistcoat flow never asks for '+id);
+  for(const id of ['waist','seat','sleeve','shoulder','jacket','bicep','stomach','vestLength'])assert.ok(!fieldsHtml.includes('measureInput-'+id+'"'),'the waistcoat flow never asks for '+id);
   assert.ok(fieldsHtml.includes('Your waistcoat'),'the progress shows a waistcoat step');
-  // Package M9 supersedes the highlighted figure for this field:
-  // vest length is a diagram style field, so the step now opens
-  // on its per field line diagram instead of the studio figure.
-  assert.ok(fieldsHtml.includes('Line diagram showing the vest length measurement'),'the step opens on the vest length line diagram drawn for this field (package M9)');
+  assert.ok(fieldsHtml.includes('assets/measure/chest.webp'),'the step opens on the chest photograph, the first field of the set (package M9)');
   w.run('measureNext()');
   assert.equal(w.run('draft.step'),2,'empty waistcoat fields cannot advance');
-  assert.equal(liCount(w.elFor('#measureError').innerHTML),3,'all three waistcoat fields are required and reported together');
-  w.run("updateValue('vestLength','24');updateValue('chest','40');updateValue('stomach','34')");
+  assert.equal(liCount(w.elFor('#measureError').innerHTML),3,'the three required waistcoat fields are reported together');
+  w.run("updateBodyValue('chest','40');updateBodyValue('vestBackLength','24')");
+  // The half waist: the shopper enters their full waist and the
+  // profile stores half of it, as the field label states (M4).
+  w.run("updateHalfWaist('68')");
+  assert.equal(w.run('draft.values.halfWaist'),34,'the entered full waist is stored halved');
   w.run('measureNext()');
   assert.equal(w.run('draft.step'),3,'valid waistcoat values advance to review');
 
   const review=w.run('measure()');
   assert.ok(review.includes('>Waistcoat<'),'the review groups the values under Waistcoat');
-  assert.ok(!review.includes('Jacket Fit')&&!review.includes('Trouser Fit'),'the waistcoat review carries no fit selector, as the verified form has none');
+  assert.ok(!review.includes('Jacket Fit')&&!review.includes('Trouser Fit'),'the waistcoat review carries no fit selector');
   w.elFor('#confirmMeasures').checked=true;
   w.run('measureNext()');
   const p=JSON.parse(w.run('JSON.stringify(profiles[0])'));
-  assert.equal(p.version,2,'the waistcoat profile is version 2');
+  assert.equal(p.version,3,'the waistcoat profile is version 3');
   assert.equal(p.garment,'waistcoat','the waistcoat profile names its garment');
-  assert.deepEqual(p.values,{height:70,vestLength:24,chest:40,stomach:34},'the saved values are exactly the waistcoat set plus height');
-  assert.deepEqual(p.fits,{},'the waistcoat profile carries no fit selections');
+  assert.deepEqual(p.values,{height:70,chest:40,vestBackLength:24,halfWaist:34},'the saved values are exactly the waistcoat set plus height, the half waist stored halved');
+  assert.ok(!('fits' in p),'the waistcoat profile carries no fit selections');
+  assert.equal(p.gauge.chest,40,'the gauge block copies the chest');
   assert.equal(w.run("validateProfile(profiles[0],'waistcoat').ok"),true,'the waistcoat profile passes the shared schema validation');
   w.elFor('#profileSelect').value=p.id;
   w.run('nextConfig()');
   assert.equal(w.bag().length,1,'the waistcoat is bagged with its profile');
   const lineHtml=w.run('lineHtml(bag[0])');
-  for(const text of ['Vest length 24 in','Chest 40 in','Stomach 34 in'])assert.ok(lineHtml.includes(text),'the bag line lists: '+text);
+  for(const text of ['Vest back length 24 in','Chest 40 in','Waist (half waist) 34 in'])assert.ok(lineHtml.includes(text),'the bag line lists: '+text);
 
   // Quick Add for a waistcoat with no profile routes into measuring.
   const wq=makeWorld();
@@ -228,13 +238,13 @@ const LEGACY={id:'legacy-1',name:'Legacy fit',method:'body',unit:'in',wearer:'Me
   wc.run("chooseCustomizerProfile('legacy-1')");
   const offerHtml=wc.run('customize()');
   assert.ok(offerHtml.includes('still needs:'),'selecting the legacy profile for a waistcoat offers completion');
-  for(const label of ['Vest length','Stomach'])assert.ok(offerHtml.includes(label),'the waistcoat offer names the missing: '+label);
-  assert.deepEqual(JSON.parse(wc.run("JSON.stringify(missingForCompletion(profiles[0],'waistcoat'))")),['wearerName','height','vestLength','stomach'],'the waistcoat owed fields are exactly the schema completion list');
+  for(const label of ['Vest back length','Waist (half waist)'])assert.ok(offerHtml.includes(label),'the waistcoat offer names the missing: '+label);
+  assert.deepEqual(JSON.parse(wc.run("JSON.stringify(missingForCompletion(profiles[0],'waistcoat'))")),['wearerName','height','vestBackLength','halfWaist'],'the waistcoat owed fields are exactly the version 3 completion list');
   const before=wc.store.get('suits-profiles');
   wc.run("startProfileCompletion('legacy-1')");
   wc.run('cancelCompletion()');
   assert.equal(wc.store.get('suits-profiles'),before,'cancelling leaves the stored legacy profile byte identical');
-  console.log('J-M2b passed: a waistcoat is measured with exactly the verified 3 fields, all required, no fit selector, saved as a version 2 profile, and quick add plus the legacy completion offer cover the waistcoat.');
+  console.log('J-M2b passed: a waistcoat is measured with exactly the version 3 waistcoat set, the half waist entered whole and stored halved, no fit selector, saved as a version 3 profile, and quick add plus the legacy completion offer cover the waistcoat.');
 }
 
 // ---------------------------------------------------------------- J-M2c

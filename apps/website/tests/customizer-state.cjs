@@ -77,7 +77,13 @@ assert.equal(shirtConfig.lapel,'','a shirt starts with no lapel');
 assert.equal(shirtConfig.closure,'Spread collar','a shirt starts with its own default closure');
 assert.equal(shirtConfig.lining,'Tonal','a shirt starts from the default lining');
 assert.equal(shirtConfig.monogram,'','the suit monogram does not follow the shopper into a shirt');
-assert.ok(!('optionModel' in shirtConfig)&&!('lapelType' in shirtConfig),'no aligned suit slot follows the shopper into a shirt');
+assert.ok(!('lapelType' in shirtConfig)&&!('underCollarFabric' in shirtConfig),'no aligned suit slot follows the shopper into a shirt');
+// Since J5 a new shirt design starts on the aligned shirt model: the
+// optionModel marker and the JPOS shirt defaults, with the collar at
+// the JPOS Spread value the legacy Spread collar maps to.
+assert.equal(shirtConfig.optionModel,3,'a shirt starts on the aligned option model');
+assert.equal(shirtConfig.shirtCollarType,'Spread','a shirt starts at the JPOS Spread collar');
+assert.equal(shirtConfig.shirtFrontStyle,'Placket','a shirt starts with the standard placket front');
 
 // Bag Edit still restores the saved configuration of product 0 exactly,
 // even though the current draft belongs to another product.

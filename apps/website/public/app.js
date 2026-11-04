@@ -53,8 +53,13 @@ const VEST_VALUES=['Classic vest','Classic lapel vest','Double breasted vest','D
 // second pair included, is unpriced in this package (shown as
 // Included) until plan input 1, the upcharge data extract, prices
 // them; no retired suits.me price is carried over to a removed or
-// renamed option, and no price is invented.
-const OPTION_PRICES={underCollarFabric:{'Milanese Single Color':25,'Milanese Multi-Color':40}};
+// renamed option, and no price is invented. J5 adds the shirt front
+// style: the hidden placket at $10 is the only JPOS shirt price
+// attested in code, so it is the only aligned shirt option priced in
+// this package; every other aligned shirt option stays unpriced
+// (shown as Included) until plan input 1, the upcharge_shirts data,
+// prices it.
+const OPTION_PRICES={underCollarFabric:{'Milanese Single Color':25,'Milanese Multi-Color':40},shirtFrontStyle:{'Hidden Placket':10}};
 // The retired Wave 3 price tables, preserved verbatim for legacy
 // items only (see the legacy model note above). J4 retires the
 // trousers side tables into this ledger the same way.
@@ -213,6 +218,80 @@ function alignedPants2Choice(key,values,labels={}){const cur=(config.pants2||{})
 function alignedPants2Group(title,key,values,labels={}){const cur=(config.pants2||{})[key];return `<div class="option-title"><span>${title}</span>${cur!==undefined?`<span class="subtle">${esc(labels[cur]??cur)}</span>`:''}</div>${alignedPants2Choice(key,values,labels)}`}
 function alignedPants2Groups(){return alignedPants2Group('Pleats','pleats',PLEAT_VALUES,PLEAT_LABELS)+alignedPants2Group('Side pockets','sidePockets',SIDE_POCKET_VALUES,SIDE_POCKET_LABELS)+alignedPants2Group('Back pocket closure','backPocketClosure',BACK_POCKET_CLOSURE_VALUES,BACK_POCKET_CLOSURE_LABELS)+alignedPants2Group('Trouser cuff','trouserCuff',TROUSER_CUFF_VALUES,TROUSER_CUFF_LABELS)+alignedPants2Group('Front tab','frontTab',FRONT_TAB_VALUES,FRONT_TAB_LABELS)+alignedPants2Group('Leg break','legBreak',LEG_BREAK_VALUES,LEG_BREAK_LABELS)+alignedPants2Group('Watch pocket','watchPocket',WATCH_POCKET_VALUES,WATCH_POCKET_LABELS)+alignedPants2Group('Suspender buttons','suspenderButtons',YES_NO_VALUES)+alignedPants2Group('Elastic side tabs','elasticSideTabs',ELASTIC_SIDE_TAB_VALUES,ELASTIC_SIDE_TAB_LABELS)+alignedPants2Group('Tunnel belt loops','tunnelBeltLoops',YES_NO_VALUES,TUNNEL_BELT_LOOP_LABELS)}
 function setPants2Option(k,v){if(!config.pants2||typeof config.pants2!=='object')config.pants2=alignedSecondPairDefaults();config.pants2[k]=v;saveConfig();render(false)}
+// The aligned shirt model (JPOS consistency wave, package J5, plan
+// section 3 shirts and j0-mapping-design.md section C.4): a shirt
+// design is on the aligned model when it carries any of the
+// distinctly aligned shirt keys below. Detection is independent of
+// the jacket model and the trousers model, the same way the aligned
+// trousers detection is, so a pre-alignment shirt item (its collar
+// in the closure slot, a monogram text, nothing else) always keeps
+// the legacy path: it renders, restores and prices exactly as
+// before. The value sets are the JPOS shirt form's own (research
+// section 1.5): six collar types with the legacy Spread collar kept
+// as the JPOS Spread value and the legacy Point collar retired with
+// no JPOS counterpart, nine cuff styles, pocket style and pocket
+// position as separate groups, the numbered button colors with the
+// two mother of pearl variants, monogram placement and font, and
+// the collar and cuff stitching with its thread color. Buyer
+// language labels come first, the tailor term kept as the value.
+const ALIGNED_SHIRT_KEYS=['shirtBodyStyle','shirtFrontStyle','shirtCollarType','shirtCollarHeight','shirtSleeveStyle','shirtCuffStyle','shirtBackStyle','shirtPocketStyle','shirtPocketPosition','shirtButtons','shirtButtonHoleThread','shirtMonogramPlacement','shirtMonogramFont','shirtStitching','shirtThreadColor'];
+function alignedShirt(x){return!!x&&ALIGNED_SHIRT_KEYS.some(k=>x[k]!==undefined)}
+const SHIRT_BODY_STYLE_VALUES=['Regular','Slim','Ultra Slim','Slim 2'];
+const SHIRT_BODY_STYLE_LABELS={Regular:'Regular fit',Slim:'Slim fit','Ultra Slim':'Ultra slim fit','Slim 2':'Slim 2, near fit'};
+const SHIRT_FRONT_STYLE_VALUES=['Placket','Plain No Stitch','Hidden Placket'];
+const SHIRT_FRONT_STYLE_LABELS={Placket:'Standard placket front','Plain No Stitch':'Plain front, no placket','Hidden Placket':'Hidden placket, buttons covered'};
+const SHIRT_COLLAR_TYPE_VALUES=['Classic','Button down','Business','Spread','Full Spread','Cut away'];
+const SHIRT_COLLAR_TYPE_LABELS={Classic:'Classic collar','Button down':'Button-down collar',Business:'Business collar',Spread:'Spread collar','Full Spread':'Full spread collar','Cut away':'Cutaway collar'};
+// Collar height ladders (research section 1.5): the dedicated shirt
+// builder page (dressshirts.asp) attests Low 1 3/8 in, Standard
+// 1 5/8 in, High 1 7/8 in, while the general style page (styles.asp)
+// attests a lower ladder, Low 1 1/8 in, Standard 1 3/8 in, High
+// 1 5/8 in. The mapping does not rule on which ladder governs which
+// collar family, so the stored value is the named height and the
+// buyer facing inches use the dressshirts.asp ladder: that page is
+// the one a shirt order is actually placed through. The styles.asp
+// ladder is recorded here as the untraced variant, not offered.
+const SHIRT_COLLAR_HEIGHT_VALUES=['Low','Standard','High'];
+const SHIRT_COLLAR_HEIGHT_LABELS={Low:'Low, 1 3/8 in',Standard:'Standard, 1 5/8 in',High:'High, 1 7/8 in'};
+const SHIRT_SLEEVE_STYLE_VALUES=['Regular','Straight'];
+const SHIRT_CUFF_STYLE_VALUES=['1Button Round','1Button Mitered','1Button Square','2Button Round','2Button Mitered','2Button Square','French Round','French Mitered','French Square'];
+const SHIRT_CUFF_STYLE_LABELS={'1Button Round':'One button, rounded cuff','1Button Mitered':'One button, angled (mitered) cuff','1Button Square':'One button, square cuff','2Button Round':'Two buttons, rounded cuff','2Button Mitered':'Two buttons, angled (mitered) cuff','2Button Square':'Two buttons, square cuff','French Round':'French cuff, rounded','French Mitered':'French cuff, angled (mitered)','French Square':'French cuff, square'};
+const SHIRT_BACK_STYLE_VALUES=['Side Pleat','Center Pleat','No Pleat'];
+const SHIRT_BACK_STYLE_LABELS={'Side Pleat':'Side pleats','Center Pleat':'Center pleat','No Pleat':'No pleats, plain back'};
+const SHIRT_POCKET_STYLE_VALUES=['No Pocket','V-Shaped','Mitered','Rounded'];
+const SHIRT_POCKET_STYLE_LABELS={'No Pocket':'No chest pocket','V-Shaped':'V-shaped pocket',Mitered:'Mitered pocket',Rounded:'Rounded pocket'};
+const SHIRT_POCKET_POSITION_VALUES=['None','Left','Right','Both'];
+const SHIRT_POCKET_POSITION_LABELS={None:'No pocket',Left:'Left chest',Right:'Right chest',Both:'Both sides'};
+// The button colors carry their JPOS form numbers (1 White, 2 Ivory,
+// 3 Grey, 4 Brown, 5 Blue) and the mother of pearl variants keep the
+// form's own names, Mop1white and Mop2Grey.
+const SHIRT_BUTTON_VALUES=['Match','White 1','Ivory 2','Grey 3','Brown 4','Blue 5','Mop1white','Mop2Grey'];
+const SHIRT_BUTTON_LABELS={Match:'Match the shirt','White 1':'White (No. 1)','Ivory 2':'Ivory (No. 2)','Grey 3':'Grey (No. 3)','Brown 4':'Brown (No. 4)','Blue 5':'Blue (No. 5)',Mop1white:'Mother of pearl, white',Mop2Grey:'Mother of pearl, grey'};
+// Button hole thread and stitching thread color: the JPOS form
+// offers Match or a named color, but the named color lists were
+// never traced in the research, so only the attested values are
+// offered (Match for the button holes; None or Match for the
+// stitching thread). No thread color name is invented; the named
+// colors arrive with the shop's thread data.
+const SHIRT_BUTTON_HOLE_THREAD_VALUES=['Match'];
+const SHIRT_BUTTON_HOLE_THREAD_LABELS={Match:'Match the buttons'};
+const SHIRT_STITCHING_VALUES=['1/4 Normal Stitch','1/16 Edge Stitch'];
+const SHIRT_STITCHING_LABELS={'1/4 Normal Stitch':'Normal stitch, 1/4 in from the edge','1/16 Edge Stitch':'Edge stitch, 1/16 in from the edge'};
+const SHIRT_THREAD_COLOR_VALUES=['None','Match'];
+const SHIRT_THREAD_COLOR_LABELS={None:'No contrast thread',Match:'Match the shirt'};
+const SHIRT_MONOGRAM_PLACEMENT_VALUES=['No','Left Cuff','Right Cuff','Pocket','Left Body'];
+const SHIRT_MONOGRAM_PLACEMENT_LABELS={No:'No monogram','Left Cuff':'Left cuff','Right Cuff':'Right cuff',Pocket:'On the pocket','Left Body':'Left body'};
+const SHIRT_MONOGRAM_FONT_VALUES=['None','Regular','Script','Old English'];
+// New shirt designs start on the aligned model at the JPOS form's
+// first listed value in each group, with the collar at Spread: that
+// is the collar the shirt is pictured and sold with today, and the
+// mapping keeps the legacy Spread collar as the JPOS Spread value.
+// Every group stays changeable; nothing is preselected beyond the
+// form's own starting values, the same rule as the jacket defaults.
+function alignedShirtDefaults(){return{shirtBodyStyle:'Regular',shirtFrontStyle:'Placket',shirtCollarType:'Spread',shirtCollarHeight:'Standard',shirtSleeveStyle:'Regular',shirtCuffStyle:'1Button Round',shirtBackStyle:'Side Pleat',shirtPocketStyle:'No Pocket',shirtPocketPosition:'None',shirtButtons:'Match',shirtButtonHoleThread:'Match',shirtMonogramPlacement:'No',shirtMonogramFont:'None',shirtStitching:'1/4 Normal Stitch',shirtThreadColor:'None'}}
+function alignedShirtGroups(){return alignedGroup('Body style','shirtBodyStyle',SHIRT_BODY_STYLE_VALUES,SHIRT_BODY_STYLE_LABELS)+alignedGroup('Front style','shirtFrontStyle',SHIRT_FRONT_STYLE_VALUES,SHIRT_FRONT_STYLE_LABELS)+alignedGroup('Collar','shirtCollarType',SHIRT_COLLAR_TYPE_VALUES,SHIRT_COLLAR_TYPE_LABELS)+alignedGroup('Collar height','shirtCollarHeight',SHIRT_COLLAR_HEIGHT_VALUES,SHIRT_COLLAR_HEIGHT_LABELS)+alignedGroup('Sleeve style','shirtSleeveStyle',SHIRT_SLEEVE_STYLE_VALUES)+alignedGroup('Cuff style','shirtCuffStyle',SHIRT_CUFF_STYLE_VALUES,SHIRT_CUFF_STYLE_LABELS)+alignedGroup('Back style','shirtBackStyle',SHIRT_BACK_STYLE_VALUES,SHIRT_BACK_STYLE_LABELS)+alignedGroup('Pocket style','shirtPocketStyle',SHIRT_POCKET_STYLE_VALUES,SHIRT_POCKET_STYLE_LABELS)+alignedGroup('Pocket position','shirtPocketPosition',SHIRT_POCKET_POSITION_VALUES,SHIRT_POCKET_POSITION_LABELS)+alignedGroup('Buttons','shirtButtons',SHIRT_BUTTON_VALUES,SHIRT_BUTTON_LABELS)+alignedGroup('Button hole thread','shirtButtonHoleThread',SHIRT_BUTTON_HOLE_THREAD_VALUES,SHIRT_BUTTON_HOLE_THREAD_LABELS)}
+function alignedShirtMonogramGroups(){return alignedGroup('Monogram placement','shirtMonogramPlacement',SHIRT_MONOGRAM_PLACEMENT_VALUES,SHIRT_MONOGRAM_PLACEMENT_LABELS)+alignedGroup('Monogram font','shirtMonogramFont',SHIRT_MONOGRAM_FONT_VALUES)}
+function alignedShirtStitchGroups(){return alignedGroup('Collar and cuff stitching','shirtStitching',SHIRT_STITCHING_VALUES,SHIRT_STITCHING_LABELS)+alignedGroup('Stitching thread color','shirtThreadColor',SHIRT_THREAD_COLOR_VALUES,SHIRT_THREAD_COLOR_LABELS)}
 function lapelSizeValues(type){return LAPEL_SIZE_VALUES[type]||LAPEL_SIZE_VALUES.Notch}
 function lapelSizeDefault(type){return type==='Shawl'?'Standard-Straight':'Standard'}
 function lapelSizeLabel(type,size){return (LAPEL_SIZE_LABELS[type]||{})[size]||size}
@@ -236,6 +315,12 @@ function optionModifiers(x){const p=x?products[x.product]:null;let total=0;const
   // including additional pants on pre-alignment suits.
   if(p&&['suit','pants'].includes(p.kind)&&!alignedTrousers(x)){for(const [key] of TROUSER_DETAIL_TOGGLES)total+=legacyOptionPrice(key,x?.[key]);total+=legacyOptionPrice('sideTabs',x?.sideTabs)+legacyOptionPrice('pantsLining',x?.pantsLining);if(p.kind==='suit')total+=legacyOptionPrice('pleats',x?.pleats)}
   if(p&&p.kind==='suit'&&!alignedTrousers(x))total+=legacyOptionPrice('additionalPants',x?.additionalPants);
+  // Shirt pricing (J5): an item on the aligned shirt model charges
+  // only the hidden placket, the one JPOS shirt price attested in
+  // code; every other aligned shirt option is unpriced until plan
+  // input 1, the upcharge_shirts data, prices it. Legacy shirts
+  // carry no priced options, exactly as before.
+  if(p&&p.kind==='shirt'&&alignedShirt(x))total+=optionPrice('shirtFrontStyle',x?.shirtFrontStyle);
   return total}
 const products=[{name:'The Everyday Navy',fabric:'Wool',color:'Navy',price:399,img:'model-navy.webp',tag:'THE EVERYDAY ESSENTIAL'},{name:'The Modern Charcoal',fabric:'Wool',color:'Charcoal',price:449,img:'model-charcoal.webp',tag:'A CONSIDERED CLASSIC'},{name:'The Signature Blue',fabric:'Wool',color:'Blue',price:499,img:'model-blue.webp',tag:'YOUR NEXT SIGNATURE'},{name:'The Occasion Suit',fabric:'Linen',color:'Sand',price:479,img:'model-sand.webp',tag:'FOR THE MOMENT'}];
 let filter='All suits',sort='featured',config=read('suits-config',{product:0,fabric:'Navy',lining:'Tonal',monogram:'',...alignedOptionDefaults(),...alignedTrouserDefaults(),secondPairPants:'No'}),stage=0;

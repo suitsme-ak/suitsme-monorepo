@@ -17,13 +17,16 @@ const deliveryEstimateText=()=>'Delivery in about '+DELIVERY_ESTIMATE_WEEKS+' '+
 // here only. A choice with no entry costs nothing and shows as Included.
 // The server order sanitizer mirrors these figures so a placed order is
 // priced the same way.
-// Jacket finishes (Wave 3 package 3.3): the Lapel and Lining groups grow
-// to the full captured choice lists, priced from the same table, and
-// Buttons, Lining type and Elbow patches join the Personalize step. The
-// lining colorways are held in tier lists so the group renders in tier
-// order and the price table reads from the same source. Stored lapel
-// values stay short (Notch, Peak, Shawl and the new variants); the width
-// lives in the display label only.
+// LEGACY option model (Wave 3 packages 3.3 to 3.5), kept for one job
+// only since J3: items, drafts and orders created before the JPOS
+// alignment still carry these values, and they must keep rendering,
+// restoring in bag Edit and pricing exactly as they did. New suit and
+// jacket designs use the aligned model defined further below; nothing
+// in the aligned model reads these tables. The lining colorways are
+// held in tier lists so the legacy group renders in tier order and the
+// legacy price table reads from the same source. Stored lapel values
+// stay short (Notch, Peak, Shawl and the variants); the width lives in
+// the display label only.
 const LAPEL_VALUES=['Notch','Slim notch','Wide notch','Peak','Wide peak','Classic wider notch','Classic wider peak','Shawl'];
 const LAPEL_LABELS={Notch:'Notch 3-3.2in','Slim notch':'Slim notch 2.5in','Wide notch':'Wide notch 3.75in',Peak:'Peak 3-3.2in','Wide peak':'Wide peak 3.75in','Classic wider notch':'Classic wider notch 4.75in','Classic wider peak':'Classic wider peak 4.75in',Shawl:'Shawl'};
 const LINING_PLAIN=['Red','Steel gray','Golden beige','Purple','Wine','Turkish blue','Electric blue','Green','Jade green'];
@@ -34,15 +37,26 @@ const LINING_VALUES=['Default',...LINING_PLAIN,...LINING_PAISLEY,...LINING_BEMBE
 const BUTTON_VALUES=['Default fibre','Faux horn beige','Faux horn brown','Faux horn dark tan','Horn brown','Horn solid black','Horn royal black','Italian horn black','Horn mont black','Italian horn dark brown','Corozo beige','Corozo black','Corozo tan','Corozo russet','Corozo irish','Corozo scot brown','Corozo ivory','Vintage brown leather','Matt gold metal','Victorian lion brass','Venetian mask brass','Imperial lion brass','Stallion heritage brass','Black tiger'];
 const ELBOW_PATCH_VALUES=['None','Black leather','Brown leather','Tan brown leather','Spanish brown leather','Terrain brown leather','Scottish brown leather','Hunter tan leather','Red leather','White leather','Off white leather','Brazil green leather','Deep blue leather','Prussian blue leather','Light beige leather','Gray leather','Sherpa gray leather','Yellow leather','Dark blue suede','Light brown suede','Caramel brown suede'];
 // Priced extras, the tuxedo tier and the extra monogram fields (Wave 3
-// package 3.4): suits gain a vest in six styles with an optional fabric
-// back, additional pants, and a square and tie set; suits and jackets
-// gain the tuxedo tier and the square and tie set. The inside monogram
-// grows a second line and a collar monogram joins it; both text fields
-// price from TEXT_FIELD_PRICES when filled, because a text field has no
-// choice value for the table to key on. As in the earlier packages, the
-// new slots stay absent from config until the shopper chooses them.
+// package 3.4), now legacy: suits gained a vest in six styles with an
+// optional fabric back, additional pants, and a square and tie set;
+// suits and jackets gained the tuxedo tier; the inside monogram grew a
+// second line and a collar monogram joined it, both text fields priced
+// from TEXT_FIELD_PRICES when filled. All of that survives only in
+// LEGACY_OPTION_PRICES below, for pre-alignment items.
 const VEST_VALUES=['Classic vest','Classic lapel vest','Double breasted vest','Double breasted lapel vest','Shawl lapel vest','Shawl lapel double breasted vest'];
-const OPTION_PRICES={lapel:{'Peak':10,'Wide peak':10,'Classic wider peak':10},lining:Object.fromEntries([...LINING_PLAIN.map(v=>[v,15]),...LINING_PAISLEY.map(v=>[v,20]),...LINING_BEMBERG.map(v=>[v,30]),...LINING_ITALIAN.map(v=>[v,109])]),liningType:{'Half lining':20,'No lining (unstructured)':40},buttons:{'Horn solid black':7,'Horn royal black':7,'Italian horn black':7,'Horn mont black':7,'Italian horn dark brown':7,'Corozo beige':4,'Corozo black':4,'Corozo tan':4,'Corozo russet':4,'Corozo irish':4,'Corozo scot brown':4,'Corozo ivory':5,'Vintage brown leather':9,'Matt gold metal':9,'Victorian lion brass':75,'Venetian mask brass':75,'Imperial lion brass':75,'Stallion heritage brass':75,'Black tiger':75},elbowPatches:Object.fromEntries(ELBOW_PATCH_VALUES.slice(1).map(v=>[v,15])),pocketAccent:{'Ticket pocket':5,'Slant pocket':5,'Patch pocket':15},pantsLining:{'Front lining':5,'Front and back lining':10},pleats:{'Forward single pleat':5,'Forward 2 pleats':5},tier:{'Make it a tuxedo':50},vest:Object.fromEntries(VEST_VALUES.map(v=>[v,99])),vestFabricBack:{'Fabric back':20},additionalPants:{'Yes':140},squareAndTie:{'Yes':39},workingCuffButtons:{'Yes':5},pickStitch:{'Yes':10},gauntletCuff:{'Yes':15},naturalShoulders:{'Yes':20},boatPocket:{'Yes':25},milaneseButtonhole:{'Yes':75},pantsCuff:{'Yes':5},suspenderButtons:{'Yes':2},coinPocket:{'Yes':5},sideTabs:{'Classic side tabs':12,'Back elastic':12,'Side adjusters':12,'Side elasticated tabs':17,'Milan side tabs':20,'Venice side tabs':20}};
+// The current storefront price table. Since J3 it holds only prices
+// that are attested for the options the current model offers: the
+// Milanese under collar fabrics ($25 and $40, the only JPOS option
+// prices attested in code) and the trousers side tables, which stay
+// live until J4 aligns the trousers groups. Every other aligned suit
+// and jacket option is unpriced in this package (shown without a
+// price, treated as Included) until plan input 1, the upcharge data
+// extract, prices them; no retired suits.me price is carried over to
+// a removed or renamed option, and no price is invented.
+const OPTION_PRICES={underCollarFabric:{'Milanese Single Color':25,'Milanese Multi-Color':40},pantsLining:{'Front lining':5,'Front and back lining':10},pleats:{'Forward single pleat':5,'Forward 2 pleats':5},additionalPants:{'Yes':140},pantsCuff:{'Yes':5},suspenderButtons:{'Yes':2},coinPocket:{'Yes':5},sideTabs:{'Classic side tabs':12,'Back elastic':12,'Side adjusters':12,'Side elasticated tabs':17,'Milan side tabs':20,'Venice side tabs':20}};
+// The retired Wave 3 price tables, preserved verbatim for legacy
+// items only (see the legacy model note above).
+const LEGACY_OPTION_PRICES={lapel:{'Peak':10,'Wide peak':10,'Classic wider peak':10},lining:Object.fromEntries([...LINING_PLAIN.map(v=>[v,15]),...LINING_PAISLEY.map(v=>[v,20]),...LINING_BEMBERG.map(v=>[v,30]),...LINING_ITALIAN.map(v=>[v,109])]),liningType:{'Half lining':20,'No lining (unstructured)':40},buttons:{'Horn solid black':7,'Horn royal black':7,'Italian horn black':7,'Horn mont black':7,'Italian horn dark brown':7,'Corozo beige':4,'Corozo black':4,'Corozo tan':4,'Corozo russet':4,'Corozo irish':4,'Corozo scot brown':4,'Corozo ivory':5,'Vintage brown leather':9,'Matt gold metal':9,'Victorian lion brass':75,'Venetian mask brass':75,'Imperial lion brass':75,'Stallion heritage brass':75,'Black tiger':75},elbowPatches:Object.fromEntries(ELBOW_PATCH_VALUES.slice(1).map(v=>[v,15])),pocketAccent:{'Ticket pocket':5,'Slant pocket':5,'Patch pocket':15},tier:{'Make it a tuxedo':50},vest:Object.fromEntries(VEST_VALUES.map(v=>[v,99])),vestFabricBack:{'Fabric back':20},squareAndTie:{'Yes':39},workingCuffButtons:{'Yes':5},pickStitch:{'Yes':10},gauntletCuff:{'Yes':15},naturalShoulders:{'Yes':20},boatPocket:{'Yes':25},milaneseButtonhole:{'Yes':75}};
 const TEXT_FIELD_PRICES={monogram:10,collarMonogram:10};
 const OPTION_DEFAULTS={buttons:'Horn brown',vents:'Single vent',cuffButtons:'Three',pocketAccent:'None',liningType:'Full lining',elbowPatches:'None',pantsLining:'No lining',pocketStyle:'Cross',pleats:'Flat front',backPockets:'2 welted pockets',beltLoops:'Yes',tier:'Regular',vest:'No vest',vestFabricBack:'Matches lining',additionalPants:'No',squareAndTie:'No',workingCuffButtons:'No',pickStitch:'No',gauntletCuff:'No',naturalShoulders:'No',boatPocket:'No',milaneseButtonhole:'No',pantsCuff:'No',suspenderButtons:'No',coinPocket:'No',wideWaistband:'No',sideTabs:'No side tabs',tailorChanges:'Yes, change if required'};
 const JACKET_OPTION_GROUPS=[{key:'buttons',title:'Buttons',values:BUTTON_VALUES},{key:'vents',title:'Vents',values:['Single vent','Double vent','No vents']},{key:'cuffButtons',title:'Jacket cuff buttons',values:['One','Two','Three','Four']},{key:'pocketAccent',title:'Pocket accent',values:['None','Ticket pocket','Slant pocket','Patch pocket']}];
@@ -67,10 +81,113 @@ const JACKET_DETAIL_TOGGLES=[['workingCuffButtons','Working cuff buttons'],['pic
 const TROUSER_DETAIL_TOGGLES=[['pantsCuff','Pants cuff'],['suspenderButtons','Suspender buttons'],['coinPocket','Flap coin pocket'],['wideWaistband','2 inch waistband']];
 const SIDE_TAB_VALUES=['No side tabs','Classic side tabs','Back elastic','Side adjusters','Side elasticated tabs','Milan side tabs','Venice side tabs'];
 const TAILOR_CHANGES_VALUES=['Yes, change if required','No, contact me'];
+// ---------------------------------------------------------------------
+// The JPOS aligned suit and jacket option model (J wave package J3,
+// plan section 2, mapping J0 section C.1 and C.6). Groups, values and
+// defaults follow the shop's JPOS style form: closure with 3-Roll-2
+// and the four double breasted configurations the database holds;
+// lapel type and lapel size as separate groups; waist pocket type and
+// angle separate; ticket pocket; breast pocket type; button style;
+// the five part cuff construction; under collar fabric (where the
+// Milanese choices live in JPOS) with the collar eyelet; vents None,
+// Center, Side (JPOS has no double vent); exterior stitch; French
+// facing; the label program and collar monogram as styles, not priced
+// text fields; the tuxedo facing specification in place of the tier
+// switch; and the vest in a suit on the JPOS vest fields. The shared
+// Fit preference step leaves tailored garments (its work moved to the
+// measurements profile in J1), and the groups the plan removes (named
+// button materials, elbow patches, Gauntlet cuff, Natural shoulders,
+// Italian boat pocket, the Milanese lapel buttonhole, square and tie,
+// tailor changes consent, Pocket accent as a group) exist only in the
+// legacy model above. Every value carries a data-visual key in the
+// renderer so J8 can attach an illustration per value.
+// Lining: the JPOS lining catalog values are not yet available (plan
+// input 3), so the lining group keeps the LINING_VALUES list above as
+// a clearly marked placeholder, unpriced in the aligned model; those
+// values are not JPOS values and are never presented as such.
+const CLOSURE_VALUES=['1-Button','2-Button','3-Button','3-Roll-2','4-Button','2x1 DB','4x2 DB','6x1 DB','6x2 DB','8x2 DB'];
+const CLOSURE_LABELS={'1-Button':'One button','2-Button':'Two buttons','3-Button':'Three buttons','3-Roll-2':'Three roll two','4-Button':'Four buttons','2x1 DB':'Double breasted, 2 by 1','4x2 DB':'Double breasted, 4 by 2','6x1 DB':'Double breasted, 6 by 1','6x2 DB':'Double breasted, 6 by 2','8x2 DB':'Double breasted, 8 by 2'};
+const LAPEL_TYPE_VALUES=['Notch','Peak','DB Peak','Shawl'];
+const LAPEL_TYPE_LABELS={Notch:'Notch lapel',Peak:'Peak lapel','DB Peak':'Double breasted peak lapel',Shawl:'Shawl collar'};
+const LAPEL_SIZE_VALUES={Notch:['Narrow','Standard','Wide'],Peak:['Narrow','Standard','Wide'],'DB Peak':['Narrow','Standard','Wide'],Shawl:['Narrow-Straight','Standard-Straight','Wide-Straight','Narrow-Rounded','Standard-Rounded','Wide-Rounded']};
+// Inch values attested in the JPOS form evidence: the Standard width
+// per lapel type, and the shawl widths (straight attested, rounded
+// stated as matching). Narrow and Wide for the straight lapels carry
+// no inches because none are attested; none are invented.
+const LAPEL_SIZE_LABELS={Notch:{Narrow:'Narrow',Standard:'Standard, 2 7/8 in',Wide:'Wide'},Peak:{Narrow:'Narrow',Standard:'Standard, 3 in',Wide:'Wide'},'DB Peak':{Narrow:'Narrow',Standard:'Standard, 3 1/4 in',Wide:'Wide'},Shawl:{'Narrow-Straight':'Narrow straight, 1 5/8 in','Standard-Straight':'Standard straight, 2 1/8 in','Wide-Straight':'Wide straight, 3 in','Narrow-Rounded':'Narrow rounded, 1 5/8 in','Standard-Rounded':'Standard rounded, 2 1/8 in','Wide-Rounded':'Wide rounded, 3 in'}};
+const BUTTON_STYLE_VALUES=['Matching','Tuxedo Button','Fabric covered'];
+const BUTTON_STYLE_LABELS={Matching:'Matching buttons','Tuxedo Button':'Tuxedo buttons','Fabric covered':'Fabric covered buttons'};
+const ALIGNED_VENT_VALUES=['None','Center','Side'];
+const VENT_LABELS={None:'No vent',Center:'Center vent, single',Side:'Side vents, double'};
+const CUFF_BUTTON_VALUES=['3 Buttons','4 Buttons','5 Buttons','1 Large Button'];
+const CUFF_BUTTON_LABELS={'3 Buttons':'3 buttons','4 Buttons':'4 buttons','5 Buttons':'5 buttons','1 Large Button':'1 large button'};
+const CUFF_BUTTON_TYPE_VALUES=['Regular','Slanting','Regular Combo','Slanting Combo','Regular Kissing','Slanting Kissing'];
+const CUFF_BUTTON_HOLE_VALUES=['Imitation Button Holes','No Button Holes','Functional Options'];
+const CUFF_BUTTON_HOLE_LABELS={'Imitation Button Holes':'Imitation, sewn not cut','No Button Holes':'No button holes','Functional Options':'Working buttonholes'};
+const CUFF_STITCH_TYPE_VALUES=['Default','Bottom 1','Bottom 2','All'];
+const CUFF_STITCH_COLOR_VALUES=['Match'];
+const WAIST_POCKET_TYPE_VALUES=['Flap','Double Besom','Patch','Tall Flap'];
+const WAIST_POCKET_TYPE_LABELS={Flap:'Flap pocket','Double Besom':'Double besom, jetted','Patch':'Patch pocket','Tall Flap':'Tall flap pocket'};
+const WAIST_POCKET_ANGLE_VALUES=['Horizontal','Slanted'];
+const WAIST_POCKET_ANGLE_LABELS={Horizontal:'Straight across',Slanted:'Slanted'};
+const TICKET_POCKET_VALUES=['None','Flap','Single Besom','Double Besom','Tall Flap'];
+const TICKET_POCKET_LABELS={None:'No ticket pocket',Flap:'Flap ticket pocket','Single Besom':'Single besom ticket pocket','Double Besom':'Double besom ticket pocket','Tall Flap':'Tall flap ticket pocket'};
+const BREAST_POCKET_TYPE_VALUES=['Welt','Patch','None'];
+const BREAST_POCKET_TYPE_LABELS={Welt:'Welt pocket',Patch:'Patch pocket',None:'No breast pocket'};
+const UNDER_COLLAR_VALUES=['Match','Milanese Single Color','Milanese Multi-Color'];
+const UNDER_COLLAR_LABELS={Match:'Matches the jacket','Milanese Single Color':'Milanese felt, one color','Milanese Multi-Color':'Milanese felt, multiple colors'};
+const COLLAR_EYELET_VALUES=['Teardrop (Standard)','No Eyelet','Imitation','Special'];
+const COLLAR_EYELET_LABELS={'Teardrop (Standard)':'Teardrop eyelet','No Eyelet':'No eyelet',Imitation:'Imitation eyelet',Special:'Special eyelet'};
+const EXTERIOR_STITCH_VALUES=['None','1/16 Pic','5/16 Pic','1/16 Top','5/16 Top','1/4 Double'];
+const EXTERIOR_STITCH_LABELS={None:'No visible stitching','1/16 Pic':'Pick stitch, 1/16 in from the edge','5/16 Pic':'Pick stitch, 5/16 in from the edge','1/16 Top':'Top stitch, 1/16 in','5/16 Top':'Top stitch, 5/16 in','1/4 Double':'Double stitch, 1/4 in'};
+const YES_NO_VALUES=['No','Yes'];
+const LABEL_STYLE_VALUES=['None','Block','Script','Standard','Personalized Monogram','Personalized Name'];
+const LABEL_STYLE_LABELS={None:'No label',Block:'Block letters',Script:'Script letters',Standard:'Standard label','Personalized Monogram':'Personalized monogram','Personalized Name':'Personalized name'};
+const LABEL_COLOR_VALUES=['Default (Contrasting)','Fabric'];
+const LABEL_COLOR_LABELS={'Default (Contrasting)':'Contrasting thread',Fabric:'Fabric color thread'};
+const COLLAR_MONOGRAM_STYLE_VALUES=['None','Block','Script'];
+const TUX_FACING_VALUES=['None','Satin 1/8','Satin 3/8','Satin full','Grosgrain 1/8','Grosgrain 3/8','Grosgrain full'];
+const TUX_OUTSEAM_VALUES=['None','Satin 1/8','Satin 3/8','Satin 5/8','Grosgrain 1/8','Grosgrain 3/8','Grosgrain 5/8'];
+const TUX_PANTS_POCKET_VALUES=['None','Front','Back','Both'];
+const VEST_STYLE_VALUES=['No Lapel','Notch Lapel'];
+const VEST_BUTTON_VALUES=['5-Button','6-Button','DB 6x3','Low 5 Button'];
+const VEST_POCKET_TYPE_VALUES=['Welt','Double Besom'];
+const VEST_POCKET_TYPE_LABELS={Welt:'Welt pockets','Double Besom':'Double besom pockets'};
+const VEST_POCKET_NUMBER_VALUES=['2-Pocket','4-Pocket'];
+const VEST_BACK_VALUES=['Lining','Fabric'];
+// The full aligned config fragment a fresh suit or jacket design
+// starts from: every group at its JPOS standard, so a bagged item and
+// its order carry the complete specification, never an implied one.
+function alignedOptionDefaults(){return{optionModel:3,closure:'2-Button',lapelType:'Notch',lapelSize:'Standard',buttonStyle:'Matching',vents:'Center',cuffButtons:'4 Buttons',cuffButtonType:'Regular',cuffButtonHole:'Imitation Button Holes',cuffStitchType:'Default',cuffStitchColor:'Match',waistPocketType:'Flap',waistPocketAngle:'Horizontal',ticketPocket:'None',breastPocketType:'Welt',underCollarFabric:'Match',collarEyelet:'Teardrop (Standard)',exteriorStitch:'None',frenchFacing:'No',labelStyle:'None',labelColor:'Default (Contrasting)',collarMonogramStyle:'None',collarColor:'Default (Contrasting)',tuxedo:'No',tuxLapel:'None',tuxCollar:'None',tuxFrontEdge:'None',tuxBreastPocket:'None',tuxWaistPocket:'No',tuxPocketFlaps:'No',tuxOutseam:'None',tuxPantsPocket:'None',vestIncluded:'No',vestStyle:'No Lapel',vestButtons:'5-Button',vestPocketType:'Welt',vestPocketNumber:'2-Pocket',vestBack:'Lining'}}
+// Keys that exist only in the aligned model (closure, vents and
+// cuffButtons are shared with the legacy model and are not markers).
+const ALIGNED_OPTION_KEYS=['lapelType','lapelSize','buttonStyle','cuffButtonType','cuffButtonHole','cuffStitchType','cuffStitchColor','waistPocketType','waistPocketAngle','ticketPocket','breastPocketType','underCollarFabric','collarEyelet','exteriorStitch','frenchFacing','labelStyle','labelColor','collarMonogramStyle','collarColor','tuxedo','tuxLapel','tuxCollar','tuxFrontEdge','tuxBreastPocket','tuxWaistPocket','tuxPocketFlaps','tuxOutseam','tuxPantsPocket','vestIncluded','vestStyle','vestButtons','vestPocketType','vestPocketNumber','vestBack'];
+// Every config slot the aligned model writes, shared keys included;
+// used when a design resets or an edit restores a design.
+const ALIGNED_CONFIG_KEYS=['closure','vents','cuffButtons',...ALIGNED_OPTION_KEYS];
+function lapelSizeValues(type){return LAPEL_SIZE_VALUES[type]||LAPEL_SIZE_VALUES.Notch}
+function lapelSizeDefault(type){return type==='Shawl'?'Standard-Straight':'Standard'}
+function lapelSizeLabel(type,size){return (LAPEL_SIZE_LABELS[type]||{})[size]||size}
+// An item or design is on the aligned model when it carries the
+// optionModel marker set at design start, or any distinctly aligned
+// key (a stored item written before the marker existed in a draft).
+function alignedDesign(x){return!!x&&(x.optionModel===3||ALIGNED_OPTION_KEYS.some(k=>x[k]!==undefined))}
 function optionPrice(key,value){return OPTION_PRICES[key]?.[value]||0}
-function optionModifiers(x){const p=x?products[x.product]:null;let total=optionPrice('lapel',x?.lapel)+optionPrice('lining',x?.lining)+optionPrice('liningType',x?.liningType)+optionPrice('buttons',x?.buttons)+optionPrice('elbowPatches',x?.elbowPatches)+optionPrice('pocketAccent',x?.pocketAccent);if(p&&['suit','jacket'].includes(p.kind)){for(const [key] of JACKET_DETAIL_TOGGLES)total+=optionPrice(key,x?.[key]);total+=optionPrice('tier',x?.tier)+optionPrice('squareAndTie',x?.squareAndTie)+(x?.monogram?TEXT_FIELD_PRICES.monogram:0)+(x?.collarMonogram?TEXT_FIELD_PRICES.collarMonogram:0);if(p.kind==='suit'){total+=optionPrice('vest',x?.vest);if(x?.vest&&x.vest!=='No vest')total+=optionPrice('vestFabricBack',x?.vestFabricBack);total+=optionPrice('additionalPants',x?.additionalPants)}}if(p&&['suit','pants'].includes(p.kind)){for(const [key] of TROUSER_DETAIL_TOGGLES)total+=optionPrice(key,x?.[key]);total+=optionPrice('sideTabs',x?.sideTabs)+optionPrice('pantsLining',x?.pantsLining);if(p.kind==='suit')total+=optionPrice('pleats',x?.pleats)}return total}
+function legacyOptionPrice(key,value){return LEGACY_OPTION_PRICES[key]?.[value]||0}
+// The price a choice button shows: current table first (the aligned
+// model and the still live trousers groups), legacy table for the
+// groups only a legacy design session still renders.
+function choicePrice(key,value){const table=OPTION_PRICES[key];return table?Number(table[value]||0):legacyOptionPrice(key,value)}
+function optionModifiers(x){const p=x?products[x.product]:null;let total=0;const suitJacket=p&&['suit','jacket'].includes(p.kind);
+  if(suitJacket&&alignedDesign(x)){total+=optionPrice('underCollarFabric',x?.underCollarFabric)}
+  else{total+=legacyOptionPrice('lapel',x?.lapel)+legacyOptionPrice('lining',x?.lining)+legacyOptionPrice('liningType',x?.liningType)+legacyOptionPrice('buttons',x?.buttons)+legacyOptionPrice('elbowPatches',x?.elbowPatches)+legacyOptionPrice('pocketAccent',x?.pocketAccent);if(suitJacket){for(const [key] of JACKET_DETAIL_TOGGLES)total+=legacyOptionPrice(key,x?.[key]);total+=legacyOptionPrice('tier',x?.tier)+legacyOptionPrice('squareAndTie',x?.squareAndTie)+(x?.monogram?TEXT_FIELD_PRICES.monogram:0)+(x?.collarMonogram?TEXT_FIELD_PRICES.collarMonogram:0);if(p.kind==='suit'){total+=legacyOptionPrice('vest',x?.vest);if(x?.vest&&x.vest!=='No vest')total+=legacyOptionPrice('vestFabricBack',x?.vestFabricBack)}}}
+  // Trousers side pricing is unchanged in this package (J4 aligns the
+  // trousers groups); it applies to legacy and aligned items alike.
+  if(p&&['suit','pants'].includes(p.kind)){for(const [key] of TROUSER_DETAIL_TOGGLES)total+=optionPrice(key,x?.[key]);total+=optionPrice('sideTabs',x?.sideTabs)+optionPrice('pantsLining',x?.pantsLining);if(p.kind==='suit')total+=optionPrice('pleats',x?.pleats)}
+  if(p&&p.kind==='suit')total+=optionPrice('additionalPants',x?.additionalPants);
+  return total}
 const products=[{name:'The Everyday Navy',fabric:'Wool',color:'Navy',price:399,img:'model-navy.webp',tag:'THE EVERYDAY ESSENTIAL'},{name:'The Modern Charcoal',fabric:'Wool',color:'Charcoal',price:449,img:'model-charcoal.webp',tag:'A CONSIDERED CLASSIC'},{name:'The Signature Blue',fabric:'Wool',color:'Blue',price:499,img:'model-blue.webp',tag:'YOUR NEXT SIGNATURE'},{name:'The Occasion Suit',fabric:'Linen',color:'Sand',price:479,img:'model-sand.webp',tag:'FOR THE MOMENT'}];
-let filter='All suits',sort='featured',config=read('suits-config',{product:0,fabric:'Navy',lapel:'Notch',closure:'Two button',fit:'Tailored',lining:'Tonal',monogram:''}),stage=0;
+let filter='All suits',sort='featured',config=read('suits-config',{product:0,fabric:'Navy',lining:'Tonal',monogram:'',...alignedOptionDefaults()}),stage=0;
 let draft=read('suits-draft',{step:0,method:'body',unit:'in',values:{},name:'My measurements',fit:'Tailored',ready:{jacket:'',length:'',trouser:''},garment:null,wearerName:'',fits:null,completionId:null,completionMissing:null});let profiles=read('suits-profiles',[]),bag=read('suits-bag',[]),returnToSuit=false,editingBagId=null;
 const fields=LEGACY_WIZARD_FIELDS.map(d=>{const def=MEASUREMENT_FIELDS[d.id]||RETIRED_BODY_FIELDS[d.id];return{id:d.id,label:d.label,group:d.group,min:def.ranges.Men[0],max:def.ranges.Men[1],tip:d.tip,line:d.line}});
 function measureBounds(f){if(draft.wearer!=='Boys')return f;const r=fieldRange(f.id,'Boys');return{...f,min:r.min,max:r.max}}
@@ -272,8 +389,8 @@ function home(){return `<section class="hero"><div class="hero-copy"><div class=
 function collection(){return `<section class="collection-hero"><div class="copy"><div class="eyebrow">THE SUITS.ME COLLECTION</div><h1>Your next<br>signature piece.</h1><p>Start with a favorite. Make every detail your own.</p><span class="subtle">Preview collection · AI-generated model imagery</span></div><img src="assets/model-blue.webp" alt="Suits.me menswear collection"></section><section class="section"><div class="filter-row"><div class="filters">${['All suits','Wool','Linen','Wedding'].map(f=>`<button class="chip ${filter===f?'active':''}" onclick="setFilter('${f}')">${f}</button>`).join('')}</div><select aria-label="Sort suits" onchange="sort=this.value;render(false)"><option value="featured" ${sort==='featured'?'selected':''}>Featured</option><option value="low" ${sort==='low'?'selected':''}>Price: low to high</option><option value="high" ${sort==='high'?'selected':''}>Price: high to low</option></select></div><div class="products">${cards()}</div><p class="ai-note">Original AI-generated model photography · Illustrative garments and prices.</p></section>`}
 function setFilter(f){filter=f;render(false)}function chooseProduct(i){editingBagId=null;config.product=i;config.fabric=products[i].color;saveConfig();stage=0;location.hash='#customize';if(location.hash==='#customize')render()}
 function choice(key,values){return `<div class="choices">${values.map(v=>`<button class="choice ${config[key]===v?'active':''}" aria-pressed="${config[key]===v}" onclick="setOption('${key}','${v}')">${v}</button>`).join('')}</div>`}
-function setOption(k,v){config[k]=v;if(k==='vest'&&v==='No vest')delete config.vestFabricBack;saveConfig();render(false)}
-function pricedChoice(key,values,current,labels){current=current??config[key]??OPTION_DEFAULTS[key];return `<div class="choices">${values.map(v=>{const price=optionPrice(key,v);return `<button class="choice ${current===v?'active':''}" aria-pressed="${current===v}" onclick="setOption('${key}','${v}')">${labels?.[v]??v} · ${price?'+$'+price:'Included'}</button>`}).join('')}</div>`}
+function setOption(k,v){config[k]=v;if(k==='vest'&&v==='No vest')delete config.vestFabricBack;if(k==='lapelType'){const sizes=lapelSizeValues(v);if(!sizes.includes(config.lapelSize))config.lapelSize=lapelSizeDefault(v)}if(k==='vestIncluded'){delete config.vest;delete config.vestFabricBack}if(k==='tuxedo')delete config.tier;saveConfig();render(false)}
+function pricedChoice(key,values,current,labels){current=current??config[key]??OPTION_DEFAULTS[key];return `<div class="choices">${values.map(v=>{const price=choicePrice(key,v);return `<button class="choice ${current===v?'active':''}" aria-pressed="${current===v}" onclick="setOption('${key}','${v}')">${labels?.[v]??v} · ${price?'+$'+price:'Included'}</button>`}).join('')}</div>`}
 function lapelChoice(){return pricedChoice('lapel',LAPEL_VALUES,config.lapel||'Notch',LAPEL_LABELS)}
 // The lining group leads with the Default choice (the standard nearest
 // matching color lining). A stored Tonal value, the long-standing
@@ -282,13 +399,60 @@ function lapelChoice(){return pricedChoice('lapel',LAPEL_VALUES,config.lapel||'N
 // appended so the shopper still sees their own selection active, priced
 // at nothing, exactly as their bag line renders it.
 function liningChoice(){const values=LINING_VALUES.slice(),cur=config.lining;if(cur&&cur!=='Tonal'&&!values.includes(cur))values.push(cur);return pricedChoice('lining',values,cur&&cur!=='Tonal'?cur:'Default')}
+// The aligned lining group: the same placeholder values (plan input
+// 3 pending), but unpriced, because the aligned model never charges
+// from the retired tier table. A stored legacy colorway is appended
+// exactly as in the legacy group, so the shopper sees it selected.
+function alignedLiningChoice(){const values=LINING_VALUES.slice(),cur=config.lining;if(cur&&cur!=='Tonal'&&!values.includes(cur))values.push(cur);const shown=cur&&cur!=='Tonal'?cur:'Default';return `<div class="choices">${values.map(v=>`<button class="choice ${shown===v?'active':''}" data-visual="lining:${v}" aria-pressed="${shown===v}" onclick="setOption('lining','${v}')">${esc(v)} · Included</button>`).join('')}</div>`}
 function jacketOptionGroups(){return JACKET_OPTION_GROUPS.map(g=>`<div class="option-title">${g.title}</div>${pricedChoice(g.key,g.values)}`).join('')}
 function trouserOptionGroups(includePleats=true){return TROUSER_OPTION_GROUPS.filter(g=>includePleats||g.key!=='pleats').map(g=>`<div class="option-title">${g.title}</div>${g.key==='pleats'?pricedChoice(g.key,g.values,config.pleats??config.trouserFront):pricedChoice(g.key,g.values)}`).join('')}
 function jacketDetailGroups(){return JACKET_DETAIL_TOGGLES.map(([key,title])=>`<div class="option-title">${title}</div>${pricedChoice(key,['No','Yes'])}`).join('')}
 function trouserDetailGroups(){return `<h3>Trouser details</h3>`+TROUSER_DETAIL_TOGGLES.map(([key,title])=>`<div class="option-title">${title}</div>${pricedChoice(key,['No','Yes'])}`).join('')+`<div class="option-title">Side tabs</div>${pricedChoice('sideTabs',SIDE_TAB_VALUES)}`}
 function tailorChangesChoice(){const cur=config.tailorChanges??OPTION_DEFAULTS.tailorChanges;return `<div class="choices">${TAILOR_CHANGES_VALUES.map(v=>`<button class="choice ${cur===v?'active':''}" aria-pressed="${cur===v}" onclick="setOption('tailorChanges','${v}')">${v}</button>`).join('')}</div>`}
+// The pre-alignment Personalize step, unchanged: it renders only for
+// a design session that is editing a legacy item, so the shopper sees
+// the choices their item actually carries.
+function legacyStage1(){return `<div class="option-title">Lapel</div>${lapelChoice()}<div class="option-title">Jacket closure</div>${choice('closure',['Two button','One button','Three button','Four button','Double breasted'])}${jacketOptionGroups()}<div class="option-title">Lining</div>${liningChoice()}<div class="option-title">Lining type</div>${pricedChoice('liningType',['Full lining','Half lining','No lining (unstructured)'])}<div class="option-title">Elbow patches</div>${pricedChoice('elbowPatches',ELBOW_PATCH_VALUES)}<label class="field">Monogram <span class="subtle">Optional · up to 12 characters</span><input maxlength="12" value="${esc(config.monogram)}" oninput="config.monogram=this.value;saveConfig()" placeholder="Your personal touch"></label>`}
+// Aligned model renderer (J3): buyer language first, the tailor term
+// and inches as the secondary label where the mapping attests them,
+// the current selection stated in words in every group header, and a
+// stable data-visual key on every value for the J8 illustrations.
+function alignedChoice(key,values,labels={}){const cur=config[key];return `<div class="choices">${values.map(v=>{const price=optionPrice(key,v);return `<button class="choice ${cur===v?'active':''}" data-visual="${key}:${v}" aria-pressed="${cur===v}" onclick="setOption('${key}','${v}')">${esc(labels[v]??v)} · ${price?'+$'+price:'Included'}</button>`}).join('')}</div>`}
+function alignedGroup(title,key,values,labels={}){const cur=config[key];return `<div class="option-title"><span>${title}</span>${cur!==undefined?`<span class="subtle">${esc(labels[cur]??cur)}</span>`:''}</div>${alignedChoice(key,values,labels)}`}
+function legacyLeftovers(){const notes=[];if(config.lapel)notes.push('lapel: '+config.lapel);if(config.buttons)notes.push('buttons: '+config.buttons);if(config.elbowPatches&&config.elbowPatches!=='None')notes.push('elbow patches: '+config.elbowPatches);if(config.pocketAccent&&config.pocketAccent!=='None')notes.push('pocket accent: '+config.pocketAccent);if(config.liningType)notes.push('lining type: '+config.liningType);if(config.tier&&config.tier!=='Regular')notes.push('the tuxedo tier');if(config.vest&&config.vest!=='No vest')notes.push('vest: '+config.vest);if(config.squareAndTie==='Yes')notes.push('square and tie');for(const [key,title] of JACKET_DETAIL_TOGGLES)if(config[key]==='Yes')notes.push(title.toLowerCase());return notes}
+function alignedStage1(p){const suit=p.kind==='suit';let h='';const leftovers=legacyLeftovers();if(leftovers.length)h+=`<div class="note">This design was started with earlier options (${leftovers.map(esc).join(', ')}). Those choices are not part of the current option set and are not charged.</div>`;
+  h+=alignedGroup('Tuxedo facings','tuxedo',YES_NO_VALUES,{No:'Standard jacket',Yes:'Add tuxedo facings'});
+  if(config.tuxedo==='Yes'){h+=alignedGroup('Tuxedo lapel facing','tuxLapel',TUX_FACING_VALUES)+alignedGroup('Tuxedo collar facing','tuxCollar',TUX_FACING_VALUES)+alignedGroup('Tuxedo front edge','tuxFrontEdge',TUX_FACING_VALUES)+alignedGroup('Tuxedo breast pocket facing','tuxBreastPocket',TUX_FACING_VALUES)+alignedGroup('Tuxedo waist pocket','tuxWaistPocket',YES_NO_VALUES,{No:'No satin',Yes:'Satin'})+alignedGroup('Tuxedo pocket flaps','tuxPocketFlaps',YES_NO_VALUES);if(suit)h+=alignedGroup('Tuxedo trouser outseam stripe','tuxOutseam',TUX_OUTSEAM_VALUES)+alignedGroup('Tuxedo trouser pockets','tuxPantsPocket',TUX_PANTS_POCKET_VALUES)}
+  h+=alignedGroup('Lapel style','lapelType',LAPEL_TYPE_VALUES,LAPEL_TYPE_LABELS);
+  h+=alignedGroup('Lapel width','lapelSize',lapelSizeValues(config.lapelType),Object.fromEntries(lapelSizeValues(config.lapelType).map(v=>[v,lapelSizeLabel(config.lapelType,v)])));
+  h+=alignedGroup('Jacket closure','closure',CLOSURE_VALUES,CLOSURE_LABELS);
+  h+=alignedGroup('Buttons','buttonStyle',BUTTON_STYLE_VALUES,BUTTON_STYLE_LABELS);
+  h+=alignedGroup('Vents','vents',ALIGNED_VENT_VALUES,VENT_LABELS);
+  h+=alignedGroup('Waist pocket style','waistPocketType',WAIST_POCKET_TYPE_VALUES,WAIST_POCKET_TYPE_LABELS);
+  h+=alignedGroup('Waist pocket angle','waistPocketAngle',WAIST_POCKET_ANGLE_VALUES,WAIST_POCKET_ANGLE_LABELS);
+  h+=alignedGroup('Ticket pocket','ticketPocket',TICKET_POCKET_VALUES,TICKET_POCKET_LABELS);
+  h+=alignedGroup('Breast pocket','breastPocketType',BREAST_POCKET_TYPE_VALUES,BREAST_POCKET_TYPE_LABELS);
+  h+=alignedGroup('Cuff buttons','cuffButtons',CUFF_BUTTON_VALUES,CUFF_BUTTON_LABELS);
+  h+=alignedGroup('Cuff button style','cuffButtonType',CUFF_BUTTON_TYPE_VALUES);
+  h+=alignedGroup('Cuff button holes','cuffButtonHole',CUFF_BUTTON_HOLE_VALUES,CUFF_BUTTON_HOLE_LABELS);
+  h+=alignedGroup('Cuff stitch position','cuffStitchType',CUFF_STITCH_TYPE_VALUES);
+  h+=alignedGroup('Cuff stitch color','cuffStitchColor',CUFF_STITCH_COLOR_VALUES)+`<div class="note">More cuff stitch colors arrive with the shop's button and thread data.</div>`;
+  h+=alignedGroup('Under collar fabric','underCollarFabric',UNDER_COLLAR_VALUES,UNDER_COLLAR_LABELS);
+  h+=alignedGroup('Collar eyelet','collarEyelet',COLLAR_EYELET_VALUES,COLLAR_EYELET_LABELS);
+  h+=alignedGroup('Stitching on the jacket edges','exteriorStitch',EXTERIOR_STITCH_VALUES,EXTERIOR_STITCH_LABELS);
+  h+=alignedGroup('French facing','frenchFacing',YES_NO_VALUES,{No:'Standard facing',Yes:'French facing, fabric wraps inside'});
+  h+=`<div class="option-title"><span>Lining</span><span class="subtle">${esc(config.lining&&config.lining!=='Tonal'?config.lining:'Default')}</span></div>${alignedLiningChoice()}`;
+  h+=`<div id="j3Trousers"></div>`;
+  if(suit){h+=alignedGroup('Vest','vestIncluded',YES_NO_VALUES,{No:'No vest',Yes:'Add a vest'});if(config.vestIncluded==='Yes')h+=alignedGroup('Vest style','vestStyle',VEST_STYLE_VALUES)+alignedGroup('Vest buttons','vestButtons',VEST_BUTTON_VALUES)+alignedGroup('Vest pocket style','vestPocketType',VEST_POCKET_TYPE_VALUES,VEST_POCKET_TYPE_LABELS)+alignedGroup('Vest pockets','vestPocketNumber',VEST_POCKET_NUMBER_VALUES)+alignedGroup('Vest back','vestBack',VEST_BACK_VALUES,{Lining:'Lining back',Fabric:'Fabric back'})}
+  h+=alignedGroup('Inside label','labelStyle',LABEL_STYLE_VALUES,LABEL_STYLE_LABELS);
+  if(config.labelStyle&&config.labelStyle!=='None')h+=alignedGroup('Label thread color','labelColor',LABEL_COLOR_VALUES,LABEL_COLOR_LABELS);
+  if(config.labelStyle==='Personalized Monogram'||config.labelStyle==='Personalized Name')h+=`<label class="field">${config.labelStyle==='Personalized Name'?'Name for the label':'Monogram for the label'} <span class="subtle">Optional · up to 20 characters</span><input maxlength="20" value="${esc(config.monogram||'')}" oninput="config.monogram=this.value;saveConfig()" placeholder="Your personal touch"></label><label class="field">Second line <span class="subtle">Optional</span><input maxlength="20" value="${esc(config.monogram2||'')}" oninput="config.monogram2=this.value;saveConfig()" placeholder="Optional second line"></label>`;
+  h+=alignedGroup('Collar monogram','collarMonogramStyle',COLLAR_MONOGRAM_STYLE_VALUES,{None:'No collar monogram',Block:'Block letters',Script:'Script letters'});
+  if(config.collarMonogramStyle&&config.collarMonogramStyle!=='None'){h+=alignedGroup('Collar monogram thread','collarColor',LABEL_COLOR_VALUES,LABEL_COLOR_LABELS);h+=`<label class="field">Collar monogram text <span class="subtle">Optional · up to 11 characters</span><input maxlength="11" value="${esc(config.collarMonogram||'')}" oninput="config.collarMonogram=this.value;saveConfig()" placeholder="Your initials"></label>`}
+  h+=`<div id="j3Tail"></div>`;
+  return h}
 function commentsField(){return `<label class="field">Comments <span class="subtle">Optional · up to 200 characters</span><textarea maxlength="200" rows="3" oninput="config.comments=this.value;saveConfig()" placeholder="Anything our tailors should know">${esc(config.comments||'')}</textarea></label>`}
-function customize(){let p=products[config.product]||products[0];let inner=stage===0?`<div class="option-title"><span>Color story</span><span class="subtle">${config.fabric}</span></div><div class="swatches">${[['Navy','#273545'],['Charcoal','#54534f'],['Blue','#4b657b'],['Sand','#bbac95']].map(([v,c])=>`<button class="swatch ${config.fabric===v?'active':''}" aria-pressed="${config.fabric===v}" onclick="setOption('fabric','${v}')"><i style="--c:${c}"></i>${v}</button>`).join('')}</div><div class="option-title">Your fit preference</div>${choice('fit',['Slim','Tailored','Relaxed'])}<div class="note">A fit preference describes how you like to wear your suit. Your body measurements stay the same.</div>`:stage===1?`<div class="option-title">Lapel</div>${lapelChoice()}<div class="option-title">Jacket closure</div>${choice('closure',['Two button','One button','Three button','Four button','Double breasted'])}${jacketOptionGroups()}<div class="option-title">Lining</div>${liningChoice()}<div class="option-title">Lining type</div>${pricedChoice('liningType',['Full lining','Half lining','No lining (unstructured)'])}<div class="option-title">Elbow patches</div>${pricedChoice('elbowPatches',ELBOW_PATCH_VALUES)}<label class="field">Monogram <span class="subtle">Optional · up to 12 characters</span><input maxlength="12" value="${esc(config.monogram)}" oninput="config.monogram=this.value;saveConfig()" placeholder="Your personal touch"></label>`:`<h3>A fit that's yours.</h3><p class="subtle">Choose a saved profile or follow our guided measurements.</p><div class="option-title">How would you like to find your fit?</div>${methodChoiceHtml(p)}${customizerMethod()==='deferred'?`<div class="note">You are ordering this garment with measurements to follow. Add it to your bag and place your order now; then add your measurements from your order page. We cannot start making this garment until your measurements arrive, and nothing is measured or guessed for you in the meantime.</div>`:`${profiles.length?`<label class="field">Measurement profile<select id="profileSelect" onchange="chooseCustomizerProfile(this.value)"><option value="">Choose a profile</option>${profiles.map(p=>`<option value="${p.id}" ${config.profileId===p.id?'selected':''}>${esc(p.name)} · ${p.method==='ready'?'Standard size':p.method==='garment'?'From an existing garment':p.method==='modify'?'Modified standard size':'Custom measurements'}</option>`).join('')}</select></label>`:'<div class="note">You haven’t saved a measurement profile yet.</div>'}${completionPromptHtml(p)}<button class="btn light" onclick="startMeasurements()">${profiles.length?'Create another profile':customizerMethod()==='garment'?'Measure an existing garment':customizerMethod()==='modify'?'Modify a standard size':'Take my measurements'} →</button>`}<div class="note">Prefer a professional fitting? <a class="textlink" href="/locations">Visit a showroom ↗</a></div>`;return `<div class="page-top"><div class="breadcrumb"><a href="/collections/suits">The collection</a> &nbsp; / &nbsp; ${p.name}</div></div><section class="config-layout"><div class="config-photo"><img src="assets/${p.img}" alt="${p.name} base silhouette"><span class="photo-label">Base silhouette · Color and detail selections summarized at review</span></div><div class="config-form"><div class="eyebrow">YOUR PERSONAL ATELIER</div><h1>${p.name}</h1><p>Made around you, down to the smallest detail.</p><div class="price">$${p.price+optionModifiers(config)} <span class="subtle">· Illustrative preview price</span></div><div class="stage-tabs">${['01 Fabric & fit','02 Personalize','03 Measurements'].map((s,i)=>`<button class="${stage===i?'active':''}" onclick="stage=${i};render(false)">${s}</button>`).join('')}</div>${inner}${editingBagId?'<div class="note">You are editing an item from your bag. Saving updates that item in place; nothing new is added.</div>':''}<div id="configError" class="error" role="alert"></div><button class="btn orange" onclick="nextConfig()">${stage===2?(editingBagId?'Save changes':'Add to bag'):'Continue'} <span>→</span></button>${editingBagId?'<button class="btn light" style="width:100%;margin-top:10px" onclick="cancelBagEdit()">Cancel editing</button>':''}<p class="subtle" style="text-align:center;margin-top:18px">YOUR CHOICES ARE SAVED ON THIS BROWSER</p></div></section>`}
+function customize(){let p=products[config.product]||products[0];let inner=stage===0?`<div class="option-title"><span>Color story</span><span class="subtle">${config.fabric}</span></div><div class="swatches">${[['Navy','#273545'],['Charcoal','#54534f'],['Blue','#4b657b'],['Sand','#bbac95']].map(([v,c])=>`<button class="swatch ${config.fabric===v?'active':''}" aria-pressed="${config.fabric===v}" onclick="setOption('fabric','${v}')"><i style="--c:${c}"></i>${v}</button>`).join('')}</div><div class="option-title">Your fit preference</div>${choice('fit',['Slim','Tailored','Relaxed'])}<div class="note">A fit preference describes how you like to wear your suit. Your body measurements stay the same.</div>`:stage===1?(['suit','jacket'].includes(p.kind)&&alignedDesign(config)?alignedStage1(p):legacyStage1()):`<h3>A fit that's yours.</h3><p class="subtle">Choose a saved profile or follow our guided measurements.</p><div class="option-title">How would you like to find your fit?</div>${methodChoiceHtml(p)}${customizerMethod()==='deferred'?`<div class="note">You are ordering this garment with measurements to follow. Add it to your bag and place your order now; then add your measurements from your order page. We cannot start making this garment until your measurements arrive, and nothing is measured or guessed for you in the meantime.</div>`:`${profiles.length?`<label class="field">Measurement profile<select id="profileSelect" onchange="chooseCustomizerProfile(this.value)"><option value="">Choose a profile</option>${profiles.map(p=>`<option value="${p.id}" ${config.profileId===p.id?'selected':''}>${esc(p.name)} · ${p.method==='ready'?'Standard size':p.method==='garment'?'From an existing garment':p.method==='modify'?'Modified standard size':'Custom measurements'}</option>`).join('')}</select></label>`:'<div class="note">You haven’t saved a measurement profile yet.</div>'}${completionPromptHtml(p)}<button class="btn light" onclick="startMeasurements()">${profiles.length?'Create another profile':customizerMethod()==='garment'?'Measure an existing garment':customizerMethod()==='modify'?'Modify a standard size':'Take my measurements'} →</button>`}<div class="note">Prefer a professional fitting? <a class="textlink" href="/locations">Visit a showroom ↗</a></div>`;return `<div class="page-top"><div class="breadcrumb"><a href="/collections/suits">The collection</a> &nbsp; / &nbsp; ${p.name}</div></div><section class="config-layout"><div class="config-photo"><img src="assets/${p.img}" alt="${p.name} base silhouette"><span class="photo-label">Base silhouette · Color and detail selections summarized at review</span></div><div class="config-form"><div class="eyebrow">YOUR PERSONAL ATELIER</div><h1>${p.name}</h1><p>Made around you, down to the smallest detail.</p><div class="price">$${p.price+optionModifiers(config)} <span class="subtle">· Illustrative preview price</span></div><div class="stage-tabs">${['01 Fabric & fit','02 Personalize','03 Measurements'].map((s,i)=>`<button class="${stage===i?'active':''}" onclick="stage=${i};render(false)">${s}</button>`).join('')}</div>${inner}${editingBagId?'<div class="note">You are editing an item from your bag. Saving updates that item in place; nothing new is added.</div>':''}<div id="configError" class="error" role="alert"></div><button class="btn orange" onclick="nextConfig()">${stage===2?(editingBagId?'Save changes':'Add to bag'):'Continue'} <span>→</span></button>${editingBagId?'<button class="btn light" style="width:100%;margin-top:10px" onclick="cancelBagEdit()">Cancel editing</button>':''}<p class="subtle" style="text-align:center;margin-top:18px">YOUR CHOICES ARE SAVED ON THIS BROWSER</p></div></section>`}
 function nextConfig(){if(stage<2){stage++;render(false);return}let profile;if(config.deferMeasurements){const cp=products[config.product]||products[0];profile={name:'Measurements to follow',method:'deferred',wearer:productWearerOf(cp),garment:cp.kind,version:2,deferred:true}}else{const id=$('#profileSelect')?.value;if(!id){$('#configError').textContent='Choose a saved profile, or take your measurements first.';return}const found=profiles.find(p=>p.id===id);if(!found){$('#configError').textContent='Choose a saved profile, or take your measurements first.';return}config.profileId=id;saveConfig();profile=JSON.parse(JSON.stringify(found))}const item={...JSON.parse(JSON.stringify(config)),profile};delete item.deferMeasurements;if(config.deferMeasurements)delete item.profileId;delete config.deferMeasurements;saveConfig();const editIndex=editingBagId?bag.findIndex(x=>x.id===editingBagId):-1;if(editIndex>=0){bag[editIndex]={...bag[editIndex],...item,id:bag[editIndex].id};editingBagId=null;write('suits-bag',bag);updateBag();openBag();toast('Your bag item was updated.');return}item.id=uid();bag.push(item);write('suits-bag',bag);updateBag();openBag()}
 function cancelBagEdit(){editingBagId=null;openBag()}
 function startMeasurements(){returnToSuit=true;draft.step=0;saveDraft();location.hash='#measure';render()}

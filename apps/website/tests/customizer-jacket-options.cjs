@@ -1,14 +1,17 @@
 const assert=require('node:assert/strict'),fs=require('node:fs'),vm=require('node:vm');
-// CUS-01 (Wave 3 package 3.1): the jacket core option groups and the
-// price modifier mechanism. Suits and standalone jackets gain Vents,
-// Jacket cuff buttons and Pocket accent groups in the Personalize step,
-// the Jacket closure group gains Three button and Four button, and the
-// pocket accent choices carry prices from the single OPTION_PRICES table
-// in app.js: the customizer labels, the bag item price, the checkout
-// total and the server order all read the same figures. The new config
-// slots stay absent until a shopper picks a choice, so a stored config
-// or bag item from before this change (no new fields) loads with the
-// defaults and renders exactly as before.
+// CUS-01, aligned model (J wave package J3): the jacket core option
+// groups follow the JPOS style form. Suits and standalone jackets get
+// the JPOS closure (3-Roll-2 and the double breasted configurations),
+// vents None, Center, Side, waist pocket type and angle, ticket
+// pocket, breast pocket type and the cuff construction, all starting
+// from the JPOS standards in alignedOptionDefaults. The only priced
+// jacket choices are the Milanese under collar fabrics ($25, $40) from
+// OPTION_PRICES in app.js: the customizer labels, the bag item price,
+// the checkout total and the server order all read the same figures.
+// World 5 and the server section pin the legacy rule: an item saved
+// before the alignment (no aligned marker) renders and prices exactly
+// as it did under the Wave 3 tables, which survive in
+// LEGACY_OPTION_PRICES for that purpose only.
 // Client worlds drive the real storefront scripts in a vm with stubbed
 // DOM and storage, in the style of the other suites; the server section
 // drives lib/commerce.ts through its checkout route like commerce.cjs.
@@ -32,50 +35,55 @@ function makeWorld(seed={}){
 }
 function bagCurrentWorld(w){w.run('stage=2;render(false)');w.elFor('#profileSelect').value='profile-1';w.run('nextConfig()')}
 
-// World 1: a suit gains the three groups, the extended closure, priced
-// choices, and the modifier reaches the bag line and checkout.
+// World 1: a suit gains the aligned groups and the JPOS closure, the
+// standards start selected, and the one priced jacket choice (the
+// Milanese under collar) reaches the bag line and checkout.
 {
   const w=makeWorld();
-  assert.equal(w.run("optionPrice('pocketAccent','Patch pocket')"),15,'the price table prices a Patch pocket at $15');
-  assert.equal(w.run("optionPrice('pocketAccent','Ticket pocket')"),5,'the price table prices a Ticket pocket at $5');
-  assert.equal(w.run("optionPrice('vents','Double vent')"),0,'unpriced choices cost nothing');
+  assert.equal(w.run("optionPrice('underCollarFabric','Milanese Single Color')"),25,'the price table prices the Milanese single color under collar at $25');
+  assert.equal(w.run("optionPrice('underCollarFabric','Milanese Multi-Color')"),40,'the price table prices the Milanese multi color under collar at $40');
+  assert.equal(w.run("optionPrice('pocketAccent','Patch pocket')"),0,'the current price table no longer offers the retired pocket accent');
+  assert.equal(w.run("legacyOptionPrice('pocketAccent','Patch pocket')"),15,'the legacy table keeps the pocket accent price for pre-alignment items only');
+  assert.equal(w.run("optionPrice('vents','Side')"),0,'unpriced choices cost nothing');
   w.run('beginDesign(0)');
-  assert.ok(!('vents' in w.config())&&!('cuffButtons' in w.config())&&!('pocketAccent' in w.config()),'the new slots stay unset until the shopper picks a choice');
+  assert.equal(w.config().vents,'Center','a fresh design starts from the aligned standards');
+  assert.equal(w.config().cuffButtons,'4 Buttons','four cuff buttons are the JPOS standard');
+  assert.ok(!('pocketAccent' in w.config()),'the retired pocket accent slot is never set by a new design');
   w.run('stage=1');
   const html=w.run('customize()');
-  for(const title of ['Vents','Jacket cuff buttons','Pocket accent'])assert.ok(html.includes(`<div class="option-title">${title}</div>`),`the Personalize step offers the ${title} group`);
-  for(const style of ['Two button','One button','Three button','Four button','Double breasted'])assert.ok(html.includes(`setOption('closure','${style}')`),`the closure group offers ${style}`);
-  assert.ok(html.includes(`<button class="choice active" aria-pressed="true" onclick="setOption('vents','Single vent')">Single vent · Included</button>`),'Single vent is the selected default, labelled Included');
-  assert.ok(html.includes(`<button class="choice active" aria-pressed="true" onclick="setOption('cuffButtons','Three')">Three · Included</button>`),'Three cuff buttons is the selected default, labelled Included');
-  assert.ok(html.includes(`<button class="choice active" aria-pressed="true" onclick="setOption('pocketAccent','None')">None · Included</button>`),'No pocket accent is the selected default, labelled Included');
-  assert.ok(html.includes('Ticket pocket · +$5'),'the Ticket pocket choice shows its +$5 modifier');
-  assert.ok(html.includes('Slant pocket · +$5'),'the Slant pocket choice shows its +$5 modifier');
-  assert.ok(html.includes('Patch pocket · +$15'),'the Patch pocket choice shows its +$15 modifier');
-  assert.ok(html.includes('Double vent · Included'),'unpriced vent choices are labelled Included');
-  w.run("setOption('vents','Double vent');setOption('cuffButtons','Four');setOption('pocketAccent','Patch pocket');setOption('closure','Three button')");
+  for(const title of ['Vents','Waist pocket style','Waist pocket angle','Ticket pocket','Breast pocket','Cuff buttons','Cuff button style','Under collar fabric'])assert.ok(html.includes(`<div class="option-title"><span>${title}</span>`),`the Personalize step offers the ${title} group`);
+  for(const style of ['1-Button','2-Button','3-Button','3-Roll-2','4-Button','2x1 DB','4x2 DB','6x1 DB','6x2 DB','8x2 DB'])assert.ok(html.includes(`setOption('closure','${style}')`),`the closure group offers ${style}`);
+  assert.ok(!html.includes('Double vent'),'the vents group has no double vent: JPOS offers None, Center, Side');
+  assert.ok(html.includes(`<button class="choice active" data-visual="vents:Center" aria-pressed="true" onclick="setOption('vents','Center')">Center vent, single · Included</button>`),'the Center vent is the selected standard, labelled Included');
+  assert.ok(html.includes(`<button class="choice active" data-visual="cuffButtons:4 Buttons" aria-pressed="true" onclick="setOption('cuffButtons','4 Buttons')">4 buttons · Included</button>`),'four cuff buttons are the selected standard, labelled Included');
+  assert.ok(html.includes(`<button class="choice active" data-visual="ticketPocket:None" aria-pressed="true" onclick="setOption('ticketPocket','None')">No ticket pocket · Included</button>`),'no ticket pocket is the selected standard, labelled Included');
+  assert.ok(html.includes('Milanese felt, one color · +$25'),'the Milanese single color choice shows its +$25 price');
+  assert.ok(html.includes('Milanese felt, multiple colors · +$40'),'the Milanese multi color choice shows its +$40 price');
+  assert.ok(html.includes('Flap ticket pocket · Included'),'unpriced pocket choices are labelled Included');
+  w.run("setOption('vents','Side');setOption('cuffButtons','5 Buttons');setOption('waistPocketType','Patch');setOption('closure','3-Roll-2');setOption('underCollarFabric','Milanese Single Color')");
   const chosen=w.run('customize()');
-  assert.ok(chosen.includes('<div class="price">$414 '),'the customizer price rises by the Patch pocket modifier');
-  assert.ok(chosen.includes(`aria-pressed="true" onclick="setOption('pocketAccent','Patch pocket')"`),'the chosen pocket accent renders selected');
+  assert.ok(chosen.includes('<div class="price">$424 '),'the customizer price rises by the Milanese price only');
+  assert.ok(chosen.includes(`aria-pressed="true" onclick="setOption('waistPocketType','Patch')"`),'the chosen waist pocket type renders selected');
   bagCurrentWorld(w);
   assert.equal(w.bag().length,1,'the configured suit is bagged');
   const item=w.bag()[0];
-  assert.equal(item.vents,'Double vent');assert.equal(item.cuffButtons,'Four');assert.equal(item.pocketAccent,'Patch pocket');assert.equal(item.closure,'Three button');
-  assert.equal(w.run('lineDescription(bag[0])'),'Navy · Notch lapel · Tailored fit · Three button · Double vent · Four cuff buttons · Patch pocket · Tonal lining','the bag line shows the new selections in customizer order');
-  assert.ok(w.run('lineHtml(bag[0])').includes('$414'),'the bag line price includes the modifier');
-  assert.equal(w.run('subtotal()'),414,'the subtotal includes the modifier');
+  assert.equal(item.vents,'Side');assert.equal(item.cuffButtons,'5 Buttons');assert.equal(item.waistPocketType,'Patch');assert.equal(item.closure,'3-Roll-2');assert.equal(item.underCollarFabric,'Milanese Single Color');assert.equal(item.optionModel,3);
+  assert.equal(w.run('lineDescription(bag[0])'),'Navy · Notch lapel, Standard · 3-Roll-2 · Side vents · 5 cuff buttons · Patch waist pockets · Milanese Single Color under collar · Tonal lining','the bag line shows the new selections in customizer order');
+  assert.ok(w.run('lineHtml(bag[0])').includes('$424'),'the bag line price includes the Milanese price');
+  assert.equal(w.run('subtotal()'),424,'the subtotal includes the Milanese price');
   w.run("location.hash='#checkout'");
   const checkout=w.run('checkoutPage()');
-  assert.ok(checkout.includes('Patch pocket')&&checkout.includes('$414'),'the checkout shows the selection and the raised total');
+  assert.ok(checkout.includes('Patch waist pockets')&&checkout.includes('$424'),'the checkout shows the selection and the raised total');
   // Bag Edit restores the new selections and reprices on change.
   w.run(`editBagItem('${item.id}')`);
-  assert.equal(w.config().vents,'Double vent','bag Edit restores the vents');
-  assert.equal(w.config().cuffButtons,'Four','bag Edit restores the cuff buttons');
-  assert.equal(w.config().pocketAccent,'Patch pocket','bag Edit restores the pocket accent');
-  w.run("setOption('pocketAccent','Slant pocket')");
+  assert.equal(w.config().vents,'Side','bag Edit restores the vents');
+  assert.equal(w.config().cuffButtons,'5 Buttons','bag Edit restores the cuff buttons');
+  assert.equal(w.config().waistPocketType,'Patch','bag Edit restores the waist pocket type');
+  w.run("setOption('underCollarFabric','Match')");
   bagCurrentWorld(w);
   assert.equal(w.bag().length,1,'saving the edit adds no new line');
-  assert.equal(w.bag()[0].pocketAccent,'Slant pocket','the edited line carries the new pocket accent');
-  assert.equal(w.run('subtotal()'),404,'the edited line is repriced from the same table');
+  assert.equal(w.bag()[0].underCollarFabric,'Match','the edited line carries the new under collar fabric');
+  assert.equal(w.run('subtotal()'),399,'the edited line is repriced from the same table');
 }
 
 // World 2: a standalone jacket gets the same groups and pricing.
@@ -87,45 +95,50 @@ function bagCurrentWorld(w){w.run('stage=2;render(false)');w.elFor('#profileSele
   w.run(`beginDesign(${idx})`);
   w.run('stage=1');
   const html=w.run('customize()');
-  for(const title of ['Vents','Jacket cuff buttons','Pocket accent'])assert.ok(html.includes(`<div class="option-title">${title}</div>`),`the jacket Personalize step offers the ${title} group`);
-  assert.ok(html.includes(`aria-pressed="true" onclick="setOption('vents','Single vent')"`),'the jacket starts from the same defaults');
-  w.run("setOption('pocketAccent','Patch pocket')");
+  for(const title of ['Vents','Waist pocket style','Ticket pocket','Cuff buttons'])assert.ok(html.includes(`<div class="option-title"><span>${title}</span>`),`the jacket Personalize step offers the ${title} group`);
+  assert.ok(html.includes(`aria-pressed="true" onclick="setOption('vents','Center')"`),'the jacket starts from the same standards');
+  w.run("setOption('ticketPocket','Flap');setOption('underCollarFabric','Milanese Multi-Color')");
   bagCurrentWorld(w);
   const item=w.bag()[0];
-  assert.equal(item.pocketAccent,'Patch pocket','the jacket line stores the pocket accent');
-  assert.ok(!('vents' in item),'an untouched group stores nothing on the jacket line');
-  assert.equal(w.run('subtotal()'),base+15,'the jacket subtotal includes the modifier');
-  assert.ok(w.run('lineHtml(bag[0])').includes('$'+(base+15)),'the jacket bag line shows the raised price');
-  assert.ok(w.run('lineDescription(bag[0])').includes('Patch pocket'),'the jacket bag line shows the pocket accent');
+  assert.equal(item.ticketPocket,'Flap','the jacket line stores the ticket pocket');
+  assert.equal(item.vents,'Center','the jacket line stores the standard vent it started from');
+  assert.equal(w.run('subtotal()'),base+40,'the jacket subtotal includes the Milanese price');
+  assert.ok(w.run('lineHtml(bag[0])').includes('$'+(base+40)),'the jacket bag line shows the raised price');
+  assert.ok(w.run('lineDescription(bag[0])').includes('Flap ticket pocket'),'the jacket bag line shows the ticket pocket');
 }
 
-// World 3: Ticket pocket adds $5, choosing None returns the price to base.
+// World 3: the Milanese single color adds $25, returning to Match
+// returns the price to base.
 {
   const w=makeWorld();
   w.run('beginDesign(0)');
-  w.run("setOption('pocketAccent','Ticket pocket')");
+  w.run("setOption('underCollarFabric','Milanese Single Color')");
   bagCurrentWorld(w);
-  assert.equal(w.run('subtotal()'),404,'a Ticket pocket adds exactly $5');
+  assert.equal(w.run('subtotal()'),424,'a Milanese single color under collar adds exactly $25');
   w.run(`editBagItem('${w.bag()[0].id}')`);
-  w.run("setOption('pocketAccent','None')");
+  w.run("setOption('underCollarFabric','Match')");
   bagCurrentWorld(w);
-  assert.equal(w.run('subtotal()'),399,'choosing None returns the price to the base');
-  assert.ok(!w.run('lineDescription(bag[0])').includes('pocket'),'a None pocket accent adds no bag line segment');
+  assert.equal(w.run('subtotal()'),399,'returning to Match returns the price to the base');
+  assert.ok(!w.run('lineDescription(bag[0])').includes('under collar'),'a Match under collar adds no bag line segment');
 }
 
-// World 4: the CUS-07 product change reset clears the new groups too.
+// World 4: the CUS-07 product change reset restores the aligned
+// standards too.
 {
   const w=makeWorld();
   w.run('beginDesign(0)');
-  w.run("setOption('pocketAccent','Patch pocket');setOption('vents','Double vent');setOption('cuffButtons','Four')");
+  w.run("setOption('waistPocketType','Patch');setOption('vents','Side');setOption('cuffButtons','5 Buttons');setOption('underCollarFabric','Milanese Multi-Color')");
   w.run('beginDesign(1)');
   const config=w.config();
-  assert.ok(!('pocketAccent' in config)&&!('vents' in config)&&!('cuffButtons' in config),'starting another product clears the new groups back to their defaults');
+  assert.equal(config.waistPocketType,'Flap','starting another product resets the waist pocket type to the standard');
+  assert.equal(config.vents,'Center','starting another product resets the vents to the standard');
+  assert.equal(config.cuffButtons,'4 Buttons','starting another product resets the cuff buttons to the standard');
+  assert.equal(config.underCollarFabric,'Match','starting another product resets the under collar fabric');
   w.run('stage=1');
-  assert.ok(w.run('customize()').includes(`aria-pressed="true" onclick="setOption('pocketAccent','None')"`),'the second product starts from the default pocket accent');
+  assert.ok(w.run('customize()').includes(`aria-pressed="true" onclick="setOption('ticketPocket','None')"`),'the second product starts from the standard ticket pocket');
   bagCurrentWorld(w);
   const item=w.bag()[0];
-  assert.ok(!('pocketAccent' in item),'the second product line carries no pocket accent from the first');
+  assert.equal(item.waistPocketType,'Flap','the second product line carries the standard, not the first product choice');
   assert.equal(w.run('subtotal()'),449,'the second product is priced at its base');
 }
 
@@ -182,5 +195,5 @@ function bagCurrentWorld(w){w.run('stage=2;render(false)');w.elFor('#profileSele
   const pantsIdx=catalog.findIndex(p=>p.kind==='pants'),pants=catalog[pantsIdx];
   r=await commerce(req({items:[{product:pantsIdx,fabric:'Wool',lapel:'',closure:'Flat front',pocketAccent:'Patch pocket',fit:'Tailored',lining:'',monogram:'',profile:readyProfile}],shipping},'jacket-options-00000003'),env);
   assert.equal((await r.json()).totalCents,pants.priceCents,'a pocket accent value on trousers is never priced');
-  console.log('Customizer jacket option checks passed: suits and jackets render Vents, Jacket cuff buttons and Pocket accent with Included or priced labels and preselected defaults, the closure offers five styles, pocket accent prices flow from the one table to the customizer, bag, checkout and server order, bag Edit restores the selections, a product switch resets them, and legacy items render unchanged, repricing only through the documented Peak lapel and filled monogram rules.');
+  console.log('Customizer jacket option checks passed: suits and jackets render the aligned JPOS groups (closure with 3-Roll-2 and the DB configurations, vents None Center Side, the pocket groups and the cuff construction) with standards preselected, the Milanese under collar prices flow from the one table to the customizer, bag, checkout and server order, bag Edit restores the selections, a product switch resets them to the standards, and legacy items render and price unchanged through the legacy tables.');
 })().catch(e=>{console.error(e);process.exit(1)});

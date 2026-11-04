@@ -1,15 +1,17 @@
 const assert=require('node:assert/strict'),fs=require('node:fs'),vm=require('node:vm');
-// CUS-01 (Wave 3 package 3.3): the jacket finishes. The Lapel group grows
-// to the eight captured variants with widths in the labels (the three
-// peak variants priced at +$10), the Lining group grows to the captured
-// colorways in price tiers (Default included, plain +$15, Paisley +$20,
-// Bemberg +$30, Italian +$109), and Lining type (Half +$20, Unstructured
-// +$40), Buttons (horn +$7, corozo +$4 or +$5, leather and metal +$9,
-// statement brass +$75) and Elbow patches (+$15) join the Personalize
-// step for suits and standalone jackets. All prices read OPTION_PRICES
-// in app.js and its server mirror. The new slots (liningType, buttons,
-// elbowPatches) stay absent from config until chosen, like packages 3.1
-// and 3.2, so stored items from before this change render byte
+// CUS-01 finishes, aligned model (J wave package J3): the Wave 3
+// finish model (eight lapel variants with folded in widths, tiered
+// lining prices, named button materials, lining types, elbow patches)
+// is replaced by the JPOS groups: lapel type and lapel width as
+// separate groups with the attested inch values, button style
+// (Matching, Tuxedo Button, Fabric covered), and the lining group
+// kept as unpriced placeholder values pending the JPOS lining
+// catalog (plan input 3). The Wave 3 prices survive only in
+// LEGACY_OPTION_PRICES and its server mirror, for pre-alignment
+// items: Worlds 5 and 6 and the server section pin that legacy
+// behavior byte and price exact. (The historical note this suite
+// carried: the new slots stayed absent from config until chosen, so
+// stored items from before the Wave 3 change rendered byte
 // identically. Two deliberate legacy rules are pinned down here:
 // a stored lapel of Peak now prices at +$10 (its line text is unchanged),
 // and stored lining values Tonal, Burgundy and Midnight, which are not
@@ -38,53 +40,48 @@ function makeWorld(seed={}){
 }
 function bagCurrentWorld(w){w.run('stage=2;render(false)');w.elFor('#profileSelect').value='profile-1';w.run('nextConfig()')}
 
-// World 1: a suit renders all five finish areas with their defaults, in
-// captured order, and the new slots stay unset until chosen.
+// World 1: a suit renders the aligned finish areas with their
+// standards, in mapping order: lapel type and width as separate
+// groups, button style in place of the named materials, and the
+// placeholder lining group unpriced. The removed finish groups
+// (Lining type, Elbow patches, named button materials) are absent,
+// and the retired prices survive only in the legacy table.
 {
   const w=makeWorld();
-  assert.equal(w.run('LAPEL_VALUES.length'),8,'the lapel group holds the eight captured variants');
-  assert.equal(w.run('LINING_VALUES.length'),63,'the lining group holds Default plus the 62 captured colorways');
-  assert.equal(w.run('BUTTON_VALUES.length'),24,'the buttons group holds the 24 captured choices');
-  assert.equal(w.run('ELBOW_PATCH_VALUES.length'),21,'the elbow patch group holds None plus the 20 captured choices');
-  assert.equal(w.run("optionPrice('lapel','Peak')"),10,'Peak prices at $10 in the table');
-  assert.equal(w.run("optionPrice('lining','Paisley red')"),20,'a Paisley lining prices at $20');
-  assert.equal(w.run("optionPrice('lining','Italian jazz royale')"),109,'an Italian lining prices at $109');
-  assert.equal(w.run("optionPrice('buttons','Corozo ivory')"),5,'Corozo ivory prices at $5, above the other corozo at $4');
+  assert.equal(w.run('LAPEL_TYPE_VALUES.length'),4,'the lapel type group holds the four JPOS types');
+  assert.equal(w.run("lapelSizeValues('Shawl').length"),6,'the shawl width group holds the straight and rounded widths');
+  assert.equal(w.run('LINING_VALUES.length'),63,'the lining group still holds Default plus the 62 placeholder colorways');
+  assert.equal(w.run("optionPrice('lapel','Peak')"),0,'the current table prices no lapel: the Peak modifier is retired for new designs');
+  assert.equal(w.run("legacyOptionPrice('lapel','Peak')"),10,'the legacy table keeps Peak at $10 for pre-alignment items');
+  assert.equal(w.run("legacyOptionPrice('lining','Italian jazz royale')"),109,'the legacy table keeps the Italian lining tier for pre-alignment items');
+  assert.equal(w.run("optionPrice('underCollarFabric','Milanese Multi-Color')"),40,'the Milanese multi color under collar prices at $40 in the current table');
   w.run('beginDesign(0)');
-  assert.ok(!('liningType' in w.config())&&!('buttons' in w.config())&&!('elbowPatches' in w.config()),'the finish slots stay unset until the shopper picks a choice');
+  assert.ok(!('liningType' in w.config())&&!('buttons' in w.config())&&!('elbowPatches' in w.config()),'a new design never sets the removed finish slots');
+  assert.equal(w.config().lapelType,'Notch','a new design starts from the Notch lapel type standard');
   w.run('stage=1');
   const html=w.run('customize()');
-  const titles=['Lapel','Jacket closure','Buttons','Vents','Jacket cuff buttons','Pocket accent','Lining','Lining type','Elbow patches'];
+  const titles=['Tuxedo facings','Lapel style','Lapel width','Jacket closure','Buttons','Vents','Waist pocket style','Under collar fabric','Lining'];
   let at=-1;
-  for(const t of titles){const i=html.indexOf(`<div class="option-title">${t}</div>`);assert.ok(i>at,`the Personalize step offers ${t} after the previous group`);at=i}
+  for(const t of titles){const i=html.indexOf(`<div class="option-title"><span>${t}</span>`);assert.ok(i>at,`the Personalize step offers ${t} after the previous group`);at=i}
   assert.ok(html.indexOf('<h3>Trousers</h3>')>at,'the Trousers section follows the jacket finishes');
-  assert.ok(html.indexOf('<label class="field">Monogram')>html.indexOf('<h3>Trousers</h3>'),'the Monogram field follows the Trousers section');
-  assert.ok(html.includes(`aria-pressed="true" onclick="setOption('lapel','Notch')">Notch 3-3.2in · Included`),'the Notch lapel is the selected default, width in its label');
-  assert.ok(html.includes(`onclick="setOption('lapel','Peak')">Peak 3-3.2in · +$10`),'the Peak lapel shows its width and +$10 modifier');
-  assert.ok(html.includes(`onclick="setOption('lapel','Wide peak')">Wide peak 3.75in · +$10`),'the Wide peak lapel shows its width and +$10 modifier');
-  assert.ok(html.includes(`onclick="setOption('lapel','Classic wider notch')">Classic wider notch 4.75in · Included`),'the Classic wider notch shows its width, Included');
-  assert.ok(html.includes(`onclick="setOption('lapel','Shawl')">Shawl · Included`),'the Shawl lapel is offered, Included');
+  assert.ok(html.indexOf('<span>Inside label</span>')>html.indexOf('<h3>Trousers</h3>'),'the label program follows the Trousers section');
+  for(const gone of ['Lining type','Elbow patches','Black tiger','Horn brown','Classic wider notch'])assert.ok(!html.includes(gone),`the Personalize step no longer offers ${gone}`);
+  assert.ok(html.includes(`aria-pressed="true" onclick="setOption('lapelType','Notch')">Notch lapel · Included`),'the Notch lapel type is the selected standard');
+  assert.ok(html.includes(`onclick="setOption('lapelType','Peak')">Peak lapel · Included`),'the Peak lapel type is offered unpriced');
+  assert.ok(html.includes(`onclick="setOption('lapelType','DB Peak')">Double breasted peak lapel · Included`),'the DB Peak lapel type is offered');
+  assert.ok(html.includes(`aria-pressed="true" onclick="setOption('lapelSize','Standard')">Standard, 2 7/8 in · Included`),'the Standard notch width is selected, with its JPOS inches');
   assert.ok(html.includes(`aria-pressed="true" onclick="setOption('lining','Default')">Default · Included`),'the Default lining is the selected default');
   assert.equal(w.config().lining,'Tonal','rendering the Default choice does not rewrite the stored Tonal value');
-  assert.ok(html.includes(`onclick="setOption('lining','Red')">Red · +$15`),'a plain lining shows +$15');
-  assert.ok(html.includes(`onclick="setOption('lining','Paisley red')">Paisley red · +$20`),'a Paisley lining shows +$20');
-  assert.ok(html.includes(`onclick="setOption('lining','Black Bemberg')">Black Bemberg · +$30`),'a Bemberg lining shows +$30');
-  assert.ok(html.includes(`onclick="setOption('lining','Italian jazz royale')">Italian jazz royale · +$109`),'an Italian lining shows +$109');
-  assert.ok(html.includes(`aria-pressed="true" onclick="setOption('liningType','Full lining')">Full lining · Included`),'Full lining is the selected lining type default');
-  assert.ok(html.includes(`onclick="setOption('liningType','Half lining')">Half lining · +$20`),'Half lining shows +$20');
-  assert.ok(html.includes(`onclick="setOption('liningType','No lining (unstructured)')">No lining (unstructured) · +$40`),'the unstructured lining type shows +$40');
-  assert.ok(html.includes(`aria-pressed="true" onclick="setOption('buttons','Horn brown')">Horn brown · Included`),'Horn brown is the selected button default');
-  assert.ok(html.includes(`onclick="setOption('buttons','Horn solid black')">Horn solid black · +$7`),'a horn button shows +$7');
-  assert.ok(html.includes(`onclick="setOption('buttons','Corozo beige')">Corozo beige · +$4`),'a corozo button shows +$4');
-  assert.ok(html.includes(`onclick="setOption('buttons','Vintage brown leather')">Vintage brown leather · +$9`),'a leather button shows +$9');
-  assert.ok(html.includes(`onclick="setOption('buttons','Black tiger')">Black tiger · +$75`),'a statement brass button shows +$75');
-  assert.ok(html.includes(`aria-pressed="true" onclick="setOption('elbowPatches','None')">None · Included`),'no elbow patch is the selected default');
-  assert.ok(html.includes(`onclick="setOption('elbowPatches','Black leather')">Black leather · +$15`),'an elbow patch shows +$15');
+  assert.ok(html.includes(`onclick="setOption('lining','Paisley red')">Paisley red · Included`),'a Paisley lining is unpriced in the aligned model');
+  assert.ok(html.includes(`onclick="setOption('lining','Italian jazz royale')">Italian jazz royale · Included`),'an Italian lining is unpriced in the aligned model');
+  assert.ok(html.includes(`aria-pressed="true" onclick="setOption('buttonStyle','Matching')">Matching buttons · Included`),'matching buttons are the selected standard');
+  assert.ok(html.includes(`onclick="setOption('buttonStyle','Fabric covered')">Fabric covered buttons · Included`),'fabric covered buttons are offered');
 }
 
-// World 2: each priced finish adds exactly its modifier on its own.
+// World 2: on the aligned model only the Milanese under collar
+// fabrics move the price; every other finish choice adds nothing.
 {
-  const cases=[["setOption('lapel','Wide peak')",10,'a Wide peak lapel adds $10'],["setOption('lining','Paisley red')",20,'a Paisley lining adds $20'],["setOption('lining','Italian jazz royale')",109,'an Italian lining adds $109'],["setOption('lining','Wine')",15,'a plain lining adds $15'],["setOption('liningType','Half lining')",20,'Half lining adds $20'],["setOption('liningType','No lining (unstructured)')",40,'the unstructured lining type adds $40'],["setOption('buttons','Black tiger')",75,'a statement brass button adds $75'],["setOption('buttons','Italian horn black')",7,'a horn button adds $7'],["setOption('elbowPatches','Dark blue suede')",15,'an elbow patch adds $15']];
+  const cases=[["setOption('lapelType','Peak')",0,'a Peak lapel type adds nothing'],["setOption('lapelSize','Wide')",0,'a Wide lapel adds nothing'],["setOption('lining','Paisley red')",0,'a Paisley lining adds nothing'],["setOption('lining','Italian jazz royale')",0,'an Italian lining adds nothing'],["setOption('buttonStyle','Fabric covered')",0,'fabric covered buttons add nothing'],["setOption('exteriorStitch','5/16 Pic')",0,'an exterior stitch adds nothing'],["setOption('underCollarFabric','Milanese Single Color')",25,'a Milanese single color under collar adds $25'],["setOption('underCollarFabric','Milanese Multi-Color')",40,'a Milanese multi color under collar adds $40']];
   for(const [act,delta,message] of cases){
     const w=makeWorld();
     w.run('beginDesign(0)');
@@ -95,31 +92,33 @@ function bagCurrentWorld(w){w.run('stage=2;render(false)');w.elFor('#profileSele
 }
 
 // World 3: combined finishes total correctly through the bag line and
-// checkout, and bag Edit restores them.
+// checkout (only the Milanese under collar prices), and bag Edit
+// restores them.
 {
   const w=makeWorld();
   w.run('beginDesign(0)');
-  w.run("setOption('lapel','Wide peak');setOption('buttons','Black tiger');setOption('lining','Paisley red');setOption('liningType','Half lining');setOption('elbowPatches','Black leather')");
-  assert.ok(w.run('customize()').includes('<div class="price">$539 '),'the customizer price carries all five modifiers (10+75+20+20+15)');
+  w.run("setOption('lapelType','Peak');setOption('lapelSize','Wide');setOption('buttonStyle','Tuxedo Button');setOption('lining','Paisley red');setOption('underCollarFabric','Milanese Multi-Color')");
+  assert.ok(w.run('customize()').includes('<div class="price">$439 '),'the customizer price carries the Milanese price only (40)');
   bagCurrentWorld(w);
   assert.equal(w.bag().length,1,'the configured suit is bagged');
   const item=w.bag()[0];
-  assert.equal(item.lapel,'Wide peak');assert.equal(item.buttons,'Black tiger');assert.equal(item.lining,'Paisley red');assert.equal(item.liningType,'Half lining');assert.equal(item.elbowPatches,'Black leather');
-  assert.equal(w.run('lineDescription(bag[0])'),'Navy · Wide peak lapel · Tailored fit · Two button · Black tiger buttons · Paisley red lining · Half lining · Black leather elbow patches','the bag line shows the finishes in customizer order');
-  assert.equal(w.run('subtotal()'),539,'the subtotal totals the combined finishes');
+  assert.equal(item.lapelType,'Peak');assert.equal(item.lapelSize,'Wide');assert.equal(item.buttonStyle,'Tuxedo Button');assert.equal(item.lining,'Paisley red');assert.equal(item.underCollarFabric,'Milanese Multi-Color');
+  assert.ok(!('buttons' in item)&&!('liningType' in item)&&!('elbowPatches' in item),'the bagged item carries none of the removed finish slots');
+  assert.equal(w.run('lineDescription(bag[0])'),'Navy · Peak lapel, Wide · 2-Button · Tuxedo buttons · Center vent · 4 cuff buttons · Flap waist pockets · Milanese Multi-Color under collar · Paisley red lining','the bag line shows the finishes in customizer order');
+  assert.equal(w.run('subtotal()'),439,'the subtotal totals the Milanese price only');
   w.run("location.hash='#checkout'");
   const checkout=w.run('checkoutPage()');
-  assert.ok(checkout.includes('Paisley red lining')&&checkout.includes('$539'),'the checkout shows the finishes and the combined total');
+  assert.ok(checkout.includes('Paisley red lining')&&checkout.includes('$439'),'the checkout shows the finishes and the total');
   w.run(`editBagItem('${item.id}')`);
-  assert.equal(w.config().lapel,'Wide peak','bag Edit restores the lapel');
-  assert.equal(w.config().buttons,'Black tiger','bag Edit restores the buttons');
+  assert.equal(w.config().lapelType,'Peak','bag Edit restores the lapel type');
+  assert.equal(w.config().lapelSize,'Wide','bag Edit restores the lapel width');
+  assert.equal(w.config().buttonStyle,'Tuxedo Button','bag Edit restores the button style');
   assert.equal(w.config().lining,'Paisley red','bag Edit restores the lining');
-  assert.equal(w.config().liningType,'Half lining','bag Edit restores the lining type');
-  assert.equal(w.config().elbowPatches,'Black leather','bag Edit restores the elbow patches');
-  w.run("setOption('buttons','Horn brown')");
+  assert.equal(w.config().underCollarFabric,'Milanese Multi-Color','bag Edit restores the under collar fabric');
+  w.run("setOption('underCollarFabric','Match')");
   bagCurrentWorld(w);
   assert.equal(w.bag().length,1,'saving the edit adds no new line');
-  assert.equal(w.run('subtotal()'),464,'removing the brass button reprices the line from the same table');
+  assert.equal(w.run('subtotal()'),399,'returning the under collar to Match reprices the line from the same table');
 }
 
 // World 4: a standalone jacket renders the same finish areas and prices
@@ -132,17 +131,17 @@ function bagCurrentWorld(w){w.run('stage=2;render(false)');w.elFor('#profileSele
   w.run(`beginDesign(${idx})`);
   w.run('stage=1');
   const html=w.run('customize()');
-  for(const t of ['Lapel','Buttons','Lining','Lining type','Elbow patches'])assert.ok(html.includes(`<div class="option-title">${t}</div>`),`the jacket Personalize step offers the ${t} group`);
-  assert.ok(html.includes(`aria-pressed="true" onclick="setOption('buttons','Horn brown')"`),'the jacket starts from the same button default');
+  for(const t of ['Lapel style','Lapel width','Buttons','Lining'])assert.ok(html.includes(`<div class="option-title"><span>${t}</span>`),`the jacket Personalize step offers the ${t} group`);
+  assert.ok(html.includes(`aria-pressed="true" onclick="setOption('buttonStyle','Matching')"`),'the jacket starts from the same button style standard');
   assert.ok(!html.includes('<h3>Trousers</h3>'),'a standalone jacket has no Trousers section');
-  w.run("setOption('lining','Italian golden maduro');setOption('elbowPatches','Red leather')");
+  w.run("setOption('lining','Italian golden maduro');setOption('underCollarFabric','Milanese Single Color')");
   bagCurrentWorld(w);
   const item=w.bag()[0];
   assert.equal(item.lining,'Italian golden maduro','the jacket line stores the Italian lining');
-  assert.equal(item.elbowPatches,'Red leather','the jacket line stores the elbow patch');
-  assert.equal(w.run('subtotal()'),base+109+15,'the jacket subtotal includes both modifiers');
+  assert.equal(item.underCollarFabric,'Milanese Single Color','the jacket line stores the under collar fabric');
+  assert.equal(w.run('subtotal()'),base+25,'the jacket subtotal includes the Milanese price only');
   assert.ok(w.run('lineDescription(bag[0])').includes('Italian golden maduro lining'),'the jacket bag line shows the lining');
-  assert.ok(w.run('lineDescription(bag[0])').includes('Red leather elbow patches'),'the jacket bag line shows the elbow patch');
+  assert.ok(w.run('lineDescription(bag[0])').includes('Milanese Single Color under collar'),'the jacket bag line shows the under collar fabric');
 }
 
 // World 5: the deliberate legacy Peak rule. A stored item with lapel
@@ -186,21 +185,25 @@ function bagCurrentWorld(w){w.run('stage=2;render(false)');w.elFor('#profileSele
   assert.equal(w.run('subtotal()'),399,'the legacy line still prices at base after the edit cycle');
 }
 
-// World 7: the CUS-07 product change reset clears the finishes too.
+// World 7: the CUS-07 product change reset restores the finish
+// standards too.
 {
   const w=makeWorld();
   w.run('beginDesign(0)');
-  w.run("setOption('lapel','Wide peak');setOption('lining','Paisley red');setOption('liningType','Half lining');setOption('buttons','Black tiger');setOption('elbowPatches','Black leather')");
+  w.run("setOption('lapelType','Peak');setOption('lapelSize','Wide');setOption('lining','Paisley red');setOption('buttonStyle','Fabric covered');setOption('underCollarFabric','Milanese Multi-Color')");
   w.run('beginDesign(1)');
   const config=w.config();
-  assert.ok(!('liningType' in config)&&!('buttons' in config)&&!('elbowPatches' in config),'starting another product clears the finish slots');
-  assert.equal(config.lapel,'Notch','the second product starts from the Notch lapel');
+  assert.ok(!('liningType' in config)&&!('buttons' in config)&&!('elbowPatches' in config),'starting another product sets no removed finish slots');
+  assert.equal(config.lapelType,'Notch','the second product starts from the Notch lapel type');
+  assert.equal(config.lapelSize,'Standard','the second product starts from the Standard lapel width');
+  assert.equal(config.buttonStyle,'Matching','the second product starts from matching buttons');
+  assert.equal(config.underCollarFabric,'Match','the second product starts from the Match under collar');
   assert.equal(config.lining,'Tonal','the second product starts from the default lining');
   w.run('stage=1');
   assert.ok(w.run('customize()').includes(`aria-pressed="true" onclick="setOption('lining','Default')"`),'the second product shows the Default lining selected');
   bagCurrentWorld(w);
   const item=w.bag()[0];
-  assert.ok(!('buttons' in item)&&!('liningType' in item),'the second product line carries no finishes from the first');
+  assert.equal(item.lapelType,'Notch','the second product line carries the standard lapel type');
   assert.equal(w.run('subtotal()'),449,'the second product prices at its base');
 }
 
@@ -240,5 +243,5 @@ function bagCurrentWorld(w){w.run('stage=2;render(false)');w.elFor('#profileSele
   const pantsIdx=catalog.findIndex(p=>p.kind==='pants'),pants=catalog[pantsIdx];
   r=await commerce(req({items:[{product:pantsIdx,fabric:'Wool',lapel:'Wide peak',closure:'Flat front',buttons:'Black tiger',fit:'Tailored',lining:'Paisley red',liningType:'Half lining',elbowPatches:'Black leather',monogram:'',profile:readyProfile}],shipping},'jacket-finishes-0000004'),env);
   assert.equal((await r.json()).totalCents,pants.priceCents,'finish values on trousers are never priced');
-  console.log('Customizer jacket finish checks passed: suits and jackets render the expanded Lapel and Lining groups plus Lining type, Buttons and Elbow patches with defaults and tier prices, every modifier flows from the one table to the customizer, bag, checkout and server order, bag Edit restores the finishes, a product switch resets them, legacy Peak reprices only through its documented rule, and legacy Notch and Tonal items are byte and price identical.');
+  console.log('Customizer jacket finish checks passed: suits and jackets render the aligned lapel type and width groups with JPOS inches, the button style group and the unpriced placeholder lining, the removed finish groups are absent, only the Milanese under collar prices on the jacket side, bag Edit restores the finishes, a product switch resets them to the standards, and legacy items price and render exactly as before through the legacy tables on client and server.');
 })().catch(e=>{console.error(e);process.exit(1)});

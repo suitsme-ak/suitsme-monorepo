@@ -66,7 +66,7 @@ const TROUSER_SLOTS=['pantsLining','pocketStyle','pleats','backPockets','beltLoo
   assert.equal(w.bag().length,1,'the configured suit is bagged');
   const item=w.bag()[0];
   assert.equal(item.pantsLining,'Front and back lining');assert.equal(item.pocketStyle,'Seam');assert.equal(item.pleats,'Forward 2 pleats');assert.equal(item.backPockets,'No back pockets');assert.equal(item.beltLoops,'No');
-  assert.equal(w.run('lineDescription(bag[0])'),'Navy · Notch lapel · Tailored fit · Two button · Front and back lining · Seam · Forward 2 pleats · No back pockets · No belt loops · Tonal lining','the bag line shows the trousers selections in group order');
+  assert.equal(w.run('lineDescription(bag[0])'),'Navy · Notch lapel, Standard · 2-Button · Center vent · 4 cuff buttons · Flap waist pockets · Front and back lining · Seam · Forward 2 pleats · No back pockets · No belt loops · Tonal lining','the bag line shows the aligned jacket specification, then the trousers selections in group order');
   assert.equal(w.run('subtotal()'),414,'the subtotal adds the $10 lining and the $5 pleats');
   w.run("location.hash='#checkout'");
   const checkout=w.run('checkoutPage()');
@@ -113,7 +113,7 @@ const TROUSER_SLOTS=['pantsLining','pocketStyle','pleats','backPockets','beltLoo
   const item=w.bag()[0];
   assert.equal(item.pleats,'Single pleat','the bagged item stores the pleats choice');
   assert.equal(item.trouserFront,'Flat front','the legacy slot keeps its preselect and is not overwritten');
-  assert.equal(w.run('lineDescription(bag[0])'),'Taupe · Notch lapel · Tailored fit · Two button · Single pleat · Tonal lining','the bag line shows the chosen pleat once, in the trouser front position');
+  assert.equal(w.run('lineDescription(bag[0])'),'Taupe · Notch lapel, Standard · 2-Button · Center vent · 4 cuff buttons · Flap waist pockets · Single pleat · Tonal lining','the bag line shows the chosen pleat once, in the trouser front position');
   w.run(`editBagItem('${item.id}')`);
   assert.equal(w.config().pleats,'Single pleat','bag Edit restores the pleats choice');
   assert.equal(w.config().trouserFront,'Flat front','bag Edit restores the legacy slot alongside it');

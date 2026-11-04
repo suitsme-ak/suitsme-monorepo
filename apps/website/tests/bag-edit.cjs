@@ -2,12 +2,12 @@ const assert=require('node:assert/strict'),fs=require('node:fs'),vm=require('nod
 // CRT-02: bag Edit restores a configured item into the customizer and saving
 // updates that same item in place. Drives the real storefront scripts in a vm
 // with stubbed DOM and storage, in the style of the other suites.
-// Note (Wave 3 package 3.3): the suit configured below wears a Peak lapel,
-// which OPTION_PRICES now prices at +$10, so the two subtotal expectations
-// carry that modifier; every other behavior asserted here is unchanged.
-// Note (Wave 3 package 3.4): the same suit carries a filled monogram,
-// which TEXT_FIELD_PRICES now prices at +$10, so the same two subtotal
-// expectations carry that modifier too.
+// Note (J wave package J3): the suit configured below is built on the
+// JPOS aligned model (lapelType Peak, closure 1-Button), whose choices
+// are unpriced except the Milanese under collar fabrics, so the two
+// subtotal expectations no longer carry the Wave 3 Peak lapel and
+// monogram modifiers for the suit. The quick add jacket is a legacy
+// item and still prices its Peak lapel at +$10 inside its $279.
 function makeEl(){return{innerHTML:'',textContent:'',value:'',checked:false,open:false,classList:{add(){},remove(){},toggle(){return false}},addEventListener(){},setAttribute(){},getBoundingClientRect:()=>({left:0,top:0,right:0,bottom:0}),showModal(){this.open=true},close(){this.open=false},scrollIntoView(){}}}
 const els=new Map();const elFor=s=>{if(!els.has(s))els.set(s,makeEl());return els.get(s)};
 const store=new Map();
@@ -24,14 +24,14 @@ const clone=o=>JSON.parse(JSON.stringify(o));
 
 // Build a fully configured suit through the real customizer flow.
 run('beginDesign(0)');
-run(`setOption('fit','Slim');setOption('lapel','Peak');setOption('closure','One button');setOption('lining','Burgundy');config.monogram='AB';saveConfig();stage=2;render(false)`);
+run(`setOption('lapelType','Peak');setOption('closure','1-Button');setOption('lining','Burgundy');config.monogram='AB';saveConfig();stage=2;render(false)`);
 elFor('#profileSelect').value='profile-1';
 run('nextConfig()');
 let bag=bagState();
 assert.equal(bag.length,1,'customizer add creates one bag line');
 const suit=bag[0];
-assert.equal(suit.product,0);assert.equal(suit.fabric,'Navy');assert.equal(suit.fit,'Slim');
-assert.equal(suit.lapel,'Peak');assert.equal(suit.closure,'One button');assert.equal(suit.lining,'Burgundy');
+assert.equal(suit.product,0);assert.equal(suit.fabric,'Navy');assert.equal(suit.optionModel,3,'the suit is on the aligned option model');
+assert.equal(suit.lapelType,'Peak');assert.equal(suit.closure,'1-Button');assert.equal(suit.lining,'Burgundy');
 assert.equal(suit.monogram,'AB');assert.deepEqual(suit.profile,profile,'item stores a copy of the full profile');
 
 // A second line via quick add, so position preservation can be checked.
@@ -40,14 +40,14 @@ bag=bagState();
 assert.equal(bag.length,2,'quick add appends a second line');
 const jacket=bag[1];
 assert.equal(jacket.lapel,'Notch');assert.equal(jacket.lining,'Tonal');assert.deepEqual(jacket.profile,profile);
-assert.equal(run('subtotal()'),399+10+10+279,'subtotal covers both lines (the Peak lapel and the filled monogram add their $10 modifiers)');
+assert.equal(run('subtotal()'),399+279,'subtotal covers both lines (the aligned suit prices at base; the legacy quick add jacket keeps its modifiers)');
 
 // Edit the suit: change exactly one option (lining) and save.
 run(`editBagItem('${suit.id}')`);
 assert.equal(run('editingBagId'),suit.id,'edit session targets the suit line');
 const restored=JSON.parse(store.get('suits-config'));
-assert.equal(restored.lapel,'Peak');assert.equal(restored.lining,'Burgundy');assert.equal(restored.closure,'One button');
-assert.equal(restored.fit,'Slim');assert.equal(restored.monogram,'AB');assert.equal(restored.profileId,'profile-1','profile is restored into the customizer');
+assert.equal(restored.lapelType,'Peak');assert.equal(restored.lining,'Burgundy');assert.equal(restored.closure,'1-Button');
+assert.ok(!('fit' in restored)&&!('lapel' in restored),'the aligned edit session carries no legacy fit or lapel slot');assert.equal(restored.monogram,'AB');assert.equal(restored.profileId,'profile-1','profile is restored into the customizer');
 assert.ok(run('customize()').includes('editing an item from your bag'),'customizer explains the edit in progress');
 run('stage=2;render(false)');
 const editingHtml=run('customize()');
@@ -105,5 +105,5 @@ assert.ok(!run(`lineHtml(bag[3])`).includes('editBagItem'),'gift card line has n
 assert.ok(run(`lineHtml(bag[0])`).includes('>Edit</button>'),'garment line renders an Edit button');
 run(`editBagItem('${bag[2].id}')`);
 assert.equal(run('editingBagId'),null,'editBagItem is a no-op for non garment items');
-assert.equal(run('subtotal()'),399+10+10+279+79+100,'totals still cover every kind of line');
+assert.equal(run('subtotal()'),399+279+79+100,'totals still cover every kind of line');
 console.log('Bag edit checks passed: edit restores every selection, saving updates the same line in place with only the changed option different, cancel and the profile guard leave the bag untouched, quick add items are editable, and gift/accessory/swatch lines offer no Edit.');

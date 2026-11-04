@@ -1,15 +1,15 @@
 const assert=require('node:assert/strict'),fs=require('node:fs'),vm=require('node:vm');
-// CUS-02 (Wave 3 package 3.4): the priced extras, the tuxedo tier and
-// the extra monogram fields. Suits and jackets gain a Tier group at the
-// top of the Personalize step (Regular included, Make it a tuxedo +$50)
-// and a square and tie set (+$39); suits alone gain a vest in six styles
-// (+$99 each) with an optional fabric back (+$20) and additional pants
-// (+$140). The inside monogram grows a second line and a collar
-// monogram joins it: a filled first line prices at +$10 (the second
-// line adds nothing) and a filled collar monogram at +$10, read from
-// TEXT_FIELD_PRICES and its server mirror. Every extra shows its price
-// before it is added and nothing is preselected on. The new slots stay
-// absent from config until chosen, like packages 3.1 to 3.3.
+// CUS-02 extras, aligned model (J wave package J3): the Wave 3 extras
+// model (the tuxedo tier switch, six named vest styles with a priced
+// fabric back, the square and tie set, priced monogram text fields) is
+// replaced by the JPOS shapes: the tuxedo facing specification (per
+// part material and coverage), the vest in a suit on the JPOS vest
+// fields (style, buttons, pocket type and number, back), and the
+// label program and collar monogram as styles whose text fields ride
+// along unpriced. Additional pants (+$140) survive because the
+// trousers groups are J4's package. The Wave 3 extras prices survive
+// only in LEGACY_OPTION_PRICES and its server mirror, for
+// pre-alignment items; World 7 and the server section pin that.
 // One deliberate legacy rule is pinned down here: the inside monogram
 // was free before this package, so a stored item with a filled monogram
 // reprices by exactly +$10 under the new table, its line text
@@ -38,52 +38,59 @@ function makeWorld(seed={}){
 }
 function bagCurrentWorld(w){w.run('stage=2;render(false)');w.elFor('#profileSelect').value='profile-1';w.run('nextConfig()')}
 
-// World 1: a suit renders the Tier group at the top of the Personalize
-// step, the Extras section after Trousers with every price showing, and
-// the three monogram fields; the new slots stay unset until chosen and
-// the waistcoat back group appears only once a vest is chosen.
+// World 1: a suit renders the Tuxedo facings group at the top of the
+// Personalize step in place of the tier switch, the vest field groups
+// after Trousers once a vest is added, and the label program with its
+// text fields appearing only for a personalized style. The retired
+// extras (tier, named vest styles, square and tie, priced monogram
+// text) survive only in the legacy price table.
 {
   const w=makeWorld();
-  assert.equal(w.run('VEST_VALUES.length'),6,'the vest group holds the six captured styles');
-  assert.equal(w.run("optionPrice('tier','Make it a tuxedo')"),50,'the tuxedo tier prices at $50 in the table');
-  assert.equal(w.run("optionPrice('vest','Classic vest')"),99,'a vest style prices at $99');
-  assert.equal(w.run("optionPrice('vestFabricBack','Fabric back')"),20,'the fabric back prices at $20');
-  assert.equal(w.run("optionPrice('additionalPants','Yes')"),140,'additional pants price at $140');
-  assert.equal(w.run("optionPrice('squareAndTie','Yes')"),39,'the square and tie set prices at $39');
-  assert.equal(w.run('TEXT_FIELD_PRICES.monogram'),10,'a filled inside monogram prices at $10');
-  assert.equal(w.run('TEXT_FIELD_PRICES.collarMonogram'),10,'a filled collar monogram prices at $10');
+  assert.equal(w.run('TUX_FACING_VALUES.length'),7,'the tuxedo facing choices combine three coverages in two materials, plus None');
+  assert.equal(w.run('VEST_STYLE_VALUES.length'),2,'the vest style group holds the two JPOS styles');
+  assert.equal(w.run("optionPrice('tier','Make it a tuxedo')"),0,'the current table prices no tuxedo tier: the switch is retired');
+  assert.equal(w.run("legacyOptionPrice('tier','Make it a tuxedo')"),50,'the legacy table keeps the tier price for pre-alignment items');
+  assert.equal(w.run("legacyOptionPrice('vest','Classic vest')"),99,'the legacy table keeps the named vest prices for pre-alignment items');
+  assert.equal(w.run("optionPrice('additionalPants','Yes')"),140,'additional pants still price at $140: a trousers side group J4 owns');
+  assert.equal(w.run('TEXT_FIELD_PRICES.monogram'),10,'the text field price survives for legacy items only');
   w.run('beginDesign(0)');
   const fresh=w.config();
-  for(const k of ['tier','vest','vestFabricBack','additionalPants','squareAndTie','monogram2','collarMonogram'])assert.ok(!(k in fresh),`the ${k} slot stays unset until the shopper chooses it`);
+  for(const k of ['tier','vest','vestFabricBack','squareAndTie','monogram2','collarMonogram'])assert.ok(!(k in fresh),`a new design never sets the retired ${k} slot`);
+  assert.equal(fresh.tuxedo,'No','the tuxedo gate starts off');
+  assert.equal(fresh.vestIncluded,'No','the vest gate starts off: nothing is preselected on');
+  assert.equal(fresh.labelStyle,'None','the label program starts at no label');
   w.run('stage=1');
   const html=w.run('customize()');
-  assert.ok(html.indexOf('<div class="option-title">Tier</div>')>=0&&html.indexOf('<div class="option-title">Tier</div>')<html.indexOf('<div class="option-title">Lapel</div>'),'the Tier group opens the Personalize step, before Lapel');
-  assert.ok(html.includes(`aria-pressed="true" onclick="setOption('tier','Regular')">Regular · Included`),'Regular is the selected tier default, shown Included');
-  assert.ok(html.includes(`onclick="setOption('tier','Make it a tuxedo')">Make it a tuxedo · +$50`),'the tuxedo tier shows its +$50 before it is chosen');
-  assert.ok(html.indexOf('<h3>Trousers</h3>')<html.indexOf('<h3>Extras</h3>')&&html.indexOf('<h3>Extras</h3>')<html.indexOf('<label class="field">Monogram'),'the Extras section follows Trousers and precedes the monogram fields');
-  assert.ok(html.includes(`aria-pressed="true" onclick="setOption('vest','No vest')">No vest · Included`),'no vest is the selected default, shown Included: nothing is preselected on');
-  assert.ok(html.includes(`onclick="setOption('vest','Classic vest')">Classic vest · +$99`),'a vest style shows its +$99 before it is added');
-  assert.ok(html.includes(`onclick="setOption('vest','Shawl lapel double breasted vest')">Shawl lapel double breasted vest · +$99`),'every vest style shows +$99');
-  assert.ok(!html.includes('Waistcoat back'),'the waistcoat back group stays hidden until a vest is chosen');
+  assert.ok(html.indexOf('<span>Tuxedo facings</span>')>=0&&html.indexOf('<span>Tuxedo facings</span>')<html.indexOf('<span>Lapel style</span>'),'the Tuxedo facings group opens the Personalize step, before Lapel style');
+  assert.ok(html.includes(`aria-pressed="true" onclick="setOption('tuxedo','No')">Standard jacket · Included`),'the standard jacket is the selected default, shown Included');
+  assert.ok(!html.includes('Make it a tuxedo')&&!html.includes('Square and tie')&&!html.includes('Classic vest'),'the tier switch, the square and tie set and the named vest styles are not offered');
+  assert.ok(html.indexOf('<h3>Trousers</h3>')<html.indexOf('<span>Vest</span>')&&html.indexOf('<span>Vest</span>')<html.indexOf('<span>Inside label</span>'),'the vest group follows Trousers and precedes the label program');
+  assert.ok(html.includes(`aria-pressed="true" onclick="setOption('vestIncluded','No')">No vest · Included`),'no vest is the selected default, shown Included');
+  assert.ok(!html.includes('Vest back'),'the vest field groups stay hidden until a vest is added');
   assert.ok(html.includes(`aria-pressed="true" onclick="setOption('additionalPants','No')">No · Included`),'additional pants start off, shown Included');
   assert.ok(html.includes(`onclick="setOption('additionalPants','Yes')">Yes · +$140`),'additional pants show +$140 before they are added');
-  assert.ok(html.includes(`aria-pressed="true" onclick="setOption('squareAndTie','No')">No · Included`),'the square and tie set starts off, shown Included');
-  assert.ok(html.includes(`onclick="setOption('squareAndTie','Yes')">Yes · +$39`),'the square and tie set shows +$39 before it is added');
-  assert.ok(html.includes('Inside the jacket · +$10 when filled · up to 20 characters'),'the inside monogram states its price and its 20 character cap');
-  assert.ok(html.includes('<input maxlength="20" value="" oninput="config.monogram=this.value;saveConfig()" placeholder="Line 1">'),'the first monogram line takes 20 characters');
-  assert.ok(html.includes('<input maxlength="20" value="" oninput="config.monogram2=this.value;saveConfig()" placeholder="Line 2">'),'the second monogram line takes 20 characters');
-  assert.ok(html.includes('Collar monogram'),'the collar monogram field is offered');
-  assert.ok(html.includes('<input maxlength="11" value="" oninput="config.collarMonogram=this.value;saveConfig()" placeholder="Your personal touch">'),'the collar monogram takes 11 characters');
-  w.run("setOption('vest','Classic vest')");
+  assert.ok(html.includes(`aria-pressed="true" onclick="setOption('labelStyle','None')">No label · Included`),'no label is the selected label default');
+  assert.ok(!html.includes('Monogram for the label'),'the label text field stays hidden until a personalized style is chosen');
+  assert.ok(html.includes(`aria-pressed="true" onclick="setOption('collarMonogramStyle','None')">No collar monogram · Included`),'no collar monogram is the selected default');
+  assert.ok(!html.includes('Collar monogram text'),'the collar monogram text field stays hidden until a style is chosen');
+  w.run("setOption('vestIncluded','Yes')");
   const withVest=w.run('customize()');
-  assert.ok(withVest.includes('<div class="option-title">Waistcoat back</div>'),'choosing a vest reveals the waistcoat back group');
-  assert.ok(withVest.includes(`aria-pressed="true" onclick="setOption('vestFabricBack','Matches lining')">Matches lining · Included`),'the lining back is the selected waistcoat back default');
-  assert.ok(withVest.includes(`onclick="setOption('vestFabricBack','Fabric back')">Fabric back · +$20`),'the fabric back shows +$20');
+  assert.ok(withVest.includes('<span>Vest back</span>'),'adding a vest reveals the vest field groups');
+  assert.ok(withVest.includes(`aria-pressed="true" onclick="setOption('vestBack','Lining')">Lining back · Included`),'the lining back is the selected vest back standard');
+  assert.ok(withVest.includes(`onclick="setOption('vestBack','Fabric')">Fabric back · Included`),'the fabric back is unpriced in the aligned model');
+  w.run("setOption('labelStyle','Personalized Monogram')");
+  const withLabel=w.run('customize()');
+  assert.ok(withLabel.includes('<input maxlength="20" value="" oninput="config.monogram=this.value;saveConfig()" placeholder="Your personal touch">'),'choosing a personalized label reveals the label text field at its 20 character cap');
+  assert.ok(withLabel.includes('Second line'),'the second label line field is offered');
+  w.run("setOption('collarMonogramStyle','Block')");
+  assert.ok(w.run('customize()').includes('<input maxlength="11" value="" oninput="config.collarMonogram=this.value;saveConfig()" placeholder="Your initials">'),'choosing a collar monogram style reveals its text field at its 11 character cap');
 }
 
-// World 2: each extra and field adds exactly its modifier on its own.
+// World 2: on the aligned model the tuxedo specification, the vest
+// fields and the label program add nothing; additional pants are the
+// only priced extra left on a suit.
 {
-  const cases=[["setOption('tier','Make it a tuxedo')",50,'the tuxedo tier adds $50'],["setOption('additionalPants','Yes')",140,'additional pants add $140'],["setOption('squareAndTie','Yes')",39,'the square and tie set adds $39'],["config.monogram='AB';saveConfig()",10,'a filled inside monogram adds $10'],["config.monogram='AB';config.monogram2='CD';saveConfig()",10,'the second monogram line adds nothing beyond the first'],["config.collarMonogram='EF';saveConfig()",10,'a filled collar monogram adds $10'],["config.monogram2='CD';saveConfig()",0,'a lone second line, with the first line empty, adds nothing'],['',0,'empty monogram fields add nothing']];
+  const cases=[["setOption('tuxedo','Yes')",0,'the tuxedo gate adds nothing'],["setOption('tuxedo','Yes');setOption('tuxLapel','Satin full');setOption('tuxCollar','Grosgrain 3/8')",0,'tuxedo facings add nothing'],["setOption('additionalPants','Yes')",140,'additional pants add $140'],["setOption('vestIncluded','Yes');setOption('vestStyle','Notch Lapel');setOption('vestBack','Fabric')",0,'the vest fields add nothing'],["setOption('labelStyle','Personalized Monogram');config.monogram='AB';config.monogram2='CD';saveConfig()",0,'a filled personalized label adds nothing'],["setOption('collarMonogramStyle','Block');config.collarMonogram='EF';saveConfig()",0,'a filled collar monogram adds nothing'],['',0,'an untouched design adds nothing']];
   for(const [act,delta,message] of cases){
     const w=makeWorld();
     w.run('beginDesign(0)');
@@ -91,76 +98,69 @@ function bagCurrentWorld(w){w.run('stage=2;render(false)');w.elFor('#profileSele
     assert.equal(w.run('itemPrice(config)'),399+delta,message);
     assert.equal(w.run('optionCharge(config)'),delta,message+' (option charge)');
   }
-  for(const style of ['Classic vest','Classic lapel vest','Double breasted vest','Double breasted lapel vest','Shawl lapel vest','Shawl lapel double breasted vest']){
-    const w=makeWorld();
-    w.run('beginDesign(0)');
-    w.run(`setOption('vest','${style}')`);
-    assert.equal(w.run('itemPrice(config)'),399+99,`the ${style} adds $99`);
-    assert.equal(w.run('optionCharge(config)'),99,`the ${style} charges $99`);
-  }
-  const w=makeWorld();
-  w.run('beginDesign(0)');
-  w.run("setOption('vest','Classic vest');setOption('vestFabricBack','Fabric back')");
-  assert.equal(w.run('itemPrice(config)'),399+119,'a vest with a fabric back adds $99 plus $20');
 }
 
-// World 3: removing the vest removes its charge completely, in the
-// customizer and through bag Edit.
+// World 3: removing the vest removes it from the line completely, in
+// the customizer and through bag Edit.
 {
   const w=makeWorld();
   w.run('beginDesign(0)');
-  w.run("setOption('vest','Classic lapel vest');setOption('vestFabricBack','Fabric back')");
-  assert.equal(w.run('itemPrice(config)'),399+119,'the vest and fabric back price together');
-  w.run("setOption('vest','No vest')");
-  assert.ok(!('vestFabricBack' in w.config()),'choosing No vest clears the fabric back selection with it');
-  assert.equal(w.run('itemPrice(config)'),399,'removing the vest returns the customizer price to base');
-  assert.equal(w.run('optionCharge(config)'),0,'removing the vest leaves no charge');
-  w.run("setOption('vest','Classic lapel vest');setOption('vestFabricBack','Fabric back')");
+  w.run("setOption('vestIncluded','Yes');setOption('vestStyle','Notch Lapel');setOption('vestBack','Fabric')");
+  assert.equal(w.run('itemPrice(config)'),399,'the vest fields are unpriced in the aligned model');
+  assert.ok(w.run('lineDescription(config)').includes('Vest: Notch Lapel'),'the design line names the vest while it is added');
+  w.run("setOption('vestIncluded','No')");
+  assert.ok(!w.run('lineDescription(config)').includes('Vest:'),'turning the vest off removes it from the line');
+  w.run("setOption('vestIncluded','Yes')");
   bagCurrentWorld(w);
-  assert.equal(w.run('subtotal()'),399+119,'the bagged vest prices with its fabric back');
+  assert.equal(w.run('subtotal()'),399,'the bagged vest prices at base');
   const item=w.bag()[0];
   w.run(`editBagItem('${item.id}')`);
-  assert.equal(w.config().vest,'Classic lapel vest','bag Edit restores the vest style');
-  assert.equal(w.config().vestFabricBack,'Fabric back','bag Edit restores the fabric back');
-  w.run("setOption('vest','No vest')");
+  assert.equal(w.config().vestIncluded,'Yes','bag Edit restores the vest gate');
+  assert.equal(w.config().vestStyle,'Notch Lapel','bag Edit restores the vest style');
+  assert.equal(w.config().vestBack,'Fabric','bag Edit restores the vest back');
+  w.run("setOption('vestIncluded','No')");
   bagCurrentWorld(w);
   assert.equal(w.bag().length,1,'saving the removal adds no new line');
-  assert.equal(w.run('subtotal()'),399,'removing the vest through bag Edit returns the line to base price');
-  assert.ok(!w.run('lineDescription(bag[0])').includes('vest'),'the edited line no longer names a vest');
+  assert.equal(w.run('subtotal()'),399,'the edited line stays at base price');
+  assert.ok(!w.run('lineDescription(bag[0])').includes('Vest:'),'the edited line no longer names a vest');
   assert.ok(!w.run('lineDescription(bag[0])').includes('Fabric back'),'the edited line no longer names the fabric back');
 }
 
-// World 4: all the extras combined total correctly through the bag
-// line and checkout, and bag Edit restores every one of them.
+// World 4: the aligned extras combined total correctly through the
+// bag line and checkout (only additional pants price), and bag Edit
+// restores every field.
 {
   const w=makeWorld();
   w.run('beginDesign(0)');
-  w.run("setOption('tier','Make it a tuxedo');setOption('vest','Classic vest');setOption('vestFabricBack','Fabric back');setOption('additionalPants','Yes');setOption('squareAndTie','Yes');config.monogram='AB';config.monogram2='CD';config.collarMonogram='EF';saveConfig()");
-  assert.ok(w.run('customize()').includes('<div class="price">$767 '),'the customizer price carries every extra (50+99+20+140+39+10+10)');
+  w.run("setOption('tuxedo','Yes');setOption('tuxLapel','Satin full');setOption('vestIncluded','Yes');setOption('vestStyle','Notch Lapel');setOption('vestButtons','DB 6x3');setOption('vestBack','Fabric');setOption('additionalPants','Yes');setOption('labelStyle','Personalized Monogram');config.monogram='AB';config.monogram2='CD';setOption('collarMonogramStyle','Block');config.collarMonogram='EF';saveConfig()");
+  assert.ok(w.run('customize()').includes('<div class="price">$539 '),'the customizer price carries additional pants only (140)');
   bagCurrentWorld(w);
   assert.equal(w.bag().length,1,'the configured suit is bagged');
   const item=w.bag()[0];
-  assert.equal(item.tier,'Make it a tuxedo');assert.equal(item.vest,'Classic vest');assert.equal(item.vestFabricBack,'Fabric back');assert.equal(item.additionalPants,'Yes');assert.equal(item.squareAndTie,'Yes');assert.equal(item.monogram,'AB');assert.equal(item.monogram2,'CD');assert.equal(item.collarMonogram,'EF');
-  assert.equal(w.run('lineDescription(bag[0])'),'Navy · Notch lapel · Tailored fit · Two button · Make it a tuxedo · Tonal lining · Classic vest · Fabric back · Additional pants · Square and tie · Monogram AB / CD · Collar monogram EF','the bag line names the tier, the vest and its fabric back, both add ons and both monograms');
-  assert.equal(w.run('subtotal()'),767,'the subtotal totals every extra');
+  assert.equal(item.tuxedo,'Yes');assert.equal(item.tuxLapel,'Satin full');assert.equal(item.vestIncluded,'Yes');assert.equal(item.vestStyle,'Notch Lapel');assert.equal(item.vestButtons,'DB 6x3');assert.equal(item.vestBack,'Fabric');assert.equal(item.additionalPants,'Yes');assert.equal(item.labelStyle,'Personalized Monogram');assert.equal(item.monogram,'AB');assert.equal(item.monogram2,'CD');assert.equal(item.collarMonogram,'EF');
+  assert.ok(!('tier' in item)&&!('vest' in item)&&!('squareAndTie' in item),'the bagged item carries none of the retired extras slots');
+  assert.equal(w.run('lineDescription(bag[0])'),'Navy · Notch lapel, Standard · 2-Button · Tuxedo facings · Center vent · 4 cuff buttons · Flap waist pockets · Tonal lining · Vest: Notch Lapel, DB 6x3, Welt pockets, 2-Pocket, Fabric back · Additional pants · Label: Personalized Monogram AB / CD · Collar monogram EF','the bag line names the facings, the vest fields, additional pants and both monograms');
+  assert.equal(w.run('subtotal()'),539,'the subtotal totals additional pants only');
   w.run("location.hash='#checkout'");
   const checkout=w.run('checkoutPage()');
-  assert.ok(checkout.includes('Classic vest')&&checkout.includes('$767'),'the checkout shows the extras and the combined total');
+  assert.ok(checkout.includes('Notch Lapel')&&checkout.includes('$539'),'the checkout shows the extras and the total');
   w.run(`editBagItem('${item.id}')`);
-  assert.equal(w.config().tier,'Make it a tuxedo','bag Edit restores the tier');
-  assert.equal(w.config().vest,'Classic vest','bag Edit restores the vest');
-  assert.equal(w.config().vestFabricBack,'Fabric back','bag Edit restores the fabric back');
+  assert.equal(w.config().tuxedo,'Yes','bag Edit restores the tuxedo gate');
+  assert.equal(w.config().tuxLapel,'Satin full','bag Edit restores the lapel facing');
+  assert.equal(w.config().vestIncluded,'Yes','bag Edit restores the vest gate');
+  assert.equal(w.config().vestStyle,'Notch Lapel','bag Edit restores the vest style');
+  assert.equal(w.config().vestBack,'Fabric','bag Edit restores the vest back');
   assert.equal(w.config().additionalPants,'Yes','bag Edit restores additional pants');
-  assert.equal(w.config().squareAndTie,'Yes','bag Edit restores the square and tie set');
-  assert.equal(w.config().monogram2,'CD','bag Edit restores the second monogram line');
+  assert.equal(w.config().labelStyle,'Personalized Monogram','bag Edit restores the label style');
+  assert.equal(w.config().monogram2,'CD','bag Edit restores the second label line');
   assert.equal(w.config().collarMonogram,'EF','bag Edit restores the collar monogram');
   bagCurrentWorld(w);
-  assert.equal(w.run('subtotal()'),767,'saving the restored edit keeps the combined total');
+  assert.equal(w.run('subtotal()'),539,'saving the restored edit keeps the total');
 }
 
-// World 5: a standalone jacket offers the tier, the square and tie set
-// and the expanded monogram fields, but no vest and no additional
-// pants, and prices what it offers the same way.
+// World 5: a standalone jacket offers the tuxedo specification and
+// the label program, but no vest and no additional pants, and prices
+// what it offers the same way (nothing, pending the upcharge data).
 {
   const w=makeWorld();
   const idx=w.run("products.findIndex(p=>p.kind==='jacket')");
@@ -169,18 +169,17 @@ function bagCurrentWorld(w){w.run('stage=2;render(false)');w.elFor('#profileSele
   w.run(`beginDesign(${idx})`);
   w.run('stage=1');
   const html=w.run('customize()');
-  assert.ok(html.includes('<div class="option-title">Tier</div>'),'the jacket Personalize step offers the Tier group');
-  assert.ok(html.includes('<div class="option-title">Square and tie</div>'),'the jacket offers the square and tie set');
-  assert.ok(!html.includes('<div class="option-title">Add a vest</div>'),'a standalone jacket offers no vest');
-  assert.ok(!html.includes('<div class="option-title">Additional pants</div>'),'a standalone jacket offers no additional pants');
-  assert.ok(html.includes('config.monogram2=this.value')&&html.includes('config.collarMonogram=this.value'),'the jacket offers the second monogram line and the collar monogram');
-  w.run("setOption('tier','Make it a tuxedo');setOption('squareAndTie','Yes');config.collarMonogram='EF';saveConfig()");
-  assert.equal(w.run('itemPrice(config)'),base+50+39+10,'the jacket prices the tier, the set and the collar monogram');
+  assert.ok(html.includes('<span>Tuxedo facings</span>'),'the jacket Personalize step offers the tuxedo specification');
+  assert.ok(!html.includes('<span>Vest</span>'),'a standalone jacket offers no vest');
+  assert.ok(!html.includes('<span>Additional pants</span>'),'a standalone jacket offers no additional pants');
+  assert.ok(html.includes('<span>Inside label</span>')&&html.includes('<span>Collar monogram</span>'),'the jacket offers the label program and the collar monogram style');
+  w.run("setOption('tuxedo','Yes');setOption('tuxCollar','Grosgrain 3/8');setOption('collarMonogramStyle','Script');config.collarMonogram='EF';saveConfig()");
+  assert.equal(w.run('itemPrice(config)'),base,'the jacket prices its tuxedo facings and collar monogram at nothing');
   bagCurrentWorld(w);
   const item=w.bag()[0];
-  assert.equal(item.tier,'Make it a tuxedo');assert.equal(item.squareAndTie,'Yes');assert.ok(!('vest' in item)&&!('additionalPants' in item),'the jacket line carries no suit only extras');
-  assert.equal(w.run('lineDescription(bag[0])'),`Taupe · Notch lapel · Tailored fit · Two button · Make it a tuxedo · Tonal lining · Square and tie · Collar monogram EF`,'the jacket bag line names the tier, the set and the collar monogram');
-  assert.equal(w.run('subtotal()'),base+99,'the jacket subtotal includes its extras');
+  assert.equal(item.tuxedo,'Yes');assert.equal(item.tuxCollar,'Grosgrain 3/8');assert.ok(!('vestIncluded' in item)&&!('additionalPants' in item),'the jacket line carries no suit only extras');
+  assert.equal(w.run('lineDescription(bag[0])'),`Taupe · Notch lapel, Standard · 2-Button · Tuxedo facings · Center vent · 4 cuff buttons · Flap waist pockets · Tonal lining · Collar monogram EF`,'the jacket bag line names the facings and the collar monogram');
+  assert.equal(w.run('subtotal()'),base,'the jacket subtotal is its base price');
 }
 
 // World 6: trousers keep their existing behavior exactly: the single
@@ -228,18 +227,23 @@ function bagCurrentWorld(w){w.run('stage=2;render(false)');w.elFor('#profileSele
   assert.equal(w2.run('itemPrice(bag[0])'),399,'a legacy line without a monogram prices at the product base');
 }
 
-// World 8: the CUS-07 product change reset clears every new slot.
+// World 8: the CUS-07 product change reset restores every aligned
+// slot to its standard and clears the text fields.
 {
   const w=makeWorld();
   w.run('beginDesign(0)');
-  w.run("setOption('tier','Make it a tuxedo');setOption('vest','Classic vest');setOption('vestFabricBack','Fabric back');setOption('additionalPants','Yes');setOption('squareAndTie','Yes');config.monogram='AB';config.monogram2='CD';config.collarMonogram='EF';saveConfig()");
+  w.run("setOption('tuxedo','Yes');setOption('vestIncluded','Yes');setOption('additionalPants','Yes');setOption('labelStyle','Personalized Monogram');config.monogram='AB';config.monogram2='CD';config.collarMonogram='EF';saveConfig()");
   w.run('beginDesign(1)');
   const config=w.config();
-  for(const k of ['tier','vest','vestFabricBack','additionalPants','squareAndTie','monogram2','collarMonogram'])assert.ok(!(k in config),`starting another product clears the ${k} slot`);
+  for(const k of ['tier','vest','vestFabricBack','squareAndTie','monogram2','collarMonogram'])assert.ok(!(k in config),`starting another product clears the ${k} slot`);
+  assert.equal(config.tuxedo,'No','the second product starts with the tuxedo gate off');
+  assert.equal(config.vestIncluded,'No','the second product starts with no vest');
+  assert.equal(config.labelStyle,'None','the second product starts with no label');
   assert.equal(config.monogram,'','the second product starts with an empty monogram');
   bagCurrentWorld(w);
   const item=w.bag()[0];
-  for(const k of ['tier','vest','vestFabricBack','additionalPants','squareAndTie','monogram2','collarMonogram'])assert.ok(!(k in item),`the second product line carries no ${k} from the first`);
+  for(const k of ['tier','vest','vestFabricBack','squareAndTie','monogram2','collarMonogram'])assert.ok(!(k in item),`the second product line carries no ${k} from the first`);
+  assert.equal(item.tuxedo,'No','the second product line carries the standard tuxedo gate');
   assert.equal(w.run('subtotal()'),449,'the second product prices at its base');
 }
 
@@ -286,5 +290,5 @@ function bagCurrentWorld(w){w.run('stage=2;render(false)');w.elFor('#profileSele
   assert.equal((await r.json()).totalCents,pants.priceCents,'extras and monogram values on trousers are never priced');
   const storedPants=JSON.parse(db.rows.at(-1).items)[0];
   assert.equal(storedPants.monogram,'ABCDEFGHIJKL','trousers keep the 12 character monogram cap on the order item');
-  console.log('Customizer extras checks passed: suits and jackets render the Tier group and expanded monogram fields, suits gain the vest, fabric back, additional pants and square and tie extras with prices shown before adding and nothing preselected on, every modifier flows from the one table to the customizer, bag, checkout and server order, removing the vest removes its charge in the customizer and through bag Edit, a product switch resets every new slot, legacy monogram items reprice by exactly $10 with line text unchanged, and other kinds are untouched.');
+  console.log('Customizer extras checks passed: suits and jackets render the tuxedo facing specification in place of the tier switch, suits specify the vest on the JPOS vest fields, the label program and collar monogram are styles with unpriced text, only additional pants prices among the extras, removing the vest removes it from the line in the customizer and through bag Edit, a product switch resets every slot, legacy items price and render exactly as before through the legacy tables on client and server, and other kinds are untouched.');
 })().catch(e=>{console.error(e);process.exit(1)});

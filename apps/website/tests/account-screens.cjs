@@ -715,17 +715,19 @@ const BAG_ITEM={id:'test-item',product:0,fabric:'Navy',fit:'Tailored',lapel:'Not
   }
   assert.equal(signed.run('productPage(0)'),guest.run('productPage(0)'),'the product page is byte identical signed in');
   // The customizer: identical renders at every stage, then the
-  // priced customization of J17 driven in both worlds.
+  // priced customization of J17 (aligned model since J3) driven in
+  // both worlds: the Milanese under collar and additional pants are
+  // the priced choices; the vest fields and label program are not.
   for(const w of [guest,signed]){w.run('chooseProduct(0)');w.run('beginDesign(0)');}
   assert.equal(signed.run('customize()'),guest.run('customize()'),'the customizer fabric step is byte identical signed in');
   const base=signed.run('products[0].price');
   for(const w of [guest,signed]){
     w.run('nextConfig()'); // stage 0 to 1, Personalize
-    w.run("setOption('tier','Make it a tuxedo');setOption('vest','Classic vest')");
-    w.run("setOption('vestFabricBack','Fabric back');setOption('additionalPants','Yes');setOption('squareAndTie','Yes');config.monogram='AB';config.monogram2='CD';config.collarMonogram='EF';saveConfig()");
+    w.run("setOption('underCollarFabric','Milanese Multi-Color');setOption('vestIncluded','Yes');setOption('vestStyle','Notch Lapel')");
+    w.run("setOption('additionalPants','Yes');setOption('labelStyle','Personalized Monogram');config.monogram='AB';config.monogram2='CD';setOption('collarMonogramStyle','Block');config.collarMonogram='EF';saveConfig()");
   }
   assert.equal(signed.run('customize()'),guest.run('customize()'),'the Personalize step with every priced extra chosen is byte identical signed in');
-  assert.ok(signed.run('customize()').includes('$'+(base+368)),'the signed in customizer price carries every extra (50+99+20+140+39+10+10)');
+  assert.ok(signed.run('customize()').includes('$'+(base+180)),'the signed in customizer price carries every priced choice (40+140)');
   for(const w of [guest,signed]){
     w.run('nextConfig()'); // stage 1 to 2, Measurements
     w.elFor('#profileSelect').value='p-ready';
@@ -736,9 +738,9 @@ const BAG_ITEM={id:'test-item',product:0,fabric:'Navy',fit:'Tailored',lapel:'Not
   assert.equal(guestBag.length,1,'the guest journey bags exactly one suit');
   const stripIds=items=>items.map(item=>{const copy={...item};delete copy.id;return copy});
   assert.deepEqual(stripIds(signedBag),stripIds(guestBag),'the bagged item is identical signed in and as guest, its random line id aside');
-  assert.equal(signedBag[0].vest,'Classic vest','the signed in bag stores the vest');
-  assert.equal(signed.run('subtotal()'),base+368,'the signed in subtotal is the Wave 3 total for this configuration');
-  assert.equal(guest.run('subtotal()'),base+368,'the guest subtotal is the same Wave 3 total');
+  assert.equal(signedBag[0].vestStyle,'Notch Lapel','the signed in bag stores the vest style');
+  assert.equal(signed.run('subtotal()'),base+180,'the signed in subtotal is the aligned total for this configuration');
+  assert.equal(guest.run('subtotal()'),base+180,'the guest subtotal is the same aligned total');
   assert.equal(signed.run('lineHtml(bag[0],false)'),guest.run('lineHtml(bag[0],false)'),'the bag line is byte identical signed in');
   // Checkout: byte identical once the one designed difference,
   // the account strip line, is set aside, and each strip is the
@@ -748,7 +750,7 @@ const BAG_ITEM={id:'test-item',product:0,fabric:'Navy',fit:'Tailored',lapel:'Not
   assert.ok(guestCheckout.includes('Have an account?'),'the guest checkout carries the guest strip');
   const stripLine=/<p class="account-strip">.*?<\/p>/;
   assert.equal(signedCheckout.replace(stripLine,''),guestCheckout.replace(stripLine,''),'checkout is byte identical signed in apart from the account strip line');
-  assert.ok(signedCheckout.includes('$'+(base+368))&&guestCheckout.includes('$'+(base+368)),'both checkouts total the configured price');
+  assert.ok(signedCheckout.includes('$'+(base+180))&&guestCheckout.includes('$'+(base+180)),'both checkouts total the configured price');
   // The bag persists across re renders while signed in.
   const bagJson=signed.store.get('suits-bag'),lineBefore=signed.run('lineHtml(bag[0],false)');
   signed.run("location.hash='#home';render()");
@@ -769,12 +771,12 @@ const BAG_ITEM={id:'test-item',product:0,fabric:'Navy',fit:'Tailored',lapel:'Not
   const orders=JSON.parse(signed.store.get('suits-orders')||'[]');
   assert.equal(orders.length,1,'the signed in demo checkout records exactly one order');
   assert.equal(orders[0].demo,true,'the recorded order is a demo order');
-  assert.equal(orders[0].total,base+368,'the order total is the configured total, extras included');
-  assert.equal(orders[0].items[0].vest,'Classic vest','the order item keeps the vest');
+  assert.equal(orders[0].total,base+180,'the order total is the configured total, priced choices included');
+  assert.equal(orders[0].items[0].vestStyle,'Notch Lapel','the order item keeps the vest style');
   assert.equal(signed.location.hash,'#order/'+orders[0].id,'placing the order lands on its order page');
   assert.ok(signed.elFor('#main').innerHTML.includes('DEMONSTRATION COMPLETE'),'the order page renders the demo completion screen');
   assert.equal(JSON.parse(signed.store.get('suits-bag')).length,0,'the bag is empty after the order is placed');
-  console.log('J24 passed: signed in, the menus are byte identical to the guest world, and so are home, three listings, a product page and every customizer stage; the priced customization lands at the Wave 3 total (base + 368) with an identical bag line, checkout differs only in the designed account strip line, the bag persists across re renders, and demo checkout completes to the order page (package 5.8).');
+  console.log('J24 passed: signed in, the menus are byte identical to the guest world, and so are home, three listings, a product page and every customizer stage; the priced customization lands at the aligned total (base + 180) with an identical bag line, checkout differs only in the designed account strip line, the bag persists across re renders, and demo checkout completes to the order page (package 5.8).');
 }
 
 // ---------------------------------------------------------------- J26
@@ -833,7 +835,7 @@ const BAG_ITEM={id:'test-item',product:0,fabric:'Navy',fit:'Tailored',lapel:'Not
   assert.equal(bagNow.length,2,'the purchase adds to the bag that was already on this browser');
   assert.equal(w.run('bag[bag.length-1].profile.name'),'My measurements','the bagged suit carries the local profile');
   assert.equal(w.run('bag[bag.length-1].lining'),'Wine','the bagged suit carries the chosen lining');
-  assert.equal(w.run('itemPrice(bag[bag.length-1])'),base+15,'the bagged suit prices the Wine lining over the base price');
+  assert.equal(w.run('itemPrice(bag[bag.length-1])'),base,'the bagged suit prices at the base price: the placeholder Wine lining is unpriced in the aligned model');
   assert.ok(w.run('lineHtml(bag[bag.length-1],false)').includes('Wine lining'),'the bag line shows the chosen lining');
   w.run("location.hash='#checkout';render()");
   assert.ok(w.elFor('#main').innerHTML.includes('checkoutForm'),'checkout opens on the delivery form');
@@ -924,5 +926,5 @@ const BAG_ITEM={id:'test-item',product:0,fabric:'Navy',fit:'Tailored',lapel:'Not
   console.log('J32 passed: the live review step renders the server quoted delivery, tax and full total in place of the calculated later copy once the quote returns, and the payment return for an expired order explains the closed 24 hour window, keeps the reference and points back to checkout (package 6.1, client half; the server half is in tests/commerce.cjs).');
 }
 
-console.log('Account screen checks passed: the gate hides every entry point with byte identical guest screens, the register to verify to signed in journey works from the real URLs, uniform API answers are shown word for word, returnTo is validated, sign out restores the guest, the checkout strip and profiles line follow the account state, reset and change password complete end to end, signed in profile saves and deletes write through with failure surfacing and retry (S8, package 5.5), a second browser pulls the account profiles down with the account copy winning a shared id (S8, package 5.5), and the guest migration offers once, imports exactly the local arrays and leaves local data and the bag untouched (J25, package 5.5), and the signed in orders page renders the merged account history with demo badged snapshots while sign out restores the browser only page (S9, package 5.6), the signed in shopping surfaces are byte identical to the guest surfaces with the priced customization at the Wave 3 totals and demo checkout completing (J24, package 5.8 parity gate), and sign out restores a guest byte identical to a fresh guest that completes the full purchase path again (J26, package 5.8 parity gate), and the sandbox review copy matches what sandbox actually charges (S10, package 6.0), and the live review step shows the server quoted totals before the redirect and the expired order payment return explains the closed window (J32, package 6.1).');
+console.log('Account screen checks passed: the gate hides every entry point with byte identical guest screens, the register to verify to signed in journey works from the real URLs, uniform API answers are shown word for word, returnTo is validated, sign out restores the guest, the checkout strip and profiles line follow the account state, reset and change password complete end to end, signed in profile saves and deletes write through with failure surfacing and retry (S8, package 5.5), a second browser pulls the account profiles down with the account copy winning a shared id (S8, package 5.5), and the guest migration offers once, imports exactly the local arrays and leaves local data and the bag untouched (J25, package 5.5), and the signed in orders page renders the merged account history with demo badged snapshots while sign out restores the browser only page (S9, package 5.6), the signed in shopping surfaces are byte identical to the guest surfaces with the priced customization at the aligned totals and demo checkout completing (J24, package 5.8 parity gate), and sign out restores a guest byte identical to a fresh guest that completes the full purchase path again (J26, package 5.8 parity gate), and the sandbox review copy matches what sandbox actually charges (S10, package 6.0), and the live review step shows the server quoted totals before the redirect and the expired order payment return explains the closed window (J32, package 6.1).');
 })().catch(e=>{console.error(e);process.exit(1)});

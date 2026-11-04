@@ -52,14 +52,14 @@ let html=run('customize()');
 assert.ok(html.includes('<div class="option-title">Pleats</div>'),'the Women suit Personalize step shows a Pleats group');
 assert.ok(html.includes("setOption('pleats','Flat front')")&&html.includes("setOption('pleats','Single pleat')"),'both CUS-06 trouser front choices are offered in the Pleats group');
 assert.ok(html.includes(`<button class="choice active" aria-pressed="true" onclick="setOption('pleats','Flat front')">Flat front · Included</button>`),'the preselected trouser front shows selected in the Pleats group');
-assert.ok(html.includes('<div class="option-title">Jacket closure</div>')&&html.includes("setOption('closure','Two button')"),'the jacket groups remain on the Women suit');
+assert.ok(html.includes('<div class="option-title"><span>Jacket closure</span>')&&html.includes("setOption('closure','2-Button')"),'the jacket groups remain on the Women suit, in the aligned vocabulary');
 assert.ok(html.indexOf('Pleats')>html.indexOf('Lining')&&html.indexOf('Pleats')<html.indexOf('Monogram'),'the trousers section sits after Lining and before Monogram');
 
 // 2. The two style slots are independent, and the trouser choice is stored
 // on the configuration and carried into the bag and onto the bag line.
-run("setOption('closure','One button')");
+run("setOption('closure','1-Button')");
 run("setOption('pleats','Single pleat')");
-assert.equal(run('config.closure'),'One button','the jacket closure choice is stored in its own slot');
+assert.equal(run('config.closure'),'1-Button','the jacket closure choice is stored in its own slot');
 assert.equal(run('config.pleats'),'Single pleat','the trouser choice is stored alongside it, not over it');
 assert.equal(run('config.trouserFront'),'Flat front','the legacy trouser front preselect is untouched by the pleats choice');
 run('stage=2');
@@ -68,8 +68,8 @@ run('nextConfig()');
 assert.equal(bagState().length,1,'the Women suit is bagged');
 const womenItem=bagState()[0];
 assert.equal(womenItem.pleats,'Single pleat','the bagged item stores the chosen trouser front in the pleats slot');
-assert.equal(womenItem.closure,'One button','the bagged item keeps the jacket closure as chosen');
-assert.equal(run('lineDescription(bag[0])'),'Taupe · Notch lapel · Tailored fit · One button · Single pleat · Tonal lining','the bag line shows the trouser front with the other selections, in line order');
+assert.equal(womenItem.closure,'1-Button','the bagged item keeps the jacket closure as chosen');
+assert.equal(run('lineDescription(bag[0])'),'Taupe · Notch lapel, Standard · 1-Button · Center vent · 4 cuff buttons · Flap waist pockets · Single pleat · Tonal lining','the bag line shows the trouser front with the other selections, in line order');
 assert.ok(run('lineHtml(bag[0])').includes('Single pleat'),'the rendered bag line shows the trouser front');
 assert.ok(run('checkoutPage()').includes('Single pleat'),'the checkout selection shows the trouser front');
 
@@ -93,14 +93,14 @@ run('stage=1');
 html=run('customize()');
 assert.ok(!html.includes('Trouser front'),'the Men suit Personalize step has no Trouser front group');
 assert.ok(!html.includes('trouserFront'),'the Men suit Personalize step never mentions the trouser front slot');
-run("setOption('closure','Two button')");
+run("setOption('closure','2-Button')");
 run('stage=2');
 documentStub.querySelector('#profileSelect').value='p-men';
 run('nextConfig()');
 const menItem=bagState().find(x=>x.product===menSuit);
 assert.ok(menItem,'the Men suit is bagged');
 assert.ok(!('trouserFront' in menItem),'the bagged Men suit stores no trouser front key');
-assert.equal(run(`lineDescription(bag.find(x=>x.product===${menSuit}))`),'Navy · Notch lapel · Tailored fit · Two button · Tonal lining','the Men suit bag line is unchanged');
+assert.equal(run(`lineDescription(bag.find(x=>x.product===${menSuit}))`),'Navy · Notch lapel, Standard · 2-Button · Center vent · 4 cuff buttons · Flap waist pockets · Tonal lining','the Men suit bag line reads in the aligned specification');
 
 // 5. Standalone Women trousers are unchanged: the same group and choices,
 // still stored in the closure slot, with no trouserFront slot involved.

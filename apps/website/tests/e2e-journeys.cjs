@@ -15,11 +15,11 @@ const assert=require('node:assert/strict'),fs=require('node:fs'),vm=require('nod
 // J11 size guide journey (SIZ-03)
 // J12 cross product customizer state journey (CUS-07)
 // J13 women suit trouser front journey (CUS-06, Pleats group since 3.2)
-// J14 jacket core options journey (CUS-01)
+// J14 jacket core options journey (CUS-01; JPOS aligned groups since J3)
 // J15 trousers options journey (CUS-01)
-// J16 jacket finishes journey (CUS-01)
-// J17 priced extras, tier and monogram fields journey (CUS-02)
-// J18 detail add ons, tailor changes and comments journey (CUS-02)
+// J16 jacket finishes journey (CUS-01; lapel type and width split since J3)
+// J17 tuxedo facings, vest fields and label program journey (CUS-02; aligned since J3)
+// J18 cuff construction, trouser details and comments journey (CUS-02; aligned since J3)
 // J19 real URL entry journey (NAV-01)
 // J20 real product URL entry journey (NAV-01, Wave 4 stage 3a)
 // J21 category spot entry journeys (NAV-01, Wave 4 stage 4)
@@ -323,7 +323,7 @@ function makeEntryWorld({pathname='/',hash='',profiles=null}={}){
   const w=makeWorld({profiles:[profile]});
   w.run('chooseProduct(0)');w.run('beginDesign(0)');
   w.run('nextConfig()');
-  w.run("setOption('lapel','Peak');setOption('lining','Burgundy')");
+  w.run("setOption('lapelType','Peak');setOption('lining','Burgundy')");
   w.run('nextConfig()');
   w.elFor('#profileSelect').value='profile-1';
   w.run('nextConfig()');
@@ -336,10 +336,10 @@ function makeEntryWorld({pathname='/',hash='',profiles=null}={}){
   assert.equal(w.run('editingBagId'),before.id,'Edit targets the bagged line');
   assert.ok(w.run('customize()').includes('editing an item from your bag'),'the customizer shows the editing note');
   assert.equal(w.run('config.lining'),'Burgundy','Edit restores the previous lining');
-  assert.equal(w.run('config.lapel'),'Peak','Edit restores the previous lapel');
+  assert.equal(w.run('config.lapelType'),'Peak','Edit restores the previous lapel type');
   w.run('stage=1');
   const personalize=w.run('customize()');
-  assert.ok(/class="choice active" aria-pressed="true" onclick="setOption\('lining','Burgundy'\)"/.test(personalize),'the Personalize step shows the previous lining selected');
+  assert.ok(/class="choice active"[^>]*aria-pressed="true" onclick="setOption\('lining','Burgundy'\)"/.test(personalize),'the Personalize step shows the previous lining selected');
   w.run("setOption('lining','Midnight')");
   w.run('stage=2');
   w.elFor('#profileSelect').value='profile-1';
@@ -596,7 +596,7 @@ console.log('E2E journey J11 passed: the rebuilt size guide is consulted in inch
   const body={id:'p-body',name:'Body profile',method:'body',unit:'in',wearer:'Men',fit:'Tailored',values:{chest:40,waist:34,shoulder:18,sleeve:25,jacket:29,seat:40,trouserWaist:34,thigh:24,inseam:32,outseam:42},ready:{jacket:'40',length:'Regular',trouser:'34'},created:'2026-01-01T00:00:00.000Z'};
   const w=makeWorld({profiles:[body]});
   w.run('beginDesign(0)');
-  w.run(`setOption('fit','Slim');setOption('lapel','Peak');setOption('closure','One button');setOption('lining','Burgundy');config.monogram='E2E';saveConfig();stage=2;render(false)`);
+  w.run(`setOption('lapelType','Peak');setOption('closure','1-Button');setOption('lining','Burgundy');config.monogram='E2E';saveConfig();stage=2;render(false)`);
   w.elFor('#profileSelect').value='p-body';
   w.run('nextConfig()');
   assert.equal(w.bag().length,1,'the first suit is bagged with its distinctive options');
@@ -607,10 +607,11 @@ console.log('E2E journey J11 passed: the rebuilt size guide is consulted in inch
   assert.ok(w.elFor('#main').innerHTML.includes('The Modern Charcoal'),'the journey lands on the second product page');
   w.run('beginDesign(1)');
   const started=JSON.parse(w.run('JSON.stringify(config)'));
-  assert.deepEqual({lapel:started.lapel,closure:started.closure,fit:started.fit,lining:started.lining,monogram:started.monogram},{lapel:'Notch',closure:'Two button',fit:'Tailored',lining:'Tonal',monogram:''},'the second product starts from its own defaults');
+  assert.deepEqual({lapelType:started.lapelType,closure:started.closure,lapelSize:started.lapelSize,lining:started.lining,monogram:started.monogram},{lapelType:'Notch',closure:'2-Button',lapelSize:'Standard',lining:'Tonal',monogram:''},'the second product starts from its own aligned defaults');
+  assert.ok(!('lapel' in started)&&!('fit' in started),'the second product design carries no legacy lapel or fit slot');
   const personalize=w.run('stage=1;customize()');
   assert.ok(!personalize.includes('E2E'),'the first product monogram is absent from the second product customizer');
-  assert.ok(personalize.includes(`class="choice active" aria-pressed="true" onclick="setOption('lining','Default')"`),'the second product shows the Default lining choice as active (its stored Tonal default, since package 3.3)');
+  assert.ok(/class="choice active"[^>]*aria-pressed="true" onclick="setOption\('lining','Default'\)"/.test(personalize),'the second product shows the Default lining choice as active (its stored Tonal default, since package 3.3)');
   w.run('stage=2;render(false)');
   w.elFor('#profileSelect').value='p-body';
   w.run('nextConfig()');
@@ -620,7 +621,8 @@ console.log('E2E journey J11 passed: the rebuilt size guide is consulted in inch
 
   w.run(`editBagItem('${first.id}')`);
   const restored=JSON.parse(w.run('JSON.stringify(config)'));
-  assert.deepEqual({lapel:restored.lapel,closure:restored.closure,fit:restored.fit,lining:restored.lining,monogram:restored.monogram},{lapel:'Peak',closure:'One button',fit:'Slim',lining:'Burgundy',monogram:'E2E'},'bag Edit restores the first suit configuration exactly');
+  assert.deepEqual({lapelType:restored.lapelType,closure:restored.closure,lining:restored.lining,monogram:restored.monogram},{lapelType:'Peak',closure:'1-Button',lining:'Burgundy',monogram:'E2E'},'bag Edit restores the first suit configuration exactly');
+  assert.ok(!('lapel' in restored)&&!('fit' in restored),'the restored aligned configuration carries no legacy lapel or fit slot');
   assert.ok(w.run('customize()').includes('editing an item from your bag'),'the customizer shows the edit in progress');
 }
 
@@ -649,14 +651,14 @@ console.log('E2E journey J12 passed: designing a second product starts clean wit
   const personalize=w.run('customize()');
   assert.ok(personalize.includes('<div class="option-title">Pleats</div>'),'the Personalize step offers a Pleats group for the Women suit');
   assert.ok(personalize.includes("setOption('pleats','Single pleat')"),'the Single pleat choice is offered');
-  assert.ok(personalize.includes('<div class="option-title">Jacket closure</div>'),'the jacket closure group is still offered');
+  assert.ok(personalize.includes('<div class="option-title"><span>Jacket closure</span>'),'the jacket closure group is still offered');
   w.run("setOption('pleats','Single pleat')");
   w.run('nextConfig()'); // stage 1 to 2, Measurements
   w.elFor('#profileSelect').value='p-women-body';
   w.run('nextConfig()');
   assert.equal(w.bag().length,1,'the Women suit is bagged');
   assert.equal(w.bag()[0].pleats,'Single pleat','the bagged item stores the chosen trouser front in the pleats slot');
-  assert.equal(w.bag()[0].closure,'Two button','the bagged item keeps the jacket closure in its own slot');
+  assert.equal(w.bag()[0].closure,'2-Button','the bagged item keeps the jacket closure in its own slot, in the aligned JPOS vocabulary');
   assert.ok(w.run('lineHtml(bag[0])').includes('Single pleat'),'the bag line shows the trouser front');
   w.run("location.hash='#checkout'");
   assert.ok(w.run('checkoutPage()').includes('Single pleat'),'the checkout selection shows the trouser front');
@@ -664,11 +666,14 @@ console.log('E2E journey J12 passed: designing a second product starts clean wit
 }
 
 // ---------------------------------------------------------------- J14
-// Jacket core options journey (CUS-01): from a suit product page, the
-// Personalize step offers the extended closure and the new Vents, Jacket
-// cuff buttons and Pocket accent groups with their defaults selected;
-// choosing a priced pocket accent raises the price on the customizer,
-// the bag line and the checkout total by exactly its modifier.
+// Jacket core options journey (CUS-01, aligned model since J3): from
+// a suit product page, the Personalize step offers the JPOS closure
+// (including 3-Roll-2 and the double breasted configurations), vents
+// None, Center, Side, the pocket groups and the cuff construction
+// with their JPOS standards selected; choosing the priced Milanese
+// under collar raises the price on the customizer, the bag line and
+// the checkout total by exactly its price, and nothing else on the
+// step carries a price.
 {
   const ready={id:'p-ready',name:'Ready profile',method:'ready',wearer:'Men',fit:'Tailored',ready:{jacket:'40',length:'Regular',trouser:'34'},created:'2026-01-01T00:00:00.000Z'};
   const w=makeWorld({profiles:[ready]});
@@ -679,27 +684,30 @@ console.log('E2E journey J12 passed: designing a second product starts clean wit
   w.run('nextConfig()'); // stage 0 to 1, Personalize
   assert.equal(w.run('stage'),1,'the journey reaches the Personalize step');
   const personalize=w.run('customize()');
-  for(const title of ['Vents','Jacket cuff buttons','Pocket accent'])assert.ok(personalize.includes(`<div class="option-title">${title}</div>`),`the Personalize step offers the ${title} group`);
-  assert.ok(personalize.includes("setOption('closure','Three button')")&&personalize.includes("setOption('closure','Four button')"),'the closure group offers the extended styles');
-  assert.ok(personalize.includes(`aria-pressed="true" onclick="setOption('vents','Single vent')"`),'Single vent starts selected');
-  assert.ok(personalize.includes(`aria-pressed="true" onclick="setOption('cuffButtons','Three')"`),'Three cuff buttons starts selected');
-  assert.ok(personalize.includes('Patch pocket · +$15'),'the Patch pocket choice shows its modifier');
-  w.run("setOption('vents','Double vent');setOption('pocketAccent','Patch pocket')");
-  assert.ok(w.run('customize()').includes('$'+(base+15)),'the customizer price rises by the modifier');
+  for(const title of ['Vents','Waist pocket style','Ticket pocket','Cuff buttons','Under collar fabric'])assert.ok(personalize.includes(`<div class="option-title"><span>${title}</span>`),`the Personalize step offers the ${title} group`);
+  assert.ok(personalize.includes("setOption('closure','3-Roll-2')")&&personalize.includes("setOption('closure','6x2 DB')"),'the closure group offers 3-Roll-2 and the double breasted configurations');
+  assert.ok(!personalize.includes('Double vent'),'no double vent exists in the aligned model');
+  assert.ok(!personalize.includes('Pocket accent'),'the Pocket accent group is gone; its choices live in the pocket groups');
+  assert.ok(personalize.includes(`aria-pressed="true" onclick="setOption('vents','Center')"`),'the Center vent starts selected');
+  assert.ok(personalize.includes(`aria-pressed="true" onclick="setOption('cuffButtons','4 Buttons')"`),'four cuff buttons start selected, the JPOS standard');
+  assert.ok(personalize.includes('Milanese felt, multiple colors · +$40'),'the Milanese multi color under collar shows its price');
+  w.run("setOption('vents','Side');setOption('underCollarFabric','Milanese Multi-Color')");
+  assert.ok(w.run('customize()').includes('$'+(base+40)),'the customizer price rises by the Milanese price only');
   w.run('nextConfig()'); // stage 1 to 2, Measurements
   w.elFor('#profileSelect').value='p-ready';
   w.run('nextConfig()');
   assert.equal(w.bag().length,1,'the configured suit is bagged');
-  assert.equal(w.bag()[0].pocketAccent,'Patch pocket','the bagged item stores the pocket accent');
-  assert.equal(w.bag()[0].vents,'Double vent','the bagged item stores the vents');
-  assert.ok(w.run('lineHtml(bag[0])').includes('$'+(base+15)),'the bag line price includes the modifier');
-  assert.ok(w.run('lineDescription(bag[0])').includes('Patch pocket'),'the bag line shows the pocket accent');
-  assert.equal(w.run('subtotal()'),base+15,'the subtotal includes the modifier');
+  assert.equal(w.bag()[0].underCollarFabric,'Milanese Multi-Color','the bagged item stores the under collar fabric');
+  assert.equal(w.bag()[0].vents,'Side','the bagged item stores the vents');
+  assert.ok(w.run('lineHtml(bag[0])').includes('$'+(base+40)),'the bag line price includes the Milanese price');
+  assert.ok(w.run('lineDescription(bag[0])').includes('Side vents'),'the bag line shows the vents');
+  assert.ok(w.run('lineDescription(bag[0])').includes('Milanese Multi-Color under collar'),'the bag line shows the under collar fabric');
+  assert.equal(w.run('subtotal()'),base+40,'the subtotal includes the Milanese price only');
   w.run("location.hash='#checkout'");
   const checkout=w.run('checkoutPage()');
-  assert.ok(checkout.includes('Patch pocket'),'the checkout selection shows the pocket accent');
-  assert.ok(checkout.includes('$'+(base+15)),'the checkout total includes the modifier');
-  console.log('E2E journey J14 passed: the suit Personalize step offers the jacket core groups with defaults selected, and a priced pocket accent raises the customizer, bag and checkout prices by exactly its modifier.');
+  assert.ok(checkout.includes('Milanese Multi-Color under collar'),'the checkout selection shows the under collar fabric');
+  assert.ok(checkout.includes('$'+(base+40)),'the checkout total includes the Milanese price');
+  console.log('E2E journey J14 passed: the suit Personalize step offers the aligned jacket core groups with JPOS standards selected, and the Milanese under collar raises the customizer, bag and checkout prices by exactly its price.');
 }
 
 // ---------------------------------------------------------------- J15
@@ -769,12 +777,14 @@ console.log('E2E journey J12 passed: designing a second product starts clean wit
 }
 
 // ---------------------------------------------------------------- J16
-// Jacket finishes journey (CUS-01, package 3.3): from a suit product
-// page, the Personalize step offers the expanded Lapel and Lining groups
-// and the new Lining type, Buttons and Elbow patches groups with their
-// defaults selected; one priced choice from each finish area raises the
-// customizer, bag and checkout prices by exactly the combined modifier,
-// and a standalone jacket renders the same finish areas.
+// Jacket finishes journey (CUS-01, aligned model since J3): from a
+// suit product page, the Personalize step offers lapel type and lapel
+// width as separate groups with the JPOS inch values, the button
+// style group in place of the named button materials, and the lining
+// group (placeholder values, unpriced pending the JPOS lining
+// catalog); the removed groups (Lining type, Elbow patches, named
+// materials) are absent, choosing across the finish areas changes no
+// price, and a standalone jacket renders the same finish areas.
 {
   const ready={id:'p-ready',name:'Ready profile',method:'ready',wearer:'Men',fit:'Tailored',ready:{jacket:'40',length:'Regular',trouser:'34'},created:'2026-01-01T00:00:00.000Z'};
   const w=makeWorld({profiles:[ready]});
@@ -785,51 +795,54 @@ console.log('E2E journey J12 passed: designing a second product starts clean wit
   w.run('nextConfig()'); // stage 0 to 1, Personalize
   assert.equal(w.run('stage'),1,'the journey reaches the Personalize step');
   const personalize=w.run('customize()');
-  for(const title of ['Lapel','Buttons','Lining','Lining type','Elbow patches'])assert.ok(personalize.includes(`<div class="option-title">${title}</div>`),`the Personalize step offers the ${title} group`);
-  assert.ok(personalize.includes(`aria-pressed="true" onclick="setOption('lapel','Notch')">Notch 3-3.2in`),'the Notch lapel starts selected with its width');
+  for(const title of ['Lapel style','Lapel width','Buttons','Lining'])assert.ok(personalize.includes(`<div class="option-title"><span>${title}</span>`),`the Personalize step offers the ${title} group`);
+  for(const gone of ['Lining type','Elbow patches','Black tiger'])assert.ok(!personalize.includes(gone),`the Personalize step no longer offers ${gone}`);
+  assert.ok(personalize.includes(`aria-pressed="true" onclick="setOption('lapelType','Notch')">Notch lapel`),'the Notch lapel type starts selected');
+  assert.ok(personalize.includes(`aria-pressed="true" onclick="setOption('lapelSize','Standard')">Standard, 2 7/8 in`),'the Standard notch width starts selected with its JPOS inches');
   assert.ok(personalize.includes(`aria-pressed="true" onclick="setOption('lining','Default')"`),'the Default lining starts selected');
-  assert.ok(personalize.includes(`aria-pressed="true" onclick="setOption('liningType','Full lining')"`),'Full lining starts selected');
-  assert.ok(personalize.includes(`aria-pressed="true" onclick="setOption('buttons','Horn brown')"`),'Horn brown buttons start selected');
-  assert.ok(personalize.includes(`aria-pressed="true" onclick="setOption('elbowPatches','None')"`),'no elbow patch starts selected');
-  assert.ok(personalize.includes('Paisley red · +$20'),'the Paisley lining shows its modifier');
-  assert.ok(personalize.includes('Black tiger · +$75'),'the brass button shows its modifier');
-  w.run("setOption('lapel','Wide peak');setOption('lining','Paisley red');setOption('liningType','Half lining');setOption('buttons','Black tiger');setOption('elbowPatches','Black leather')");
-  assert.ok(w.run('customize()').includes('$'+(base+140)),'the customizer price rises by the combined modifiers (10+20+20+75+15)');
+  assert.ok(personalize.includes(`aria-pressed="true" onclick="setOption('buttonStyle','Matching')">Matching buttons`),'matching buttons start selected');
+  assert.ok(personalize.includes('Paisley red · Included'),'the placeholder lining values are unpriced in the aligned model');
+  w.run("setOption('lapelType','Peak')");
+  assert.ok(w.run('customize()').includes(`aria-pressed="true" onclick="setOption('lapelSize','Standard')">Standard, 3 in`),'switching to Peak shows the Peak standard width in inches');
+  w.run("setOption('lining','Paisley red');setOption('buttonStyle','Fabric covered')");
+  assert.ok(w.run('customize()').includes('$'+base+' '),'the customizer price does not move for unpriced finish choices');
   w.run('nextConfig()'); // stage 1 to 2, Measurements
   w.elFor('#profileSelect').value='p-ready';
   w.run('nextConfig()');
   assert.equal(w.bag().length,1,'the configured suit is bagged');
-  assert.equal(w.bag()[0].lapel,'Wide peak','the bagged item stores the lapel');
+  assert.equal(w.bag()[0].lapelType,'Peak','the bagged item stores the lapel type');
+  assert.equal(w.bag()[0].lapelSize,'Standard','the bagged item stores the lapel width');
   assert.equal(w.bag()[0].lining,'Paisley red','the bagged item stores the lining');
-  assert.equal(w.bag()[0].liningType,'Half lining','the bagged item stores the lining type');
-  assert.equal(w.bag()[0].buttons,'Black tiger','the bagged item stores the buttons');
-  assert.equal(w.bag()[0].elbowPatches,'Black leather','the bagged item stores the elbow patches');
-  assert.ok(w.run('lineDescription(bag[0])').includes('Wide peak lapel'),'the bag line shows the lapel');
+  assert.equal(w.bag()[0].buttonStyle,'Fabric covered','the bagged item stores the button style');
+  assert.ok(!('buttons' in w.bag()[0])&&!('elbowPatches' in w.bag()[0])&&!('liningType' in w.bag()[0]),'the bagged item carries none of the removed finish slots');
+  assert.ok(w.run('lineDescription(bag[0])').includes('Peak lapel, Standard'),'the bag line shows the lapel type and width');
   assert.ok(w.run('lineDescription(bag[0])').includes('Paisley red lining'),'the bag line shows the lining');
-  assert.ok(w.run('lineDescription(bag[0])').includes('Black leather elbow patches'),'the bag line shows the elbow patches');
-  assert.equal(w.run('subtotal()'),base+140,'the subtotal includes the combined modifiers');
+  assert.ok(w.run('lineDescription(bag[0])').includes('Fabric covered buttons'),'the bag line shows the button style');
+  assert.equal(w.run('subtotal()'),base,'the subtotal is the base price: every finish choice here is unpriced');
   w.run("location.hash='#checkout'");
   const checkout=w.run('checkoutPage()');
   assert.ok(checkout.includes('Paisley red lining'),'the checkout selection shows the finishes');
-  assert.ok(checkout.includes('$'+(base+140)),'the checkout total includes the combined modifiers');
+  assert.ok(checkout.includes('$'+base),'the checkout total is the base price');
   // A standalone jacket renders the same finish areas.
   const jacketIdx=w.run("products.findIndex(p=>p.kind==='jacket')");
   assert.ok(jacketIdx>=0,'the catalog holds a standalone jacket for the journey');
   w.run(`beginDesign(${jacketIdx})`);
   w.run('nextConfig()');
   const jacketPersonalize=w.run('customize()');
-  for(const title of ['Lapel','Buttons','Lining','Lining type','Elbow patches'])assert.ok(jacketPersonalize.includes(`<div class="option-title">${title}</div>`),`the jacket Personalize step offers the ${title} group`);
-  console.log('E2E journey J16 passed: the suit Personalize step offers the expanded lapel and lining groups plus lining type, buttons and elbow patches with defaults selected, one priced choice from each area raises the customizer, bag and checkout prices by exactly the combined modifier, and a standalone jacket offers the same finish areas.');
+  for(const title of ['Lapel style','Lapel width','Buttons','Lining'])assert.ok(jacketPersonalize.includes(`<div class="option-title"><span>${title}</span>`),`the jacket Personalize step offers the ${title} group`);
+  console.log('E2E journey J16 passed: the suit Personalize step offers lapel type and width as separate groups with JPOS inches, the button style group and the unpriced placeholder lining, the removed finish groups are absent, and a standalone jacket offers the same finish areas.');
 }
 
 // ---------------------------------------------------------------- J17
-// Priced extras journey (CUS-02, package 3.4): from a suit product page,
-// the Personalize step opens with the Tier group, the Extras section
-// offers the vest, additional pants and square and tie set with prices
-// showing and nothing preselected on, and the three monogram fields sit
-// below; choosing everything raises the customizer, bag and checkout
-// prices by exactly the combined extras total, and a standalone jacket
-// offers the tier and the set but no vest.
+// Tuxedo facings, vest and label journey (CUS-02, aligned model since
+// J3): from a suit product page, the Personalize step opens with the
+// Tuxedo facings group in place of the tier switch; turning it on
+// reveals the per part facing specification; the vest is specified on
+// the JPOS vest fields in place of the six named styles; the label
+// program and collar monogram are styles with text only when a
+// personalized style is chosen; the square and tie set is gone; only
+// additional pants (a trousers side group J4 owns) still prices, and
+// a standalone jacket offers the tuxedo specification but no vest.
 {
   const ready={id:'p-ready',name:'Ready profile',method:'ready',wearer:'Men',fit:'Tailored',ready:{jacket:'40',length:'Regular',trouser:'34'},created:'2026-01-01T00:00:00.000Z'};
   const w=makeWorld({profiles:[ready]});
@@ -840,63 +853,66 @@ console.log('E2E journey J12 passed: designing a second product starts clean wit
   w.run('nextConfig()'); // stage 0 to 1, Personalize
   assert.equal(w.run('stage'),1,'the journey reaches the Personalize step');
   const personalize=w.run('customize()');
-  assert.ok(personalize.indexOf('<div class="option-title">Tier</div>')<personalize.indexOf('<div class="option-title">Lapel</div>'),'the Tier group opens the Personalize step');
-  assert.ok(personalize.includes(`aria-pressed="true" onclick="setOption('tier','Regular')"`),'the Regular tier starts selected');
-  assert.ok(personalize.includes('Make it a tuxedo · +$50'),'the tuxedo tier shows its price');
-  assert.ok(personalize.includes('<h3>Extras</h3>'),'the Extras section is offered');
-  assert.ok(personalize.includes('Classic vest · +$99'),'the vest styles show their price');
-  assert.ok(personalize.includes(`aria-pressed="true" onclick="setOption('vest','No vest')"`),'no vest starts selected: nothing is preselected on');
-  assert.ok(personalize.includes('Yes · +$140'),'additional pants show their price');
-  assert.ok(personalize.includes('Yes · +$39'),'the square and tie set shows its price');
-  assert.ok(personalize.includes('placeholder="Line 2"'),'the second monogram line is offered');
-  assert.ok(personalize.includes('Collar monogram'),'the collar monogram is offered');
-  w.run("setOption('tier','Make it a tuxedo');setOption('vest','Classic vest')");
-  assert.ok(w.run('customize()').includes('<div class="option-title">Waistcoat back</div>'),'choosing a vest reveals the waistcoat back group');
-  w.run("setOption('vestFabricBack','Fabric back');setOption('additionalPants','Yes');setOption('squareAndTie','Yes');config.monogram='AB';config.monogram2='CD';config.collarMonogram='EF';saveConfig()");
-  assert.ok(w.run('customize()').includes('$'+(base+368)),'the customizer price rises by every extra (50+99+20+140+39+10+10)');
+  assert.ok(personalize.indexOf('<span>Tuxedo facings</span>')<personalize.indexOf('<span>Lapel style</span>'),'the Tuxedo facings group opens the Personalize step');
+  assert.ok(personalize.includes(`aria-pressed="true" onclick="setOption('tuxedo','No')"`),'the standard jacket starts selected');
+  assert.ok(!personalize.includes('Tier')&&!personalize.includes('Square and tie')&&!personalize.includes('Classic vest'),'the tier switch, the square and tie set and the named vest styles are gone');
+  assert.ok(personalize.includes('Yes · +$140'),'additional pants still show their price');
+  assert.ok(personalize.includes(`aria-pressed="true" onclick="setOption('vestIncluded','No')"`),'no vest starts selected: nothing is preselected on');
+  w.run("setOption('tuxedo','Yes')");
+  const tuxHtml=w.run('customize()');
+  for(const title of ['Tuxedo lapel facing','Tuxedo collar facing','Tuxedo front edge','Tuxedo breast pocket facing','Tuxedo trouser outseam stripe'])assert.ok(tuxHtml.includes(`<span>${title}</span>`),`the tuxedo specification offers ${title}`);
+  assert.ok(tuxHtml.includes("setOption('tuxLapel','Grosgrain full')"),'the facing choices combine material and coverage');
+  w.run("setOption('vestIncluded','Yes')");
+  assert.ok(w.run('customize()').includes('<span>Vest back</span>'),'choosing a vest reveals the vest field groups');
+  w.run("setOption('tuxLapel','Satin full');setOption('tuxWaistPocket','Yes');setOption('vestStyle','Notch Lapel');setOption('vestButtons','DB 6x3');setOption('vestBack','Fabric');setOption('additionalPants','Yes');setOption('labelStyle','Personalized Monogram');config.monogram='AB';config.monogram2='CD';setOption('collarMonogramStyle','Block');config.collarMonogram='EF';saveConfig()");
+  assert.ok(w.run('customize()').includes('$'+(base+140)),'the customizer price rises by additional pants only: facings, vest fields and label styles are unpriced');
   w.run('nextConfig()'); // stage 1 to 2, Measurements
   w.elFor('#profileSelect').value='p-ready';
   w.run('nextConfig()');
   assert.equal(w.bag().length,1,'the configured suit is bagged');
   const item=w.bag()[0];
-  assert.equal(item.tier,'Make it a tuxedo','the bagged item stores the tier');
-  assert.equal(item.vest,'Classic vest','the bagged item stores the vest');
-  assert.equal(item.vestFabricBack,'Fabric back','the bagged item stores the fabric back');
+  assert.equal(item.tuxedo,'Yes','the bagged item stores the tuxedo gate');
+  assert.equal(item.tuxLapel,'Satin full','the bagged item stores the lapel facing');
+  assert.equal(item.vestIncluded,'Yes','the bagged item stores the vest gate');
+  assert.equal(item.vestStyle,'Notch Lapel','the bagged item stores the vest style');
+  assert.equal(item.vestButtons,'DB 6x3','the bagged item stores the vest buttons');
+  assert.equal(item.vestBack,'Fabric','the bagged item stores the vest back');
   assert.equal(item.additionalPants,'Yes','the bagged item stores additional pants');
-  assert.equal(item.squareAndTie,'Yes','the bagged item stores the square and tie set');
-  assert.equal(item.monogram2,'CD','the bagged item stores the second monogram line');
-  assert.equal(item.collarMonogram,'EF','the bagged item stores the collar monogram');
+  assert.equal(item.labelStyle,'Personalized Monogram','the bagged item stores the label style');
+  assert.equal(item.monogram2,'CD','the bagged item stores the second label line');
+  assert.equal(item.collarMonogram,'EF','the bagged item stores the collar monogram text');
+  assert.ok(!('tier' in item)&&!('vest' in item)&&!('squareAndTie' in item),'the bagged item carries none of the removed extras slots');
   const line=w.run('lineDescription(bag[0])');
-  for(const part of ['Make it a tuxedo','Classic vest','Fabric back','Additional pants','Square and tie','Monogram AB / CD','Collar monogram EF'])assert.ok(line.includes(part),`the bag line names ${part}`);
-  assert.equal(w.run('subtotal()'),base+368,'the subtotal includes every extra');
+  for(const part of ['Tuxedo facings','Vest: Notch Lapel, DB 6x3','Fabric back','Additional pants','Label: Personalized Monogram AB / CD','Collar monogram EF'])assert.ok(line.includes(part),`the bag line names ${part}`);
+  assert.equal(w.run('subtotal()'),base+140,'the subtotal includes additional pants only');
   w.run("location.hash='#checkout'");
   const checkout=w.run('checkoutPage()');
-  assert.ok(checkout.includes('Classic vest'),'the checkout selection shows the vest');
-  assert.ok(checkout.includes('$'+(base+368)),'the checkout total includes every extra');
-  // A standalone jacket offers the tier and the set, but no vest.
+  assert.ok(checkout.includes('Notch Lapel'),'the checkout selection shows the vest');
+  assert.ok(checkout.includes('$'+(base+140)),'the checkout total includes additional pants only');
+  // A standalone jacket offers the tuxedo specification, but no vest.
   const jacketIdx=w.run("products.findIndex(p=>p.kind==='jacket')");
   assert.ok(jacketIdx>=0,'the catalog holds a standalone jacket for the journey');
   const jacketBase=w.run(`products[${jacketIdx}].price`);
   w.run(`beginDesign(${jacketIdx})`);
   w.run('nextConfig()');
   const jacketPersonalize=w.run('customize()');
-  assert.ok(jacketPersonalize.includes('<div class="option-title">Tier</div>'),'the jacket Personalize step offers the Tier group');
-  assert.ok(jacketPersonalize.includes('<div class="option-title">Square and tie</div>'),'the jacket offers the square and tie set');
-  assert.ok(!jacketPersonalize.includes('<div class="option-title">Add a vest</div>'),'the jacket offers no vest');
-  w.run("setOption('squareAndTie','Yes')");
-  assert.equal(w.run('itemPrice(config)'),jacketBase+39,'the jacket prices the square and tie set');
-  console.log('E2E journey J17 passed: the suit Personalize step opens with the Tier group, offers the vest, additional pants and square and tie extras with prices showing and nothing preselected on, and the three monogram fields, the combined extras raise the customizer, bag and checkout prices by exactly their total, and a standalone jacket offers the tier and the set but no vest.');
+  assert.ok(jacketPersonalize.includes('<span>Tuxedo facings</span>'),'the jacket Personalize step offers the tuxedo specification');
+  assert.ok(!jacketPersonalize.includes('<span>Vest</span>'),'the jacket offers no vest');
+  w.run("setOption('tuxedo','Yes');setOption('tuxLapel','Satin 3/8')");
+  assert.equal(w.run('itemPrice(config)'),jacketBase,'the jacket prices its tuxedo facings at nothing: they are unpriced pending the upcharge data');
+  console.log('E2E journey J17 passed: the suit Personalize step opens with the tuxedo facing specification in place of the tier switch, the vest is specified on the JPOS vest fields, the label program carries the monogram text unpriced, only additional pants prices, and a standalone jacket offers the tuxedo specification but no vest.');
 }
 
 // ---------------------------------------------------------------- J18
-// Detail add ons journey (CUS-02, package 3.5): from a suit product
-// page, the Personalize step offers the Jacket details toggles, the
-// Trouser details toggles and the Side tabs group, the tailor changes
-// consent and the comments field; choosing details from both sections
-// raises the customizer, bag and checkout prices by exactly their
-// combined modifier, the consent and comments reach the bag and
-// checkout, and a standalone jacket offers the jacket details but no
-// trouser details or consent.
+// Detail add ons journey (CUS-02, aligned model since J3): from a
+// suit product page, the Personalize step offers the cuff construction
+// and exterior stitch groups in place of the jacket detail toggles,
+// the Trouser details toggles and Side tabs group (unchanged until
+// J4), and the comments field; the tailor changes consent is gone.
+// Jacket side details are unpriced in the aligned model, so only the
+// trousers side choices move the price; the comments reach the bag
+// and checkout, and a standalone jacket offers the cuff construction
+// but no trouser details.
 {
   const ready={id:'p-ready',name:'Ready profile',method:'ready',wearer:'Men',fit:'Tailored',ready:{jacket:'40',length:'Regular',trouser:'34'},created:'2026-01-01T00:00:00.000Z'};
   const w=makeWorld({profiles:[ready]});
@@ -907,49 +923,46 @@ console.log('E2E journey J12 passed: designing a second product starts clean wit
   w.run('nextConfig()'); // stage 0 to 1, Personalize
   assert.equal(w.run('stage'),1,'the journey reaches the Personalize step');
   const personalize=w.run('customize()');
-  assert.ok(personalize.includes('<h3>Jacket details</h3>'),'the Personalize step offers the Jacket details section');
-  assert.ok(personalize.includes('<div class="option-title">Handmade Milanese lapel buttonhole</div>'),'the Personalize step offers the Milanese buttonhole detail');
-  assert.ok(personalize.includes(`onclick="setOption('milaneseButtonhole','Yes')">Yes · +$75`),'the priciest jacket detail shows its price');
-  assert.ok(personalize.includes(`aria-pressed="true" onclick="setOption('workingCuffButtons','No')"`),'the jacket detail toggles start off');
+  for(const title of ['Cuff button style','Cuff button holes','Stitching on the jacket edges'])assert.ok(personalize.includes(`<span>${title}</span>`),`the Personalize step offers the ${title} group`);
+  assert.ok(!personalize.includes('Milanese lapel buttonhole')&&!personalize.includes('Tailor changes'),'the Milanese lapel buttonhole and the tailor changes consent are gone');
+  assert.ok(personalize.includes(`aria-pressed="true" onclick="setOption('cuffButtonHole','Imitation Button Holes')"`),'imitation cuff button holes start selected, the JPOS standard');
   assert.ok(personalize.includes('<h3>Trouser details</h3>'),'the Personalize step offers the Trouser details section');
   assert.ok(personalize.includes('Venice side tabs · +$20'),'the top side tab tier shows its price');
-  assert.ok(personalize.includes(`aria-pressed="true" onclick="setOption('tailorChanges','Yes, change if required')"`),'the tailor changes default starts selected');
   assert.ok(personalize.includes('<textarea maxlength="200"'),'the comments field is offered');
-  w.run("setOption('workingCuffButtons','Yes');setOption('boatPocket','Yes');setOption('suspenderButtons','Yes');setOption('sideTabs','Milan side tabs');setOption('tailorChanges','No, contact me');config.comments='Please rush for a wedding.';saveConfig()");
-  assert.ok(w.run('customize()').includes('$'+(base+52)),'the customizer price rises by the combined detail modifiers (5+25+2+20)');
+  w.run("setOption('cuffButtonHole','Functional Options');setOption('exteriorStitch','1/16 Pic');setOption('suspenderButtons','Yes');setOption('sideTabs','Milan side tabs');config.comments='Please rush for a wedding.';saveConfig()");
+  assert.ok(w.run('customize()').includes('$'+(base+22)),'the customizer price rises by the trousers side modifiers only (2+20); the jacket details are unpriced');
   w.run('nextConfig()'); // stage 1 to 2, Measurements
   w.elFor('#profileSelect').value='p-ready';
   w.run('nextConfig()');
   assert.equal(w.bag().length,1,'the configured suit is bagged');
   const item=w.bag()[0];
-  assert.equal(item.workingCuffButtons,'Yes','the bagged item stores the working cuff buttons toggle');
-  assert.equal(item.boatPocket,'Yes','the bagged item stores the boat pocket toggle');
+  assert.equal(item.cuffButtonHole,'Functional Options','the bagged item stores the cuff button holes');
+  assert.equal(item.exteriorStitch,'1/16 Pic','the bagged item stores the exterior stitch');
   assert.equal(item.suspenderButtons,'Yes','the bagged item stores the suspender buttons toggle');
   assert.equal(item.sideTabs,'Milan side tabs','the bagged item stores the side tabs');
-  assert.equal(item.tailorChanges,'No, contact me','the bagged item stores the tailor changes consent');
   assert.equal(item.comments,'Please rush for a wedding.','the bagged item stores the comments');
+  assert.ok(!('tailorChanges' in item)&&!('workingCuffButtons' in item)&&!('boatPocket' in item),'the bagged item carries none of the removed detail slots');
   const line=w.run('lineDescription(bag[0])');
-  for(const part of ['Working cuff buttons','Italian boat pocket','Suspender buttons','Milan side tabs','Tailor changes: No, contact me'])assert.ok(line.includes(part),`the bag line names ${part}`);
+  for(const part of ['Working cuff buttonholes','1/16 Pic stitch','Suspender buttons','Milan side tabs'])assert.ok(line.includes(part),`the bag line names ${part}`);
   assert.ok(w.run('lineHtml(bag[0])').includes('Comments: Please rush for a wedding.'),'the bag line markup shows the comments');
-  assert.equal(w.run('subtotal()'),base+52,'the subtotal includes the detail modifiers');
+  assert.equal(w.run('subtotal()'),base+22,'the subtotal includes the trousers side modifiers only');
   w.run("location.hash='#checkout'");
   const checkout=w.run('checkoutPage()');
   assert.ok(checkout.includes('Comments: Please rush for a wedding.'),'the checkout shows the comments');
-  assert.ok(checkout.includes('$'+(base+52)),'the checkout total includes the detail modifiers');
-  // A standalone jacket offers the jacket details, but no trouser
-  // details and no tailor changes consent.
+  assert.ok(checkout.includes('$'+(base+22)),'the checkout total includes the trousers side modifiers only');
+  // A standalone jacket offers the cuff construction, but no trouser
+  // details.
   const jacketIdx=w.run("products.findIndex(p=>p.kind==='jacket')");
   assert.ok(jacketIdx>=0,'the catalog holds a standalone jacket for the journey');
   const jacketBase=w.run(`products[${jacketIdx}].price`);
   w.run(`beginDesign(${jacketIdx})`);
   w.run('nextConfig()');
   const jacketPersonalize=w.run('customize()');
-  assert.ok(jacketPersonalize.includes('<h3>Jacket details</h3>'),'the jacket Personalize step offers the Jacket details section');
+  assert.ok(jacketPersonalize.includes('<span>Cuff button holes</span>'),'the jacket Personalize step offers the cuff construction');
   assert.ok(!jacketPersonalize.includes('<h3>Trouser details</h3>'),'the jacket offers no Trouser details section');
-  assert.ok(!jacketPersonalize.includes('<div class="option-title">Tailor changes</div>'),'the jacket offers no tailor changes consent');
-  w.run("setOption('pickStitch','Yes')");
-  assert.equal(w.run('itemPrice(config)'),jacketBase+10,'the jacket prices its pick stitch detail');
-  console.log('E2E journey J18 passed: the suit Personalize step offers the Jacket details and Trouser details toggles, the Side tabs group, the tailor changes consent and the comments field, the chosen details raise the customizer, bag and checkout prices by exactly their combined modifier, the consent and comments reach the bag and checkout, and a standalone jacket offers the jacket details only.');
+  w.run("setOption('cuffButtonType','Slanting Kissing')");
+  assert.equal(w.run('itemPrice(config)'),jacketBase,'the jacket prices its cuff construction at nothing: unpriced pending the upcharge data');
+  console.log('E2E journey J18 passed: the suit Personalize step offers the cuff construction and exterior stitch groups in place of the jacket detail toggles, the Trouser details and Side tabs are unchanged, the tailor changes consent is gone, the comments reach the bag and checkout, and a standalone jacket offers the cuff construction only.');
 }
 
 // ---------------------------------------------------------------- J19
@@ -991,7 +1004,7 @@ console.log('E2E journey J12 passed: designing a second product starts clean wit
   assert.equal(run('location.hash'),'#customize','designing from the product page lands on the customize route');
   assert.equal(run('config.product'),firstId,'the customizer opens on the chosen product');
   run('nextConfig()'); // stage 0 to 1, Personalize
-  assert.ok(run('customize()').includes(`onclick="setOption('lining','Wine')">Wine · +$15`),'the Personalize step offers the Wine lining at its tier price');
+  assert.ok(run('customize()').includes(`onclick="setOption('lining','Wine')">Wine · Included`),'the Personalize step offers the Wine lining, unpriced in the aligned model pending the JPOS lining catalog');
   run("setOption('lining','Wine')");
   run('nextConfig()'); // stage 1 to 2, Measurements
   elFor('#profileSelect').value='p-ready';
@@ -1119,27 +1132,27 @@ console.log('E2E journey J12 passed: designing a second product starts clean wit
   w.run(`chooseProduct(${firstId})`);
   w.run(`beginDesign(${firstId})`);
   w.run('nextConfig()'); // stage 0 to 1, Personalize
-  assert.ok(w.run('customize()').includes(`onclick="setOption('lining','Wine')">Wine · +$15`),'the Personalize step offers the Wine lining at its tier price');
+  assert.ok(w.run('customize()').includes(`onclick="setOption('lining','Wine')">Wine · Included`),'the Personalize step offers the Wine lining, unpriced in the aligned model pending the JPOS lining catalog');
   w.run("setOption('lining','Wine')");
   w.run('nextConfig()'); // stage 1 to 2, Measurements
   w.elFor('#profileSelect').value='p-ready';
   w.run('nextConfig()'); // Add to Bag
   assert.equal(w.bag().length,1,'Add to Bag creates exactly one bag line');
   const expectedTotal=w.run('itemPrice(bag[0])');
-  assert.equal(expectedTotal,basePrice+15,'the configured price carries the priced lining over the base price');
+  assert.equal(expectedTotal,basePrice,'the configured price is the base price: the placeholder lining is unpriced in the aligned model');
   w.run("location.hash='#checkout';render()");
   assert.ok(w.elFor('#main').innerHTML.includes('checkoutForm'),'the checkout opens on the delivery form');
   w.run(`saveCheckoutForm({__data:{email:'e2e@example.com',firstName:'E2E',lastName:'Shopper',address:'1 Main Street',city:'New York',state:'NY',zip:'10001',country:'US'}})`);
   assert.equal(w.run('checkoutStage'),1,'submitting the delivery form advances to review and payment');
   const review=w.elFor('#main').innerHTML;
   assert.ok(review.includes(productName),'the review shows the product from the real URL entry');
-  assert.ok(review.includes('Wine lining'),'the review shows the priced lining chosen at the Personalize step');
+  assert.ok(review.includes('Wine lining'),'the review shows the lining chosen at the Personalize step');
   w.elFor('#orderConsent').checked=true;
   w.run('submitCheckout()');
   const orders=JSON.parse(w.store.get('suits-orders')||'[]');
   assert.equal(orders.length,1,'the demo checkout records exactly one order');
   assert.equal(orders[0].demo,true,'the recorded order is a demo order');
-  assert.equal(orders[0].total,expectedTotal,'the order total is the configured price, priced lining included');
+  assert.equal(orders[0].total,expectedTotal,'the order total is the configured price');
   assert.equal(orders[0].items[0].lining,'Wine','the order item keeps the chosen lining');
   assert.equal(w.location.hash,'#order/'+orders[0].id,'placing the demo order lands on its order route');
   const landed=w.elFor('#main').innerHTML;

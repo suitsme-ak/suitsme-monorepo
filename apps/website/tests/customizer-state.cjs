@@ -29,8 +29,8 @@ function makeWorld(seedConfig){
 // Customize product 0 with distinctive options and a monogram, and bag it.
 const w=makeWorld();
 w.run('beginDesign(0)');
-w.run(`setOption('fit','Slim');setOption('lapel','Peak');setOption('closure','One button');setOption('lining','Burgundy');config.monogram='AB';saveConfig()`);
-assert.deepEqual(w.config(),{product:0,fabric:'Navy',lapel:'Peak',closure:'One button',fit:'Slim',lining:'Burgundy',monogram:'AB'},'product 0 design carries the chosen options');
+w.run(`setOption('lapelType','Peak');setOption('closure','1-Button');setOption('lining','Burgundy');config.monogram='AB';saveConfig()`);
+assert.deepEqual(w.config(),{product:0,fabric:'Navy',lining:'Burgundy',monogram:'AB',...w.run('alignedOptionDefaults()'),closure:'1-Button',lapelType:'Peak'},'product 0 design carries the chosen options on the aligned defaults');
 w.run('stage=2;render(false)');
 w.elFor('#profileSelect').value='profile-1';
 w.run('nextConfig()');
@@ -41,11 +41,11 @@ const suitLine=w.bag()[0];
 // hash directly, then the shopper clicks Design on the product page.
 w.run(`location.hash='#product/1';render()`);
 w.run('beginDesign(1)');
-assert.deepEqual(w.config(),{product:1,fabric:'Charcoal',lapel:'Notch',closure:'Two button',fit:'Tailored',lining:'Tonal',monogram:'',profileId:'profile-1'},'starting product 1 begins from defaults, not from product 0 options');
+assert.deepEqual(w.config(),{product:1,fabric:'Charcoal',lining:'Tonal',monogram:'',...w.run('alignedOptionDefaults()'),profileId:'profile-1'},'starting product 1 begins from the aligned defaults, not from product 0 options');
 const freshHtml=w.run('stage=1;customize()');
 assert.ok(!freshHtml.includes('AB'),'the monogram from product 0 is nowhere in the product 1 customizer');
-assert.ok(freshHtml.includes(`class="choice active" aria-pressed="true" onclick="setOption('lining','Default')"`),'the Default lining choice is the active choice for product 1 (the stored Tonal default shows as Default since package 3.3)');
-assert.ok(freshHtml.includes(`class="choice active" aria-pressed="true" onclick="setOption('lapel','Notch')"`),'the default lapel is the active choice for product 1');
+assert.ok(freshHtml.includes(`class="choice active" data-visual="lining:Default" aria-pressed="true" onclick="setOption('lining','Default')"`),'the Default lining choice is the active choice for product 1 (the stored Tonal default shows as Default since package 3.3)');
+assert.ok(freshHtml.includes(`class="choice active" data-visual="lapelType:Notch" aria-pressed="true" onclick="setOption('lapelType','Notch')"`),'the default lapel type is the active choice for product 1');
 assert.ok(!freshHtml.includes(`aria-pressed="true" onclick="setOption('lining','Burgundy')"`),'product 0 lining is not active for product 1');
 
 // Bag product 1 as started: its line must carry the defaults, proving the
@@ -56,8 +56,8 @@ w.run('nextConfig()');
 assert.equal(w.bag().length,2,'product 1 is bagged as a second line');
 const secondLine=w.bag()[1];
 assert.equal(secondLine.product,1);
-assert.equal(secondLine.lapel,'Notch');assert.equal(secondLine.closure,'Two button');
-assert.equal(secondLine.fit,'Tailored');assert.equal(secondLine.lining,'Tonal');
+assert.equal(secondLine.lapelType,'Notch');assert.equal(secondLine.closure,'2-Button');
+assert.equal(secondLine.optionModel,3);assert.ok(!('lapel' in secondLine)&&!('fit' in secondLine),'the bagged product 1 line carries no legacy lapel or fit slot');assert.equal(secondLine.lining,'Tonal');
 assert.equal(secondLine.monogram,'','the bagged product 1 line has no monogram from product 0');
 
 // Returning to the same product resumes the in progress design.
@@ -77,11 +77,12 @@ assert.equal(shirtConfig.lapel,'','a shirt starts with no lapel');
 assert.equal(shirtConfig.closure,'Spread collar','a shirt starts with its own default closure');
 assert.equal(shirtConfig.lining,'Tonal','a shirt starts from the default lining');
 assert.equal(shirtConfig.monogram,'','the suit monogram does not follow the shopper into a shirt');
+assert.ok(!('optionModel' in shirtConfig)&&!('lapelType' in shirtConfig),'no aligned suit slot follows the shopper into a shirt');
 
 // Bag Edit still restores the saved configuration of product 0 exactly,
 // even though the current draft belongs to another product.
 w.run(`editBagItem('${suitLine.id}')`);
-assert.deepEqual(w.config(),{product:0,fabric:'Navy',lapel:'Peak',closure:'One button',fit:'Slim',lining:'Burgundy',monogram:'AB',profileId:'profile-1'},'bag Edit restores product 0 saved options and monogram');
+assert.deepEqual(w.config(),{product:0,fabric:'Navy',lining:'Burgundy',monogram:'AB',...w.run('alignedOptionDefaults()'),closure:'1-Button',lapelType:'Peak',profileId:'profile-1'},'bag Edit restores product 0 saved options and monogram');
 w.run(`setOption('lining','Midnight');stage=2;render(false)`);
 w.elFor('#profileSelect').value='profile-1';
 w.run('nextConfig()');
@@ -94,5 +95,5 @@ assert.deepEqual(afterEdit[1],secondLine,'the other line is untouched by the edi
 // product from an earlier session.
 const w2=makeWorld({product:3,fabric:'Blue',lapel:'Shawl',closure:'One button',fit:'Relaxed',lining:'Midnight',monogram:'OLD'});
 w2.run('beginDesign(1)');
-assert.deepEqual(w2.config(),{product:1,fabric:'Charcoal',lapel:'Notch',closure:'Two button',fit:'Tailored',lining:'Tonal',monogram:''},'a persisted config for another product does not leak into a new design');
+assert.deepEqual(w2.config(),{product:1,fabric:'Charcoal',lining:'Tonal',monogram:'',...w2.run('alignedOptionDefaults()')},'a persisted config for another product does not leak into a new design');
 console.log('Customizer state checks passed: starting a different product (including a kind switch and a persisted config from an earlier session) begins from defaults with no options or monogram carried over, returning to the same product resumes the in progress design, and bag Edit still restores and saves the line configuration exactly.');

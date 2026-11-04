@@ -292,6 +292,27 @@ function alignedShirtDefaults(){return{shirtBodyStyle:'Regular',shirtFrontStyle:
 function alignedShirtGroups(){return alignedGroup('Body style','shirtBodyStyle',SHIRT_BODY_STYLE_VALUES,SHIRT_BODY_STYLE_LABELS)+alignedGroup('Front style','shirtFrontStyle',SHIRT_FRONT_STYLE_VALUES,SHIRT_FRONT_STYLE_LABELS)+alignedGroup('Collar','shirtCollarType',SHIRT_COLLAR_TYPE_VALUES,SHIRT_COLLAR_TYPE_LABELS)+alignedGroup('Collar height','shirtCollarHeight',SHIRT_COLLAR_HEIGHT_VALUES,SHIRT_COLLAR_HEIGHT_LABELS)+alignedGroup('Sleeve style','shirtSleeveStyle',SHIRT_SLEEVE_STYLE_VALUES)+alignedGroup('Cuff style','shirtCuffStyle',SHIRT_CUFF_STYLE_VALUES,SHIRT_CUFF_STYLE_LABELS)+alignedGroup('Back style','shirtBackStyle',SHIRT_BACK_STYLE_VALUES,SHIRT_BACK_STYLE_LABELS)+alignedGroup('Pocket style','shirtPocketStyle',SHIRT_POCKET_STYLE_VALUES,SHIRT_POCKET_STYLE_LABELS)+alignedGroup('Pocket position','shirtPocketPosition',SHIRT_POCKET_POSITION_VALUES,SHIRT_POCKET_POSITION_LABELS)+alignedGroup('Buttons','shirtButtons',SHIRT_BUTTON_VALUES,SHIRT_BUTTON_LABELS)+alignedGroup('Button hole thread','shirtButtonHoleThread',SHIRT_BUTTON_HOLE_THREAD_VALUES,SHIRT_BUTTON_HOLE_THREAD_LABELS)}
 function alignedShirtMonogramGroups(){return alignedGroup('Monogram placement','shirtMonogramPlacement',SHIRT_MONOGRAM_PLACEMENT_VALUES,SHIRT_MONOGRAM_PLACEMENT_LABELS)+alignedGroup('Monogram font','shirtMonogramFont',SHIRT_MONOGRAM_FONT_VALUES)}
 function alignedShirtStitchGroups(){return alignedGroup('Collar and cuff stitching','shirtStitching',SHIRT_STITCHING_VALUES,SHIRT_STITCHING_LABELS)+alignedGroup('Stitching thread color','shirtThreadColor',SHIRT_THREAD_COLOR_VALUES,SHIRT_THREAD_COLOR_LABELS)}
+// The aligned waistcoat model (JPOS consistency wave, package J6,
+// plan section 3 waistcoats and j0-mapping-design.md section C.5):
+// one vest model in both contexts, as in JPOS, so the standalone
+// waistcoat runs the same field set as the vest inside a suit
+// (section C.6), on the same keys and value sets the J3 suit vest
+// uses: style, buttons, pocket type, pocket number and back. The
+// legacy Front style values map onto the button set (Five button is
+// the 5-Button, Six button the 6-Button) and the monogram field
+// leaves the aligned waistcoat, because the JPOS vest section of
+// the style page carries no monogram. No waistcoat option price is
+// attested anywhere in the JPOS evidence, so every aligned
+// waistcoat option is unpriced in this package; plan input 1, the
+// upcharge data, is the source that will price them. Detection is
+// kind gated at every use site, the same way the shirt model's is:
+// the vest keys also live on suit designs, while a pre-alignment
+// waistcoat item (its front style in the closure slot, plus a
+// monogram, and none of these keys) always keeps the legacy path.
+const ALIGNED_WAISTCOAT_KEYS=['vestStyle','vestButtons','vestPocketType','vestPocketNumber','vestBack'];
+function alignedWaistcoat(x){return!!x&&ALIGNED_WAISTCOAT_KEYS.some(k=>x[k]!==undefined)}
+function alignedWaistcoatDefaults(){return{vestStyle:'No Lapel',vestButtons:'5-Button',vestPocketType:'Welt',vestPocketNumber:'2-Pocket',vestBack:'Lining'}}
+function alignedWaistcoatGroups(){return alignedGroup('Vest style','vestStyle',VEST_STYLE_VALUES)+alignedGroup('Vest buttons','vestButtons',VEST_BUTTON_VALUES)+alignedGroup('Vest pocket style','vestPocketType',VEST_POCKET_TYPE_VALUES,VEST_POCKET_TYPE_LABELS)+alignedGroup('Vest pockets','vestPocketNumber',VEST_POCKET_NUMBER_VALUES)+alignedGroup('Vest back','vestBack',VEST_BACK_VALUES,{Lining:'Lining back',Fabric:'Fabric back'})}
 function lapelSizeValues(type){return LAPEL_SIZE_VALUES[type]||LAPEL_SIZE_VALUES.Notch}
 function lapelSizeDefault(type){return type==='Shawl'?'Standard-Straight':'Standard'}
 function lapelSizeLabel(type,size){return (LAPEL_SIZE_LABELS[type]||{})[size]||size}

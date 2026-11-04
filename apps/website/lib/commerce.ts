@@ -97,6 +97,15 @@ const ALIGNED_TROUSER_KEYS_CENTS=["sidePockets","backPocketClosure","trouserCuff
 // shirt at all: legacy shirts never carried priced options.
 const SHIRT_FRONT_STYLE_PRICE_CENTS:Record<string,number>={'Hidden Placket':1000};
 const ALIGNED_SHIRT_KEYS_CENTS=['shirtBodyStyle','shirtFrontStyle','shirtCollarType','shirtCollarHeight','shirtSleeveStyle','shirtCuffStyle','shirtBackStyle','shirtPocketStyle','shirtPocketPosition','shirtButtons','shirtButtonHoleThread','shirtMonogramPlacement','shirtMonogramFont','shirtStitching','shirtThreadColor'];
+// J6 waistcoat alignment (j0-mapping-design.md section C.5): the
+// standalone waistcoat runs the same vest field set as the vest
+// inside a suit, on the keys already persisted in cleanItems below
+// (vestStyle, vestButtons, vestPocketType, vestPocketNumber,
+// vestBack). No waistcoat option price is attested anywhere in the
+// JPOS evidence, so a waistcoat item is never charged for its
+// options here; plan input 1, the upcharge data, is the source that
+// will price them. VEST_PRICE_CENTS above prices only the legacy
+// named vest styles, and only on suit items.
 const PANTS2_STYLE_KEYS=["pleats","sidePockets","backPocketClosure","trouserCuff","frontTab","legBreak","watchPocket","suspenderButtons","elasticSideTabs","tunnelBeltLoops"];
 function cleanPants2(block:any){const out:any={};for(const k of PANTS2_STYLE_KEYS){const v=block[k];if(typeof v==="string"&&v)out[k]=v.slice(0,40)}return out}
 function cleanShipping(x:any){const fields=['email','firstName','lastName','address','city','state','zip','country'];const o:any={};for(const k of fields){if(typeof x?.[k]!=='string'||!x[k].trim()||x[k].length>150)throw Error('Please complete your delivery details.');o[k]=x[k].trim();}if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(o.email)||!/^\d{5}(-\d{4})?$/.test(o.zip)||!/^[A-Z]{2}$/.test(o.state)||o.country!=='US')throw Error('Please check your email and US delivery address.');return o;}

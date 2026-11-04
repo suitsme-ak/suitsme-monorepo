@@ -30,7 +30,7 @@ function makeWorld(seedConfig){
 const w=makeWorld();
 w.run('beginDesign(0)');
 w.run(`setOption('lapelType','Peak');setOption('closure','1-Button');setOption('lining','Burgundy');config.monogram='AB';saveConfig()`);
-assert.deepEqual(w.config(),{product:0,fabric:'Navy',lining:'Burgundy',monogram:'AB',...w.run('alignedOptionDefaults()'),closure:'1-Button',lapelType:'Peak'},'product 0 design carries the chosen options on the aligned defaults');
+assert.deepEqual(w.config(),{product:0,fabric:'Navy',lining:'Burgundy',monogram:'AB',...w.run('alignedOptionDefaults()'),...w.run('alignedTrouserDefaults()'),secondPairPants:'No',closure:'1-Button',lapelType:'Peak'},'product 0 design carries the chosen options on the aligned defaults, trousers defaults included since J4');
 w.run('stage=2;render(false)');
 w.elFor('#profileSelect').value='profile-1';
 w.run('nextConfig()');
@@ -41,7 +41,7 @@ const suitLine=w.bag()[0];
 // hash directly, then the shopper clicks Design on the product page.
 w.run(`location.hash='#product/1';render()`);
 w.run('beginDesign(1)');
-assert.deepEqual(w.config(),{product:1,fabric:'Charcoal',lining:'Tonal',monogram:'',...w.run('alignedOptionDefaults()'),profileId:'profile-1'},'starting product 1 begins from the aligned defaults, not from product 0 options');
+assert.deepEqual(w.config(),{product:1,fabric:'Charcoal',lining:'Tonal',monogram:'',...w.run('alignedOptionDefaults()'),...w.run('alignedTrouserDefaults()'),secondPairPants:'No',profileId:'profile-1'},'starting product 1 begins from the aligned defaults, not from product 0 options');
 const freshHtml=w.run('stage=1;customize()');
 assert.ok(!freshHtml.includes('AB'),'the monogram from product 0 is nowhere in the product 1 customizer');
 assert.ok(freshHtml.includes(`class="choice active" data-visual="lining:Default" aria-pressed="true" onclick="setOption('lining','Default')"`),'the Default lining choice is the active choice for product 1 (the stored Tonal default shows as Default since package 3.3)');
@@ -82,7 +82,7 @@ assert.ok(!('optionModel' in shirtConfig)&&!('lapelType' in shirtConfig),'no ali
 // Bag Edit still restores the saved configuration of product 0 exactly,
 // even though the current draft belongs to another product.
 w.run(`editBagItem('${suitLine.id}')`);
-assert.deepEqual(w.config(),{product:0,fabric:'Navy',lining:'Burgundy',monogram:'AB',...w.run('alignedOptionDefaults()'),closure:'1-Button',lapelType:'Peak',profileId:'profile-1'},'bag Edit restores product 0 saved options and monogram');
+assert.deepEqual(w.config(),{product:0,fabric:'Navy',lining:'Burgundy',monogram:'AB',...w.run('alignedOptionDefaults()'),...w.run('alignedTrouserDefaults()'),secondPairPants:'No',closure:'1-Button',lapelType:'Peak',profileId:'profile-1'},'bag Edit restores product 0 saved options and monogram');
 w.run(`setOption('lining','Midnight');stage=2;render(false)`);
 w.elFor('#profileSelect').value='profile-1';
 w.run('nextConfig()');
@@ -95,5 +95,5 @@ assert.deepEqual(afterEdit[1],secondLine,'the other line is untouched by the edi
 // product from an earlier session.
 const w2=makeWorld({product:3,fabric:'Blue',lapel:'Shawl',closure:'One button',fit:'Relaxed',lining:'Midnight',monogram:'OLD'});
 w2.run('beginDesign(1)');
-assert.deepEqual(w2.config(),{product:1,fabric:'Charcoal',lining:'Tonal',monogram:'',...w2.run('alignedOptionDefaults()')},'a persisted config for another product does not leak into a new design');
+assert.deepEqual(w2.config(),{product:1,fabric:'Charcoal',lining:'Tonal',monogram:'',...w2.run('alignedOptionDefaults()'),...w2.run('alignedTrouserDefaults()'),secondPairPants:'No'},'a persisted config for another product does not leak into a new design');
 console.log('Customizer state checks passed: starting a different product (including a kind switch and a persisted config from an earlier session) begins from defaults with no options or monogram carried over, returning to the same product resumes the in progress design, and bag Edit still restores and saves the line configuration exactly.');

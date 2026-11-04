@@ -1,18 +1,23 @@
 const assert=require('node:assert/strict'),fs=require('node:fs'),vm=require('node:vm');
-// CUS-01 (Wave 3 package 3.2): the trousers option groups. Suits gain a
-// Trousers section in the Personalize step with five groups (Pants
-// lining, Pocket style, Pleats, Back pockets, Belt loops), and standalone
-// trousers keep their Trouser front group and gain the other four. The
-// priced choices (front lining $5, front and back lining $10, forward
-// pleats $5) read OPTION_PRICES in app.js, the same table the jacket
-// groups use, and the server sanitizer mirrors the figures. The new
-// config slots stay absent until a shopper picks a choice, so stored
-// state from before this change loads with the defaults and renders
-// exactly as before. The suit pleats choice lives in the new pleats
-// slot; the CUS-06 trouserFront slot remains as its legacy fallback for
-// women's suits: beginDesign still preselects it, the Pleats group and
-// the bag line read it when pleats is unset, and bag Edit restores it,
-// so a women's suit bagged under CUS-06 displays and edits without loss.
+// CUS-01 (Wave 3 package 3.2): the trousers option groups. Suits gained
+// a Trousers section in the Personalize step with five groups (Pants
+// lining, Pocket style, Pleats, Back pockets, Belt loops), and
+// standalone trousers kept their Trouser front group and gained the
+// other four. The priced choices (front lining $5, front and back
+// lining $10, forward pleats $5) read the trousers price tables, and
+// the server sanitizer mirrors the figures.
+//
+// Since J4 those groups and tables are the LEGACY trousers model: new
+// designs carry the aligned JPOS trousers groups (covered by e2e
+// journey J15 and the customizer-jpos-j4 suite), and the tables live
+// in LEGACY_OPTION_PRICES. This suite now pins the legacy model
+// exactly as before: a legacy design session (a configuration with no
+// aligned keys, the state a shopper's browser held when J4 shipped)
+// renders the five groups with their defaults, prices from the legacy
+// tables, restores through bag Edit, and the server prices unmarked
+// items from the mirrored tables. The suit pleats choice lives in the
+// pleats slot; the CUS-06 trouserFront slot remains as its legacy
+// fallback for women's suits.
 function makeEl(){return{innerHTML:'',textContent:'',value:'',checked:false,open:false,classList:{add(){},remove(){},toggle(){return false}},addEventListener(){},setAttribute(){},getBoundingClientRect:()=>({left:0,top:0,right:0,bottom:0}),showModal(){this.open=true},close(){this.open=false},scrollIntoView(){}}}
 const menProfile={id:'profile-men',name:'Men fit',method:'body',unit:'in',wearer:'Men',fit:'Tailored',values:{chest:40,waist:34,shoulder:18,sleeve:25,jacket:29,seat:40,trouserWaist:34,thigh:24,inseam:32,outseam:42},ready:{jacket:'40',length:'Regular',trouser:'34'},created:'2026-10-27T00:00:00.000Z'};
 const womenProfile={id:'profile-women',name:'Women fit',method:'body',unit:'in',wearer:'Women',fit:'Tailored',values:{chest:36,waist:29,shoulder:15,sleeve:24,jacket:28,seat:38,trouserWaist:29,thigh:22,inseam:31,outseam:41},ready:{jacket:'38',length:'Regular',trouser:'30'},created:'2026-10-27T00:00:00.000Z'};
@@ -34,16 +39,21 @@ function makeWorld(seed={}){
 }
 function bagCurrentWorld(w,profileId){w.run('stage=2;render(false)');w.elFor('#profileSelect').value=profileId;w.run('nextConfig()')}
 const TROUSER_SLOTS=['pantsLining','pocketStyle','pleats','backPockets','beltLoops'];
+// A legacy design session: the configuration a shopper's browser held
+// before the aligned model existed, with no aligned keys at all.
+function legacySuitSession(w){w.run("config={product:0,fabric:'Navy',lapel:'Notch',closure:'Two button',fit:'Tailored',lining:'Tonal',monogram:''};saveConfig()")}
 
-// World 1: a men's suit renders the whole Trousers section with the
-// captured defaults, and priced choices reach the bag and checkout.
+// World 1: a legacy men's suit session renders the whole Trousers
+// section with the captured defaults, and priced choices reach the
+// bag and checkout at the legacy prices.
 {
   const w=makeWorld();
-  assert.equal(w.run("optionPrice('pantsLining','Front and back lining')"),10,'the price table prices front and back lining at $10');
-  assert.equal(w.run("optionPrice('pantsLining','Front lining')"),5,'the price table prices front lining at $5');
-  assert.equal(w.run("optionPrice('pleats','Forward single pleat')"),5,'the price table prices a forward single pleat at $5');
-  assert.equal(w.run("optionPrice('pleats','Single pleat')"),0,'a regular single pleat costs nothing');
-  w.run('beginDesign(0)');
+  assert.equal(w.run("legacyOptionPrice('pantsLining','Front and back lining')"),10,'the legacy table prices front and back lining at $10');
+  assert.equal(w.run("legacyOptionPrice('pantsLining','Front lining')"),5,'the legacy table prices front lining at $5');
+  assert.equal(w.run("legacyOptionPrice('pleats','Forward single pleat')"),5,'the legacy table prices a forward single pleat at $5');
+  assert.equal(w.run("optionPrice('pantsLining','Front and back lining')"),0,'the current table no longer prices the retired lining group');
+  assert.equal(w.run("legacyOptionPrice('pleats','Single pleat')"),0,'a regular single pleat costs nothing');
+  legacySuitSession(w);
   for(const slot of TROUSER_SLOTS)assert.ok(!(slot in w.config()),`the ${slot} slot stays unset until the shopper picks a choice`);
   w.run('stage=1');
   const html=w.run('customize()');
@@ -66,7 +76,7 @@ const TROUSER_SLOTS=['pantsLining','pocketStyle','pleats','backPockets','beltLoo
   assert.equal(w.bag().length,1,'the configured suit is bagged');
   const item=w.bag()[0];
   assert.equal(item.pantsLining,'Front and back lining');assert.equal(item.pocketStyle,'Seam');assert.equal(item.pleats,'Forward 2 pleats');assert.equal(item.backPockets,'No back pockets');assert.equal(item.beltLoops,'No');
-  assert.equal(w.run('lineDescription(bag[0])'),'Navy · Notch lapel, Standard · 2-Button · Center vent · 4 cuff buttons · Flap waist pockets · Front and back lining · Seam · Forward 2 pleats · No back pockets · No belt loops · Tonal lining','the bag line shows the aligned jacket specification, then the trousers selections in group order');
+  assert.equal(w.run('lineDescription(bag[0])'),'Navy · Notch lapel · Tailored fit · Two button · Front and back lining · Seam · Forward 2 pleats · No back pockets · No belt loops · Tonal lining','the bag line shows the legacy trousers selections in group order');
   assert.equal(w.run('subtotal()'),414,'the subtotal adds the $10 lining and the $5 pleats');
   w.run("location.hash='#checkout'");
   const checkout=w.run('checkoutPage()');
@@ -84,7 +94,7 @@ const TROUSER_SLOTS=['pantsLining','pocketStyle','pleats','backPockets','beltLoo
 // World 2: front lining alone adds exactly $5, and No lining adds nothing.
 {
   const w=makeWorld();
-  w.run('beginDesign(0)');
+  legacySuitSession(w);
   w.run("setOption('pantsLining','Front lining')");
   bagCurrentWorld(w,'profile-men');
   assert.equal(w.run('optionCharge(bag[0])'),5,'the front lining charge is exactly $5');
@@ -96,9 +106,10 @@ const TROUSER_SLOTS=['pantsLining','pocketStyle','pleats','backPockets','beltLoo
   assert.ok(w.run('lineDescription(bag[0])').includes('No lining'),'an explicitly chosen No lining still shows on the bag line');
 }
 
-// World 3: a women's suit pleats choice stores in the pleats slot, shows
-// on the bag line once (the legacy trouserFront preselect does not
-// duplicate it), and restores on bag Edit.
+// World 3: a women's suit on the aligned model (J4): the pleats choice
+// stores the JPOS value in the pleats slot, shows on the bag line once
+// (the legacy trouserFront preselect does not duplicate it), and
+// restores on bag Edit.
 {
   const w=makeWorld();
   const idx=w.run("products.findIndex(p=>p.category==='Women'&&p.kind==='suit')");
@@ -107,15 +118,15 @@ const TROUSER_SLOTS=['pantsLining','pocketStyle','pleats','backPockets','beltLoo
   assert.equal(w.config().trouserFront,'Flat front','beginDesign still preselects the legacy trouser front for a Women suit');
   w.run('stage=1');
   const html=w.run('customize()');
-  assert.ok(html.includes(`<button class="choice active" aria-pressed="true" onclick="setOption('pleats','Flat front')">Flat front · Included</button>`),'the Pleats group shows the preselected front as its current choice');
-  w.run("setOption('pleats','Single pleat')");
+  assert.ok(html.includes(`<button class="choice active" data-visual="pleats:Flat Front" aria-pressed="true" onclick="setOption('pleats','Flat Front')">Flat front, no pleats · Included</button>`),'the Pleats group shows the aligned Flat Front standard as its current choice');
+  w.run("setOption('pleats','Single Rvrs Pleat')");
   bagCurrentWorld(w,'profile-women');
   const item=w.bag()[0];
-  assert.equal(item.pleats,'Single pleat','the bagged item stores the pleats choice');
+  assert.equal(item.pleats,'Single Rvrs Pleat','the bagged item stores the aligned pleats choice');
   assert.equal(item.trouserFront,'Flat front','the legacy slot keeps its preselect and is not overwritten');
-  assert.equal(w.run('lineDescription(bag[0])'),'Taupe · Notch lapel, Standard · 2-Button · Center vent · 4 cuff buttons · Flap waist pockets · Single pleat · Tonal lining','the bag line shows the chosen pleat once, in the trouser front position');
+  assert.equal(w.run('lineDescription(bag[0])'),'Taupe · Notch lapel, Standard · 2-Button · Center vent · 4 cuff buttons · Flap waist pockets · Single reverse pleat · Slanted pockets · Double besom back pockets · Medium break · Belt loops · Tonal lining','the bag line shows the chosen pleat once, with the rest of the aligned trousers specification');
   w.run(`editBagItem('${item.id}')`);
-  assert.equal(w.config().pleats,'Single pleat','bag Edit restores the pleats choice');
+  assert.equal(w.config().pleats,'Single Rvrs Pleat','bag Edit restores the pleats choice');
   assert.equal(w.config().trouserFront,'Flat front','bag Edit restores the legacy slot alongside it');
 }
 
@@ -144,14 +155,15 @@ const TROUSER_SLOTS=['pantsLining','pocketStyle','pleats','backPockets','beltLoo
   assert.ok(w.run('lineDescription(bag[0])').includes('2 pleats')&&!w.run('lineDescription(bag[0])').includes('Single pleat'),'the bag line now follows the pleats choice, not the stale legacy front');
 }
 
-// World 5: standalone trousers keep Trouser front in the closure slot and
-// gain the other four groups; a priced lining flows to the total.
+// World 5: a legacy standalone trousers session keeps Trouser front in
+// the closure slot and gains the other four groups; a priced lining
+// flows to the total.
 {
   const w=makeWorld();
   const idx=w.run("products.findIndex(p=>p.kind==='pants'&&p.category==='Trousers')");
   assert.ok(idx>=0,'the catalog holds standalone trousers');
   const base=w.run(`products[${idx}].price`);
-  w.run(`beginDesign(${idx})`);
+  w.run(`config={product:${idx},fabric:products[${idx}].color,lapel:'',closure:'Flat front',fit:'',lining:'',monogram:''};saveConfig()`);
   assert.equal(w.config().closure,'Flat front','standalone trousers still preselect Flat front in the closure slot');
   w.run('stage=1');
   const html=w.run('customize()');
@@ -170,30 +182,35 @@ const TROUSER_SLOTS=['pantsLining','pocketStyle','pleats','backPockets','beltLoo
   assert.ok(w.run('lineHtml(bag[0])').includes('$'+(base+5)),'the trousers bag line price includes the modifier');
 }
 
-// World 6: the CUS-07 product change reset and the kind cleanups clear
-// the trousers fields, so nothing leaks into a garment that lacks them.
+// World 6: the CUS-07 product change reset under the aligned model
+// (J4): switching products clears the previous design's trousers
+// choices and lands on the new garment's own model, defaults for
+// suits and trousers, nothing at all for a jacket.
 {
   const w=makeWorld();
   const pantsIdx=w.run("products.findIndex(p=>p.kind==='pants')");
   const jacketIdx=w.run("products.findIndex(p=>p.kind==='jacket')");
   w.run('beginDesign(0)');
-  w.run("setOption('pantsLining','Front and back lining');setOption('pleats','Forward single pleat');setOption('beltLoops','No');setOption('pocketStyle','Seam');setOption('backPockets','No back pockets')");
+  w.run("setOption('sidePockets','Western');setOption('pleats','Double Rvrs Pleat');setOption('beltLoops','No')");
   w.run(`beginDesign(${pantsIdx})`);
-  for(const slot of TROUSER_SLOTS)assert.ok(!(slot in w.config()),`switching to trousers clears the ${slot} from the suit design`);
-  w.run("setOption('pantsLining','Front lining')");
+  assert.equal(w.config().sidePockets,'Slanted','switching to trousers resets the side pockets to the trousers default, not the suit choice');
+  assert.equal(w.config().pleats,'Flat Front','switching to trousers resets the pleats to the trousers default');
+  assert.equal(w.config().beltLoops,'Yes','switching to trousers resets the belt loops to the trousers default');
+  w.run("setOption('sidePockets','On-Seam')");
   w.run(`beginDesign(${jacketIdx})`);
-  for(const slot of TROUSER_SLOTS)assert.ok(!(slot in w.config()),`switching to a jacket clears the ${slot}; jackets offer no trousers groups`);
+  for(const key of ['sidePockets','backPocketClosure','trouserCuff','frontTab','legBreak','watchPocket','elasticSideTabs','tunnelBeltLoops','pleats','backPockets','beltLoops'])assert.ok(!(key in w.config()),`switching to a jacket clears the ${key}; jackets offer no trousers groups`);
   w.run('beginDesign(1)');
-  for(const slot of TROUSER_SLOTS)assert.ok(!(slot in w.config()),`switching to another suit clears the ${slot} back to defaults`);
+  assert.equal(w.config().sidePockets,'Slanted','switching to another suit restores the trousers defaults');
   bagCurrentWorld(w,'profile-men');
   const item=w.bag()[0];
-  for(const slot of TROUSER_SLOTS)assert.ok(!(slot in item),`the second suit line carries no ${slot} from the first design`);
+  assert.equal(item.sidePockets,'Slanted','the second suit line carries its own defaults, not the first design choices');
   assert.equal(w.run('subtotal()'),449,'the second suit is priced at its base');
 }
 
 // Server: the order sanitizer persists the five selections and prices
-// the lining and pleats from the mirrored tables, each for the kinds
-// that offer them only.
+// the lining and pleats from the mirrored legacy tables, each for the
+// kinds that offer them only. The posted items are unmarked, so the
+// server reads them as the legacy items they are.
 (async()=>{
   const ts=require('typescript'),Module=require('node:module'),path=require('node:path');
   const file=path.resolve('lib/commerce.ts'),m=new Module(file,module);m.filename=file;m.paths=module.paths;
@@ -227,5 +244,5 @@ const TROUSER_SLOTS=['pantsLining','pocketStyle','pleats','backPockets','beltLoo
   const jacketIdx=catalog.findIndex(p=>p.kind==='jacket'),jacket=catalog[jacketIdx];
   r=await commerce(req({items:[{product:jacketIdx,fabric:'Wool',lapel:'Notch',closure:'Two button',fit:'Tailored',lining:'Tonal',monogram:'',pantsLining:'Front and back lining',pleats:'Forward 2 pleats',profile:readyProfile}],shipping},'trouser-options-00000003'),env);
   assert.equal((await r.json()).totalCents,jacket.priceCents,'trousers values on a jacket are never priced');
-  console.log('Customizer trouser option checks passed: suits render the five trousers groups with defaults, priced lining and pleats choices flow from the one table to the customizer, bag, checkout and server order, women suits keep the CUS-06 legacy fallback, standalone trousers gain four groups without a Pleats group, product switches reset the fields, and legacy items are untouched.');
+  console.log('Customizer trouser option checks passed: the legacy trousers model renders, prices and persists exactly as before through legacy sessions, items and the server tables, women suits keep the CUS-06 legacy fallback, and the aligned model resets cleanly across product switches.');
 })().catch(e=>{console.error(e);process.exit(1)});

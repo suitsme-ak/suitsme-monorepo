@@ -6,7 +6,11 @@ const assert=require('node:assert/strict'),fs=require('node:fs'),vm=require('nod
 // exterior stitch groups, unpriced in this package, and the tailor
 // changes consent is removed (the plan retires it; the comments field
 // stays). The trousers side (Trouser details toggles and the Side
-// tabs group) is unchanged until J4. The retired toggle prices
+// tabs group) was aligned in J4: new designs render the JPOS trousers
+// groups instead, and the toggles survive, priced from the legacy
+// tables, only in legacy sessions and on pre-alignment items, which
+// Worlds 3, 4, 5 and 7 now drive through legacy and transitional
+// configurations. The retired toggle prices
 // survive only in LEGACY_OPTION_PRICES and its server mirror, for
 // pre-alignment items; World 2, World 9 and the server section pin
 // that legacy behavior. (Wave 3 package 3.5, the package this suite
@@ -44,22 +48,25 @@ const JACKET_TOGGLES=[['workingCuffButtons',5],['pickStitch',10],['gauntletCuff'
 
 // World 1: a suit renders the cuff construction and exterior stitch
 // groups in the jacket area before Trousers (in place of the retired
-// Jacket details toggles), the Trouser details section inside
-// Trousers unchanged, and the comments field; the tailor changes
-// consent is gone; the retired toggle slots are never set by a new
-// design, and their prices survive only in the legacy table.
+// Jacket details toggles), the aligned trousers groups inside
+// Trousers (in place of the Trouser details toggles and Side tabs),
+// and the comments field; the tailor changes consent is gone; the
+// retired toggle slots are never set by a new design, and their
+// prices survive only in the legacy table.
 {
   const w=makeWorld();
   for(const [key,price] of JACKET_TOGGLES)assert.equal(w.run(`legacyOptionPrice('${key}','Yes')`),price,`the retired ${key} toggle keeps its $${price} in the legacy table`);
   for(const [key] of JACKET_TOGGLES)assert.equal(w.run(`optionPrice('${key}','Yes')`),0,`the current table prices no ${key} toggle`);
-  assert.equal(w.run("optionPrice('pantsCuff','Yes')"),5,'pants cuff prices at $5');
-  assert.equal(w.run("optionPrice('suspenderButtons','Yes')"),2,'suspender buttons price at $2');
-  assert.equal(w.run("optionPrice('coinPocket','Yes')"),5,'the flap coin pocket prices at $5');
-  assert.equal(w.run("optionPrice('wideWaistband','Yes')"),0,'the 2 inch waistband toggle is free');
-  assert.equal(w.run("optionPrice('sideTabs','Venice side tabs')"),20,'Venice side tabs price at $20');
+  assert.equal(w.run("legacyOptionPrice('pantsCuff','Yes')"),5,'pants cuff prices at $5 in the legacy table');
+  assert.equal(w.run("legacyOptionPrice('suspenderButtons','Yes')"),2,'suspender buttons price at $2 in the legacy table');
+  assert.equal(w.run("legacyOptionPrice('coinPocket','Yes')"),5,'the flap coin pocket prices at $5 in the legacy table');
+  assert.equal(w.run("legacyOptionPrice('wideWaistband','Yes')"),0,'the 2 inch waistband toggle is free in the legacy table');
+  assert.equal(w.run("legacyOptionPrice('sideTabs','Venice side tabs')"),20,'Venice side tabs price at $20 in the legacy table');
+  for(const key of ['pantsCuff','coinPocket','sideTabs'])assert.equal(w.run(`optionPrice('${key}','Yes')`),0,`the current table prices no ${key}: the aligned trousers groups are unpriced`);
   w.run('beginDesign(0)');
   const fresh=w.config();
-  for(const k of NEW_SLOTS)assert.ok(!(k in fresh),`the ${k} slot stays unset until the shopper chooses it`);
+  for(const k of NEW_SLOTS.filter(k=>k!=='suspenderButtons'))assert.ok(!(k in fresh),`the ${k} slot stays unset until the shopper chooses it`);
+  assert.equal(fresh.suspenderButtons,'No','suspender buttons start at the aligned standard, No');
   w.run('stage=1');
   const html=w.run('customize()');
   assert.ok(html.indexOf('<span>Cuff button holes</span>')<html.indexOf('<h3>Trousers</h3>'),'the cuff construction precedes Trousers');
@@ -68,17 +75,11 @@ const JACKET_TOGGLES=[['workingCuffButtons',5],['pickStitch',10],['gauntletCuff'
   assert.ok(html.includes(`aria-pressed="true" onclick="setOption('cuffButtonHole','Imitation Button Holes')">Imitation, sewn not cut · Included`),'imitation cuff button holes are the selected standard');
   assert.ok(html.includes(`onclick="setOption('cuffButtonHole','Functional Options')">Working buttonholes · Included`),'working buttonholes are offered unpriced');
   assert.ok(html.includes(`onclick="setOption('exteriorStitch','1/4 Double')">Double stitch, 1/4 in · Included`),'the double exterior stitch is offered unpriced');
-  assert.ok(html.indexOf('<h3>Trousers</h3>')<html.indexOf('<h3>Trouser details</h3>'),'the Trouser details section sits inside the Trousers section');
-  assert.ok(html.includes(`aria-pressed="true" onclick="setOption('pantsCuff','No')">No · Included`),'the pants cuff toggle starts off');
-  assert.ok(html.includes(`onclick="setOption('suspenderButtons','Yes')">Yes · +$2`),'suspender buttons show +$2');
-  assert.ok(html.includes(`onclick="setOption('wideWaistband','Yes')">Yes · Included`),'the 2 inch waistband toggle is labelled Included');
-  assert.ok(html.includes(`aria-pressed="true" onclick="setOption('sideTabs','No side tabs')">No side tabs · Included`),'no side tabs is the selected default, shown Included');
-  assert.ok(html.includes(`onclick="setOption('sideTabs','Classic side tabs')">Classic side tabs · +$12`),'classic side tabs show +$12');
-  assert.ok(html.includes(`onclick="setOption('sideTabs','Back elastic')">Back elastic · +$12`),'back elastic shows +$12');
-  assert.ok(html.includes(`onclick="setOption('sideTabs','Side adjusters')">Side adjusters · +$12`),'side adjusters show +$12');
-  assert.ok(html.includes(`onclick="setOption('sideTabs','Side elasticated tabs')">Side elasticated tabs · +$17`),'side elasticated tabs show +$17');
-  assert.ok(html.includes(`onclick="setOption('sideTabs','Milan side tabs')">Milan side tabs · +$20`),'Milan side tabs show +$20');
-  assert.ok(html.includes(`onclick="setOption('sideTabs','Venice side tabs')">Venice side tabs · +$20`),'Venice side tabs show +$20');
+  assert.ok(!html.includes('<h3>Trouser details</h3>'),'the Trouser details section is gone from an aligned design');
+  assert.ok(html.includes('<div class="option-title"><span>Elastic side tabs</span>'),'the aligned trousers groups render in place of the toggles');
+  assert.ok(html.includes(`aria-pressed="true" onclick="setOption('suspenderButtons','No')">No · Included`),'suspender buttons start off in the aligned model, shown Included');
+  assert.ok(html.includes(`onclick="setOption('suspenderButtons','Yes')">Yes · Included`),'suspender buttons are unpriced in the aligned model');
+  assert.ok(!html.includes('Venice side tabs')&&!html.includes('Flap coin pocket')&&!html.includes('2 inch waistband'),'the named side tabs, the coin pocket toggle and the waistband toggle are gone');
   assert.ok(!html.includes('Tailor changes'),'the tailor changes consent is not offered');
   assert.ok(html.includes('<textarea maxlength="200"'),'the comments field caps at 200 characters');
   assert.ok(html.includes('config.comments=this.value;saveConfig()'),'the comments field writes to the config slot');
@@ -105,26 +106,22 @@ const JACKET_TOGGLES=[['workingCuffButtons',5],['pickStitch',10],['gauntletCuff'
 }
 
 // World 3: the trouser detail toggles and every side tab tier add
-// exactly their modifiers on a suit, on their own and combined.
+// exactly their modifiers on a legacy suit configuration, on their
+// own and combined.
 {
+  const legacySuit=extra=>({product:0,fabric:'Navy',lapel:'Notch',closure:'Two button',fit:'Tailored',lining:'Tonal',monogram:'',...extra});
   for(const [key,price] of [['pantsCuff',5],['suspenderButtons',2],['coinPocket',5],['wideWaistband',0]]){
     const w=makeWorld();
-    w.run('beginDesign(0)');
-    w.run(`setOption('${key}','Yes')`);
-    assert.equal(w.run('optionCharge(config)'),price,`the ${key} toggle charges $${price} on a suit`);
-    assert.equal(w.run('itemPrice(config)'),399+price,`the ${key} toggle raises the suit price by $${price}`);
+    assert.equal(w.run(`optionCharge(${JSON.stringify(legacySuit({[key]:'Yes'}))})`),price,`the ${key} toggle charges $${price} on a legacy suit`);
+    assert.equal(w.run(`itemPrice(${JSON.stringify(legacySuit({[key]:'Yes'}))})`),399+price,`the ${key} toggle raises the legacy suit price by $${price}`);
   }
   for(const [value,price] of [['No side tabs',0],['Classic side tabs',12],['Back elastic',12],['Side adjusters',12],['Side elasticated tabs',17],['Milan side tabs',20],['Venice side tabs',20]]){
     const w=makeWorld();
-    w.run('beginDesign(0)');
-    w.run(`setOption('sideTabs','${value}')`);
-    assert.equal(w.run('optionCharge(config)'),price,`the ${value} choice charges $${price}`);
-    assert.equal(w.run('itemPrice(config)'),399+price,`the ${value} choice raises the suit price by $${price}`);
+    assert.equal(w.run(`optionCharge(${JSON.stringify(legacySuit({sideTabs:value}))})`),price,`the ${value} choice charges $${price}`);
+    assert.equal(w.run(`itemPrice(${JSON.stringify(legacySuit({sideTabs:value}))})`),399+price,`the ${value} choice raises the legacy suit price by $${price}`);
   }
   const w=makeWorld();
-  w.run('beginDesign(0)');
-  w.run("setOption('pantsCuff','Yes');setOption('suspenderButtons','Yes');setOption('coinPocket','Yes');setOption('wideWaistband','Yes');setOption('sideTabs','Milan side tabs')");
-  assert.equal(w.run('optionCharge(config)'),32,'the trouser details combine to $32 (5+2+5+0+20)');
+  assert.equal(w.run(`optionCharge(${JSON.stringify(legacySuit({pantsCuff:'Yes',suspenderButtons:'Yes',coinPocket:'Yes',wideWaistband:'Yes',sideTabs:'Milan side tabs'}))})`),32,'the trouser details combine to $32 (5+2+5+0+20) on a legacy suit');
 }
 
 // World 4: a combined suit carries every detail through the bag item,
@@ -132,7 +129,7 @@ const JACKET_TOGGLES=[['workingCuffButtons',5],['pickStitch',10],['gauntletCuff'
 // trousers side details price, the cuff construction does not.
 {
   const w=makeWorld();
-  w.run('beginDesign(0)');
+  w.run("config={product:0,fabric:'Navy',lining:'Tonal',monogram:'',...alignedOptionDefaults()};saveConfig()");
   w.run("setOption('cuffButtonHole','Functional Options');setOption('exteriorStitch','5/16 Top');setOption('pantsCuff','Yes');setOption('coinPocket','Yes');setOption('sideTabs','Venice side tabs');config.comments='Please rush for a wedding.';saveConfig()");
   assert.ok(w.run('customize()').includes('<div class="price">$429 '),'the customizer price carries the trousers side details only (5+5+20)');
   bagCurrentWorld(w);
@@ -152,7 +149,7 @@ const JACKET_TOGGLES=[['workingCuffButtons',5],['pickStitch',10],['gauntletCuff'
 // or clearing the comments through an edit removes its effect.
 {
   const w=makeWorld();
-  w.run('beginDesign(0)');
+  w.run("config={product:0,fabric:'Navy',lining:'Tonal',monogram:'',...alignedOptionDefaults()};saveConfig()");
   w.run("setOption('cuffButtonHole','Functional Options');setOption('exteriorStitch','5/16 Top');setOption('pantsCuff','Yes');setOption('coinPocket','Yes');setOption('sideTabs','Venice side tabs');config.comments='Please rush for a wedding.';saveConfig()");
   bagCurrentWorld(w);
   const item=w.bag()[0];
@@ -200,17 +197,17 @@ const JACKET_TOGGLES=[['workingCuffButtons',5],['pickStitch',10],['gauntletCuff'
   assert.ok(!line.includes('Pants cuff')&&!line.includes('Venice side tabs')&&!line.includes('2 inch waistband'),'the jacket line describes none of the trouser details');
 }
 
-// World 7: standalone trousers offer the Trouser details section, the
-// Side tabs group and the comments field, but no Jacket details and no
-// tailor changes; their details price like the suit's, and jacket
-// detail values seeded onto a trousers item are never priced or
-// described.
+// World 7: a legacy standalone trousers session offers the Trouser
+// details section, the Side tabs group and the comments field, but no
+// Jacket details and no tailor changes; their details price like the
+// suit's, and jacket detail values seeded onto a trousers item are
+// never priced or described.
 {
   const w=makeWorld();
   const idx=w.run("products.findIndex(p=>p.kind==='pants')");
   assert.ok(idx>=0,'the catalog holds standalone trousers');
   const base=w.run(`products[${idx}].price`);
-  w.run(`beginDesign(${idx})`);
+  w.run(`config={product:${idx},fabric:'Navy',lapel:'',closure:'Flat front',fit:'Tailored',lining:'Tonal',monogram:''};saveConfig()`);
   w.run('stage=1');
   const html=w.run('customize()');
   assert.ok(html.includes('<h3>Trouser details</h3>'),'the trousers Personalize step offers the Trouser details section');
@@ -278,10 +275,12 @@ const JACKET_TOGGLES=[['workingCuffButtons',5],['pickStitch',10],['gauntletCuff'
   assert.equal(w.config().comments,'Please rush for a wedding.','returning to the same product resumes the comments');
   w.run('beginDesign(1)');
   const config=w.config();
-  for(const k of NEW_SLOTS)assert.ok(!(k in config),`starting another product clears the ${k} slot`);
+  for(const k of NEW_SLOTS.filter(k=>k!=='suspenderButtons'))assert.ok(!(k in config),`starting another product clears the ${k} slot`);
+  assert.equal(config.suspenderButtons,'No','suspender buttons return to the aligned standard on the new product');
   bagCurrentWorld(w);
   const item=w.bag()[0];
-  for(const k of NEW_SLOTS)assert.ok(!(k in item),`the second product line carries no ${k} from the first`);
+  for(const k of NEW_SLOTS.filter(k=>k!=='suspenderButtons'))assert.ok(!(k in item),`the second product line carries no ${k} from the first`);
+  assert.equal(item.suspenderButtons,'No','the second product line carries the suspender buttons standard, not the first design choice');
   assert.equal(w.run('subtotal()'),449,'the second product prices at its base');
   const pantsIdx=w.run("products.findIndex(p=>p.kind==='pants')");
   w.run('beginDesign(0)');
@@ -338,5 +337,5 @@ const JACKET_TOGGLES=[['workingCuffButtons',5],['pickStitch',10],['gauntletCuff'
   const storedPants=JSON.parse(db.rows.at(-1).items)[0];
   assert.equal(storedPants.comments,'Hem to a cropped length.','the trousers order item persists its comments');
   assert.equal(storedPants.sideTabs,'Venice side tabs','the trousers order item persists the side tabs');
-  console.log('Customizer detail checks passed: suits and jackets render the cuff construction and exterior stitch groups in place of the retired jacket toggles, suits and trousers keep the Trouser details toggles and Side tabs group with their prices, the tailor changes consent is gone and the comments field remains on all three kinds, trousers side modifiers flow from the one table to the customizer, bag, checkout and server order with kind guards on both sides, bag Edit restores and removes details, a product switch resets every slot, and legacy items are byte and price identical.');
+  console.log('Customizer detail checks passed: suits and jackets render the cuff construction and exterior stitch groups in place of the retired jacket toggles, legacy suits and trousers sessions keep the Trouser details toggles and Side tabs group with their prices, the tailor changes consent is gone and the comments field remains on all three kinds, trousers side modifiers flow from the one table to the customizer, bag, checkout and server order with kind guards on both sides, bag Edit restores and removes details, a product switch resets every slot, and legacy items are byte and price identical.');
 })().catch(e=>{console.error(e);process.exit(1)});

@@ -716,18 +716,19 @@ const BAG_ITEM={id:'test-item',product:0,fabric:'Navy',fit:'Tailored',lapel:'Not
   assert.equal(signed.run('productPage(0)'),guest.run('productPage(0)'),'the product page is byte identical signed in');
   // The customizer: identical renders at every stage, then the
   // priced customization of J17 (aligned model since J3) driven in
-  // both worlds: the Milanese under collar and additional pants are
-  // the priced choices; the vest fields and label program are not.
+  // both worlds: the Milanese under collar is the priced choice; the
+  // second pair (J4, in place of additional pants) and the vest
+  // fields and label program are not priced.
   for(const w of [guest,signed]){w.run('chooseProduct(0)');w.run('beginDesign(0)');}
   assert.equal(signed.run('customize()'),guest.run('customize()'),'the customizer fabric step is byte identical signed in');
   const base=signed.run('products[0].price');
   for(const w of [guest,signed]){
     w.run('nextConfig()'); // stage 0 to 1, Personalize
     w.run("setOption('underCollarFabric','Milanese Multi-Color');setOption('vestIncluded','Yes');setOption('vestStyle','Notch Lapel')");
-    w.run("setOption('additionalPants','Yes');setOption('labelStyle','Personalized Monogram');config.monogram='AB';config.monogram2='CD';setOption('collarMonogramStyle','Block');config.collarMonogram='EF';saveConfig()");
+    w.run("setOption('secondPairPants','Yes');setOption('labelStyle','Personalized Monogram');config.monogram='AB';config.monogram2='CD';setOption('collarMonogramStyle','Block');config.collarMonogram='EF';saveConfig()");
   }
   assert.equal(signed.run('customize()'),guest.run('customize()'),'the Personalize step with every priced extra chosen is byte identical signed in');
-  assert.ok(signed.run('customize()').includes('$'+(base+180)),'the signed in customizer price carries every priced choice (40+140)');
+  assert.ok(signed.run('customize()').includes('$'+(base+40)),'the signed in customizer price carries every priced choice (the Milanese 40; the second pair is unpriced)');
   for(const w of [guest,signed]){
     w.run('nextConfig()'); // stage 1 to 2, Measurements
     w.elFor('#profileSelect').value='p-ready';
@@ -739,8 +740,8 @@ const BAG_ITEM={id:'test-item',product:0,fabric:'Navy',fit:'Tailored',lapel:'Not
   const stripIds=items=>items.map(item=>{const copy={...item};delete copy.id;return copy});
   assert.deepEqual(stripIds(signedBag),stripIds(guestBag),'the bagged item is identical signed in and as guest, its random line id aside');
   assert.equal(signedBag[0].vestStyle,'Notch Lapel','the signed in bag stores the vest style');
-  assert.equal(signed.run('subtotal()'),base+180,'the signed in subtotal is the aligned total for this configuration');
-  assert.equal(guest.run('subtotal()'),base+180,'the guest subtotal is the same aligned total');
+  assert.equal(signed.run('subtotal()'),base+40,'the signed in subtotal is the aligned total for this configuration');
+  assert.equal(guest.run('subtotal()'),base+40,'the guest subtotal is the same aligned total');
   assert.equal(signed.run('lineHtml(bag[0],false)'),guest.run('lineHtml(bag[0],false)'),'the bag line is byte identical signed in');
   // Checkout: byte identical once the one designed difference,
   // the account strip line, is set aside, and each strip is the
@@ -750,7 +751,7 @@ const BAG_ITEM={id:'test-item',product:0,fabric:'Navy',fit:'Tailored',lapel:'Not
   assert.ok(guestCheckout.includes('Have an account?'),'the guest checkout carries the guest strip');
   const stripLine=/<p class="account-strip">.*?<\/p>/;
   assert.equal(signedCheckout.replace(stripLine,''),guestCheckout.replace(stripLine,''),'checkout is byte identical signed in apart from the account strip line');
-  assert.ok(signedCheckout.includes('$'+(base+180))&&guestCheckout.includes('$'+(base+180)),'both checkouts total the configured price');
+  assert.ok(signedCheckout.includes('$'+(base+40))&&guestCheckout.includes('$'+(base+40)),'both checkouts total the configured price');
   // The bag persists across re renders while signed in.
   const bagJson=signed.store.get('suits-bag'),lineBefore=signed.run('lineHtml(bag[0],false)');
   signed.run("location.hash='#home';render()");
@@ -771,12 +772,12 @@ const BAG_ITEM={id:'test-item',product:0,fabric:'Navy',fit:'Tailored',lapel:'Not
   const orders=JSON.parse(signed.store.get('suits-orders')||'[]');
   assert.equal(orders.length,1,'the signed in demo checkout records exactly one order');
   assert.equal(orders[0].demo,true,'the recorded order is a demo order');
-  assert.equal(orders[0].total,base+180,'the order total is the configured total, priced choices included');
+  assert.equal(orders[0].total,base+40,'the order total is the configured total, priced choices included');
   assert.equal(orders[0].items[0].vestStyle,'Notch Lapel','the order item keeps the vest style');
   assert.equal(signed.location.hash,'#order/'+orders[0].id,'placing the order lands on its order page');
   assert.ok(signed.elFor('#main').innerHTML.includes('DEMONSTRATION COMPLETE'),'the order page renders the demo completion screen');
   assert.equal(JSON.parse(signed.store.get('suits-bag')).length,0,'the bag is empty after the order is placed');
-  console.log('J24 passed: signed in, the menus are byte identical to the guest world, and so are home, three listings, a product page and every customizer stage; the priced customization lands at the aligned total (base + 180) with an identical bag line, checkout differs only in the designed account strip line, the bag persists across re renders, and demo checkout completes to the order page (package 5.8).');
+  console.log('J24 passed: signed in, the menus are byte identical to the guest world, and so are home, three listings, a product page and every customizer stage; the priced customization lands at the aligned total (base + 40) with an identical bag line, checkout differs only in the designed account strip line, the bag persists across re renders, and demo checkout completes to the order page (package 5.8).');
 }
 
 // ---------------------------------------------------------------- J26

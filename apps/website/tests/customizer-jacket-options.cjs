@@ -68,7 +68,7 @@ function bagCurrentWorld(w){w.run('stage=2;render(false)');w.elFor('#profileSele
   assert.equal(w.bag().length,1,'the configured suit is bagged');
   const item=w.bag()[0];
   assert.equal(item.vents,'Side');assert.equal(item.cuffButtons,'5 Buttons');assert.equal(item.waistPocketType,'Patch');assert.equal(item.closure,'3-Roll-2');assert.equal(item.underCollarFabric,'Milanese Single Color');assert.equal(item.optionModel,3);
-  assert.equal(w.run('lineDescription(bag[0])'),'Navy · Notch lapel, Standard · 3-Roll-2 · Side vents · 5 cuff buttons · Patch waist pockets · Milanese Single Color under collar · Tonal lining','the bag line shows the new selections in customizer order');
+  assert.equal(w.run('lineDescription(bag[0])'),'Navy · Notch lapel, Standard · 3-Roll-2 · Side vents · 5 cuff buttons · Patch waist pockets · Milanese Single Color under collar · Flat front, no pleats · Slanted pockets · Double besom back pockets · Medium break · Belt loops · Tonal lining','the bag line shows the new selections in customizer order, trousers specification included since J4');
   assert.ok(w.run('lineHtml(bag[0])').includes('$424'),'the bag line price includes the Milanese price');
   assert.equal(w.run('subtotal()'),424,'the subtotal includes the Milanese price');
   w.run("location.hash='#checkout'");

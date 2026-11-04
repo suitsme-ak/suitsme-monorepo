@@ -146,7 +146,7 @@ function bagCurrentWorld(w){w.run('stage=2;render(false)');w.elFor('#profileSele
   const item=w.bag()[0];
   assert.equal(item.vestIncluded,'Yes');assert.equal(item.vestStyle,'Notch Lapel');assert.equal(item.vestButtons,'DB 6x3');assert.equal(item.vestPocketType,'Double Besom');assert.equal(item.vestPocketNumber,'4-Pocket');assert.equal(item.vestBack,'Fabric');
   assert.ok(!('vest' in item)&&!('vestFabricBack' in item),'the bagged item carries none of the named style slots');
-  assert.equal(w.run('lineDescription(bag[0])'),'Navy · Notch lapel, Standard · 2-Button · Center vent · 4 cuff buttons · Flap waist pockets · Tonal lining · Vest: Notch Lapel, DB 6x3, Double Besom pockets, 4-Pocket, Fabric back','the bag line reads the vest specification in field order');
+  assert.equal(w.run('lineDescription(bag[0])'),'Navy · Notch lapel, Standard · 2-Button · Center vent · 4 cuff buttons · Flap waist pockets · Flat front, no pleats · Slanted pockets · Double besom back pockets · Medium break · Belt loops · Tonal lining · Vest: Notch Lapel, DB 6x3, Double Besom pockets, 4-Pocket, Fabric back','the bag line reads the vest specification in field order');
   assert.equal(w.run('subtotal()'),base,'the vest fields price at nothing pending the upcharge data');
   w.run(`editBagItem('${item.id}')`);
   assert.equal(w.config().vestButtons,'DB 6x3','bag Edit restores the vest buttons');

@@ -141,12 +141,14 @@ function demoCheckout(w){
   assert.equal(w.run('draft.garment'),'suit','the Studio carries the order item garment');
   assert.equal(w.run('garmentMode()'),true,'the garment aware studio is active');
   assert.ok(w.run('pendingOrderAttach')!==null,'the attach context is armed');
+  // Since package J1 the Studio collects the version 3 set.
+  const MEASURED_V3={height:70,chest:40,chestOverArm:46,sleeveInseamL:18,sleeveInseamR:18,shoulder:18,jacketLength:29,jacketWaist:34,outseam:42,trouserWaist:34,seat:40,frontRise:11,thigh:24,inseam:32,rise:12,crotch:10};
   w.run('measureNext()');
-  w.run("draft.wearerName='Alex Kumar';updateValue('height','70')");
+  w.run("draft.wearerName='Alex Kumar';updateBodyValue('height','70')");
   w.run('measureNext()');
-  w.run("updateValue('chest','40');updateValue('sleeve','25');updateValue('shoulder','18');updateValue('jacket','29');updateValue('stomach','34')");
+  w.run("updateBodyValue('chest','40');updateBodyValue('chestOverArm','46');updateBodyValue('sleeveInseamL','18');updateBodyValue('sleeveInseamR','18');updateBodyValue('shoulder','18');updateBodyValue('jacketLength','29');updateBodyValue('jacketWaist','34')");
   w.run('measureNext()');
-  w.run("updateValue('pantsLength','42');updateValue('waist','34');updateValue('seat','40');updateValue('frontRise','11');updateValue('thigh','24')");
+  w.run("updateBodyValue('outseam','42');updateBodyValue('trouserWaist','34');updateBodyValue('seat','40');updateBodyValue('frontRise','11');updateBodyValue('thigh','24');updateBodyValue('inseam','32');updateBodyValue('rise','12');updateBodyValue('crotch','10')");
   w.run('measureNext()');
   assert.equal(w.run('draft.step'),4,'the Studio reaches its review step');
   w.elFor('#confirmMeasures').checked=true;
@@ -154,8 +156,9 @@ function demoCheckout(w){
   assert.equal(w.run('profiles.length'),1,'the Studio saves the new profile');
   const attached=w.orders()[0].items[0].profile;
   assert.equal(attached.method,'body','saving in the Studio attaches the profile to the order item');
+  assert.equal(attached.version,3,'the attached profile is the version 3 profile the Studio saved');
   assert.equal(attached.garment,'suit','the attached profile names the garment');
-  assert.deepEqual(attached.values,SUIT_VALUES,'the attached values are exactly what was measured');
+  assert.deepEqual(attached.values,MEASURED_V3,'the attached values are exactly what was measured');
   assert.equal(attached.id,w.run('profiles[0].id'),'the attached profile is the one the Studio saved');
   assert.equal(w.run('pendingOrderAttach'),null,'the attach context is consumed by the save');
   assert.equal(w.run('location.hash'),'#order/'+orderId,'the flow returns to the completed order');

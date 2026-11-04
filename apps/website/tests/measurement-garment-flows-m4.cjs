@@ -1,22 +1,23 @@
 const assert = require('node:assert/strict'), fs = require('node:fs'), vm = require('node:vm'), ts = require('typescript'), Module = require('node:module'), crypto = require('node:crypto');
 const path = require('node:path');
 // Journeys J-M4a, J-M4b, J-M4c and J-M4d (measurements wave,
-// package M4): the garment aware Measurement Studio extends from
-// Men to Women and Boys. A women's suit is measured with the
-// verified women's set (the men's suit fields in the form's
-// order, stomach before bicep, every field required) and both fit
-// selectors; a boys' journey entered from the navigation Studio,
-// where a persisted draft still carries a previous session's Men
-// wearer (inconsistency INC-03), completes under the boys ranges
-// once the wearer is chosen explicitly; switching the wearer
-// mid session changes the rules the session applies, and the
-// customizer offers each wearer only their own profiles; and
-// standard sizes exist for both groups (inconsistency INC-04):
-// women by bust band, kids by age, using the benchmark's
-// published sets, with no men's table presented as applying to
-// them. Driven on the real storefront scripts in a Node vm with
-// stubbed DOM and storage, plus the real checkout module for the
-// stored order shape, in the style of the other suites.
+// package M4), with the body journeys rebuilt by the JPOS
+// consistency wave (package J1) on the version 3 schema. A
+// women's suit is measured with the version 3 women's suit set
+// (the JPOS suit set with every field required, the women's rule
+// carried into version 3) and no fit selectors; a boys' journey
+// entered from the navigation Studio, where a persisted draft
+// still carries a previous session's Men wearer (inconsistency
+// INC-03), completes under the boys ranges once the wearer is
+// chosen explicitly; switching the wearer mid session changes
+// the rules the session applies, and the customizer offers each
+// wearer only their own profiles; and standard sizes exist for
+// both groups (inconsistency INC-04): women by bust band, kids
+// by age, using the benchmark's published sets, with no men's
+// table presented as applying to them. Driven on the real
+// storefront scripts in a Node vm with stubbed DOM and storage,
+// plus the real checkout module for the stored order shape, in
+// the style of the other suites.
 
 function makeEl() { const el = { innerHTML: '', textContent: '', value: '', checked: false, open: false, style: {}, attrs: {}, classList: { add() {}, remove() {}, toggle() { return false } }, setAttribute(k, v) { el.attrs[k] = String(v) }, removeAttribute(k) { delete el.attrs[k] }, getAttribute(k) { return k in el.attrs ? el.attrs[k] : null }, addEventListener() {}, getBoundingClientRect: () => ({ left: 0, right: 0, top: 0, bottom: 0 }), showModal() { el.open = true }, close() { el.open = false }, scrollIntoView() {} }; return el }
 function makeWorld(seed = {}) {
@@ -40,7 +41,7 @@ function makeWorld(seed = {}) {
 const liCount = html => (html.match(/<li>/g) || []).length;
 const inputCount = html => (html.match(/measureInput-/g) || []).length;
 const fieldOrder = (html, ids) => ids.map(id => html.indexOf('measureInput-' + id));
-const setValues = (w, values) => { for (const [k, v] of Object.entries(values)) w.run(`updateValue('${k}','${v}')`); };
+const setValues = (w, values) => { for (const [k, v] of Object.entries(values)) w.run(`updateBodyValue('${k}','${v}')`); };
 const demoCheckout = (w, email) => {
   w.run("location.hash='#checkout';render()");
   w.run(`saveCheckoutForm({__data:{email:'${email}',firstName:'Alex',lastName:'Kumar',address:'1 Main Street',city:'New York',state:'NY',zip:'10001',country:'US'}})`);
@@ -48,14 +49,13 @@ const demoCheckout = (w, email) => {
   w.run('submitCheckout()');
   return JSON.parse(w.store.get('suits-orders') || '[]');
 };
-const WOMEN_SUIT_VALUES = { chest: 38, sleeve: 24, shoulder: 16, jacket: 28, stomach: 32, bicep: 12, pantsLength: 40, waist: 30, seat: 40, frontRise: 11, backRise: 15, thigh: 23, knee: 15, legOpening: 14 };
+const WOMEN_SUIT_VALUES = { chest: 38, chestOverArm: 44, sleeveInseamL: 17, sleeveInseamR: 17, sleeveOutseam: 24, shoulder: 16, jacketLength: 28, jacketWaist: 30, outseam: 40, trouserWaist: 30, seat: 40, frontRise: 11, backRise: 15, thigh: 23, knee: 15, bottom: 14, inseam: 30, rise: 12, crotch: 11 };
 
 // ---------------------------------------------------------------- J-M4a
-// Women's suit measuring end to end: the verified women's set in
-// the form's order with every field required, both fit selectors,
-// a version 2 women's profile, and the bag and demo order carrying
-// it. Quick Add routes a women's suit with no profile into the
-// same flow.
+// Women's suit measuring end to end: the version 3 women's suit
+// set with every field required, a version 3 women's profile, and
+// the bag and demo order carrying it. Quick Add routes a women's
+// suit with no profile into the same flow.
 {
   const w = makeWorld();
   const idx = w.run("products.findIndex(p=>p.category==='Women'&&p.kind==='suit')");
@@ -66,68 +66,66 @@ const WOMEN_SUIT_VALUES = { chest: 38, sleeve: 24, shoulder: 16, jacket: 28, sto
   w.run('startMeasurements()');
   assert.equal(w.run('draft.wearer'), 'Women', 'the session carries the Women wearer from the product');
   assert.equal(w.run('garmentMode()'), true, 'the garment aware studio is active for a Women suit');
-  assert.equal(w.run('garmentSetId()'), 'womens-suit', "the session uses the verified women's suit set");
+  assert.equal(w.run('garmentSetId()'), 'womens-suit', "the session uses the women's suit set");
   assert.ok(/^Women's suit_\d{1,2}\/\d{1,2}\/\d{4}$/.test(w.run('draft.name')), 'the profile name is prefilled with the category and date: ' + w.run('draft.name'));
   assert.equal(w.run('garmentSteps().length'), 5, 'the women suit flow has method, preamble, jacket, trousers and review steps');
 
   w.run('measureNext()');
   assert.equal(w.run('draft.step'), 1, 'the Studio advances to the name and height preamble');
-  w.run("draft.wearerName='Priya Kumar';updateValue('height','66')");
+  w.run("draft.wearerName='Priya Kumar';updateBodyValue('height','66')");
   w.run('measureNext()');
   assert.equal(w.run('draft.step'), 2, 'a completed preamble advances to the jacket fields');
 
-  // The jacket part: the verified order, stomach before bicep,
-  // and every field required (nothing carries the Optional tag).
+  // The jacket part: the version 3 jacket block, and every field
+  // required (nothing carries the Optional tag).
   const jacketHtml = w.run('measure()');
-  const jacketOrder = ['chest', 'sleeve', 'shoulder', 'jacket', 'stomach', 'bicep'];
-  assert.deepEqual(fieldOrder(jacketHtml, jacketOrder).slice().sort((a, b) => a - b), fieldOrder(jacketHtml, jacketOrder), 'the women jacket fields render in the verified order, stomach before bicep');
-  assert.equal(inputCount(jacketHtml), 6, 'the women jacket step asks for exactly 6 measurements');
+  const jacketOrder = ['chest', 'chestOverArm', 'sleeveInseamL', 'sleeveInseamR', 'sleeveOutseam', 'shoulder', 'jacketLength', 'jacketWaist'];
+  assert.deepEqual(fieldOrder(jacketHtml, jacketOrder).slice().sort((a, b) => a - b), fieldOrder(jacketHtml, jacketOrder), 'the women jacket fields render in the version 3 order');
+  assert.equal(inputCount(jacketHtml), 8, 'the women jacket step asks for exactly 8 measurements');
   assert.ok(!jacketHtml.includes(' · Optional'), 'no field on the women jacket step is optional');
   w.run('measureNext()');
   assert.equal(w.run('draft.step'), 2, 'empty women jacket fields cannot advance');
-  assert.equal(liCount(w.elFor('#measureError').innerHTML), 6, 'all six women jacket fields are reported together, bicep included');
-  setValues(w, { chest: 38, sleeve: 24, shoulder: 16, jacket: 28, stomach: 32 });
+  assert.equal(liCount(w.elFor('#measureError').innerHTML), 8, 'all eight women jacket fields are reported together, the sleeve outseam included');
+  setValues(w, { chest: 38, chestOverArm: 44, sleeveInseamL: 17, sleeveInseamR: 17, shoulder: 16, jacketLength: 28, jacketWaist: 30 });
   w.run('measureNext()');
   assert.equal(w.run('draft.step'), 2, 'the one field that is optional for men still blocks for women');
   assert.equal(liCount(w.elFor('#measureError').innerHTML), 0, 'a single problem is shown as text, not a list');
-  assert.ok(w.elFor('#measureError').textContent.includes('bicep'), 'the blocking problem names the bicep');
-  w.run("updateValue('bicep','12')");
+  assert.ok(w.elFor('#measureError').textContent.includes('sleeve outseam'), 'the blocking problem names the sleeve outseam');
+  w.run("updateBodyValue('sleeveOutseam','24')");
   w.run('measureNext()');
   assert.equal(w.run('draft.step'), 3, 'the completed jacket part advances to the trousers fields');
 
-  // The trousers part: the same 8 fields as the men's suit, all
-  // required here, including back rise, knee and leg opening.
+  // The trousers part: the version 3 trouser block, all required
+  // here, including back rise, knee and bottom.
   const trousersHtml = w.run('measure()');
-  const trousersOrder = ['pantsLength', 'waist', 'seat', 'frontRise', 'backRise', 'thigh', 'knee', 'legOpening'];
-  assert.deepEqual(fieldOrder(trousersHtml, trousersOrder).slice().sort((a, b) => a - b), fieldOrder(trousersHtml, trousersOrder), 'the women trouser fields render in the verified order');
-  assert.equal(inputCount(trousersHtml), 8, 'the women trousers step asks for exactly 8 measurements');
+  const trousersOrder = ['outseam', 'trouserWaist', 'seat', 'frontRise', 'backRise', 'thigh', 'knee', 'bottom', 'inseam', 'rise', 'crotch'];
+  assert.deepEqual(fieldOrder(trousersHtml, trousersOrder).slice().sort((a, b) => a - b), fieldOrder(trousersHtml, trousersOrder), 'the women trouser fields render in the version 3 order');
+  assert.equal(inputCount(trousersHtml), 11, 'the women trousers step asks for exactly 11 measurements');
   assert.ok(!trousersHtml.includes(' · Optional'), 'no field on the women trousers step is optional');
   w.run('measureNext()');
   assert.equal(w.run('draft.step'), 3, 'empty women trouser fields cannot advance');
-  assert.equal(liCount(w.elFor('#measureError').innerHTML), 8, 'all eight women trouser fields are reported together');
-  setValues(w, { pantsLength: 40, waist: 30, seat: 40, frontRise: 11, backRise: 15, thigh: 23, knee: 15, legOpening: 14 });
+  assert.equal(liCount(w.elFor('#measureError').innerHTML), 11, 'all eleven women trouser fields are reported together');
+  setValues(w, { outseam: 40, trouserWaist: 30, seat: 40, frontRise: 11, backRise: 15, thigh: 23, knee: 15, bottom: 14, inseam: 30, rise: 12, crotch: 11 });
   w.run('measureNext()');
   assert.equal(w.run('draft.step'), 4, 'the completed trousers part advances to review');
 
-  // Review: both fit selectors at their benchmark defaults.
+  // Review: grouped by garment part, no fit selectors.
   const review = w.run('measure()');
   assert.ok(review.includes('>Jacket<') && review.includes('>Trousers<'), 'the review groups the values under Jacket and Trousers');
-  assert.ok(review.includes('Jacket Fit') && review.includes('Trouser Fit'), 'the review carries both fit selectors');
-  assert.equal(w.run('draft.fits.jacketFit'), 'Regular Fit', 'the jacket fit starts at the benchmark default');
-  assert.equal(w.run('draft.fits.trouserFit'), 'Classic Comfort Fit', 'the trouser fit starts at the benchmark default');
+  assert.ok(!review.includes('Jacket Fit') && !review.includes('Trouser Fit'), 'the version 3 review carries no fit selectors');
   w.elFor('#confirmMeasures').checked = true;
   w.run('measureNext()');
   assert.equal(w.run('profiles.length'), 1, 'the Studio saves the women suit profile');
   const p = JSON.parse(w.run('JSON.stringify(profiles[0])'));
-  assert.equal(p.version, 2, 'the saved profile is version 2');
+  assert.equal(p.version, 3, 'the saved profile is version 3');
   assert.equal(p.garment, 'suit', 'the saved profile names its garment');
   assert.equal(p.wearer, 'Women', 'the saved profile names its wearer');
   assert.equal(p.wearerName, 'Priya Kumar');
   assert.deepEqual(p.values, { height: 66, ...WOMEN_SUIT_VALUES }, 'the saved values are exactly the women suit set plus height');
-  assert.deepEqual(p.fits, { jacketFit: 'Regular Fit', trouserFit: 'Classic Comfort Fit' }, 'the saved profile carries both fit selections');
+  assert.ok(!('fits' in p), 'the saved profile carries no fit selections');
   assert.equal(w.run("validateProfile(profiles[0],'suit').ok"), true, 'the saved profile passes the shared schema validation');
-  const noBicep = { ...p, values: { ...p.values } }; delete noBicep.values.bicep;
-  assert.equal(w.run(`validateProfile(${JSON.stringify(noBicep)},'suit').ok`), false, 'the same profile without a bicep is refused by the shared rule');
+  const noOutseam = { ...p, values: { ...p.values } }; delete noOutseam.values.sleeveOutseam;
+  assert.equal(w.run(`validateProfile(${JSON.stringify(noOutseam)},'suit').ok`), false, 'the same profile without the sleeve outseam is refused by the shared rule');
   assert.equal(w.run('stage'), 2, 'saving returns to the customizer Measurements step');
 
   // Bag and demo checkout keep the women profile intact.
@@ -135,7 +133,8 @@ const WOMEN_SUIT_VALUES = { chest: 38, sleeve: 24, shoulder: 16, jacket: 28, sto
   w.run('nextConfig()');
   assert.equal(w.bag().length, 1, 'Add to Bag creates exactly one bag line');
   const lineHtml = w.run('lineHtml(bag[0])');
-  for (const text of ['Height 66 in', 'Chest 38 in', 'Bicep 12 in', 'Stomach 32 in', 'Leg opening 14 in', 'Jacket Fit Regular Fit', 'Trouser Fit Classic Comfort Fit']) assert.ok(lineHtml.includes(text), 'the bag line lists: ' + text);
+  for (const text of ['Height 66 in', 'Chest 38 in', 'Chest over arms 44 in', 'Sleeve outseam 24 in', 'Leg opening 14 in']) assert.ok(lineHtml.includes(text), 'the bag line lists: ' + text);
+  assert.ok(!lineHtml.includes('Jacket Fit'), 'the bag line shows no fit selectors');
   const orders = demoCheckout(w, 'jm4a@example.com');
   assert.equal(orders.length, 1, 'the demo checkout records exactly one order');
   assert.equal(orders[0].items[0].profile.wearer, 'Women', 'the order item carries the Women wearer');
@@ -153,7 +152,8 @@ const WOMEN_SUIT_VALUES = { chest: 38, sleeve: 24, shoulder: 16, jacket: 28, sto
   assert.equal(wq.run('garmentSetId()'), 'womens-suit', "the quick add route uses the women's suit set");
 
   // The legacy completion offer extends to a Women profile:
-  // exactly the owed fields, cancel byte safe.
+  // exactly the fields the version 3 upgrade still owes, every
+  // men optional included, cancel byte safe.
   const LEGACY_W = { id: 'legacy-w', name: 'Legacy women fit', method: 'body', unit: 'in', wearer: 'Women', fit: 'Tailored', values: { chest: 38, waist: 30, shoulder: 16, sleeve: 24, jacket: 28, seat: 40, trouserWaist: 30, thigh: 23, inseam: 30, outseam: 40 }, created: '2026-01-15T00:00:00.000Z' };
   const wc = makeWorld({ profiles: [LEGACY_W] });
   const cidx = wc.run("products.findIndex(p=>p.category==='Women'&&p.kind==='suit')");
@@ -162,14 +162,14 @@ const WOMEN_SUIT_VALUES = { chest: 38, sleeve: 24, shoulder: 16, jacket: 28, sto
   wc.run("chooseCustomizerProfile('legacy-w')");
   const offerHtml = wc.run('customize()');
   assert.ok(offerHtml.includes('still needs:'), 'selecting the legacy Women profile for a women suit offers completion');
-  assert.deepEqual(JSON.parse(wc.run("JSON.stringify(missingForCompletion(profiles[0],'suit'))")), ['wearerName', 'height', 'stomach', 'bicep', 'pantsLength', 'frontRise', 'backRise', 'knee', 'legOpening', 'jacketFit', 'trouserFit'], 'the women owed fields are exactly the schema completion list, every men optional included');
+  assert.deepEqual(JSON.parse(wc.run("JSON.stringify(missingForCompletion(profiles[0],'suit'))")), ['wearerName', 'height', 'chestOverArm', 'sleeveInseamL', 'sleeveInseamR', 'sleeveOutseam', 'jacketWaist', 'outseam', 'frontRise', 'backRise', 'knee', 'bottom', 'inseam', 'rise', 'crotch'], 'the women owed fields are exactly the version 3 completion list, every men optional included');
   const before = wc.store.get('suits-profiles');
   wc.run("startProfileCompletion('legacy-w')");
   assert.equal(wc.run('draft.wearer'), 'Women', 'the completion session carries the Women wearer');
   assert.equal(wc.run('garmentMode()'), true, 'the completion runs in the garment aware studio');
   wc.run('cancelCompletion()');
   assert.equal(wc.store.get('suits-profiles'), before, 'cancelling leaves the stored legacy Women profile byte identical');
-  console.log('J-M4a passed: a women suit is measured with the verified all required set in the form order, saved as a version 2 Women profile through bag and demo order, quick add routes into measuring, and the legacy completion offer covers Women profiles with byte safe cancel.');
+  console.log('J-M4a passed: a women suit is measured with the version 3 all required set, saved as a version 3 Women profile through bag and demo order, quick add routes into measuring, and the legacy completion offer covers Women profiles with byte safe cancel.');
 }
 
 // ---------------------------------------------------------------- J-M4b
@@ -179,7 +179,7 @@ const WOMEN_SUIT_VALUES = { chest: 38, sleeve: 24, shoulder: 16, jacket: 28, sto
 // door the same child used to be measured under whatever rules
 // the leftover draft implied). The shopper chooses Boys at the
 // method step, and from there the boys rules govern: child
-// ranges, the men's field split, and a version 2 Boys profile
+// ranges, the men's required split, and a version 3 Boys profile
 // the boys garment can actually use.
 {
   const staleDraft = { step: 0, method: 'body', unit: 'in', values: {}, name: 'Suit_10/20/2026', fit: 'Tailored', ready: { jacket: '', length: '', trouser: '' }, garment: 'suit', wearer: 'Men', wearerName: '', fits: null, completionId: null, completionMissing: null };
@@ -195,32 +195,32 @@ const WOMEN_SUIT_VALUES = { chest: 38, sleeve: 24, shoulder: 16, jacket: 28, sto
 
   w.run('measureNext()');
   assert.equal(w.run('draft.step'), 1, 'the Studio advances to the name and height preamble');
-  w.run("draft.wearerName='Young Kumar';updateValue('height','90')");
+  w.run("draft.wearerName='Young Kumar';updateBodyValue('height','90')");
   w.run('measureNext()');
   assert.equal(w.run('draft.step'), 1, 'a height above the boys maximum is refused at this door');
   assert.ok(w.elFor('#measureError').textContent.includes('between 36 and 84'), 'the refusal quotes the boys height range, not the adult one: ' + w.elFor('#measureError').textContent);
-  w.run("updateValue('height','54')");
+  w.run("updateBodyValue('height','54')");
   w.run('measureNext()');
   assert.equal(w.run('draft.step'), 2, 'a boys height advances to the jacket fields');
 
   // Boys ranges govern, not the adult ones the stale draft
-  // implied: chest 24, sleeve 16 and jacket length 20 are all
-  // below the men minimums and valid for a child; the bicep,
-  // optional in the men's split the boys sets follow, may stay
-  // empty.
-  setValues(w, { chest: 24, sleeve: 16, shoulder: 12, jacket: 20, stomach: 24 });
+  // implied: chest 24, the sleeve inseams at 10 and jacket length
+  // 20 are all below the men minimums and valid for a child; the
+  // sleeve outseam, optional in the men's split the boys sets
+  // follow, may stay empty.
+  setValues(w, { chest: 24, chestOverArm: 30, sleeveInseamL: 10, sleeveInseamR: 10, shoulder: 12, jacketLength: 20, jacketWaist: 24 });
   w.run('measureNext()');
-  assert.equal(w.run('draft.step'), 3, 'boys scale jacket values advance, the optional bicep left empty');
-  setValues(w, { pantsLength: 32, waist: 24, seat: 28, frontRise: 8, thigh: 15 });
+  assert.equal(w.run('draft.step'), 3, 'boys scale jacket values advance, the optional sleeve outseam left empty');
+  setValues(w, { outseam: 32, trouserWaist: 24, seat: 28, frontRise: 8, thigh: 15, inseam: 22, rise: 8, crotch: 8 });
   w.run('measureNext()');
   assert.equal(w.run('draft.step'), 4, 'boys scale trouser values advance to review');
   w.elFor('#confirmMeasures').checked = true;
   w.run('measureNext()');
   assert.equal(w.run('profiles.length'), 1, 'the Studio saves the boys profile');
   const p = JSON.parse(w.run('JSON.stringify(profiles[0])'));
-  assert.equal(p.version, 2, 'the saved profile is version 2');
+  assert.equal(p.version, 3, 'the saved profile is version 3');
   assert.equal(p.wearer, 'Boys', 'the saved profile names the Boys wearer');
-  assert.deepEqual(p.values, { height: 54, chest: 24, sleeve: 16, shoulder: 12, jacket: 20, stomach: 24, pantsLength: 32, waist: 24, seat: 28, frontRise: 8, thigh: 15 }, 'the saved values are exactly the boys measurements entered');
+  assert.deepEqual(p.values, { height: 54, chest: 24, chestOverArm: 30, sleeveInseamL: 10, sleeveInseamR: 10, shoulder: 12, jacketLength: 20, jacketWaist: 24, outseam: 32, trouserWaist: 24, seat: 28, frontRise: 8, thigh: 15, inseam: 22, rise: 8, crotch: 8 }, 'the saved values are exactly the boys measurements entered');
   assert.equal(w.run("validateProfile(profiles[0],'suit').ok"), true, 'the saved profile passes the shared schema validation');
   const asMen = { ...p, wearer: 'Men' };
   assert.equal(w.run(`validateProfile(${JSON.stringify(asMen)},'suit').ok`), false, 'the same numbers are not a valid Men profile: the wearer rule, not the door, decides');
@@ -240,15 +240,15 @@ const WOMEN_SUIT_VALUES = { chest: 38, sleeve: 24, shoulder: 16, jacket: 28, sto
   const orders = demoCheckout(w, 'jm4b@example.com');
   assert.equal(orders.length, 1, 'the demo checkout records exactly one order');
   assert.deepEqual(orders[0].items[0].profile.values, p.values, 'the order item carries the boys values intact');
-  console.log('J-M4b passed: entered from the navigation Studio over a stale Men draft, choosing Boys applies the boys ranges and field split, saves a version 2 Boys profile the shared rule accepts (and refuses as a Men profile), and the boys garment bags and orders with it.');
+  console.log('J-M4b passed: entered from the navigation Studio over a stale Men draft, choosing Boys applies the boys ranges and required split, saves a version 3 Boys profile the shared rule accepts (and refuses as a Men profile), and the boys garment bags and orders with it.');
 }
 
 // ---------------------------------------------------------------- J-M4c
 // Wearer switching. In the studio, switching the wearer at the
 // method step changes the set and the required split the session
-// applies (Men suit: bicep optional; Women: the same session now
-// owes it). In the customizer, each garment offers only its own
-// wearer's profiles.
+// applies (Men suit: sleeve outseam optional; Women: the same
+// session now owes it). In the customizer, each garment offers
+// only its own wearer's profiles.
 {
   const w = makeWorld();
   const idx = w.run("products.findIndex(p=>p.category==='Suits'&&p.kind==='suit')");
@@ -258,10 +258,10 @@ const WOMEN_SUIT_VALUES = { chest: 38, sleeve: 24, shoulder: 16, jacket: 28, sto
   w.run('startMeasurements()');
   assert.equal(w.run('draft.wearer'), 'Men', 'the session starts as Men from the product');
   w.run('measureNext()');
-  w.run("draft.wearerName='Alex Kumar';updateValue('height','66')");
+  w.run("draft.wearerName='Alex Kumar';updateBodyValue('height','66')");
   w.run('measureNext()');
   assert.equal(w.run('draft.step'), 2, 'the Men session reaches the jacket fields');
-  assert.ok(w.run('measure()').includes(' · Optional'), 'for Men the bicep is marked optional');
+  assert.ok(w.run('measure()').includes(' · Optional'), 'for Men the sleeve outseam is marked optional');
   w.run('measureBack()'); w.run('measureBack()');
   assert.equal(w.run('draft.step'), 0, 'the session returns to the method step');
   w.run("draft.wearer='Women';saveDraft();render(false)");
@@ -272,10 +272,10 @@ const WOMEN_SUIT_VALUES = { chest: 38, sleeve: 24, shoulder: 16, jacket: 28, sto
   assert.equal(w.run('draft.step'), 2, 'the switched session reaches the jacket fields');
   const html = w.run('measure()');
   assert.ok(!html.includes(' · Optional'), 'after the switch no jacket field is optional');
-  setValues(w, { chest: 38, sleeve: 24, shoulder: 16, jacket: 28, stomach: 32 });
+  setValues(w, { chest: 38, chestOverArm: 44, sleeveInseamL: 17, sleeveInseamR: 17, shoulder: 16, jacketLength: 28, jacketWaist: 30 });
   w.run('measureNext()');
-  assert.equal(w.run('draft.step'), 2, 'after the switch the bicep the Men split let through now blocks');
-  assert.ok(w.elFor('#measureError').textContent.includes('bicep'), 'the blocking problem names the bicep');
+  assert.equal(w.run('draft.step'), 2, 'after the switch the sleeve outseam the Men split let through now blocks');
+  assert.ok(w.elFor('#measureError').textContent.includes('sleeve outseam'), 'the blocking problem names the sleeve outseam');
 
   // Customizer filtering: each garment's profile picker offers
   // only its own wearer's profiles.

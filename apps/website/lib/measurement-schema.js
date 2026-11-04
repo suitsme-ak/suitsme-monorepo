@@ -32,8 +32,21 @@
 // fields merge into one body waist; inseam and outseam are not body
 // profile fields; validation reports every problem at once; values
 // are entered in inches or centimeters and stored in inches.
+// Version 3 (JPOS consistency wave, package J1, design in
+// docs j0-mapping-design.md sections A and D): the body sets are
+// reshaped to the shop's JPOS fields. The waist splits back into a
+// jacket waist and a trouser waist (plan M1); the sleeve splits
+// into left and right inseams plus an outseam; the stomach leaves
+// every set; the shirt set takes the JPOS fields (back length,
+// waist, sweep, cuff size, bicep); the waistcoat takes a back
+// length and a half waist; chest over arm, weight and posture join
+// the preamble. Version 1 and 2 profiles keep loading and ordering
+// exactly as before; only newly saved body profiles are version 3.
+// Inches are the entry model in version 3 (plan M9): centimeters
+// survive only as a converter display beside a field, never as a
+// stored entry mode. The fit selectors have no version 3 home.
 
-export const PROFILE_SCHEMA_VERSION = 2;
+export const PROFILE_SCHEMA_VERSION = 3;
 export const WEARERS = ['Men', 'Women', 'Boys'];
 
 // The profile preamble every body form opens with: the name of the
@@ -129,6 +142,246 @@ export const GARMENT_SETS = {
 // set (accessory, swatch, gift) are absent on purpose. A women's
 // suit is its own set (see setForGarment).
 export const KIND_TO_SET = { suit: 'suit', jacket: 'jacket', waistcoat: 'waistcoat', pants: 'trousers', shirt: 'shirt' };
+
+// ------------------------------------------------------------------
+// Version 3 body fields (package J1). The fields whose concept and
+// ranges survive from version 2 unchanged (chest, shoulder, seat,
+// the rises, thigh, knee, neck, the shirt sleeve and bicep, height)
+// are shared with MEASUREMENT_FIELDS by reference, so the two
+// versions can never disagree about them. The fields below are the
+// ones the JPOS mapping adds, renames or reshapes. Ranges follow
+// the J0 rule: the version 2 range of the nearest equivalent field
+// is the starting point (jacketWaist from waist, outseam from
+// pantsLength, bottom from legOpening, jacketLength from jacket,
+// backLength from frontLength, vestBackLength from vestLength,
+// trouserWaist from waist, inseam from the retired version 1
+// inseam, rise from frontRise, crotch from backRise, sleeveOutseam
+// from sleeve). Where no equivalent exists the range is a wide
+// sanity bound and says so: weight, chestOverArm (the chest range
+// widened, because the tape passes over the arms), sleeveInseamL
+// and sleeveInseamR (narrowed from sleeve, because an inseam starts
+// at the underarm, not the shoulder tip), sweep (the seat range,
+// the field it replaces in the shirt set), cuffSize, opening and
+// openingAB, and halfWaist (the waist range halved, because the
+// stored value is half of the waist the shopper enters).
+export const MEASUREMENT_FIELDS_V3 = {
+  height: MEASUREMENT_FIELDS.height,
+  neck: MEASUREMENT_FIELDS.neck,
+  chest: MEASUREMENT_FIELDS.chest,
+  shoulder: MEASUREMENT_FIELDS.shoulder,
+  seat: MEASUREMENT_FIELDS.seat,
+  frontRise: MEASUREMENT_FIELDS.frontRise,
+  backRise: MEASUREMENT_FIELDS.backRise,
+  thigh: MEASUREMENT_FIELDS.thigh,
+  knee: MEASUREMENT_FIELDS.knee,
+  sleeve: MEASUREMENT_FIELDS.sleeve,
+  bicep: MEASUREMENT_FIELDS.bicep,
+  weight: { label: 'Weight', kind: 'body', unit: 'lb', ranges: { Men: [40, 600], Women: [40, 600], Boys: [15, 300] }, guidance: { placement: 'Your weight in pounds, in light clothing. Our tailors use it with your height when they look up your size template.', error: 'Do not estimate from an old weight if yours has changed; use a recent one.', helper: false, image: null } },
+  chestOverArm: { label: 'Chest over arms', kind: 'body', ranges: { Men: [30, 80], Women: [30, 80], Boys: [20, 80] }, guidance: { placement: 'Measure around your chest and over both arms at the fullest part of your chest, with your arms relaxed at your sides.', error: 'Keep your arms down and relaxed; lifting them changes the reading.', helper: true, image: null } },
+  jacketWaist: { label: 'Jacket waist', kind: 'body', ranges: { Men: [22, 70], Women: [22, 70], Boys: [18, 70] }, guidance: { placement: 'Measure around your waist at the height where your jacket will close, usually just above your natural waist, keeping the tape snug but not pulling.', error: 'This is not your trouser waist; measure where the jacket buttons, not where your trousers sit.', helper: false, image: { ref: 'waist', style: 'photo' } } },
+  trouserWaist: { label: 'Trouser waist', kind: 'body', ranges: { Men: [22, 70], Women: [22, 70], Boys: [18, 70] }, guidance: { placement: 'Measure around your waist where you will wear your trousers, keeping the tape snug but not pulling.', error: 'Do not give the size printed on a trouser label; labels are not body measurements.', helper: false, image: { ref: 'waist', style: 'photo' } } },
+  sleeveInseamL: { label: 'Left sleeve inseam', kind: 'body', ranges: { Men: [10, 30], Women: [10, 30], Boys: [6, 30] }, guidance: { placement: 'With your left arm slightly raised, measure from your underarm down the inside of the arm to your wrist bone.', error: 'Keep the arm relaxed after placing the tape; stretching the arm long shortens the sleeve.', helper: true, image: null } },
+  sleeveInseamR: { label: 'Right sleeve inseam', kind: 'body', ranges: { Men: [10, 30], Women: [10, 30], Boys: [6, 30] }, guidance: { placement: 'With your right arm slightly raised, measure from your underarm down the inside of the arm to your wrist bone.', error: 'Keep the arm relaxed after placing the tape; stretching the arm long shortens the sleeve.', helper: true, image: null } },
+  sleeveOutseam: { label: 'Sleeve outseam', kind: 'garment', ranges: { Men: [17, 40], Women: [17, 40], Boys: [10, 40] }, guidance: { placement: 'Measure from the shoulder tip down the outside of your arm to where you want the cuff to end, with your arm relaxed.', error: 'A bent arm or a shrug shortens the reading; keep the arm relaxed at your side.', helper: true, image: { ref: 'sleeve', style: 'photo' } } },
+  jacketLength: { label: 'Jacket length', kind: 'garment', ranges: { Men: [22, 42], Women: [22, 42], Boys: [14, 42] }, guidance: { placement: 'Measure from the base of your neck down your back to where you want the jacket to end, usually covering your seat.', error: 'Guessing from your height alone misses your proportions; measure the back.', helper: true, image: { ref: 'jacket-length', style: 'photo' } } },
+  outseam: { label: 'Outseam', kind: 'garment', ranges: { Men: [25, 52], Women: [25, 52], Boys: [16, 52] }, guidance: { placement: 'Measure from the top of your waist down the outside of your leg to the floor, wearing the shoes you will pair with the trousers.', error: 'Measuring barefoot, then wearing heeled shoes, leaves the hem short.', helper: true, image: { ref: 'pants-length', style: 'diagram' } } },
+  inseam: { label: 'Inseam', kind: 'body', ranges: { Men: [20, 42], Women: [20, 42], Boys: [10, 42] }, guidance: { placement: 'Have a helper measure from the crotch point down the inside of your leg to your ankle bone.', error: 'Stand straight with your legs slightly apart; a bent knee shortens the reading.', helper: true, image: { ref: 'inseam', style: 'diagram' } } },
+  rise: { label: 'Rise', kind: 'body', ranges: { Men: [6, 20], Women: [6, 20], Boys: [5, 20] }, guidance: { placement: 'Measure from the top of the front waistband, down between your legs, to the top of the back waistband, following your body.', error: 'Keep the tape following the body through the crotch; holding it away reads long.', helper: true, image: { ref: 'front-rise', style: 'diagram' } } },
+  crotch: { label: 'Crotch depth', kind: 'body', ranges: { Men: [6, 22], Women: [6, 22], Boys: [5, 22] }, guidance: { placement: 'Sit on a firm chair and measure at your side from the top of where the waistband sits down to the seat of the chair.', error: 'Sit up straight on a firm seat; a soft cushion swallows the depth.', helper: false, image: null } },
+  bottom: { label: 'Leg opening', kind: 'garment', ranges: { Men: [10, 40], Women: [10, 40], Boys: [8, 40] }, guidance: { placement: 'Lay the hem of trousers that fit you flat and measure straight across the opening, then double the number.', error: 'Measuring around your ankle gives a wider opening than you want; measure the hem itself.', helper: false, image: { ref: 'leg-opening', style: 'diagram' } } },
+  backLength: { label: 'Back length', kind: 'garment', ranges: { Men: [24, 58], Women: [24, 58], Boys: [16, 58] }, guidance: { placement: 'Measure from the base of your neck straight down your back to where you want the shirt to end.', error: 'Measure the back, not the front; the two lengths differ and our tailors cut from the back.', helper: true, image: null } },
+  waist: { label: 'Waist', kind: 'body', ranges: { Men: [22, 70], Women: [22, 70], Boys: [18, 70] }, guidance: { placement: 'Measure around your waist where the shirt will sit, keeping the tape snug but not pulling.', error: 'Do not hold your stomach in; the shirt has to fit the waist you have.', helper: false, image: { ref: 'waist', style: 'photo' } } },
+  sweep: { label: 'Sweep', kind: 'garment', ranges: { Men: [26, 78], Women: [26, 78], Boys: [20, 78] }, guidance: { placement: 'Measure around your body at the height where the shirt hem will sit, usually across the fullest part of your seat.', error: 'Keep the tape level; a hem that sits higher or lower than you measured will not match.', helper: false, image: null } },
+  cuffSize: { label: 'Cuff size', kind: 'body', ranges: { Men: [5, 15], Women: [5, 15], Boys: [4, 15] }, guidance: { placement: 'Measure around your wrist just below the wrist bone, where a shirt cuff closes, with one finger under the tape.', error: 'A tape pulled tight cuts a cuff that will not close over a watch or your hand.', helper: false, image: null } },
+  vestBackLength: { label: 'Vest back length', kind: 'garment', ranges: { Men: [18, 36], Women: [18, 36], Boys: [12, 36] }, guidance: { placement: 'Measure from the base of your neck straight down your back to where you want the waistcoat to end.', error: 'Measure the back, not the front point; our tailors cut the waistcoat from its back length.', helper: true, image: { ref: 'vest-length', style: 'diagram' } } },
+  halfWaist: { label: 'Waist (half waist)', kind: 'body', ranges: { Men: [11, 35], Women: [11, 35], Boys: [9, 35] }, guidance: { placement: 'Measure around your full waist where the waistcoat will close, keeping the tape snug but not pulling. We record half of this number as your half waist, the measure our tailors use for a waistcoat.', error: 'Give your full waist; do not halve it yourself, and do not give a trouser label size.', helper: false, image: { ref: 'waist', style: 'photo' } } },
+  opening: { label: 'Vest opening', kind: 'garment', ranges: { Men: [8, 30], Women: [8, 30], Boys: [6, 30] }, guidance: { placement: 'Measure from the top of your shoulder, where it joins the neck, down the front to where the waistcoat opening should end.', error: 'Decide the depth against a waistcoat or jacket you own; a guess shows on the chest.', helper: true, image: null } },
+  openingAB: { label: 'Vest opening (second)', kind: 'garment', ranges: { Men: [8, 30], Women: [8, 30], Boys: [6, 30] }, guidance: { placement: 'Optional: a second opening measure, taken the same way as the vest opening, when your tailor has asked for one.', error: 'Leave this empty unless a tailor has asked for it.', helper: true, image: null } }
+};
+
+// The per field step sizes for version 3 entry (plan M9): inches
+// are entered in the fraction steps the shop's own forms use. The
+// only step evidence in the JPOS code is the shirt ladders of the
+// dressshirts page (research section 4.2): quarter inch steps for
+// neck, point to point and sleeve, half inch steps for back
+// length, waist and sweep. Fields not listed keep the studio's
+// plain decimal step; no other step is claimed as a JPOS step.
+export const FIELD_STEPS_V3 = { neck: 0.25, shoulder: 0.25, sleeve: 0.25, backLength: 0.5, waist: 0.5, sweep: 0.5 };
+
+// The posture answers (J0 section B.1, wording proposed there for
+// shop review). The stored value is the answer token itself; the
+// JPOS value domain for its Posture column is not in the code
+// evidence, so nothing translates the token into a staff code.
+export const POSTURE_OPTIONS = ['Rounded forward', 'Very straight', 'Neither'];
+
+// The figure field names a version 3 profile's figure object may
+// carry (J0 section B): the JPOS orders column names, exactly as
+// attested. Package J1 reserves the shape only; no shopper facing
+// figure questions ship until the shop confirms the value domains
+// (J0 open item B.6), so a web profile's figure object is empty.
+export const FIGURE_FIELD_KEYS = ['101Stoop', '102Erect', '103HighShoulder', '104SlopingShoulder', '109ProminentChest', '110FlatChest', '112EasyArmHole', '120DeepEasyArmhole', '113DipNeck', '115SleeveWidth', '116HalfSeatonSide', '117ALowerCollar', '117StoopBackOnly', '118SquareShoulderFront', '121ABigArm', '121EasyArmholeBigArm', 'SleeveRotateBack', 'Pants71ProminentSeat', 'Pants72FlatSeat', 'Pants82SideRise', 'Pants83LiftBackThigh', 'Pants84Calf', 'Pants85MidThigh', 'VestStoop', 'VestErect', 'VestHighShoulder', 'VestSlopingShoulder', 'Shirts104Sloping'];
+
+// The gauge block keys (J0 section D.2): the ten GaugeSuitProfiles
+// value columns, with the GaugeSuit prefix dropped because the
+// block itself is the gauge context.
+export const GAUGE_KEYS = ['height', 'chest', 'jacketWaist', 'pantsWaist', 'posture', 'weight', 'chestOverArm', 'seat', 'shoulder', 'halfWaistJacket'];
+
+// The version 3 per garment body field sets, from the J0 section A
+// mappings. Field order follows the v2 sets where the fields
+// survive, with the added JPOS fields placed with their block.
+// There are no fit selectors in version 3. Sets the research gives
+// no JPOS evidence for (long-coat, shorts, leather) are not
+// remapped and have no version 3 set (J0 section A.7).
+export const GARMENT_SETS_V3 = {
+  suit: { label: 'Suit', fields: [['chest', true], ['chestOverArm', true], ['sleeveInseamL', true], ['sleeveInseamR', true], ['sleeveOutseam', false], ['shoulder', true], ['jacketLength', true], ['jacketWaist', true], ['outseam', true], ['trouserWaist', true], ['seat', true], ['frontRise', true], ['backRise', false], ['thigh', true], ['knee', false], ['bottom', false], ['inseam', true], ['rise', true], ['crotch', true]] },
+  jacket: { label: 'Jacket', fields: [['chest', true], ['chestOverArm', true], ['sleeveInseamL', true], ['sleeveInseamR', true], ['sleeveOutseam', false], ['shoulder', true], ['jacketLength', true], ['jacketWaist', true], ['seat', true]] },
+  waistcoat: { label: 'Waistcoat', fields: [['chest', true], ['vestBackLength', true], ['halfWaist', true], ['opening', false], ['openingAB', false]] },
+  trousers: { label: 'Trousers', fields: [['outseam', true], ['trouserWaist', true], ['seat', true], ['frontRise', true], ['backRise', false], ['thigh', true], ['knee', false], ['bottom', false], ['inseam', true], ['rise', true], ['crotch', true]] },
+  shirt: { label: 'Shirt', fields: [['neck', true], ['chest', true], ['sleeve', true], ['shoulder', true], ['backLength', true], ['bicep', true], ['cuffSize', true], ['waist', true], ['sweep', true]] },
+  'womens-suit': { label: "Women's suit", fields: [['chest', true], ['chestOverArm', true], ['sleeveInseamL', true], ['sleeveInseamR', true], ['sleeveOutseam', true], ['shoulder', true], ['jacketLength', true], ['jacketWaist', true], ['outseam', true], ['trouserWaist', true], ['seat', true], ['frontRise', true], ['backRise', true], ['thigh', true], ['knee', true], ['bottom', true], ['inseam', true], ['rise', true], ['crotch', true]] }
+};
+
+// The second pair of trousers block (J0 section A.3): the v3
+// trousers keys that have a Pants2 counterpart on the JPOS order.
+// frontRise, backRise and crotch have none and are not invented.
+export const SECOND_PAIR_KEYS = ['trouserWaist', 'seat', 'thigh', 'inseam', 'outseam', 'rise', 'bottom', 'knee'];
+
+export function fieldDefinitionV3(key) { return MEASUREMENT_FIELDS_V3[key] || null; }
+
+export function fieldRangeV3(key, wearer) { const def = MEASUREMENT_FIELDS_V3[key]; if (!def) return null; const r = def.ranges[wearer] || def.ranges.Men; return { min: r[0], max: r[1] }; }
+
+export function guidanceForV3(setId, key) { const base = MEASUREMENT_FIELDS_V3[key] ? MEASUREMENT_FIELDS_V3[key].guidance : null; const over = (GUIDANCE_OVERRIDES[setId] || {})[key]; if (!base) return over || null; return over ? { ...base, ...over } : base; }
+
+// The v3 set's fields for a wearer, as {key, required, label}. The
+// women's all required rule carries into version 3 unchanged.
+export function effectiveSetFieldsV3(setId, wearer) { const set = GARMENT_SETS_V3[setId]; if (!set) return []; return set.fields.map(entry => ({ key: entry[0], required: wearer === 'Women' ? true : entry[1] === true, label: entry[2] || MEASUREMENT_FIELDS_V3[entry[0]].label })); }
+
+// The v3 body validation rule: the preamble height, the optional
+// preamble weight, and exactly the set's keys. Posture is not a
+// values key (it lives in the gauge block), and no other key may
+// appear: a version 2 key in a version 3 profile is refused, so
+// the two field models can never mix in one profile.
+export function validateBodyValuesV3(values, setId, wearer) {
+  const set = GARMENT_SETS_V3[setId];
+  if (!set) return [{ field: 'garment', code: 'invalid' }];
+  if (!values || typeof values !== 'object' || Array.isArray(values)) return [{ field: 'values', code: 'invalid' }];
+  const problems = [];
+  const allowed = new Set(['height', 'weight']);
+  const check = (key, required) => {
+    const v = values[key];
+    if (v === undefined || v === null) { if (required) problems.push({ field: key, code: 'missing' }); return; }
+    if (typeof v !== 'number' || !Number.isFinite(v)) { problems.push({ field: key, code: 'invalid' }); return; }
+    const r = fieldRangeV3(key, wearer);
+    if (v < r.min || v > r.max) problems.push({ field: key, code: 'range' });
+  };
+  check('height', true);
+  check('weight', false);
+  for (const f of effectiveSetFieldsV3(setId, wearer)) { allowed.add(f.key); check(f.key, f.required); }
+  for (const key of Object.keys(values)) if (!allowed.has(key)) problems.push({ field: key, code: 'unknown' });
+  return problems;
+}
+
+// The cleaned values a server stores for a version 3 body profile:
+// height, the weight when present, and exactly the set's keys that
+// are present, in set order. Null when the values do not validate.
+export function cleanBodyValuesV3(values, setId, wearer) {
+  if (validateBodyValuesV3(values, setId, wearer).length) return null;
+  const out = { height: values.height };
+  if (values.weight !== undefined && values.weight !== null) out.weight = values.weight;
+  for (const f of effectiveSetFieldsV3(setId, wearer)) { const v = values[f.key]; if (v !== undefined && v !== null) out[f.key] = v; }
+  return out;
+}
+
+// The second pair block, validated on its own: only the keys with
+// a Pants2 counterpart may appear, each a number inside its v3
+// trousers range. Every key is optional within the block; the
+// block itself is optional on the profile.
+export function validateSecondPair(block, wearer) {
+  if (!block || typeof block !== 'object' || Array.isArray(block)) return [{ field: 'secondPair', code: 'invalid' }];
+  const problems = [];
+  for (const key of Object.keys(block)) {
+    if (!SECOND_PAIR_KEYS.includes(key)) { problems.push({ field: key, code: 'unknown' }); continue; }
+    const v = block[key];
+    if (typeof v !== 'number' || !Number.isFinite(v)) { problems.push({ field: key, code: 'invalid' }); continue; }
+    const r = fieldRangeV3(key, wearer);
+    if (v < r.min || v > r.max) problems.push({ field: key, code: 'range' });
+  }
+  return problems;
+}
+
+export function cleanSecondPair(block, wearer) {
+  if (!block || typeof block !== 'object' || Array.isArray(block) || !Object.keys(block).length) return null;
+  if (validateSecondPair(block, wearer).length) return null;
+  const out = {};
+  for (const key of SECOND_PAIR_KEYS) { const v = block[key]; if (v !== undefined && v !== null) out[key] = v; }
+  return out;
+}
+
+// The gauge block for a web created profile (J0 section D.2):
+// direct copies of the customer's own values in the gauge shape,
+// built at save time. halfWaistJacket is always null here: the
+// code evidence does not show how JPOS derives it from the jacket
+// waist, and J1 leaves it to the shop rather than halving on its
+// own authority (the waistcoat half waist of plan M4 is a
+// different, explicitly adopted rule). Posture arrives as the
+// shopper's answer token, or null when unanswered.
+export function gaugeBlockFor(values, posture) {
+  const v = values && typeof values === 'object' ? values : {};
+  const num = k => (typeof v[k] === 'number' && Number.isFinite(v[k]) ? v[k] : null);
+  return { height: num('height'), chest: num('chest'), jacketWaist: num('jacketWaist'), pantsWaist: num('trouserWaist'), posture: typeof posture === 'string' && posture ? posture : null, weight: num('weight'), chestOverArm: num('chestOverArm'), seat: num('seat'), shoulder: num('shoulder'), halfWaistJacket: null };
+}
+
+// Shape checks for the version 3 blocks (J0 sections D.1 to D.3).
+// The gauge block is a snapshot: shape only, never ranges, because
+// staff may later hold different gauge values after a fitting. A
+// web origin profile must leave halfWaistJacket null (above), and
+// must not carry a provenance block; an imported profile must
+// carry one, with at least the JPOS customer id it came from.
+export function validateV3Blocks(profile) {
+  const problems = [];
+  const origin = profile.origin;
+  if (origin === undefined || origin === null || origin === '') problems.push({ field: 'origin', code: 'missing' });
+  else if (!['web', 'jpos'].includes(origin)) problems.push({ field: 'origin', code: 'invalid' });
+  const header = profile.header;
+  if (header !== undefined && header !== null) {
+    if (typeof header !== 'object' || Array.isArray(header)) problems.push({ field: 'header', code: 'invalid' });
+    else {
+      if (header.profileType !== undefined && header.profileType !== null && typeof header.profileType !== 'string') problems.push({ field: 'profileType', code: 'invalid' });
+      if (header.jposLinks !== undefined && header.jposLinks !== null && (typeof header.jposLinks !== 'object' || Array.isArray(header.jposLinks))) problems.push({ field: 'jposLinks', code: 'invalid' });
+    }
+  }
+  const gauge = profile.gauge;
+  if (gauge !== undefined && gauge !== null) {
+    if (typeof gauge !== 'object' || Array.isArray(gauge)) problems.push({ field: 'gauge', code: 'invalid' });
+    else {
+      for (const key of Object.keys(gauge)) {
+        if (!GAUGE_KEYS.includes(key)) { problems.push({ field: key, code: 'unknown' }); continue; }
+        const v = gauge[key];
+        if (v === null || v === undefined) continue;
+        if (key === 'posture') { if (typeof v !== 'string' || !v || v.length > 40) problems.push({ field: 'posture', code: 'invalid' }); }
+        else if (typeof v !== 'number' || !Number.isFinite(v)) problems.push({ field: key, code: 'invalid' });
+      }
+      if (origin === 'web' && gauge.halfWaistJacket !== undefined && gauge.halfWaistJacket !== null) problems.push({ field: 'halfWaistJacket', code: 'invalid' });
+    }
+  }
+  const figure = profile.figure;
+  if (figure !== undefined && figure !== null) {
+    if (typeof figure !== 'object' || Array.isArray(figure)) problems.push({ field: 'figure', code: 'invalid' });
+    else for (const key of Object.keys(figure)) {
+      if (!FIGURE_FIELD_KEYS.includes(key)) { problems.push({ field: key, code: 'unknown' }); continue; }
+      const v = figure[key];
+      if (typeof v !== 'string' || !v || v.length > 40) problems.push({ field: key, code: 'invalid' });
+    }
+  }
+  const provenance = profile.provenance;
+  if (origin === 'web' && provenance !== undefined && provenance !== null) problems.push({ field: 'provenance', code: 'invalid' });
+  if (origin === 'jpos') {
+    if (!provenance || typeof provenance !== 'object' || Array.isArray(provenance)) problems.push({ field: 'provenance', code: 'missing' });
+    else if (typeof provenance.jposCustomerId !== 'string' || !provenance.jposCustomerId) problems.push({ field: 'jposCustomerId', code: 'missing' });
+  }
+  return problems;
+}
+
 
 // Garment measurement fields (measurements wave, package M7): the
 // second entry mode of the benchmark's form, MEASURE EXISTING
@@ -717,7 +970,7 @@ export function cleanLegacyValues(values, wearer) {
   return out;
 }
 
-export function profileVersion(profile) { return profile && profile.version === 2 ? 2 : 1; }
+export function profileVersion(profile) { return profile && profile.version === 3 ? 3 : profile && profile.version === 2 ? 2 : 1; }
 
 // Validate a whole profile. garmentKind is the catalog kind the
 // profile is being used for (at checkout, the item's kind); when
@@ -736,7 +989,7 @@ export function validateProfile(profile, garmentKind) {
   const wearerRaw = profile.wearer;
   if (wearerRaw !== undefined && !WEARERS.includes(wearerRaw)) problems.push({ field: 'wearer', code: 'invalid' });
   const wearer = WEARERS.includes(wearerRaw) ? wearerRaw : 'Men';
-  if (version === 2 && wearerRaw === undefined) problems.push({ field: 'wearer', code: 'missing' });
+  if (version >= 2 && wearerRaw === undefined) problems.push({ field: 'wearer', code: 'missing' });
   if (!['body', 'ready', 'garment', 'modify'].includes(profile.method)) { problems.push({ field: 'method', code: 'invalid' }); return { ok: false, version, wearer, setId: null, problems }; }
   if (profile.method === 'ready') {
     // Version 1 ready profiles are the historical men's shape and
@@ -769,8 +1022,11 @@ export function validateProfile(profile, garmentKind) {
         if (!READY_PART_KEYS.includes(key)) problems.push({ field: key, code: 'unknown' });
         else if (!parts.includes(key) && !readyPartValid(key, ready[key])) problems.push({ field: key, code: 'choice' });
       }
+      // Version 3 ready profiles keep the label based parts (the
+      // gauge specification is package J2) inside the v3 envelope.
+      if (version === 3) problems.push(...validateV3Blocks(profile));
     }
-    return { ok: problems.length === 0, version, wearer, setId: version === 2 ? readySetId(profile, garmentKind, wearer) : (garmentKind ? setForGarment(garmentKind, wearer) : null), problems };
+    return { ok: problems.length === 0, version, wearer, setId: version >= 2 ? readySetId(profile, garmentKind, wearer) : (garmentKind ? setForGarment(garmentKind, wearer) : null), problems };
   }
   if (profile.method === 'garment') {
     // Garment profiles (package M7) exist only as version 2: the
@@ -779,14 +1035,17 @@ export function validateProfile(profile, garmentKind) {
     // garment measurements, validated against the garment ranges
     // by validateGarmentValues, never against the body ranges,
     // and a garment profile carries no fit selectors: the
-    // benchmark's garment form asks for none.
-    if (version !== 2) { problems.push({ field: 'version', code: 'unsupported' }); return { ok: false, version, wearer, setId: null, problems }; }
+    // benchmark's garment form asks for none. Version 3 garment
+    // profiles carry the same sets (J0 section A.8) inside the v3
+    // envelope, so both versions are accepted here.
+    if (version !== 2 && version !== 3) { problems.push({ field: 'version', code: 'unsupported' }); return { ok: false, version, wearer, setId: null, problems }; }
     const kind = garmentKind || profile.garment;
     const setId = kind ? setForGarment(kind, wearer) : null;
     if (!setId || !GARMENT_MEASURE_SETS[setId]) { problems.push({ field: 'garment', code: 'invalid' }); return { ok: false, version, wearer, setId: null, problems }; }
     if (typeof profile.wearerName !== 'string' || !profile.wearerName.trim()) problems.push({ field: 'wearerName', code: 'missing' });
     else if (profile.wearerName.length > 60) problems.push({ field: 'wearerName', code: 'invalid' });
     problems.push(...validateGarmentValues(profile.values, setId, wearer));
+    if (version === 3) problems.push(...validateV3Blocks(profile));
     const fits = profile.fits;
     if (fits && typeof fits === 'object' && !Array.isArray(fits) && Object.keys(fits).length) problems.push({ field: 'fits', code: 'unknown' });
     return { ok: problems.length === 0, version, wearer, setId, problems };
@@ -803,7 +1062,9 @@ export function validateProfile(profile, garmentKind) {
     // garment ranges by validateModifyValues, never the body
     // ranges, and the profile carries no fit selectors and no
     // height: the benchmark's modify form asks for neither.
-    if (version !== 2) { problems.push({ field: 'version', code: 'unsupported' }); return { ok: false, version, wearer, setId: null, problems }; }
+    // Version 3 modify profiles carry the same sets and base
+    // (J0 section A.8) inside the v3 envelope.
+    if (version !== 2 && version !== 3) { problems.push({ field: 'version', code: 'unsupported' }); return { ok: false, version, wearer, setId: null, problems }; }
     const kind = garmentKind || profile.garment;
     const setId = kind ? setForGarment(kind, wearer) : null;
     if (!setId || !MODIFY_MEASURE_SETS[setId]) { problems.push({ field: 'garment', code: 'invalid' }); return { ok: false, version, wearer, setId: null, problems }; }
@@ -811,6 +1072,7 @@ export function validateProfile(profile, garmentKind) {
     else if (profile.wearerName.length > 60) problems.push({ field: 'wearerName', code: 'invalid' });
     problems.push(...validateModifyBase(profile.base, setId, wearer));
     problems.push(...validateModifyValues(profile.values, setId, wearer));
+    if (version === 3) problems.push(...validateV3Blocks(profile));
     const fits = profile.fits;
     if (fits && typeof fits === 'object' && !Array.isArray(fits) && Object.keys(fits).length) problems.push({ field: 'fits', code: 'unknown' });
     return { ok: problems.length === 0, version, wearer, setId, problems };
@@ -824,6 +1086,29 @@ export function validateProfile(profile, garmentKind) {
       else { const r = fieldRange(key, wearer); if (v < r.min || v > r.max) problems.push({ field: key, code: 'range' }); }
     }
     return { ok: problems.length === 0, version, wearer, setId: null, problems };
+  }
+  if (version === 3) {
+    // Version 3 body profiles (package J1): the JPOS shaped sets
+    // of GARMENT_SETS_V3, the v3 envelope blocks (origin, header,
+    // gauge, figure, provenance), and no fit selectors anywhere: a
+    // v3 profile carrying a fits key is invalid, the same
+    // strictness version 2 applies to its garment profiles. A set
+    // with no version 3 mapping (long-coat, shorts, leather) has
+    // no version 3 body profile.
+    const kind = garmentKind || profile.garment;
+    const setId = kind ? setForGarment(kind, wearer) : null;
+    if (!setId || !GARMENT_SETS_V3[setId]) { problems.push({ field: 'garment', code: 'invalid' }); return { ok: false, version, wearer, setId: null, problems }; }
+    if (typeof profile.wearerName !== 'string' || !profile.wearerName.trim()) problems.push({ field: 'wearerName', code: 'missing' });
+    else if (profile.wearerName.length > 60) problems.push({ field: 'wearerName', code: 'invalid' });
+    problems.push(...validateBodyValuesV3(profile.values, setId, wearer));
+    const fits = profile.fits;
+    if (fits && typeof fits === 'object' && !Array.isArray(fits) && Object.keys(fits).length) problems.push({ field: 'fits', code: 'unknown' });
+    if (profile.secondPair !== undefined && profile.secondPair !== null) {
+      if (setId !== 'suit' && setId !== 'womens-suit') problems.push({ field: 'secondPair', code: 'unknown' });
+      else problems.push(...validateSecondPair(profile.secondPair, wearer));
+    }
+    problems.push(...validateV3Blocks(profile));
+    return { ok: problems.length === 0, version, wearer, setId, problems };
   }
   const kind = garmentKind || profile.garment;
   const setId = kind ? setForGarment(kind, wearer) : null;
@@ -874,16 +1159,87 @@ export function upgradeLegacyProfile(profile, garmentKind) {
   return { profile: upgraded, missing: verdict.problems.filter(p => p.code === 'missing').map(p => p.field) };
 }
 
+// Migration (version 2 body profile to version 3; version 1
+// profiles chain through the version 2 migration first). The
+// carry table is J0 section D.4, and its refusals are the point:
+// the merged waist lands on trouserWaist and jacketWaist starts
+// absent, because a merged waist is never split by arithmetic;
+// the stomach is dropped rather than renamed into jacketWaist,
+// because a stomach circumference and a jacket waist are
+// different measures; the version 2 sleeve is dropped rather than
+// carried into the inseams or the outseam, because the landmarks
+// differ; frontLength and vestLength are dropped for backLength
+// and vestBackLength for the same reason; the fit selectors are
+// dropped, not carried anywhere. Everything the upgrade cannot
+// carry is reported by missingForCompletion (J0 section D.5), so
+// the shopper is offered completion, never handed padded values.
+const V2_TO_V3_RENAME = { jacket: 'jacketLength', pantsLength: 'outseam', legOpening: 'bottom', waist: 'trouserWaist' };
+
+export function upgradeProfileToV3(profile, garmentKind) {
+  if (!profile || typeof profile !== 'object') return null;
+  if (profileVersion(profile) === 3) { const verdict = validateProfile(profile, garmentKind); return { profile, missing: verdict.setId ? verdict.problems.filter(p => p.code === 'missing').map(p => p.field) : null }; }
+  let v2 = profile;
+  if (profileVersion(profile) === 1) {
+    if (profile.method !== 'body') return null;
+    const up = upgradeLegacyProfile(profile, garmentKind);
+    if (!up) return null;
+    v2 = up.profile;
+    // The legacy migration is garment generic: it lands the
+    // merged waist on the intermediate values for every garment.
+    // Only what the intermediate set could actually hold may
+    // carry on into version 3: a shirt profile never held a
+    // waist in version 2, so the trouser waist must not leak
+    // into the shirt set's waist here.
+    const v2SetId = setForGarment(v2.garment, v2.wearer);
+    if (v2SetId && v2.values) { const keep = new Set(['height', ...effectiveSetFields(v2SetId, v2.wearer).map(f => f.key)]); const filtered = {}; for (const k of Object.keys(v2.values)) if (keep.has(k)) filtered[k] = v2.values[k]; v2 = { ...v2, values: filtered }; }
+  }
+  const wearer = WEARERS.includes(v2.wearer) ? v2.wearer : 'Men';
+  const kind = garmentKind || v2.garment || (v2.method === 'body' ? 'suit' : undefined);
+  const setId = kind ? setForGarment(kind, wearer) : null;
+  const upgraded = { version: 3, origin: 'web', method: v2.method, garment: kind, wearer, header: { profileType: setId, jposLinks: null }, provenance: null };
+  if (v2.id !== undefined) upgraded.id = v2.id;
+  if (v2.name !== undefined) upgraded.name = v2.name;
+  upgraded.unit = 'in';
+  if (v2.fit !== undefined) upgraded.fit = v2.fit;
+  if (v2.created !== undefined) upgraded.created = v2.created;
+  if (v2.method !== 'body') {
+    // Ready, garment and modify profiles keep their payloads
+    // verbatim (J0 section D.4); only the envelope changes.
+    if (v2.ready !== undefined) upgraded.ready = v2.ready;
+    if (v2.base !== undefined) upgraded.base = v2.base;
+    if (v2.values !== undefined) upgraded.values = v2.values;
+    if (v2.wearerName !== undefined) upgraded.wearerName = v2.wearerName;
+    const verdict = validateProfile(upgraded, kind);
+    return { profile: upgraded, missing: verdict.setId ? verdict.problems.filter(p => p.code === 'missing').map(p => p.field) : null };
+  }
+  if (!setId || !GARMENT_SETS_V3[setId]) return null;
+  const src = v2.values && typeof v2.values === 'object' ? v2.values : {};
+  const values = {};
+  if (typeof src.height === 'number' && Number.isFinite(src.height)) values.height = src.height;
+  const sourceKeyFor = target => { for (const from of Object.keys(V2_TO_V3_RENAME)) if (V2_TO_V3_RENAME[from] === target) return from; return target; };
+  for (const f of effectiveSetFieldsV3(setId, wearer)) { const v = src[sourceKeyFor(f.key)]; if (typeof v === 'number' && Number.isFinite(v)) values[f.key] = v; }
+  upgraded.values = values;
+  if (typeof v2.wearerName === 'string') upgraded.wearerName = v2.wearerName;
+  upgraded.figure = {};
+  upgraded.gauge = gaugeBlockFor(values, null);
+  const verdict = validateProfile(upgraded, kind);
+  return { profile: upgraded, missing: verdict.problems.filter(p => p.code === 'missing').map(p => p.field) };
+}
+
 // The required fields a body profile still owes before it is a
-// complete version 2 profile for the garment: for a version 2
-// profile, its own missing fields; for a version 1 profile, what
-// its migration would still owe. An empty list means complete.
+// complete profile for the garment, assessed under the current
+// (version 3) sets (J0 section D.5): for a version 3 profile, its
+// own missing fields; for an older body profile, what its upgrade
+// to version 3 would still owe. An empty list means complete.
 // Returns null when completion cannot be assessed (no garment
 // context for a legacy profile, or the garment has no set).
+// Figure fields and the gauge block are never reported: the
+// figure step is optional by design, and the gauge block is
+// derived or staff side (J0 section D.5).
 export function missingForCompletion(profile, garmentKind) {
   if (!profile || typeof profile !== 'object' || profile.method !== 'body') return [];
-  if (profileVersion(profile) === 2) { const verdict = validateProfile(profile, garmentKind); if (!verdict.setId) return null; return verdict.problems.filter(p => p.code === 'missing').map(p => p.field); }
-  const up = upgradeLegacyProfile(profile, garmentKind);
+  if (profileVersion(profile) === 3) { const verdict = validateProfile(profile, garmentKind); if (!verdict.setId) return null; return verdict.problems.filter(p => p.code === 'missing').map(p => p.field); }
+  const up = upgradeProfileToV3(profile, garmentKind);
   return up ? up.missing : null;
 }
 

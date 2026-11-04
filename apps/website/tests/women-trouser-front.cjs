@@ -49,41 +49,41 @@ run(`beginDesign(${womenSuit})`);
 assert.equal(run('config.trouserFront'),'Flat front','beginDesign preselects Flat front for a Women suit, mirroring standalone trousers');
 run('stage=1');
 let html=run('customize()');
-assert.ok(html.includes('<div class="option-title">Pleats</div>'),'the Women suit Personalize step shows a Pleats group');
-assert.ok(html.includes("setOption('pleats','Flat front')")&&html.includes("setOption('pleats','Single pleat')"),'both CUS-06 trouser front choices are offered in the Pleats group');
-assert.ok(html.includes(`<button class="choice active" aria-pressed="true" onclick="setOption('pleats','Flat front')">Flat front · Included</button>`),'the preselected trouser front shows selected in the Pleats group');
+assert.ok(html.includes('<div class="option-title"><span>Pleats</span>'),'the Women suit Personalize step shows a Pleats group');
+assert.ok(html.includes("setOption('pleats','Flat Front')")&&html.includes("setOption('pleats','Single Rvrs Pleat')"),'the aligned trouser front choices are offered in the Pleats group');
+assert.ok(html.includes(`<button class="choice active" data-visual="pleats:Flat Front" aria-pressed="true" onclick="setOption('pleats','Flat Front')">Flat front, no pleats · Included</button>`),'the Flat Front standard shows selected in the Pleats group');
 assert.ok(html.includes('<div class="option-title"><span>Jacket closure</span>')&&html.includes("setOption('closure','2-Button')"),'the jacket groups remain on the Women suit, in the aligned vocabulary');
-assert.ok(html.indexOf('Pleats')>html.indexOf('Lining')&&html.indexOf('Pleats')<html.indexOf('Monogram'),'the trousers section sits after Lining and before Monogram');
+assert.ok(html.indexOf('Pleats')<html.indexOf('Monogram'),'the trousers section sits before the Monogram fields');
 
 // 2. The two style slots are independent, and the trouser choice is stored
 // on the configuration and carried into the bag and onto the bag line.
 run("setOption('closure','1-Button')");
-run("setOption('pleats','Single pleat')");
+run("setOption('pleats','Single Rvrs Pleat')");
 assert.equal(run('config.closure'),'1-Button','the jacket closure choice is stored in its own slot');
-assert.equal(run('config.pleats'),'Single pleat','the trouser choice is stored alongside it, not over it');
+assert.equal(run('config.pleats'),'Single Rvrs Pleat','the trouser choice is stored alongside it, not over it');
 assert.equal(run('config.trouserFront'),'Flat front','the legacy trouser front preselect is untouched by the pleats choice');
 run('stage=2');
 documentStub.querySelector('#profileSelect').value='p-women';
 run('nextConfig()');
 assert.equal(bagState().length,1,'the Women suit is bagged');
 const womenItem=bagState()[0];
-assert.equal(womenItem.pleats,'Single pleat','the bagged item stores the chosen trouser front in the pleats slot');
+assert.equal(womenItem.pleats,'Single Rvrs Pleat','the bagged item stores the chosen trouser front in the pleats slot');
 assert.equal(womenItem.closure,'1-Button','the bagged item keeps the jacket closure as chosen');
-assert.equal(run('lineDescription(bag[0])'),'Taupe · Notch lapel, Standard · 1-Button · Center vent · 4 cuff buttons · Flap waist pockets · Single pleat · Tonal lining','the bag line shows the trouser front with the other selections, in line order');
-assert.ok(run('lineHtml(bag[0])').includes('Single pleat'),'the rendered bag line shows the trouser front');
-assert.ok(run('checkoutPage()').includes('Single pleat'),'the checkout selection shows the trouser front');
+assert.equal(run('lineDescription(bag[0])'),'Taupe · Notch lapel, Standard · 1-Button · Center vent · 4 cuff buttons · Flap waist pockets · Single reverse pleat · Slanted pockets · Double besom back pockets · Medium break · Belt loops · Tonal lining','the bag line shows the trouser front with the other selections, in line order');
+assert.ok(run('lineHtml(bag[0])').includes('Single reverse pleat'),'the rendered bag line shows the trouser front');
+assert.ok(run('checkoutPage()').includes('Single reverse pleat'),'the checkout selection shows the trouser front');
 
 // 3. Bag edit restores the trouser front and saving an edit changes only
 // what the shopper changed.
 const beforeEdit=JSON.parse(run('JSON.stringify(bag[0])'));
 run(`editBagItem('${womenItem.id}')`);
-assert.equal(run('config.pleats'),'Single pleat','editing the bag item restores its trouser choice into the customizer');
-run("setOption('pleats','Flat front')");
+assert.equal(run('config.pleats'),'Single Rvrs Pleat','editing the bag item restores its trouser choice into the customizer');
+run("setOption('pleats','Flat Front')");
 run('stage=2');
 documentStub.querySelector('#profileSelect').value='p-women';
 run('nextConfig()');
 assert.equal(bagState().length,1,'saving the edit adds no duplicate line');
-assert.deepEqual(bagState()[0],{...beforeEdit,pleats:'Flat front'},'only the trouser choice changed on the edited Women suit line');
+assert.deepEqual(bagState()[0],{...beforeEdit,pleats:'Flat Front'},'only the trouser choice changed on the edited Women suit line');
 
 // 4. Men's suit behavior is unchanged: no Trouser front group, no
 // trouserFront key stored, and the bag line reads exactly as before.
@@ -100,24 +100,27 @@ run('nextConfig()');
 const menItem=bagState().find(x=>x.product===menSuit);
 assert.ok(menItem,'the Men suit is bagged');
 assert.ok(!('trouserFront' in menItem),'the bagged Men suit stores no trouser front key');
-assert.equal(run(`lineDescription(bag.find(x=>x.product===${menSuit}))`),'Navy · Notch lapel, Standard · 2-Button · Center vent · 4 cuff buttons · Flap waist pockets · Tonal lining','the Men suit bag line reads in the aligned specification');
+assert.equal(run(`lineDescription(bag.find(x=>x.product===${menSuit}))`),'Navy · Notch lapel, Standard · 2-Button · Center vent · 4 cuff buttons · Flap waist pockets · Flat front, no pleats · Slanted pockets · Double besom back pockets · Medium break · Belt loops · Tonal lining','the Men suit bag line reads in the aligned specification');
 
-// 5. Standalone Women trousers are unchanged: the same group and choices,
-// still stored in the closure slot, with no trouserFront slot involved.
+// 5. Standalone Women trousers (J4): the Trouser front group stays as
+// the entry point, but it now carries the aligned pleats values in the
+// pleats slot, mirrored into the closure slot the product has always
+// used, with no trouserFront slot involved.
 run(`beginDesign(${womenPants})`);
-assert.equal(run('config.closure'),'Flat front','standalone trousers still preselect Flat front in the closure slot');
+assert.equal(run('config.closure'),'Flat Front','standalone trousers start at Flat Front in the closure slot');
 run('stage=1');
 html=run('customize()');
-assert.ok(html.includes('<div class="option-title">Trouser front</div>'),'standalone trousers still show the Trouser front group');
-assert.ok(html.includes("setOption('closure','Single pleat')"),'standalone trousers still store the choice as closure');
+assert.ok(html.includes('<div class="option-title"><span>Trouser front</span>'),'standalone trousers still show the Trouser front group');
+assert.ok(html.includes("setOption('pleats','Single Rvrs Pleat')"),'standalone trousers offer the aligned front choices in the pleats slot');
 assert.ok(!html.includes('trouserFront'),'standalone trousers do not use the suit trouser front slot');
-run("setOption('closure','Single pleat')");
+run("setOption('pleats','Single Rvrs Pleat')");
 run('stage=2');
 documentStub.querySelector('#profileSelect').value='p-women';
 run('nextConfig()');
 const pantsItem=bagState().find(x=>x.product===womenPants);
 assert.ok(pantsItem,'the standalone trousers are bagged');
-assert.equal(pantsItem.closure,'Single pleat','the bagged trousers keep the choice in the closure slot');
+assert.equal(pantsItem.pleats,'Single Rvrs Pleat','the bagged trousers store the front choice in the pleats slot');
+assert.equal(pantsItem.closure,'Single Rvrs Pleat','the bagged trousers mirror the choice in the closure slot');
 assert.ok(!('trouserFront' in pantsItem),'the bagged trousers store no trouser front key');
 
 // 6. The server sanitizer persists trouserFront on the order item, like it
@@ -125,4 +128,4 @@ assert.ok(!('trouserFront' in pantsItem),'the bagged trousers store no trouser f
 const commerceSource=fs.readFileSync('lib/commerce.ts','utf8');
 assert.ok(commerceSource.includes("trouserFront:String(x.trouserFront||'').slice(0,40)"),'the order item sanitizer keeps the trouser front selection');
 
-console.log('Women trouser front checks passed: Women suits expose trouser personalization (the Pleats group since package 3.2, with the CUS-06 trouserFront slot as its legacy fallback), the choice is stored on the configuration independently of the jacket closure, shown on the bag line, restored by bag edit, and persisted by the server sanitizer, while Men suits store no trouserFront and standalone trousers are unchanged.');
+console.log('Women trouser front checks passed: Women suits expose trouser personalization (the Pleats group since package 3.2, aligned JPOS values since J4, with the CUS-06 trouserFront slot as its legacy fallback), the choice is stored on the configuration independently of the jacket closure, shown on the bag line, restored by bag edit, and persisted by the server sanitizer, while Men suits store no trouserFront and standalone trousers carry the aligned front values in the pleats slot mirrored to closure.');

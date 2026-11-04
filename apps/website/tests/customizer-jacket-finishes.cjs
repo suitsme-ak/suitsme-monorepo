@@ -104,7 +104,7 @@ function bagCurrentWorld(w){w.run('stage=2;render(false)');w.elFor('#profileSele
   const item=w.bag()[0];
   assert.equal(item.lapelType,'Peak');assert.equal(item.lapelSize,'Wide');assert.equal(item.buttonStyle,'Tuxedo Button');assert.equal(item.lining,'Paisley red');assert.equal(item.underCollarFabric,'Milanese Multi-Color');
   assert.ok(!('buttons' in item)&&!('liningType' in item)&&!('elbowPatches' in item),'the bagged item carries none of the removed finish slots');
-  assert.equal(w.run('lineDescription(bag[0])'),'Navy · Peak lapel, Wide · 2-Button · Tuxedo buttons · Center vent · 4 cuff buttons · Flap waist pockets · Milanese Multi-Color under collar · Paisley red lining','the bag line shows the finishes in customizer order');
+  assert.equal(w.run('lineDescription(bag[0])'),'Navy · Peak lapel, Wide · 2-Button · Tuxedo buttons · Center vent · 4 cuff buttons · Flap waist pockets · Milanese Multi-Color under collar · Flat front, no pleats · Slanted pockets · Double besom back pockets · Medium break · Belt loops · Paisley red lining','the bag line shows the finishes in customizer order');
   assert.equal(w.run('subtotal()'),439,'the subtotal totals the Milanese price only');
   w.run("location.hash='#checkout'");
   const checkout=w.run('checkoutPage()');

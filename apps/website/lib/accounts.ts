@@ -8,9 +8,10 @@
 // migration import (design sections 2.6 and 5). Package 5.6 adds
 // the account orders endpoint: the signed in user's store_orders
 // rows merged with their imported demo snapshots (design sections
-// 2.6 and 6). Google sign in is package 5.7; until then the Google
-// paths return 404 when accounts are enabled and the gate's 503
-// when they are not. Runtime data access is raw D1 SQL in the
+// 2.6 and 6). Package 5.7 adds Google sign in (design section 2.7):
+// the authorization code flow with server side state, JWKS verified
+// id tokens and identity resolution, independently gated by
+// googleEnabled. Runtime data access is raw D1 SQL in the
 // commerce style; db/schema.ts stays the migration source of truth.
 import { validateProfile as validateMeasurementProfile } from './measurement-schema.js';
 type Env=Record<string,any>;
@@ -18,7 +19,8 @@ const reply=(data:any,status=200)=>Response.json(data,{status,headers:{'Cache-Co
 function replyCookie(data:any,status:number,cookie:string){const r=reply(data,status);r.headers.append('Set-Cookie',cookie);return r;}
 export const SESSION_COOKIE='suitsme-session';
 const DAY_MS=24*60*60*1000,HOUR_MS=60*60*1000,SESSION_IDLE_MS=14*DAY_MS,SESSION_TOUCH_MS=DAY_MS,SESSION_MAX_MS=30*DAY_MS;
-const VERIFY_TTL_MS=24*HOUR_MS,RESET_TTL_MS=HOUR_MS;
+const VERIFY_TTL_MS=24*HOUR_MS,RESET_TTL_MS=HOUR_MS,OAUTH_STATE_TTL_MS=10*60*1000;
+const GOOGLE_AUTH_URL='https://accounts.google.com/o/oauth2/v2/auth',GOOGLE_TOKEN_URL='https://oauth2.googleapis.com/token',GOOGLE_JWKS_URL='https://www.googleapis.com/oauth2/v3/certs';
 // Readiness gate, mirroring settings() in lib/commerce.ts (section 2 of
 // the design). Accounts stay invisible to shoppers until an email sending
 // path exists, because verification and password reset depend on it.
@@ -109,6 +111,141 @@ async function emailTokenLink(env:Env,request:Request,user:any,purpose:string){
  await sendAccountEmail(env,purpose,user.email,link);
 }
 async function emailNotice(env:Env,request:Request,user:any){if(await reserveSend(env,user.email,clientIp(request)))await sendAccountEmail(env,'notice',user.email,'');}
+// The returnTo rules of design section 2.3, mirroring the client
+// copy in public/complete.js: a relative path starting with /, never
+// //, never an auth path; anything else falls back to /account. The
+// Google routes are on the list so a returnTo can never loop back
+// into the flow itself.
+function validReturnTo(value:any){
+ if(typeof value!=='string'||!value.startsWith('/')||value.startsWith('//')||value.includes('://'))return '/account';
+ const path=value.split(/[?#]/)[0];
+ if(['/sign-in','/register','/forgot-password','/reset-password','/verify-email','/signin-with-chatgpt','/signout-with-chatgpt','/callback','/api/auth/google/start','/api/auth/google/callback'].includes(path))return '/account';
+ return value;
+}
+// A browser redirect in the reply() conventions: no-store and
+// nosniff, with the session cookie appended when one is minted.
+function redirectTo(location:string,cookie?:string){
+ const headers=new Headers({'Cache-Control':'no-store','X-Content-Type-Options':'nosniff','Location':location});
+ if(cookie)headers.append('Set-Cookie',cookie);
+ return new Response(null,{status:302,headers});
+}
+// Google OAuth state (design section 2.7, package 5.7). The state
+// and nonce are 32 byte random values; only their SHA-256 hashes
+// are stored, in oauth_states, together with the validated
+// returnTo and a 10 minute expiry. Consumption is single use: the
+// row is marked used before the code exchange, so a callback can
+// never be replayed, exactly the discipline of the emailed tokens.
+async function mintOAuthState(env:Env,returnTo:string){
+ const state=b64urlEncode(crypto.getRandomValues(new Uint8Array(32))),nonce=b64urlEncode(crypto.getRandomValues(new Uint8Array(32))),now=Date.now();
+ await env.DB.prepare('INSERT INTO oauth_states (state_hash,nonce_hash,return_to,expires_at,used_at,created_at) VALUES (?,?,?,?,NULL,?)').bind(await sha256Hex(state),await sha256Hex(nonce),returnTo,new Date(now+OAUTH_STATE_TTL_MS).toISOString(),new Date(now).toISOString()).run();
+ return{state,nonce};
+}
+async function consumeOAuthState(env:Env,state:string){
+ if(!state)return null;
+ const row=await env.DB.prepare('SELECT * FROM oauth_states WHERE state_hash=?').bind(await sha256Hex(state)).first();
+ if(!row||row.used_at||Date.now()>=Date.parse(row.expires_at))return null;
+ await env.DB.prepare('UPDATE oauth_states SET used_at=? WHERE state_hash=?').bind(new Date().toISOString(),row.state_hash).run();
+ return row;
+}
+// Google id token verification. The JWKS document is fetched from
+// Google and cached in memory for an hour; an unknown key id forces
+// one refetch, which covers key rotation. The RS256 signature is
+// verified with WebCrypto before any claim is read, and then the
+// issuer, the audience (this app's client id), the expiry and the
+// nonce (compared by hash against the stored state row) must all
+// check out. Any failure returns null and the caller refuses.
+let jwksCache:{keys:any[],at:number}|null=null;
+async function googleJwks(force:boolean){
+ if(!force&&jwksCache&&Date.now()-jwksCache.at<HOUR_MS)return jwksCache.keys;
+ const res=await fetch(GOOGLE_JWKS_URL);
+ if(!res.ok)throw Error('Unable to load Google signing keys.');
+ const data=await res.json();
+ const keys=data&&Array.isArray(data.keys)?data.keys:[];
+ jwksCache={keys,at:Date.now()};
+ return keys;
+}
+function b64urlJson(part:string){try{return JSON.parse(new TextDecoder().decode(b64urlDecode(part)));}catch{return null;}}
+async function verifyGoogleIdToken(token:string,env:Env,nonceHash:string){
+ const parts=token.split('.');if(parts.length!==3)return null;
+ const header=b64urlJson(parts[0]),claims=b64urlJson(parts[1]);
+ if(!header||!claims||header.alg!=='RS256'||typeof header.kid!=='string')return null;
+ let jwk=null;
+ for(const force of [false,true]){const keys=await googleJwks(force);jwk=keys.find((k:any)=>k&&k.kid===header.kid&&k.kty==='RSA')||null;if(jwk)break;}
+ if(!jwk)return null;
+ let ok=false;
+ try{
+  const key=await crypto.subtle.importKey('jwk',jwk,{name:'RSASSA-PKCS1-v1_5',hash:'SHA-256'},false,['verify']);
+  ok=await crypto.subtle.verify('RSASSA-PKCS1-v1_5',key,b64urlDecode(parts[2]),enc.encode(parts[0]+'.'+parts[1]));
+ }catch{return null;}
+ if(!ok)return null;
+ if(claims.iss!=='https://accounts.google.com'&&claims.iss!=='accounts.google.com')return null;
+ if(claims.aud!==env.GOOGLE_CLIENT_ID)return null;
+ if(typeof claims.exp!=='number'||Date.now()>=claims.exp*1000)return null;
+ if(typeof claims.nonce!=='string'||await sha256Hex(claims.nonce)!==nonceHash)return null;
+ return claims;
+}
+// Google start (design section 2.7): mint the state, then send the
+// browser to Google with the app's client id, this origin's
+// callback as the redirect URI, the openid email profile scope and
+// the account chooser prompt. The client secret plays no part here.
+async function googleStart(request:Request,env:Env){
+ const url=new URL(request.url),returnTo=validReturnTo(url.searchParams.get('returnTo'));
+ const{state,nonce}=await mintOAuthState(env,returnTo);
+ const auth=new URL(GOOGLE_AUTH_URL);
+ auth.searchParams.set('client_id',env.GOOGLE_CLIENT_ID);
+ auth.searchParams.set('redirect_uri',url.origin+'/api/auth/google/callback');
+ auth.searchParams.set('response_type','code');
+ auth.searchParams.set('scope','openid email profile');
+ auth.searchParams.set('state',state);
+ auth.searchParams.set('nonce',nonce);
+ auth.searchParams.set('prompt','select_account');
+ return redirectTo(auth.toString());
+}
+// Google callback (design section 2.7). Every failure, expected or
+// not, lands on the sign in page with the same error flag and never
+// creates a session; the client turns that flag into one plain
+// message. Resolution, in order: an identity row signs in its user;
+// a user with the same normalized email gets the identity linked
+// (and is marked verified if they were not, since Google has proved
+// mailbox ownership); otherwise a new, already verified user with
+// no credential row is created with the identity. An unverified
+// Google email refuses outright: the app never links or creates
+// accounts on it. No Google tokens are stored, only the identity
+// row (provider, subject, user id, provider email at link time).
+async function googleCallback(request:Request,env:Env){
+ const fail=()=>redirectTo('/sign-in?error=google');
+ try{
+  const url=new URL(request.url),code=url.searchParams.get('code')||'',state=url.searchParams.get('state')||'';
+  if(!code||!state)return fail();
+  const row=await consumeOAuthState(env,state);if(!row)return fail();
+  const tokenRes=await fetch(GOOGLE_TOKEN_URL,{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:new URLSearchParams({code,client_id:env.GOOGLE_CLIENT_ID,client_secret:env.GOOGLE_CLIENT_SECRET,redirect_uri:url.origin+'/api/auth/google/callback',grant_type:'authorization_code'}),signal:AbortSignal.timeout(15000)});
+  if(!tokenRes.ok)return fail();
+  const tokenData=await tokenRes.json().catch(()=>null);
+  const idToken=tokenData&&typeof tokenData.id_token==='string'?tokenData.id_token:'';
+  if(!idToken)return fail();
+  const claims=await verifyGoogleIdToken(idToken,env,row.nonce_hash);if(!claims)return fail();
+  const sub=typeof claims.sub==='string'?claims.sub:'',email=normalizeEmail(claims.email);
+  if(!sub||!validEmail(email)||claims.email_verified!==true)return fail();
+  const now=new Date().toISOString();
+  let user=null;
+  const identity=await env.DB.prepare('SELECT * FROM user_identities WHERE provider=? AND subject=?').bind('google',sub).first();
+  if(identity){
+   user=await userById(env,identity.user_id);
+   if(!user||user.deleted_at)return fail();
+  }else{
+   user=await userByEmail(env,email);
+   if(user&&user.deleted_at)return fail();
+   if(!user){
+    const id='U'+crypto.randomUUID().replaceAll('-',''),name=typeof claims.name==='string'?claims.name.trim().slice(0,120):'';
+    await env.DB.prepare('INSERT INTO users (id,email,display_name,email_verified_at,created_at,updated_at,deleted_at) VALUES (?,?,?,?,?,?,NULL)').bind(id,email,name||null,now,now,now).run();
+    user=await userById(env,id);
+   }
+   await env.DB.prepare('INSERT INTO user_identities (provider,subject,user_id,email,created_at) VALUES (?,?,?,?,?)').bind('google',sub,user.id,email,now).run();
+   if(!user.email_verified_at)await env.DB.prepare('UPDATE users SET email_verified_at=?,updated_at=? WHERE id=?').bind(now,now,user.id).run();
+  }
+  return redirectTo(validReturnTo(row.return_to),sessionCookie(await mintSession(env,user.id)));
+ }catch{return fail();}
+}
 // CSRF posture (design section 3.6): every POST under /api/auth/* and
 // /api/account/* requires the Origin header to equal the request
 // origin, generalizing the check lib/commerce.ts applies to checkout.
@@ -264,15 +401,21 @@ async function resetPassword(request:Request,env:Env,body:any){
 // password returns the sign in 401 body. Success sets the new hash,
 // deletes the user's other sessions and rotates the current one: the
 // old token is deleted and a fresh cookie issued, which is the same
-// observable end state.
+// observable end state. A Google created account has no credential
+// row yet (design section 2.7): setting its first password here is
+// the design's set a password variant, and it skips the current
+// password check because there is no password to check against.
+// Accounts with a password always verify the current one first.
 async function changePassword(request:Request,env:Env,body:any){
  const session=await sessionUser(request,env);if(!session)return reply({error:'Please sign in to continue.'},401);
  const cred=await env.DB.prepare('SELECT * FROM user_credentials WHERE user_id=?').bind(session.id).first();
  const current=typeof body.currentPassword==='string'?body.currentPassword:'';
- if(!cred||!await verifyPassword(current,cred.password_hash))return reply({error:'Email or password is not correct.'},401);
+ if(cred&&!await verifyPassword(current,cred.password_hash))return reply({error:'Email or password is not correct.'},401);
  const next=typeof body.newPassword==='string'?body.newPassword:'',problem=passwordProblem(next,session.email);
  if(problem)return reply({error:problem},400);
- await env.DB.prepare('UPDATE user_credentials SET password_hash=?,password_updated_at=? WHERE user_id=?').bind(await hashPassword(next),new Date().toISOString(),session.id).run();
+ const hash=await hashPassword(next),now=new Date().toISOString();
+ if(cred)await env.DB.prepare('UPDATE user_credentials SET password_hash=?,password_updated_at=? WHERE user_id=?').bind(hash,now,session.id).run();
+ else await env.DB.prepare('INSERT INTO user_credentials (user_id,password_hash,password_updated_at) VALUES (?,?,?)').bind(session.id,hash,now).run();
  await deleteUserSessions(env,session.id);
  return replyCookie({user:session},200,sessionCookie(await mintSession(env,session.id)));
 }
@@ -388,15 +531,23 @@ export async function accounts(request:Request,env:Env){
  const url=new URL(request.url),path=url.pathname;
  try{
   if(!accountsEnabled(env)){
-   if(path==='/api/auth/me'&&request.method==='GET')return reply({user:null,enabled:false});
+   if(path==='/api/auth/me'&&request.method==='GET')return reply({user:null,enabled:false,googleEnabled:false});
    if(path.startsWith('/api/auth/')||path.startsWith('/api/account/'))return reply({error:'Accounts are not enabled yet.'},503);
    return reply({error:'Not found'},404);
   }
-  if(path==='/api/auth/me'&&request.method==='GET')return reply({user:await sessionUser(request,env),enabled:true});
-  // Google sign in is package 5.7 and independently gated: while its
+  if(path==='/api/auth/me'&&request.method==='GET')return reply({user:await sessionUser(request,env),enabled:true,googleEnabled:googleEnabled(env)});
+  // Google sign in (package 5.7) is independently gated: while its
   // settings are absent the Google routes answer 503, and the client
-  // does not render the button.
-  if(path.startsWith('/api/auth/google/')){if(!googleEnabled(env))return reply({error:'Google sign in is not enabled yet.'},503);return reply({error:'Not found'},404);}
+  // does not render the button. Both routes are GET redirects, so
+  // they sit outside the POST origin check below; the start mints a
+  // server side state and the callback consumes it, which is the
+  // CSRF control for this flow (design section 2.7).
+  if(path.startsWith('/api/auth/google/')){
+   if(!googleEnabled(env))return reply({error:'Google sign in is not enabled yet.'},503);
+   if(path==='/api/auth/google/start'&&request.method==='GET')return await googleStart(request,env);
+   if(path==='/api/auth/google/callback'&&request.method==='GET')return await googleCallback(request,env);
+   return reply({error:'Not found'},404);
+  }
   // Account data (package 5.5): profiles list, upsert and delete,
   // and the migration import. POSTs carry the same origin check as
   // every auth POST (section 3.6) before any state can change; the

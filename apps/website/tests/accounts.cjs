@@ -64,21 +64,21 @@ const PASS='correct horse battery staple',PASS2='a brand new passphrase 42',WRON
   for(const [route,method] of [['/api/auth/register','POST'],['/api/auth/sign-in','POST'],['/api/auth/sign-out','POST'],['/api/account/profiles','GET'],['/api/account/import','POST'],['/api/account/orders','GET']]){
    const r=await accounts(req(route,{method}),env);assert.equal(r.status,503,route+' is gated off');assert.deepEqual(await r.json(),{error:'Accounts are not enabled yet.'});
   }
-  const me=await accounts(req('/api/auth/me'),env);assert.equal(me.status,200);assert.deepEqual(await me.json(),{user:null,enabled:false});
+  const me=await accounts(req('/api/auth/me'),env);assert.equal(me.status,200);assert.deepEqual(await me.json(),{user:null,enabled:false,googleEnabled:false});
   assert.equal(me.headers.get('Cache-Control'),'no-store','Account responses are never cached');
  }
  // Enabled skeleton: me answers for guests, and paths whose bodies land
  // in later packages are an honest 404 rather than a stubbed success.
  const db=new DB,enabled={DB:db,...EMAIL};
- let r=await accounts(req('/api/auth/me'),enabled);assert.equal(r.status,200);assert.deepEqual(await r.json(),{user:null,enabled:true});
- r=await accounts(req('/api/auth/me',{cookie:SESSION_COOKIE+'=no-such-token'}),enabled);assert.deepEqual(await r.json(),{user:null,enabled:true},'An unknown session cookie reads as a guest');
+ let r=await accounts(req('/api/auth/me'),enabled);assert.equal(r.status,200);assert.deepEqual(await r.json(),{user:null,enabled:true,googleEnabled:false});
+ r=await accounts(req('/api/auth/me',{cookie:SESSION_COOKIE+'=no-such-token'}),enabled);assert.deepEqual(await r.json(),{user:null,enabled:true,googleEnabled:false},'An unknown session cookie reads as a guest');
  assert.equal((await accounts(req('/api/account/profiles'),enabled)).status,401,'The profiles API (package 5.5) requires a session; a guest reads as 401');
  assert.equal((await accounts(req('/api/account/orders'),enabled)).status,401,'The account orders API (package 5.6) requires a session; a guest reads as 401');
  assert.equal((await accounts(req('/api/auth/google/start'),enabled)).status,503,'Google routes stay gated off without Google settings');
  // Session validation through me.
  db.users.push(userRow());db.sessions.push(sessionRow('test-session-token'));
  r=await accounts(req('/api/auth/me',{cookie:'other=1; '+SESSION_COOKIE+'=test-session-token'}),enabled);
- assert.deepEqual(await r.json(),{user:{id:'U0123456789abcdef0123456789abcdef',email:'tester@example.com',name:'Test Customer',emailVerified:true},enabled:true},'A valid session cookie returns the user');
+ assert.deepEqual(await r.json(),{user:{id:'U0123456789abcdef0123456789abcdef',email:'tester@example.com',name:'Test Customer',emailVerified:true},enabled:true,googleEnabled:false},'A valid session cookie returns the user');
  const touched=db.sessions[0].last_seen_at;
  db.sessions[0]=sessionRow('idle-touch-token',{created_at:iso(-3*DAY),last_seen_at:iso(-2*DAY),expires_at:iso(27*DAY)});
  r=await accounts(req('/api/auth/me',{cookie:SESSION_COOKIE+'=idle-touch-token'}),enabled);assert.equal((await r.json()).user.email,'tester@example.com');

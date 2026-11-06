@@ -30,13 +30,16 @@ const clearedCookie=()=>SESSION_COOKIE+'=; HttpOnly; Secure; SameSite=Lax; Path=
 function publicUser(user:any){return{id:user.id,email:user.email,name:user.display_name,emailVerified:!!user.email_verified_at};}
 async function userByEmail(env:Env,email:string){return env.DB.prepare('SELECT * FROM users WHERE email=?').bind(email).first();}
 async function userById(env:Env,id:string){return env.DB.prepare('SELECT * FROM users WHERE id=?').bind(id).first();}
-// Password hashing (design section 3.1 and the package 5.0 addendum,
-// which verified these exact parameters on the built worker):
-// PBKDF2 HMAC SHA-256 through WebCrypto, 600,000 iterations, a 16 byte
-// random salt per password, a 32 byte derived key, stored self
-// describing so the parameters can rise later. Comparison is a
-// constant time equality over the full 32 bytes.
-const PBKDF2_ITERATIONS=600000,enc=new TextEncoder();
+// Password hashing (design section 3.1): PBKDF2 HMAC SHA-256 through
+// WebCrypto, 100,000 iterations, a 16 byte random salt per password,
+// a 32 byte derived key, stored self describing so the parameters can
+// rise later. Comparison is a constant time equality over the full
+// 32 bytes. The count sits at the Cloudflare Workers WebCrypto cap:
+// the design value of 600,000 was rejected by the live runtime at
+// registration on 2026-11-06 ("iteration counts above 100000 are not
+// supported"), so new hashes are minted at the cap and verification
+// keeps reading the count from each stored hash.
+const PBKDF2_ITERATIONS=100000,enc=new TextEncoder();
 function b64urlEncode(bytes:Uint8Array){let s='';for(const b of bytes)s+=String.fromCharCode(b);return btoa(s).replaceAll('+','-').replaceAll('/','_').replace(/=+$/,'');}
 function b64urlDecode(value:string){return Uint8Array.from(atob(value.replaceAll('-','+').replaceAll('_','/')),c=>c.charCodeAt(0));}
 async function derive(password:string,salt:Uint8Array,iterations:number){const key=await crypto.subtle.importKey('raw',enc.encode(password),'PBKDF2',false,['deriveBits']);return new Uint8Array(await crypto.subtle.deriveBits({name:'PBKDF2',salt,iterations,hash:'SHA-256'},key,256));}
@@ -46,7 +49,7 @@ async function verifyPassword(password:string,stored:string){try{const parts=Str
 // PBKDF2 hash of a published non credential at the current parameters),
 // so the response time matches a real wrong password attempt and does
 // not reveal whether the account exists (design section 3.5).
-const DUMMY_HASH='pbkdf2-sha256:600000:63NzfO_k2igCS7U3fB2-Tg:yeMNZEQ6INKcH4R1oeEGbeE25QfwbZ6ZRQQWmTCxSBs';
+const DUMMY_HASH='pbkdf2-sha256:100000:63NzfO_k2igCS7U3fB2-Tg:z-J3iipnKCBldxvCW9d_QLt5W7AZf3oTETDJeg3BEBk';
 // Password policy (design section 3.2): 12 to 128 characters, no
 // composition rules, never the account email or its local part, and
 // never one of the common passwords shipped here as data.

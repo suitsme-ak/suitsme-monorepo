@@ -118,7 +118,7 @@ const PASS='correct horse battery staple',PASS2='a brand new passphrase 42',WRON
   assert.equal(db.users.length,1);assert.equal(db.users[0].email,'ada@example.com','Email is stored trimmed and lower cased');
   assert.equal(db.users[0].display_name,'Ada Lovelace');assert.equal(db.users[0].email_verified_at,null);
   const stored=db.user_credentials[0].password_hash;
-  assert.match(stored,/^pbkdf2-sha256:600000:[A-Za-z0-9_-]{22}:[A-Za-z0-9_-]{43}$/,'Stored hash is the self describing 600,000 iteration format');
+  assert.match(stored,/^pbkdf2-sha256:100000:[A-Za-z0-9_-]{22}:[A-Za-z0-9_-]{43}$/,'Stored hash is the self describing 100,000 iteration format (the Workers WebCrypto cap)');
   assert.equal(mailTo('ada@example.com').length,1,'One verification email is sent');
   assert.equal(mailTo('ada@example.com')[0].subject,'Confirm your email for your Suits.me account');
   const token=tokenFromMail('ada@example.com','/verify-email');assert.ok(token,'The verification email carries a token link');
@@ -389,7 +389,7 @@ const PASS='correct horse battery staple',PASS2='a brand new passphrase 42',WRON
   db.user_credentials.push({user_id:uid,password_hash:oldHash,password_updated_at:iso(-DAY)});
   const upgraded=await post('/api/auth/sign-in',{email:'old@example.com',password:PASS},{env});
   assert.equal(upgraded.status,200,'A hash at old parameters still verifies');
-  assert.match(db.user_credentials.find(c=>c.user_id===uid).password_hash,/^pbkdf2-sha256:600000:/,'Sign in rehashes to the current parameters');
+  assert.match(db.user_credentials.find(c=>c.user_id===uid).password_hash,/^pbkdf2-sha256:100000:/,'Sign in rehashes to the current parameters');
  }
  // A6, profiles and import (package 5.5, design sections 2.6 and
  // 5): upsert creates and replaces by client id, the stored copy

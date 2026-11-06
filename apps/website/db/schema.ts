@@ -29,6 +29,14 @@ export const authTokens = sqliteTable('auth_tokens', {
  tokenHash: text('token_hash').primaryKey(), userId: text('user_id').notNull(), purpose: text('purpose').notNull(),
  expiresAt: text('expires_at').notNull(), usedAt: text('used_at'), createdAt: text('created_at').notNull(),
 },table=>[index('auth_token_user').on(table.userId,table.purpose)]);
+// Wave 5 package 5.7 (design section 2.7): Google sign in state.
+// Only the SHA-256 hashes of the state and nonce are stored, with
+// the validated returnTo, a 10 minute expiry and single use
+// consumption, following the auth_tokens pattern above.
+export const oauthStates = sqliteTable('oauth_states', {
+ stateHash: text('state_hash').primaryKey(), nonceHash: text('nonce_hash').notNull(), returnTo: text('return_to'),
+ expiresAt: text('expires_at').notNull(), usedAt: text('used_at'), createdAt: text('created_at').notNull(),
+});
 export const authAttempts = sqliteTable('auth_attempts', {
  key: text('key').primaryKey(), count: integer('count').notNull(), windowStartedAt: text('window_started_at').notNull(),
  lockedUntil: text('locked_until'),

@@ -20,5 +20,5 @@
    spans the same column, so the two actions read as a matched pair
    instead of one glued, mismatched stack. */
 .auth-page form .btn{width:100%}
-.google-row{max-width:460px;margin:14px 0 0}
+.auth-page .google-row{max-width:460px;margin:14px 0 0}
 .google-row .btn{width:100%}

@@ -51,7 +51,7 @@ function makeWorld(){
   const css=fs.readFileSync('public/store.css','utf8');
   assert.ok(css.includes('.auth-page form{max-width:460px}'),'the auth form column stays 460px');
   assert.ok(css.includes('.auth-page form .btn{width:100%}'),'the form submit button spans the form column');
-  assert.ok(css.includes('.google-row{max-width:460px;margin:14px 0 0}'),'the Google row matches the column and keeps a 14px gap');
+  assert.ok(css.includes('.auth-page .google-row{max-width:460px;margin:14px 0 0}'),'the Google row matches the column and keeps a 14px gap');
   assert.ok(css.includes('.google-row .btn{width:100%}'),'the Google button spans its row');
 
   // Google disabled: neither page renders the row or the button.

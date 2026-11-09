@@ -102,7 +102,7 @@ function goToReturn(value){const target=validReturnTo(value);const hash=typeof h
 // what they were. The link carries the page's validated returnTo
 // through the flow. A failed callback lands back here with
 // error=google, which becomes one plain message above the form.
-function googleButton(){return accountState.googleEnabled?`<p><a class="btn light" href="/api/auth/google/start?returnTo=${encodeURIComponent(validReturnTo(queryParam('returnTo')))}">Continue with Google</a></p>`:''}
+function googleButton(){return accountState.googleEnabled?`<p class="google-row"><a class="btn light" href="/api/auth/google/start?returnTo=${encodeURIComponent(validReturnTo(queryParam('returnTo')))}">Continue with Google</a></p>`:''}
 function googleErrorNote(){return queryParam('error')==='google'?`<div class="error" role="alert">Google sign in did not work. Please try again, or use your email and password.</div>`:''}
 async function authPost(path,body){try{const r=await fetch(path,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});let data=null;try{data=await r.json()}catch{}return{ok:r.ok,status:r.status,data}}catch{return{ok:false,status:0,data:null}}}
 // Wave 5 package 5.5 (ACC-01, SIZ-04): profile sync and the guest

@@ -15,3 +15,10 @@
 .account-strip{border:1px solid #e7dfd2;background:#fbf8f2;padding:12px 16px;font-size:16px;margin:0 0 18px}
 .auth-page form{max-width:460px}
 .demo-badge{font-size:13px;letter-spacing:1.2px;text-transform:uppercase;border:1px solid #d8cfbc;background:#fbf8f2;color:#6f675a;padding:5px 9px;white-space:nowrap}
+/* The Google button gets its own row under the auth form: same 460px
+   column as the form, a clear gap above it, and the form submit button
+   spans the same column, so the two actions read as a matched pair
+   instead of one glued, mismatched stack. */
+.auth-page form .btn{width:100%}
+.google-row{max-width:460px;margin:14px 0 0}
+.google-row .btn{width:100%}

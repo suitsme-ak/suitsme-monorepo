@@ -11,9 +11,12 @@
 // 2.6 and 6). Package 5.7 adds Google sign in (design section 2.7):
 // the authorization code flow with server side state, JWKS verified
 // id tokens and identity resolution, independently gated by
-// googleEnabled. Runtime data access is raw D1 SQL in the
+// googleEnabled. Package J9 adds the JPOS shop measurements import
+// (POST /api/account/jpos-import): a verified account pulls its
+// staged shop gauge record into a v3 profile with provenance.
+// Runtime data access is raw D1 SQL in the
 // commerce style; db/schema.ts stays the migration source of truth.
-import { validateProfile as validateMeasurementProfile } from './measurement-schema.js';
+import { validateProfile as validateMeasurementProfile, validateV3Blocks } from './measurement-schema.js';
 type Env=Record<string,any>;
 const reply=(data:any,status=200)=>Response.json(data,{status,headers:{'Cache-Control':'no-store','X-Content-Type-Options':'nosniff'}});
 function replyCookie(data:any,status:number,cookie:string){const r=reply(data,status);r.headers.append('Set-Cookie',cookie);return r;}
@@ -517,6 +520,178 @@ async function listAccountOrders(request:Request,env:Env){
  entries.sort((a:any,b:any)=>b.at-a.at);
  return reply({orders:entries.map((entry:any)=>entry.order)});
 }
+// JPOS shop measurements import (package J9, design in
+// docs/ux-audit/j9-app-import-design.md, mapping in the J0 design
+// section D.3). A signed in, email verified customer pulls their
+// shop gauge record from the jpos_staging_ tables into one v3
+// profile with origin "jpos". The lookup key is the account's own
+// email, so the endpoint cannot probe anyone else's record. Gauge
+// values land in the gauge block only, never in the body values:
+// a gauge chest and a body chest are different measures, so the
+// imported profile is honestly partial (empty values and figure)
+// and the completion flow is how the customer fills the body set.
+// Height, weight and shoulder in the gauge row are band or label
+// texts, never numbers, so those gauge keys stay null and the raw
+// texts are kept in the import snapshot; nothing is invented.
+function jposText(value:any){return typeof value==='string'&&value.trim()?value.trim():typeof value==='number'&&Number.isFinite(value)?String(value):null;}
+// Number parsing for staged gauge texts: a plain decimal passes
+// through, a mixed fraction ("17 1/2") or a simple fraction
+// converts to decimal inches, and anything else is not a number
+// (null here; the caller keeps the raw text in the snapshot).
+function parseJposNumber(value:any){
+ if(typeof value==='number')return Number.isFinite(value)?value:null;
+ if(typeof value!=='string')return null;
+ const text=value.trim();if(!text)return null;
+ if(/^-?\d+(\.\d+)?$/.test(text)||/^-?\.\d+$/.test(text))return Number(text);
+ const mixed=text.match(/^(-?)(\d+)\s+(\d+)\s*\/\s*(\d+)$/);
+ if(mixed){const den=Number(mixed[4]);if(!den)return null;const n=Number(mixed[2])+Number(mixed[3])/den;return mixed[1]?-n:n;}
+ const frac=text.match(/^(-?\d+)\s*\/\s*(\d+)$/);
+ if(frac){const den=Number(frac[2]);if(!den)return null;return Number(frac[1])/den;}
+ return null;
+}
+function jposDateCompare(a:any,b:any){
+ const ta=typeof a==='string'?Date.parse(a):NaN,tb=typeof b==='string'?Date.parse(b):NaN;
+ if(!Number.isNaN(ta)&&!Number.isNaN(tb))return ta-tb;
+ if(!Number.isNaN(ta))return 1;
+ if(!Number.isNaN(tb))return -1;
+ return String(a||'').localeCompare(String(b||''));
+}
+// The latest measurementProfiles header for a customer: latest by
+// creation date, modification date as the tiebreak (readiness
+// report section 2). Every header of a customer points at the same
+// gauge row, so the choice affects only the type and order links.
+function latestJposHeader(rows:any[]){
+ let best:any=null;
+ for(const row of rows){
+  if(!best){best=row;continue;}
+  const created=jposDateCompare(row.measurementCreationDate,best.measurementCreationDate);
+  if(created>0||(created===0&&jposDateCompare(row.measurementModificationDate,best.measurementModificationDate)>0))best=row;
+ }
+ return best;
+}
+function stableJson(value:any):string{
+ if(value===null||typeof value!=='object')return JSON.stringify(value)??'null';
+ if(Array.isArray(value))return '['+value.map(stableJson).join(',')+']';
+ return '{'+Object.keys(value).sort().map(k=>JSON.stringify(k)+':'+stableJson(value[k])).join(',')+'}';
+}
+function deepEqualJson(a:any,b:any){return stableJson(a)===stableJson(b);}
+// The candidate profile for one matched customer, or a refusal
+// status. Pure transform of the staged rows: no writes happen here.
+function buildJposCandidate(user:any,customer:any,gaugeRow:any,headerRow:any,now:string){
+ const raw:Record<string,string>={};
+ // Band and label texts with no numeric target, and the two gauge
+ // columns with no v3 slot: snapshot only, exactly as recorded.
+ for(const col of ['Height','Weight','Shoulder','Thigh','PantsOutSeam']){const t=jposText(gaugeRow[col]);if(t!==null)raw[col]=t;}
+ const numField=(col:string)=>{
+  const value=gaugeRow[col];
+  if(value===null||value===undefined||(typeof value==='string'&&!value.trim()))return null;
+  const parsed=parseJposNumber(value);
+  if(parsed===null)raw[col]=String(value).trim();
+  return parsed;
+ };
+ let posture:string|null=null;
+ const postureText=jposText(gaugeRow.Posture);
+ if(postureText!==null){if(['Normal','Erect','Stooping'].includes(postureText))posture=postureText;else raw.Posture=postureText;}
+ const gauge={height:null,chest:numField('Chest'),jacketWaist:numField('GaugeSuitJacketWaist'),pantsWaist:numField('GaugeSuitPantsWaist'),posture,weight:null,chestOverArm:numField('ChestOverArm'),seat:numField('Seat'),shoulder:null,halfWaistJacket:numField('HalfWaistJacket')};
+ const profileType=headerRow?jposText(headerRow.measurementType):null;
+ const jposLinks=headerRow?{jacket:jposText(headerRow.jacketOrderId),pants:jposText(headerRow.pantsOrderId),vest:jposText(headerRow.vestOrderId)}:null;
+ const header={profileType,jposLinks};
+ const customerId=String(customer.customerID);
+ const first=jposText(customer.customerfirstname),last=jposText(customer.customerlastname);
+ const wearerName=[first,last].filter(Boolean).join(' ')||(typeof user.name==='string'&&user.name.trim()?user.name.trim():'')||user.email.split('@')[0];
+ const snapshot={gauge:JSON.parse(JSON.stringify(gauge)),values:{},figure:{},raw:{...raw}};
+ const provenance={
+  sourceSystem:'jpos',
+  sourceTable:headerRow?'measurementProfiles':'GaugeSuitProfiles',
+  jposCustomerId:customerId,
+  jposMeasurementId:headerRow?jposText(headerRow.measurementId):null,
+  jposGaugeSuitProfileId:jposText(gaugeRow.gaugeSuitProfileId),
+  jposOrderIds:headerRow?{jacket:jposLinks!.jacket,pants:jposLinks!.pants,vest:jposLinks!.vest}:{jacket:null,pants:null,vest:null},
+  sourceCreatedAt:headerRow?jposText(headerRow.measurementCreationDate):jposText(gaugeRow.gaugeProfileCreationDate),
+  sourceModifiedAt:headerRow?jposText(headerRow.measurementModificationDate):jposText(gaugeRow.gaugeProfileModificationDate),
+  importedAt:now,
+  importSnapshot:snapshot
+ };
+ const profile={
+  version:3,origin:'jpos',id:'jpos-'+customerId,
+  name:'Shop measurements'+(headerRow&&profileType?' ('+profileType+')':''),
+  wearer:'Men',wearerName,garment:'suit',method:'body',unit:'in',
+  created:now,updated:now,header,gauge,values:{},figure:{},provenance
+ };
+ return profile;
+}
+// Structural checks of our own, beside validateV3Blocks: the
+// candidate must be the exact partial shape the design specifies
+// before anything is stored. The import deliberately does not go
+// through cleanProfile, which requires a complete body profile.
+function jposCandidateProblems(profile:any,customerId:string){
+ const problems=validateV3Blocks(profile).map((p:any)=>p.field+':'+p.code);
+ if(profile.id!=='jpos-'+customerId)problems.push('id:invalid');
+ if(profile.version!==3||profile.origin!=='jpos'||profile.method!=='body'||profile.garment!=='suit'||profile.wearer!=='Men'||profile.unit!=='in')problems.push('profile:invalid');
+ if(typeof profile.name!=='string'||!profile.name||typeof profile.wearerName!=='string'||!profile.wearerName)problems.push('profile:invalid');
+ if(!profile.values||typeof profile.values!=='object'||Array.isArray(profile.values)||Object.keys(profile.values).length)problems.push('values:invalid');
+ if(!profile.figure||typeof profile.figure!=='object'||Array.isArray(profile.figure)||Object.keys(profile.figure).length)problems.push('figure:invalid');
+ if(!profile.gauge||typeof profile.gauge!=='object'||Object.keys(profile.gauge).length!==10)problems.push('gauge:invalid');
+ if(profile.gauge&&(profile.gauge.height!==null||profile.gauge.weight!==null||profile.gauge.shoulder!==null))problems.push('gauge:invalid');
+ if(!profile.provenance||profile.provenance.jposCustomerId!==customerId||profile.provenance.sourceSystem!=='jpos')problems.push('provenance:invalid');
+ return problems;
+}
+async function jposImport(request:Request,env:Env){
+ const user=await sessionUser(request,env);if(!user)return reply({error:'Please sign in to continue.',status:'unauthorized',imported:0},401);
+ if(!user.emailVerified)return reply({error:'Please confirm your email first. Confirm your email, then try again to find your shop measurements.',status:'unverified',imported:0},403);
+ let customer:any=null,gaugeRow:any=null,headerRow:any=null;
+ try{
+  const custResult=await env.DB.prepare('SELECT * FROM jpos_staging_customers WHERE LOWER(customeremail)=?').bind(user.email).all();
+  const customers=custResult.results||[];
+  const ids=[...new Set(customers.map((row:any)=>jposText(row.customerID)).filter(Boolean))];
+  if(!ids.length)return reply({status:'no-match',imported:0});
+  if(ids.length>1)return reply({status:'ambiguous',imported:0,message:'More than one shop record uses this email address. Please ask the shop to confirm which record is yours, and we will add your measurements then.'});
+  customer=customers.find((row:any)=>jposText(row.customerID)===ids[0]);
+  const gaugeResult=await env.DB.prepare('SELECT * FROM jpos_staging_gaugesuitprofiles WHERE customerId=?').bind(ids[0]).all();
+  const gaugeRows=gaugeResult.results||[];
+  if(!gaugeRows.length)return reply({status:'no-gauge',imported:0});
+  gaugeRow=gaugeRows[0];
+  const headerResult=await env.DB.prepare('SELECT * FROM jpos_staging_measurementprofiles WHERE customerId=?').bind(ids[0]).all();
+  headerRow=latestJposHeader(headerResult.results||[]);
+ }catch{return reply({status:'unavailable',imported:0,error:'Your shop measurements are not available right now. Please try again later.'},503);}
+ const customerId=String(customer.customerID),now=new Date().toISOString();
+ const candidate=buildJposCandidate(user,customer,gaugeRow,headerRow,now);
+ if(jposCandidateProblems(candidate,customerId).length)return reply({status:'error',imported:0,error:'Your shop record could not be read as a measurement profile. Please ask the shop for help.'},500);
+ const existing=await env.DB.prepare('SELECT * FROM account_profiles WHERE user_id=? AND id=?').bind(user.id,candidate.id).first();
+ if(!existing){
+  await env.DB.prepare('INSERT INTO account_profiles (user_id,id,data,created_at,updated_at) VALUES (?,?,?,?,?)').bind(user.id,candidate.id,JSON.stringify(candidate),now,now).run();
+  return reply({status:'imported',imported:1,profile:candidate});
+ }
+ let stored:any=null;
+ try{stored=JSON.parse(existing.data);}catch{}
+ const prov=stored&&stored.provenance;
+ // A row with this deterministic id that is not this customer's
+ // JPOS copy is never touched (J0 D.3 copy rules).
+ if(!stored||stored.origin!=='jpos'||!prov||prov.sourceSystem!=='jpos'||prov.jposCustomerId!==customerId)return reply({status:'error',imported:0,error:'A profile with this id already exists in your account, so your shop record was not added. Please ask the shop for help.'},409);
+ const snap=prov.importSnapshot||{};
+ const candidateProv=candidate.provenance as any;
+ const sameSource=deepEqualJson({gauge:snap.gauge,values:snap.values,figure:snap.figure,raw:snap.raw||{}},{gauge:candidateProv.importSnapshot.gauge,values:{},figure:{},raw:candidateProv.importSnapshot.raw})
+  &&deepEqualJson(stored.header||null,candidate.header)
+  &&(prov.jposMeasurementId||null)===(candidateProv.jposMeasurementId||null)
+  &&(prov.jposGaugeSuitProfileId||null)===(candidateProv.jposGaugeSuitProfileId||null)
+  &&deepEqualJson(prov.jposOrderIds||null,candidateProv.jposOrderIds)
+  &&(prov.sourceCreatedAt||null)===(candidateProv.sourceCreatedAt||null)
+  &&(prov.sourceModifiedAt||null)===(candidateProv.sourceModifiedAt||null);
+ if(sameSource)return reply({status:'unchanged',imported:0,profile:stored});
+ const untouched=deepEqualJson(stored.values||{},snap.values||{})&&deepEqualJson(stored.gauge||{},snap.gauge||{})&&deepEqualJson(stored.figure||{},snap.figure||{});
+ if(untouched){
+  const refreshed={...stored,name:candidate.name,wearerName:candidate.wearerName,header:candidate.header,gauge:candidate.gauge,values:{},figure:{},updated:now,provenance:{...prov,sourceTable:candidateProv.sourceTable,jposMeasurementId:candidateProv.jposMeasurementId,jposGaugeSuitProfileId:candidateProv.jposGaugeSuitProfileId,jposOrderIds:candidateProv.jposOrderIds,sourceCreatedAt:candidateProv.sourceCreatedAt,sourceModifiedAt:candidateProv.sourceModifiedAt,importedAt:now,importSnapshot:candidateProv.importSnapshot}};
+  delete refreshed.provenance.pendingCandidate;
+  await env.DB.prepare('UPDATE account_profiles SET data=?,updated_at=? WHERE user_id=? AND id=?').bind(JSON.stringify(refreshed),now,user.id,candidate.id).run();
+  return reply({status:'refreshed',imported:1,profile:refreshed});
+ }
+ // The copy was edited on suits.me: never overwrite it. The new
+ // source values are held on its provenance as a pending candidate
+ // for a later side by side offer (J0 D.3 rule 3).
+ const withCandidate={...stored,provenance:{...prov,pendingCandidate:{header:candidate.header,gauge:candidate.gauge,values:{},figure:{},raw:{...candidateProv.importSnapshot.raw},sourceTable:candidateProv.sourceTable,jposMeasurementId:candidateProv.jposMeasurementId,jposGaugeSuitProfileId:candidateProv.jposGaugeSuitProfileId,jposOrderIds:candidateProv.jposOrderIds,sourceCreatedAt:candidateProv.sourceCreatedAt,sourceModifiedAt:candidateProv.sourceModifiedAt,importedAt:now}}};
+ await env.DB.prepare('UPDATE account_profiles SET data=?,updated_at=? WHERE user_id=? AND id=?').bind(JSON.stringify(withCandidate),now,user.id,candidate.id).run();
+ return reply({status:'candidate',imported:0,profile:withCandidate});
+}
 const AUTH_POSTS:Record<string,(request:Request,env:Env,body:any)=>Promise<Response>>={
  '/api/auth/register':register,
  '/api/auth/verify-email':verifyEmail,
@@ -556,6 +731,11 @@ export async function accounts(request:Request,env:Env){
   if(path==='/api/account/profiles'&&request.method==='POST'){if(!originOk(request,url))return reply({error:'Invalid request origin.'},403);return await upsertProfile(request,env,await readBody(request));}
   if(path.startsWith('/api/account/profiles/')&&request.method==='DELETE')return await deleteProfile(request,env,decodeURIComponent(path.slice('/api/account/profiles/'.length)));
   if(path==='/api/account/import'&&request.method==='POST'){if(!originOk(request,url))return reply({error:'Invalid request origin.'},403);return await importLocal(request,env,await readBody(request,200000));}
+  // JPOS shop measurements import (package J9): a POST with the
+  // same origin check; the request carries no body, because the
+  // lookup key is the session account's own email. The session and
+  // verified email gates are enforced inside the handler.
+  if(path==='/api/account/jpos-import'&&request.method==='POST'){if(!originOk(request,url))return reply({error:'Invalid request origin.'},403);return await jposImport(request,env);}
   // Account orders (package 5.6): a read only GET, so no origin
   // check; the session requirement is enforced inside the handler.
   if(path==='/api/account/orders'&&request.method==='GET')return await listAccountOrders(request,env);

@@ -6,10 +6,11 @@
    active fabrics, the ones the shop sells today; a shopper can
    switch the Availability filter to see the whole library, and
    inactive fabrics are always marked Inactive on their card.
-   Fabrics that already have a product page (the merchant set) link
-   to it; the rest are reference cards carrying the fabric code the
-   shop orders by. Swatches are served by the shop image server, the
-   same source the JPOS website uses. */
+   Every card opens the fabric's own page at /fabrics/<kind>/<code>,
+   so a fabric can be linked and quoted by its code; fabrics that
+   already have a product page (the merchant set) offer the design
+   entry from their detail page. Swatches are served by the shop
+   image server, the same source the JPOS website uses. */
 let libSearch='',libStatus='Active fabrics',libCollection='All collections',libColor='All colors',libPattern='All patterns',libMaterial='All materials',libSeason='All seasons',libMill='All mills',libWeave='All weaves',libOccasion='All occasions',libSort='featured',libPage=1,libRoute='';
 function resetLibraryFilters(){libSearch='';libStatus='Active fabrics';libCollection='All collections';libColor='All colors';libPattern='All patterns';libMaterial='All materials';libSeason='All seasons';libMill='All mills';libWeave='All weaves';libOccasion='All occasions';libSort='featured';libPage=1;render(false)}
 let libProductByCode=null;
@@ -20,10 +21,19 @@ function libFacetValues(items,key){return [...new Set(items.map(f=>f[key]).filte
 function libCollectionValues(items){return [...new Set(items.flatMap(f=>f.grp||[]))].sort()}
 function libTitle(f){const t=(f.col+' '+f.pat).trim();return t||f.d||f.c||'Fabric '+f.id}
 function libCard(f){
-  const p=libMerchantProduct(f.c);
   const meta=[f.m,f.sea,f.wv,f.wt].filter(Boolean).join(' · ');
-  const inner=`${f.img?`<img src="${libImageUrl(f)}" alt="Fabric swatch ${esc(f.c||f.id)}: ${esc(libTitle(f))}" loading="lazy" onerror="this.style.display='none'">`:''}<span class="sku-label">${esc(f.c||'JPOS '+f.id)}</span>${f.act?'':'<span class="fabric-status">Inactive</span>'}<h3>${esc(libTitle(f))}</h3><p>${esc(f.con||f.d)}</p>${meta?`<small>${esc(meta)}</small>`:''}${f.grp&&f.grp.length?`<small>${esc(f.grp[0])}</small>`:''}${p?`<span class="textlink">View fabric & design ${f.k==='suit'?'suit':'shirt'} →</span>`:f.act?`<span class="textlink">Order in store with code ${esc(f.c)}</span>`:`<span class="textlink">Kept for reference</span>`}`;
-  return p?`<article class="product merchant-swatch fabric-lib"><a href="/product/${p.id}">${inner}</a></article>`:`<article class="product merchant-swatch fabric-lib${f.act?'':' is-inactive'}">${inner}</article>`;
+  const inner=`${f.img?`<img src="${libImageUrl(f)}" alt="Fabric swatch ${esc(f.c)}: ${esc(libTitle(f))}" loading="lazy" onerror="this.style.display='none'">`:''}<span class="sku-label">${esc(f.c)}</span>${f.act?'':'<span class="fabric-status">Inactive</span>'}<h3>${esc(libTitle(f))}</h3><p>${esc(f.con||f.d)}</p>${meta?`<small>${esc(meta)}</small>`:''}${f.grp&&f.grp.length?`<small>${esc(f.grp[0])}</small>`:''}<span class="textlink">View fabric →</span>`;
+  return `<article class="product merchant-swatch fabric-lib${f.act?'':' is-inactive'}"><a href="/fabrics/${f.k}/${encodeURIComponent(f.c)}">${inner}</a></article>`;
+}
+function libDecoded(code){try{return decodeURIComponent(code)}catch(e){return code}}
+function fabricDetailScreen(kind,rawCode){
+  kind=kind==='shirt'?'shirt':'suit';
+  const code=libDecoded(rawCode);
+  const f=fabricLibraryData.fabrics.find(x=>x.k===kind&&x.c===code);
+  if(!f)return `<section class="catalog-heading"><div class="breadcrumb"><a href="/">Home</a> / <a href="/fabrics/${kind}">Fabrics</a> / ${kind==='suit'?'Suits':'Shirts'}</div><span class="eyebrow">Fabrics</span><h1>Fabric not found.</h1><p>We could not find a ${kind} fabric with code ${esc(code)} in the shop fabric library.</p><p><a class="btn light" href="/fabrics/${kind}">Browse ${kind} fabrics</a></p></section>`;
+  const p=libMerchantProduct(f.c);
+  const facts=[['Fabric code',f.c],['Status',f.act?'Active':'Inactive'],['Mill',f.m],['Color',f.col],['Pattern',f.pat],['Content',f.con],['Material',f.mat],['Season',f.sea],['Weave',f.wv],['Weight',f.wt?f.wt+' g/m':''],['Occasion',f.occ],['Tier',f.tier!=null&&f.tier!==''?'Tier '+f.tier:''],['Collections',(f.grp||[]).join(', ')]].filter(row=>row[1]);
+  return `<section class="catalog-heading"><div class="breadcrumb"><a href="/">Home</a> / <a href="/fabrics/${kind}">Fabrics</a> / ${kind==='suit'?'Suits':'Shirts'} / ${esc(f.c)}</div><span class="eyebrow">Fabric ${esc(f.c)}</span><h1>${esc(libTitle(f))}.</h1>${f.act?'':'<p><span class="fabric-status">Inactive</span> This fabric is not currently available to order.</p>'}</section><section class="catalog-body fabric-detail">${f.img?`<img class="fabric-detail-img" src="${libImageUrl(f)}" alt="Fabric swatch ${esc(f.c)}: ${esc(libTitle(f))}">`:''}<div class="detail-facts">${facts.map(row=>`<div><span>${esc(row[0])}</span><strong>${esc(row[1])}</strong></div>`).join('')}</div>${f.d&&f.d!==f.con?`<p>${esc(f.d)}</p>`:''}<p class="fabric-detail-actions">${p?`<a class="btn" href="/product/${p.id}">Design your ${kind} in this fabric</a>`:''}<a class="btn light" href="/fabrics/${kind}">Back to ${kind} fabrics</a></p>${p?'':f.act?`<p class="ai-note">This fabric can be ordered in store with fabric code ${esc(f.c)}.</p>`:`<p class="ai-note">Inactive fabrics stay in the library for reference and cannot be ordered.</p>`}</section>`;
 }
 function fabricLibraryScreen(kind){
   kind=kind==='shirt'?'shirt':'suit';
@@ -53,8 +63,8 @@ function fabricLibraryScreen(kind){
   ],sort:libSort,sortChange:'libSort=this.value;libPage=1;render(false)',sortOptions:[['featured','Featured'],['code','Fabric code'],['mill','Mill']]})}${listingCountHtml(items.length,shown.length,libPage)}${shown.length?`<div class="products">${shown.map(libCard).join('')}</div>`:listingEmptyHtml('resetLibraryFilters()')}<div class="pagination"><button class="btn light" ${libPage===1?'disabled':''} onclick="libPage--;render(false);document.querySelector('.fabric-library').scrollIntoView()">← Previous</button><span>Page ${libPage} of ${pages}</span><button class="btn light" ${libPage===pages?'disabled':''} onclick="libPage++;render(false);document.querySelector('.fabric-library').scrollIntoView()">Next →</button></div><p class="ai-note">Fabric data and swatches come from the shop fabric library (JPOS), export of 2026-11-04. Fabrics with a product page can be designed online; the rest can be ordered in store by fabric code.</p></section>`;
 }
 const referenceLibraryRender=render;
-render=function(top=true){if(location.hash.startsWith('#fabrics/')){const kind=location.hash.split('/')[1]==='shirt'?'shirt':'suit';document.title=(kind==='shirt'?'Shirt':'Suit')+' Fabrics - Suits.me';$('#main').innerHTML=fabricLibraryScreen(kind);updateBag();if(top)scrollTo(0,0);return}referenceLibraryRender(top)};
+render=function(top=true){if(location.hash.startsWith('#fabric/')){const parts=location.hash.split('/');const kind=parts[1]==='shirt'?'shirt':'suit';const code=parts.slice(2).join('/');document.title='Fabric '+libDecoded(code)+' - Suits.me';$('#main').innerHTML=fabricDetailScreen(kind,code);updateBag();if(top)scrollTo(0,0);return}if(location.hash.startsWith('#fabrics/')){const kind=location.hash.split('/')[1]==='shirt'?'shirt':'suit';document.title=(kind==='shirt'?'Shirt':'Suit')+' Fabrics - Suits.me';$('#main').innerHTML=fabricLibraryScreen(kind);updateBag();if(top)scrollTo(0,0);return}referenceLibraryRender(top)};
 // merchant.js paints once when it loads, before these scripts arrive.
 // On a fabrics route, paint again through the wrapped render so the
 // library screen, not the merchant list, is what stands on first load.
-if(location.hash.startsWith('#fabrics/'))render();
+if(location.hash.startsWith('#fabrics/')||location.hash.startsWith('#fabric/'))render();

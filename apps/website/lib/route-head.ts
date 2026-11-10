@@ -118,6 +118,31 @@ export function headForProduct(
   };
 }
 
+export interface FabricHeadSource {
+  c: string;
+  k: string;
+  col: string;
+  pat: string;
+  con: string;
+  m: string;
+  act: number;
+}
+
+export function headForFabric(
+  entry: FabricHeadSource | undefined,
+  kind: string,
+  code: string,
+): RouteHead | null {
+  if (!entry) return null;
+  const name = `${entry.col} ${entry.pat}`.trim() || entry.con || code;
+  return {
+    title: `Fabric ${code}: ${name} | Suits.me`,
+    description: `${name} ${kind} fabric, code ${code}, at Suits.me${entry.m ? `, woven by ${entry.m}` : ""}. ${entry.con}. ${entry.act ? "View the swatch and fabric details, then design your garment in this cloth." : "This fabric is inactive and stays in the library for reference."}`,
+    canonicalPath: `/fabrics/${kind}/${encodeURIComponent(code)}`,
+    robots: entry.act ? "index" : "noindex",
+  };
+}
+
 export function headForOrderDetail(path: string): RouteHead {
   // Order detail is shopper state: it always carries noindex, and
   // its canonical is the URL itself, the only canonical form an

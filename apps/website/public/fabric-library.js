@@ -54,3 +54,7 @@ function fabricLibraryScreen(kind){
 }
 const referenceLibraryRender=render;
 render=function(top=true){if(location.hash.startsWith('#fabrics/')){const kind=location.hash.split('/')[1]==='shirt'?'shirt':'suit';document.title=(kind==='shirt'?'Shirt':'Suit')+' Fabrics - Suits.me';$('#main').innerHTML=fabricLibraryScreen(kind);updateBag();if(top)scrollTo(0,0);return}referenceLibraryRender(top)};
+// merchant.js paints once when it loads, before these scripts arrive.
+// On a fabrics route, paint again through the wrapped render so the
+// library screen, not the merchant list, is what stands on first load.
+if(location.hash.startsWith('#fabrics/'))render();

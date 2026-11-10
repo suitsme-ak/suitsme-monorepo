@@ -61,7 +61,10 @@ const resultsLine=html=>{const m=html.match(/([\d,]+) results?/);assert.ok(m,'re
 
 // L2 default suit view
 const w=makeWorld('#fabrics/suit');
-w.run('render()');
+// No manual render() here: the first paint must come from the
+// scripts' own boot sequence, exactly as in production. merchant.js
+// paints at its load; the library scripts load after it and must
+// repaint the fabrics route themselves (the PR #62 live miss).
 let html=w.elFor('#main').innerHTML;
 assert.equal(resultsLine(html),'3648 results','suit library opens on the active fabrics');
 assert.equal(cards(html),36,'first page shows 36 fabric cards');
@@ -98,7 +101,6 @@ assert.equal(resultsLine(html),String(bestSellersActive)+(bestSellersActive===1?
 
 // L5 shirt screen
 const w2=makeWorld('#fabrics/shirt');
-w2.run('render()');
 html=w2.elFor('#main').innerHTML;
 assert.equal(resultsLine(html),'665 results','shirt library opens on the active fabrics');
 assert.ok(html.includes('/website/images/fabric/shirts/large/'),'shirt swatches come from the shirt image path');

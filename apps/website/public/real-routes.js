@@ -59,8 +59,17 @@ function validProductId(id){
 }
 function familyHash(key,raw){
   const seg=key.split('/').filter(Boolean);
+  if(seg[0]==='fabrics'&&routeFamilies.fabrics&&routeFamilies.fabrics.kinds.includes(seg[1])){
+    // Fabric detail paths carry the fabric code. Codes are case
+    // sensitive and can contain spaces or slashes, so, like the
+    // orders family below, the code is matched on the raw (decoded)
+    // segments and rejoined before it enters the hash.
+    const rawSeg=raw.split('/').filter(Boolean);
+    if(rawSeg.length>=3&&rawSeg[2])return '#fabric/'+seg[1]+'/'+encodeURIComponent(rawSeg.slice(2).join('/'));
+    if(seg.length===2)return '#fabrics/'+seg[1];
+    return null;
+  }
   if(seg.length!==2)return null;
-  if(seg[0]==='fabrics'&&routeFamilies.fabrics&&routeFamilies.fabrics.kinds.includes(seg[1]))return '#fabrics/'+seg[1];
   if(seg[0]==='studio'&&routeFamilies.studio&&routeFamilies.studio.kinds.includes(seg[1]))return '#studio/'+seg[1];
   if(seg[0]==='product'&&/^\d+$/.test(seg[1])){
     const id=parseInt(seg[1],10);

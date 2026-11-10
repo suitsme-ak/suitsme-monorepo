@@ -27,6 +27,12 @@ const assert=require('node:assert/strict'),fs=require('node:fs'),vm=require('nod
 // L6 wiring: index.html loads the library after merchant.js, the
 //    build regenerates the library data file, and collection screens
 //    still render through the merchant screen untouched.
+// L7 fabric detail pages (owner request 2026-11-10): every fabric
+//    opens at /fabrics/<kind>/<code> with the code in the URL; the
+//    real path translator maps it to the detail route, the detail
+//    screen carries the fabric facts and, for merchant fabrics, the
+//    design entry; inactive fabrics show their status; unknown codes
+//    show a not found screen; codes with slashes survive encoding.
 
 const lib=JSON.parse(fs.readFileSync('data/fabric-library.json','utf8'));
 assert.ok(Array.isArray(lib.fabrics),'library data loads');
@@ -60,6 +66,7 @@ function makeWorld(hash){
   return{run,elFor,location};
 }
 const count=(html,needle)=>html.split(needle).length-1;
+const escHtml=s=>String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;');
 const cards=html=>count(html,'product merchant-swatch fabric-lib');
 const resultsLine=html=>{const m=html.match(/([\d,]+) results?/);assert.ok(m,'results line renders');return m[0]};
 
@@ -100,7 +107,7 @@ const productId=w.run("products.find(p=>p.fabricCode==='CB11001').id");
 w.run("libMill='All mills';libSearch='CB11001';libPage=1;render(false)");
 html=w.elFor('#main').innerHTML;
 assert.equal(resultsLine(html),'1 result','search by fabric code finds exactly one fabric');
-assert.ok(html.includes('href="/product/'+productId+'"'),'the merchant fabric card links to its product page');
+assert.ok(html.includes('href="/fabrics/suit/CB11001"'),'the fabric card links to its own page with the code in the URL');
 const bestSellersActive=suit.filter(f=>f.act&&(f.grp||[]).includes('Best Sellers')).length;
 w.run("libSearch='';libCollection='Best Sellers';libPage=1;render(false)");
 html=w.elFor('#main').innerHTML;
@@ -122,5 +129,31 @@ assert.ok(fs.existsSync('public/fabric-library-data.js'),'the generated library 
 const w3=makeWorld('#collection/Suits/Best%20Sellers');
 w3.run('render()');
 assert.ok(w3.elFor('#main').innerHTML.length>0,'collection screens still render through the merchant screen');
+
+// L7 fabric detail pages
+const wd=makeWorld('#fabric/suit/CB11001');
+html=wd.elFor('#main').innerHTML;
+assert.ok(html.includes('Fabric CB11001'),'detail page is titled by the fabric code');
+assert.ok(html.includes('href="/product/'+productId+'"'),'merchant fabric detail offers the design entry');
+assert.equal(count(html,'fabric-status'),0,'an active fabric detail carries no Inactive badge');
+assert.ok(html.includes('/website/images/fabric/large/CB11001.jpg'),'detail page shows the shop swatch');
+const inactiveSuit=suit.find(f=>!f.act&&f.c&&f.img);
+const wi=makeWorld('#fabric/suit/'+encodeURIComponent(inactiveSuit.c));
+html=wi.elFor('#main').innerHTML;
+assert.ok(count(html,'fabric-status')>=1,'inactive fabric detail shows the Inactive badge');
+assert.ok(html.includes('not currently available to order'),'inactive detail states the fabric cannot be ordered');
+assert.ok(!html.includes('Design your suit in this fabric'),'inactive detail has no design entry');
+const wu=makeWorld('#fabric/suit/ZZ99999');
+assert.ok(wu.elFor('#main').innerHTML.includes('Fabric not found'),'an unknown code shows the not found screen');
+const slashShirt=shirt.find(f=>f.c&&f.c.includes('/'));
+if(slashShirt){
+  const ws=makeWorld('#fabric/shirt/'+encodeURIComponent(slashShirt.c));
+  assert.ok(ws.elFor('#main').innerHTML.includes(escHtml(slashShirt.c)),'a code with a slash opens its detail page');
+}
+assert.equal(w.run("hashForRealPath('/fabrics/suit/CB11001')"),'#fabric/suit/CB11001','the real path translator maps a fabric URL to the detail route');
+assert.equal(w.run("hashForRealPath('/fabrics/suit')"),'#fabrics/suit','the listing path still maps to the listing route');
+const detailRoute=fs.readFileSync('app/fabrics/[kind]/[code]/route.ts','utf8');
+assert.ok(detailRoute.includes('fabric-library.json')&&detailRoute.includes('headForFabric'),'the fabric detail route validates codes against the library data');
+assert.ok(fs.readFileSync('lib/route-head.ts','utf8').includes('export function headForFabric'),'route-head builds the fabric detail head');
 
 console.log('fabric-library journeys: all assertions passed');

@@ -145,10 +145,12 @@ assert.ok(html.includes('not currently available to order'),'inactive detail sta
 assert.ok(!html.includes('Design your suit in this fabric'),'inactive detail has no design entry');
 const wu=makeWorld('#fabric/suit/ZZ99999');
 assert.ok(wu.elFor('#main').innerHTML.includes('Fabric not found'),'an unknown code shows the not found screen');
-const slashShirt=shirt.find(f=>f.c&&f.c.includes('/'));
-if(slashShirt){
-  const ws=makeWorld('#fabric/shirt/'+encodeURIComponent(slashShirt.c));
-  assert.ok(ws.elFor('#main').innerHTML.includes(escHtml(slashShirt.c)),'a code with a slash opens its detail page');
+const slashSuit=suit.find(f=>f.c&&f.c.includes('/'));
+assert.ok(slashSuit,'the library holds codes containing a slash (all three are suit fabrics)');
+{
+  const ws=makeWorld('#fabric/suit/'+encodeURIComponent(slashSuit.c));
+  assert.ok(ws.elFor('#main').innerHTML.includes(escHtml(slashSuit.c)),'a code with a slash opens its detail page');
+  assert.equal(ws.run("hashForRealPath('/fabrics/suit/"+encodeURIComponent(slashSuit.c)+"')"),'#fabric/suit/'+encodeURIComponent(slashSuit.c),'the translator carries an encoded slash code to the detail route');
 }
 assert.equal(w.run("hashForRealPath('/fabrics/suit/CB11001')"),'#fabric/suit/CB11001','the real path translator maps a fabric URL to the detail route');
 assert.equal(w.run("hashForRealPath('/fabrics/suit')"),'#fabrics/suit','the listing path still maps to the listing route');

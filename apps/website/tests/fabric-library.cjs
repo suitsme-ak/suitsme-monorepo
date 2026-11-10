@@ -14,8 +14,11 @@ const assert=require('node:assert/strict'),fs=require('node:fs'),vm=require('nod
 //    it flagged as a merchant fabric.
 // L2 default view: the suit screen opens on active fabrics only
 //    (3,648 results, 36 cards, no Inactive marker anywhere).
-// L3 availability: All fabrics shows 6,714 with Inactive markers on
-//    the inactive cards; Inactive fabrics shows 3,066, all marked.
+// L3 availability: All fabrics shows 6,311 with Inactive markers on
+//    the inactive cards; Inactive fabrics shows 2,663, all marked.
+// L3b codeless shells: the 406 export rows with no fabric code are
+//    excluded from the served data entirely (owner rule 2026-11-10),
+//    so no placeholder card ever renders.
 // L4 filters: mill, color and collection filters narrow to the exact
 //    counts the data predicts, and search by fabric code finds the
 //    one fabric, linked to its product page.
@@ -38,6 +41,7 @@ const merchant=JSON.parse(fs.readFileSync('data/merchant-fabrics.json','utf8'));
 const merchantRows=merchant.fabrics||merchant;
 assert.equal(lib.fabrics.filter(f=>f.mer).length,merchantRows.length,'every merchant fabric is in the library');
 for(const m of merchantRows)assert.ok(lib.fabrics.some(f=>f.c===m.fabric_code&&f.mer===1),'merchant fabric '+m.fabric_code+' is flagged in the library');
+assert.equal(lib.fabrics.filter(f=>!f.c).length,406,'the export holds 406 codeless legacy rows');
 
 function makeEl(){const el={innerHTML:'',textContent:'',value:'',checked:false,open:false,style:{},attrs:{},classList:{add(){},remove(){},toggle(){return false}},setAttribute(k,v){el.attrs[k]=String(v)},removeAttribute(k){delete el.attrs[k]},getAttribute(k){return k in el.attrs?el.attrs[k]:null},addEventListener(){},getBoundingClientRect:()=>({left:0,right:0,top:0,bottom:0}),showModal(){el.open=true},close(){el.open=false},scrollIntoView(){}};return el}
 function makeWorld(hash){
@@ -61,6 +65,8 @@ const resultsLine=html=>{const m=html.match(/([\d,]+) results?/);assert.ok(m,'re
 
 // L2 default suit view
 const w=makeWorld('#fabrics/suit');
+assert.equal(w.run('fabricLibraryData.fabrics.length'),7559,'served library data excludes the codeless rows');
+assert.equal(w.run('fabricLibraryData.fabrics.filter(f=>!f.c).length'),0,'no codeless fabric is served');
 // No manual render() here: the first paint must come from the
 // scripts' own boot sequence, exactly as in production. merchant.js
 // paints at its load; the library scripts load after it and must
@@ -69,20 +75,21 @@ let html=w.elFor('#main').innerHTML;
 assert.equal(resultsLine(html),'3648 results','suit library opens on the active fabrics');
 assert.equal(cards(html),36,'first page shows 36 fabric cards');
 assert.equal(count(html,'fabric-status'),0,'no Inactive marker in the active view');
-assert.ok(html.includes('6,714 suit fabrics'),'header states the full library size');
+assert.ok(html.includes('6,311 suit fabrics'),'header states the full library size');
 assert.ok(html.includes('Inactive fabrics stay in the library for reference'),'header explains the inactive rule');
 
 // L3 availability filter
 w.run("libStatus='All fabrics';libPage=1;render(false)");
 html=w.elFor('#main').innerHTML;
-assert.equal(resultsLine(html),'6714 results','All fabrics shows the whole suit library');
+assert.equal(resultsLine(html),'6311 results','All fabrics shows the whole suit library');
 w.run("libPage=187;render(false)");
 html=w.elFor('#main').innerHTML;
 assert.ok(count(html,'fabric-status')>0,'inactive cards are marked in the All view');
 w.run("libStatus='Inactive fabrics';libPage=1;render(false)");
 html=w.elFor('#main').innerHTML;
-assert.equal(resultsLine(html),'3066 results','Inactive view shows only inactive suit fabrics');
+assert.equal(resultsLine(html),'2663 results','Inactive view shows only inactive suit fabrics');
 assert.equal(count(html,'fabric-status'),36,'every card in the Inactive view is marked');
+assert.equal((html.match(/JPOS \d/g)||[]).length,0,'no codeless placeholder cards in the Inactive view');
 
 // L4 filters and search, checked against the data itself
 const vbcActive=suit.filter(f=>f.act&&f.m==='VITALE BARBERIS CANONICO').length;
@@ -104,7 +111,7 @@ const w2=makeWorld('#fabrics/shirt');
 html=w2.elFor('#main').innerHTML;
 assert.equal(resultsLine(html),'665 results','shirt library opens on the active fabrics');
 assert.ok(html.includes('/website/images/fabric/shirts/large/'),'shirt swatches come from the shirt image path');
-assert.ok(html.includes('1,251 shirt fabrics'),'shirt header states the full library size');
+assert.ok(html.includes('1,248 shirt fabrics'),'shirt header states the full library size');
 
 // L6 wiring
 const shell=fs.readFileSync('public/index.html','utf8');

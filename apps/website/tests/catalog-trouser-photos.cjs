@@ -30,6 +30,7 @@ const hashOf=f=>crypto.createHash('sha256').update(fs.readFileSync(f)).digest('h
 const SHIPPED=[
   {collection:'#collection/Trousers/Wool%20Trousers',group:'wool'},
   {collection:'#collection/Trousers/Linen%20Trousers',group:'linen'},
+  {collection:'#collection/Trousers/Cotton%20Dress%20Trousers',group:'cotton'},
 ];
 for(const g of SHIPPED){
   const def=pin.groups[g.group];

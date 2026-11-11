@@ -1049,7 +1049,7 @@ console.log('E2E journey J12 passed: designing a second product starts clean wit
   const elFor=s=>{if(!elements.has(s))elements.set(s,makeEl());return elements.get(s)};
   const documentStub={title:'',querySelector:s=>elFor(s),querySelectorAll:()=>[],getElementById:id=>elFor('#'+id),addEventListener(){},createElement:()=>makeEl(),body:makeEl()};
   class J20FormData{constructor(form){this.data=(form&&form.__data)||{}}get(k){return k in this.data?this.data[k]:null}}
-  const location={hash:'',pathname:'/product/1964'};
+  const location={hash:'',pathname:'/product/1941'};
   const sandbox={console,localStorage,document:documentStub,location,setTimeout,clearTimeout,crypto:require('node:crypto').webcrypto,fetch:()=>Promise.resolve({ok:false,json:async()=>null}),FormData:J20FormData,addEventListener(){},scrollTo(){}};
   sandbox.window=sandbox;
   const ctx=vm.createContext(sandbox);
@@ -1057,9 +1057,9 @@ console.log('E2E journey J12 passed: designing a second product starts clean wit
   const run=s=>vm.runInContext(s,ctx);
   const bag=()=>JSON.parse(store.get('suits-bag')||'[]');
   const catalog=require('../data/catalog.json');
-  const productName=catalog[1964].name;
+  const productName=catalog[1941].name;
 
-  assert.equal(location.hash,'#product/1964','entering at the real product URL boots into the product hash route');
+  assert.equal(location.hash,'#product/1941','entering at the real product URL boots into the product hash route');
   const page=elFor('#main').innerHTML;
   assert.ok(page.includes('product-page'),'the real product URL entry renders the product page');
   assert.ok(page.includes(productName),'the product page names the product the URL identifies');
@@ -1067,9 +1067,9 @@ console.log('E2E journey J12 passed: designing a second product starts clean wit
   assert.ok(page.includes('href="/measure"'),'the product page links to the measurement studio at its real URL');
   assert.ok(page.includes('href="/product/'),'the product page offers related products at real URLs');
   assert.ok(!page.includes('href="#'),'the rendered product page carries no hash hrefs');
-  run('beginDesign(1964)');
+  run('beginDesign(1941)');
   assert.equal(run('location.hash'),'#customize','designing from the real URL entry lands on the customize route');
-  assert.equal(run('config.product'),1964,'the customizer opens on the product from the URL');
+  assert.equal(run('config.product'),1941,'the customizer opens on the product from the URL');
   run('nextConfig()'); // stage 0 to 1, Personalize
   run("setOption('lining','Wine')");
   run('nextConfig()'); // stage 1 to 2, Measurements

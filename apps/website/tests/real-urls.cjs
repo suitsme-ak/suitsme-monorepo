@@ -273,7 +273,7 @@ const productDoc=id=>{const p=catalog[id];return expectedDoc({title:`${p.name} |
   assert.equal(probe.hashForRealPath('/studio/pants'),'#studio/pants');
   assert.equal(probe.hashForRealPath('/product/0'),'#product/0','the first catalog id boots');
   assert.equal(probe.hashForRealPath('/product/1964'),'#product/1964','a product path boots into its product route');
-  assert.equal(probe.hashForRealPath('/product/2234'),'#product/2234','the last catalog id boots');
+  assert.equal(probe.hashForRealPath('/product/2208'),'#product/2208','the last catalog id boots');
   assert.equal(probe.hashForRealPath('/product/01964'),'#product/1964','a leading zero spelling boots into the canonical product route');
   assert.equal(probe.hashForRealPath('/orders/DEMO-ABC123'),'#order/DEMO-ABC123','an order path boots into its order route with the id case preserved');
   assert.equal(probe.hashForRealPath('/orders/'),'#orders','the orders path with a trailing slash boots into the orders list');
@@ -283,7 +283,7 @@ const productDoc=id=>{const p=catalog[id];return expectedDoc({title:`${p.name} |
   assert.equal(probe.hashForRealPath('/fabrics/wool'),null,'an unknown fabrics kind maps to nothing');
   assert.equal(probe.hashForRealPath('/fabrics'),null,'the bare fabrics path maps to nothing');
   assert.equal(probe.hashForRealPath('/studio/tuxedo'),null,'an unknown studio kind maps to nothing');
-  assert.equal(probe.hashForRealPath('/product/2235'),null,'the first id past the catalog maps to nothing');
+  assert.equal(probe.hashForRealPath('/product/2209'),null,'the first id past the catalog maps to nothing');
   assert.equal(probe.hashForRealPath('/product/99999'),null,'an unknown product id maps to nothing');
   assert.equal(probe.hashForRealPath('/product/abc'),null,'a non-numeric product id maps to nothing');
   assert.equal(probe.hashForRealPath('/product/-1'),null,'a negative product id maps to nothing');
@@ -474,7 +474,7 @@ const productDoc=id=>{const p=catalog[id];return expectedDoc({title:`${p.name} |
   // Product: existing ids serve, unknown and non-numeric ids 404,
   // non-canonical spellings of existing ids redirect.
   const productGet=await routeGet('app/product/[id]/route.ts');
-  for(const path of ['/product/0','/product/1964','/product/2234']){
+  for(const path of ['/product/0','/product/1964','/product/2208']){
     const res=await productGet(path);
     assert.equal(res.status,200,`${path} serves the shell`);
     assert.equal(res.headers.get('Content-Type'),'text/html; charset=utf-8',`${path} carries the root route content type`);
@@ -482,10 +482,10 @@ const productDoc=id=>{const p=catalog[id];return expectedDoc({title:`${p.name} |
   }
   // Literal spot checks: the injected product values come from the
   // catalog entry the page renders.
-  const product1954Doc=await (await productGet('/product/1954')).text();
-  assert.ok(product1954Doc.includes('<title>Black Solid Suit · EB11127 | Suits.me</title>'),'literal: the product title comes from the catalog entry');
-  assert.ok(product1954Doc.includes('<link rel="canonical" href="https://suits.me/product/1954">'),'literal: the product canonical');
-  assert.ok(product1954Doc.includes('a 100% WOOL suit from the Suits collection'),'literal: the product description carries the catalog fabric, kind and category');
+  const product1928Doc=await (await productGet('/product/1928')).text();
+  assert.ok(product1928Doc.includes('<title>Black Solid Suit · EB11127 | Suits.me</title>'),'literal: the product title comes from the catalog entry');
+  assert.ok(product1928Doc.includes('<link rel="canonical" href="https://suits.me/product/1928">'),'literal: the product canonical');
+  assert.ok(product1928Doc.includes('a 100% WOOL suit from the Suits collection'),'literal: the product description carries the catalog fabric, kind and category');
   const product0Doc=await (await productGet('/product/0')).text();
   assert.ok(product0Doc.includes('<title>The Everyday Navy | Suits.me</title>'),'literal: the first catalog product title');
   for(const [path,to] of [['/product/01964','/product/1964'],['/product/1964/','/product/1964']]){
@@ -494,7 +494,7 @@ const productDoc=id=>{const p=catalog[id];return expectedDoc({title:`${p.name} |
     assert.equal(res.headers.get('Location'),to,`${path} redirects to the canonical form`);
     assert.equal(await res.text(),'','a product redirect carries no injected document');
   }
-  for(const path of ['/product/2235','/product/99999','/product/abc','/product/-1','/product','/product/1964/extra']){
+  for(const path of ['/product/2209','/product/99999','/product/abc','/product/-1','/product','/product/1964/extra']){
     const res=await productGet(path);
     assert.equal(res.status,404,`${path} is a 404`);
   }
@@ -526,11 +526,11 @@ const productDoc=id=>{const p=catalog[id];return expectedDoc({title:`${p.name} |
     assert.ok(html.includes('assets/'+p.img),`product ${id} photo renders`);
     assert.ok(html.includes(p.fabricCode),`product ${id} fabric code ${p.fabricCode} renders`);
   }
-  assert.ok(html.includes('href="/product/1964"'),'the first Wool Suits product links onward at its real URL');
+  assert.ok(html.includes('href="/product/1928"'),'the first Wool Suits product links onward at its real URL');
   assert.ok(w.elFor('#catalogNav').innerHTML.includes('href="/collections/suits/wool-suits"'),'the menu offers the Wool Suits destination at its real URL');
-  w.run('chooseProduct(1964)');
-  assert.equal(w.run('location.hash'),'#product/1964','opening a product from the real URL entry navigates');
-  assert.ok(w.elFor('#main').innerHTML.includes(catalog[1964].name),'the opened product page renders');
+  w.run('chooseProduct(1928)');
+  assert.equal(w.run('location.hash'),'#product/1928','opening a product from the real URL entry navigates');
+  assert.ok(w.elFor('#main').innerHTML.includes(catalog[1928].name),'the opened product page renders');
   w.run("location.hash='#measure';render()");
   assert.ok(w.elFor('#main').innerHTML.includes('MEASUREMENT STUDIO'),'a hash destination renders from the real URL entry');
   w.run(`location.hash='${WOOL_HASH}';render()`);

@@ -3091,33 +3091,7 @@
       1071,
       1072,
       1073,
-      1074,
-      1075,
-      1076,
-      1077,
-      1078,
-      1079,
-      1080,
-      1081,
-      1082,
-      1083,
-      1084,
-      1085,
-      1086,
-      1087,
-      1088,
-      1089,
-      1090,
-      1091,
-      1092,
-      1093,
-      1094,
-      1095,
-      1096,
-      1097,
-      1098,
-      1099,
-      1100
+      1074
     ]
   },
   "#collection/Trousers/Popular%20Trousers": {
@@ -3254,7 +3228,18 @@
       819,
       820,
       821,
-      822,
+      822
+    ],
+    "spec": {
+      "material": "Linen",
+      "kind": "pants",
+      "style": "Tailored"
+    }
+  },
+  "#collection/Trousers/Cotton%20Dress%20Trousers": {
+    "category": "Trousers",
+    "title": "Cotton Dress Trousers",
+    "ids": [
       823,
       824,
       825,
@@ -3280,18 +3265,7 @@
       845,
       846,
       847,
-      848
-    ],
-    "spec": {
-      "material": "Linen",
-      "kind": "pants",
-      "style": "Tailored"
-    }
-  },
-  "#collection/Trousers/Cotton%20Dress%20Trousers": {
-    "category": "Trousers",
-    "title": "Cotton Dress Trousers",
-    "ids": [
+      848,
       849,
       850,
       851,
@@ -3301,7 +3275,18 @@
       855,
       856,
       857,
-      858,
+      858
+    ],
+    "spec": {
+      "material": "Cotton",
+      "kind": "pants",
+      "style": "Tailored"
+    }
+  },
+  "#collection/Trousers/Corduroy%20Trousers": {
+    "category": "Trousers",
+    "title": "Corduroy Trousers",
+    "ids": [
       859,
       860,
       861,
@@ -3327,18 +3312,7 @@
       881,
       882,
       883,
-      884
-    ],
-    "spec": {
-      "material": "Cotton",
-      "kind": "pants",
-      "style": "Tailored"
-    }
-  },
-  "#collection/Trousers/Corduroy%20Trousers": {
-    "category": "Trousers",
-    "title": "Corduroy Trousers",
-    "ids": [
+      884,
       885,
       886,
       887,
@@ -3348,33 +3322,7 @@
       891,
       892,
       893,
-      894,
-      895,
-      896,
-      897,
-      898,
-      899,
-      900,
-      901,
-      902,
-      903,
-      904,
-      905,
-      906,
-      907,
-      908,
-      909,
-      910,
-      911,
-      912,
-      913,
-      914,
-      915,
-      916,
-      917,
-      918,
-      919,
-      920
+      894
     ],
     "spec": {
       "material": "Corduroy",
@@ -3497,6 +3445,32 @@
     "category": "Trousers",
     "title": "Gurkha Trousers",
     "ids": [
+      895,
+      896,
+      897,
+      898,
+      899,
+      900,
+      901,
+      902,
+      903,
+      904,
+      905,
+      906,
+      907,
+      908,
+      909,
+      910,
+      911,
+      912,
+      913,
+      914,
+      915,
+      916,
+      917,
+      918,
+      919,
+      920,
       921,
       922,
       923,
@@ -3506,7 +3480,18 @@
       927,
       928,
       929,
-      930,
+      930
+    ],
+    "spec": {
+      "material": "Cotton",
+      "kind": "pants",
+      "style": "Gurkha"
+    }
+  },
+  "#collection/Trousers/Easy%20Trousers": {
+    "category": "Trousers",
+    "title": "Easy Trousers",
+    "ids": [
       931,
       932,
       933,
@@ -3532,18 +3517,7 @@
       953,
       954,
       955,
-      956
-    ],
-    "spec": {
-      "material": "Cotton",
-      "kind": "pants",
-      "style": "Gurkha"
-    }
-  },
-  "#collection/Trousers/Easy%20Trousers": {
-    "category": "Trousers",
-    "title": "Easy Trousers",
-    "ids": [
+      956,
       957,
       958,
       959,
@@ -3553,7 +3527,65 @@
       963,
       964,
       965,
-      966,
+      966
+    ],
+    "spec": {
+      "material": "Cotton",
+      "kind": "pants",
+      "style": "Relaxed"
+    }
+  },
+  "#collection/Trousers/Washed%20Chino%20Trousers": {
+    "category": "Trousers",
+    "title": "Washed Chino Trousers",
+    "ids": [
+      823,
+      824,
+      825,
+      826,
+      827,
+      828,
+      829,
+      830,
+      831,
+      832,
+      833,
+      834,
+      835,
+      836,
+      837,
+      838,
+      839,
+      840,
+      841,
+      842,
+      843,
+      844,
+      845,
+      846,
+      847,
+      848,
+      849,
+      850,
+      851,
+      852,
+      853,
+      854,
+      855,
+      856,
+      857,
+      858
+    ],
+    "spec": {
+      "material": "Cotton",
+      "kind": "pants",
+      "style": "Tailored"
+    }
+  },
+  "#collection/Trousers/Leather%20Trousers": {
+    "category": "Trousers",
+    "title": "Leather Trousers",
+    "ids": [
       967,
       968,
       969,
@@ -3579,65 +3611,7 @@
       989,
       990,
       991,
-      992
-    ],
-    "spec": {
-      "material": "Cotton",
-      "kind": "pants",
-      "style": "Relaxed"
-    }
-  },
-  "#collection/Trousers/Washed%20Chino%20Trousers": {
-    "category": "Trousers",
-    "title": "Washed Chino Trousers",
-    "ids": [
-      849,
-      850,
-      851,
-      852,
-      853,
-      854,
-      855,
-      856,
-      857,
-      858,
-      859,
-      860,
-      861,
-      862,
-      863,
-      864,
-      865,
-      866,
-      867,
-      868,
-      869,
-      870,
-      871,
-      872,
-      873,
-      874,
-      875,
-      876,
-      877,
-      878,
-      879,
-      880,
-      881,
-      882,
-      883,
-      884
-    ],
-    "spec": {
-      "material": "Cotton",
-      "kind": "pants",
-      "style": "Tailored"
-    }
-  },
-  "#collection/Trousers/Leather%20Trousers": {
-    "category": "Trousers",
-    "title": "Leather Trousers",
-    "ids": [
+      992,
       993,
       994,
       995,
@@ -3647,7 +3621,18 @@
       999,
       1000,
       1001,
-      1002,
+      1002
+    ],
+    "spec": {
+      "material": "Leather",
+      "kind": "pants",
+      "style": "Tailored"
+    }
+  },
+  "#collection/Trousers/Custom%20Jeans": {
+    "category": "Trousers",
+    "title": "Custom Jeans",
+    "ids": [
       1003,
       1004,
       1005,
@@ -3673,18 +3658,7 @@
       1025,
       1026,
       1027,
-      1028
-    ],
-    "spec": {
-      "material": "Leather",
-      "kind": "pants",
-      "style": "Tailored"
-    }
-  },
-  "#collection/Trousers/Custom%20Jeans": {
-    "category": "Trousers",
-    "title": "Custom Jeans",
-    "ids": [
+      1028,
       1029,
       1030,
       1031,
@@ -3694,7 +3668,18 @@
       1035,
       1036,
       1037,
-      1038,
+      1038
+    ],
+    "spec": {
+      "material": "Denim",
+      "kind": "pants",
+      "style": "Straight leg"
+    }
+  },
+  "#collection/Trousers/Shorts": {
+    "category": "Trousers",
+    "title": "Shorts",
+    "ids": [
       1039,
       1040,
       1041,
@@ -3720,18 +3705,7 @@
       1061,
       1062,
       1063,
-      1064
-    ],
-    "spec": {
-      "material": "Denim",
-      "kind": "pants",
-      "style": "Straight leg"
-    }
-  },
-  "#collection/Trousers/Shorts": {
-    "category": "Trousers",
-    "title": "Shorts",
-    "ids": [
+      1064,
       1065,
       1066,
       1067,
@@ -3741,33 +3715,7 @@
       1071,
       1072,
       1073,
-      1074,
-      1075,
-      1076,
-      1077,
-      1078,
-      1079,
-      1080,
-      1081,
-      1082,
-      1083,
-      1084,
-      1085,
-      1086,
-      1087,
-      1088,
-      1089,
-      1090,
-      1091,
-      1092,
-      1093,
-      1094,
-      1095,
-      1096,
-      1097,
-      1098,
-      1099,
-      1100
+      1074
     ],
     "spec": {
       "material": "Wool",
@@ -3853,6 +3801,32 @@
     "category": "Shirts",
     "title": "Shirts",
     "ids": [
+      1075,
+      1076,
+      1077,
+      1078,
+      1079,
+      1080,
+      1081,
+      1082,
+      1083,
+      1084,
+      1085,
+      1086,
+      1087,
+      1088,
+      1089,
+      1090,
+      1091,
+      1092,
+      1093,
+      1094,
+      1095,
+      1096,
+      1097,
+      1098,
+      1099,
+      1100,
       1101,
       1102,
       1103,
@@ -4042,39 +4016,39 @@
       1287,
       1288,
       1289,
-      1290,
-      1291,
-      1292,
-      1293,
-      1294,
-      1295,
-      1296,
-      1297,
-      1298,
-      1299,
-      1300,
-      1301,
-      1302,
-      1303,
-      1304,
-      1305,
-      1306,
-      1307,
-      1308,
-      1309,
-      1310,
-      1311,
-      1312,
-      1313,
-      1314,
-      1315,
-      1316
+      1290
     ]
   },
   "#collection/Shirts/Popular%20Shirts": {
     "category": "Shirts",
     "title": "Popular Shirts",
     "ids": [
+      1075,
+      1076,
+      1077,
+      1078,
+      1079,
+      1080,
+      1081,
+      1082,
+      1083,
+      1084,
+      1085,
+      1086,
+      1087,
+      1088,
+      1089,
+      1090,
+      1091,
+      1092,
+      1093,
+      1094,
+      1095,
+      1096,
+      1097,
+      1098,
+      1099,
+      1100,
       1101,
       1102,
       1103,
@@ -4084,33 +4058,7 @@
       1107,
       1108,
       1109,
-      1110,
-      1111,
-      1112,
-      1113,
-      1114,
-      1115,
-      1116,
-      1117,
-      1118,
-      1119,
-      1120,
-      1121,
-      1122,
-      1123,
-      1124,
-      1125,
-      1126,
-      1127,
-      1128,
-      1129,
-      1130,
-      1131,
-      1132,
-      1133,
-      1134,
-      1135,
-      1136
+      1110
     ],
     "spec": {
       "material": "Cotton",
@@ -4122,6 +4070,32 @@
     "category": "Shirts",
     "title": "Long Sleeve Shirts",
     "ids": [
+      1075,
+      1076,
+      1077,
+      1078,
+      1079,
+      1080,
+      1081,
+      1082,
+      1083,
+      1084,
+      1085,
+      1086,
+      1087,
+      1088,
+      1089,
+      1090,
+      1091,
+      1092,
+      1093,
+      1094,
+      1095,
+      1096,
+      1097,
+      1098,
+      1099,
+      1100,
       1101,
       1102,
       1103,
@@ -4131,7 +4105,18 @@
       1107,
       1108,
       1109,
-      1110,
+      1110
+    ],
+    "spec": {
+      "material": "Cotton",
+      "kind": "shirt",
+      "style": "Tailored"
+    }
+  },
+  "#collection/Shirts/Short%20Sleeve%20Shirts": {
+    "category": "Shirts",
+    "title": "Short Sleeve Shirts",
+    "ids": [
       1111,
       1112,
       1113,
@@ -4157,18 +4142,7 @@
       1133,
       1134,
       1135,
-      1136
-    ],
-    "spec": {
-      "material": "Cotton",
-      "kind": "shirt",
-      "style": "Tailored"
-    }
-  },
-  "#collection/Shirts/Short%20Sleeve%20Shirts": {
-    "category": "Shirts",
-    "title": "Short Sleeve Shirts",
-    "ids": [
+      1136,
       1137,
       1138,
       1139,
@@ -4178,7 +4152,65 @@
       1143,
       1144,
       1145,
-      1146,
+      1146
+    ],
+    "spec": {
+      "material": "Cotton",
+      "kind": "shirt",
+      "style": "Short sleeve"
+    }
+  },
+  "#collection/Shirts/Shop%20By%20Style": {
+    "category": "Shirts",
+    "title": "Shop By Style",
+    "ids": [
+      1075,
+      1076,
+      1077,
+      1078,
+      1079,
+      1080,
+      1081,
+      1082,
+      1083,
+      1084,
+      1085,
+      1086,
+      1087,
+      1088,
+      1089,
+      1090,
+      1091,
+      1092,
+      1093,
+      1094,
+      1095,
+      1096,
+      1097,
+      1098,
+      1099,
+      1100,
+      1101,
+      1102,
+      1103,
+      1104,
+      1105,
+      1106,
+      1107,
+      1108,
+      1109,
+      1110
+    ],
+    "spec": {
+      "material": "Cotton",
+      "kind": "shirt",
+      "style": "Tailored"
+    }
+  },
+  "#collection/Shirts/Tuxedo%20Shirt": {
+    "category": "Shirts",
+    "title": "Tuxedo Shirt",
+    "ids": [
       1147,
       1148,
       1149,
@@ -4204,65 +4236,7 @@
       1169,
       1170,
       1171,
-      1172
-    ],
-    "spec": {
-      "material": "Cotton",
-      "kind": "shirt",
-      "style": "Short sleeve"
-    }
-  },
-  "#collection/Shirts/Shop%20By%20Style": {
-    "category": "Shirts",
-    "title": "Shop By Style",
-    "ids": [
-      1101,
-      1102,
-      1103,
-      1104,
-      1105,
-      1106,
-      1107,
-      1108,
-      1109,
-      1110,
-      1111,
-      1112,
-      1113,
-      1114,
-      1115,
-      1116,
-      1117,
-      1118,
-      1119,
-      1120,
-      1121,
-      1122,
-      1123,
-      1124,
-      1125,
-      1126,
-      1127,
-      1128,
-      1129,
-      1130,
-      1131,
-      1132,
-      1133,
-      1134,
-      1135,
-      1136
-    ],
-    "spec": {
-      "material": "Cotton",
-      "kind": "shirt",
-      "style": "Tailored"
-    }
-  },
-  "#collection/Shirts/Tuxedo%20Shirt": {
-    "category": "Shirts",
-    "title": "Tuxedo Shirt",
-    "ids": [
+      1172,
       1173,
       1174,
       1175,
@@ -4272,7 +4246,65 @@
       1179,
       1180,
       1181,
-      1182,
+      1182
+    ],
+    "spec": {
+      "material": "Cotton",
+      "kind": "shirt",
+      "style": "Tuxedo"
+    }
+  },
+  "#collection/Shirts/New%20Arrivals": {
+    "category": "Shirts",
+    "title": "New Arrivals",
+    "ids": [
+      1075,
+      1076,
+      1077,
+      1078,
+      1079,
+      1080,
+      1081,
+      1082,
+      1083,
+      1084,
+      1085,
+      1086,
+      1087,
+      1088,
+      1089,
+      1090,
+      1091,
+      1092,
+      1093,
+      1094,
+      1095,
+      1096,
+      1097,
+      1098,
+      1099,
+      1100,
+      1101,
+      1102,
+      1103,
+      1104,
+      1105,
+      1106,
+      1107,
+      1108,
+      1109,
+      1110
+    ],
+    "spec": {
+      "material": "Cotton",
+      "kind": "shirt",
+      "style": "Tailored"
+    }
+  },
+  "#collection/Shirts/Linen%20Shirts": {
+    "category": "Shirts",
+    "title": "Linen Shirts",
+    "ids": [
       1183,
       1184,
       1185,
@@ -4298,65 +4330,7 @@
       1205,
       1206,
       1207,
-      1208
-    ],
-    "spec": {
-      "material": "Cotton",
-      "kind": "shirt",
-      "style": "Tuxedo"
-    }
-  },
-  "#collection/Shirts/New%20Arrivals": {
-    "category": "Shirts",
-    "title": "New Arrivals",
-    "ids": [
-      1101,
-      1102,
-      1103,
-      1104,
-      1105,
-      1106,
-      1107,
-      1108,
-      1109,
-      1110,
-      1111,
-      1112,
-      1113,
-      1114,
-      1115,
-      1116,
-      1117,
-      1118,
-      1119,
-      1120,
-      1121,
-      1122,
-      1123,
-      1124,
-      1125,
-      1126,
-      1127,
-      1128,
-      1129,
-      1130,
-      1131,
-      1132,
-      1133,
-      1134,
-      1135,
-      1136
-    ],
-    "spec": {
-      "material": "Cotton",
-      "kind": "shirt",
-      "style": "Tailored"
-    }
-  },
-  "#collection/Shirts/Linen%20Shirts": {
-    "category": "Shirts",
-    "title": "Linen Shirts",
-    "ids": [
+      1208,
       1209,
       1210,
       1211,
@@ -4366,7 +4340,65 @@
       1215,
       1216,
       1217,
-      1218,
+      1218
+    ],
+    "spec": {
+      "material": "Linen",
+      "kind": "shirt",
+      "style": "Tailored"
+    }
+  },
+  "#collection/Shirts/Buy%20One%20Get%20One%20Free%20Shirts": {
+    "category": "Shirts",
+    "title": "Buy One Get One Free Shirts",
+    "ids": [
+      1075,
+      1076,
+      1077,
+      1078,
+      1079,
+      1080,
+      1081,
+      1082,
+      1083,
+      1084,
+      1085,
+      1086,
+      1087,
+      1088,
+      1089,
+      1090,
+      1091,
+      1092,
+      1093,
+      1094,
+      1095,
+      1096,
+      1097,
+      1098,
+      1099,
+      1100,
+      1101,
+      1102,
+      1103,
+      1104,
+      1105,
+      1106,
+      1107,
+      1108,
+      1109,
+      1110
+    ],
+    "spec": {
+      "material": "Cotton",
+      "kind": "shirt",
+      "style": "Tailored"
+    }
+  },
+  "#collection/Shirts/Overshirts": {
+    "category": "Shirts",
+    "title": "Overshirts",
+    "ids": [
       1219,
       1220,
       1221,
@@ -4392,65 +4424,7 @@
       1241,
       1242,
       1243,
-      1244
-    ],
-    "spec": {
-      "material": "Linen",
-      "kind": "shirt",
-      "style": "Tailored"
-    }
-  },
-  "#collection/Shirts/Buy%20One%20Get%20One%20Free%20Shirts": {
-    "category": "Shirts",
-    "title": "Buy One Get One Free Shirts",
-    "ids": [
-      1101,
-      1102,
-      1103,
-      1104,
-      1105,
-      1106,
-      1107,
-      1108,
-      1109,
-      1110,
-      1111,
-      1112,
-      1113,
-      1114,
-      1115,
-      1116,
-      1117,
-      1118,
-      1119,
-      1120,
-      1121,
-      1122,
-      1123,
-      1124,
-      1125,
-      1126,
-      1127,
-      1128,
-      1129,
-      1130,
-      1131,
-      1132,
-      1133,
-      1134,
-      1135,
-      1136
-    ],
-    "spec": {
-      "material": "Cotton",
-      "kind": "shirt",
-      "style": "Tailored"
-    }
-  },
-  "#collection/Shirts/Overshirts": {
-    "category": "Shirts",
-    "title": "Overshirts",
-    "ids": [
+      1244,
       1245,
       1246,
       1247,
@@ -4460,7 +4434,18 @@
       1251,
       1252,
       1253,
-      1254,
+      1254
+    ],
+    "spec": {
+      "material": "Cotton",
+      "kind": "shirt",
+      "style": "Overshirt"
+    }
+  },
+  "#collection/Shirts/Silk%20Shirts": {
+    "category": "Shirts",
+    "title": "Silk Shirts",
+    "ids": [
       1255,
       1256,
       1257,
@@ -4486,18 +4471,7 @@
       1277,
       1278,
       1279,
-      1280
-    ],
-    "spec": {
-      "material": "Cotton",
-      "kind": "shirt",
-      "style": "Overshirt"
-    }
-  },
-  "#collection/Shirts/Silk%20Shirts": {
-    "category": "Shirts",
-    "title": "Silk Shirts",
-    "ids": [
+      1280,
       1281,
       1282,
       1283,
@@ -4507,33 +4481,7 @@
       1287,
       1288,
       1289,
-      1290,
-      1291,
-      1292,
-      1293,
-      1294,
-      1295,
-      1296,
-      1297,
-      1298,
-      1299,
-      1300,
-      1301,
-      1302,
-      1303,
-      1304,
-      1305,
-      1306,
-      1307,
-      1308,
-      1309,
-      1310,
-      1311,
-      1312,
-      1313,
-      1314,
-      1315,
-      1316
+      1290
     ],
     "spec": {
       "material": "Silk",
@@ -4545,6 +4493,32 @@
     "category": "Shirts",
     "title": "Business Shirts",
     "ids": [
+      1075,
+      1076,
+      1077,
+      1078,
+      1079,
+      1080,
+      1081,
+      1082,
+      1083,
+      1084,
+      1085,
+      1086,
+      1087,
+      1088,
+      1089,
+      1090,
+      1091,
+      1092,
+      1093,
+      1094,
+      1095,
+      1096,
+      1097,
+      1098,
+      1099,
+      1100,
       1101,
       1102,
       1103,
@@ -4554,33 +4528,7 @@
       1107,
       1108,
       1109,
-      1110,
-      1111,
-      1112,
-      1113,
-      1114,
-      1115,
-      1116,
-      1117,
-      1118,
-      1119,
-      1120,
-      1121,
-      1122,
-      1123,
-      1124,
-      1125,
-      1126,
-      1127,
-      1128,
-      1129,
-      1130,
-      1131,
-      1132,
-      1133,
-      1134,
-      1135,
-      1136
+      1110
     ],
     "spec": {
       "material": "Cotton",
@@ -4592,6 +4540,32 @@
     "category": "Shirts",
     "title": "Liberty London Shirts",
     "ids": [
+      1075,
+      1076,
+      1077,
+      1078,
+      1079,
+      1080,
+      1081,
+      1082,
+      1083,
+      1084,
+      1085,
+      1086,
+      1087,
+      1088,
+      1089,
+      1090,
+      1091,
+      1092,
+      1093,
+      1094,
+      1095,
+      1096,
+      1097,
+      1098,
+      1099,
+      1100,
       1101,
       1102,
       1103,
@@ -4601,33 +4575,7 @@
       1107,
       1108,
       1109,
-      1110,
-      1111,
-      1112,
-      1113,
-      1114,
-      1115,
-      1116,
-      1117,
-      1118,
-      1119,
-      1120,
-      1121,
-      1122,
-      1123,
-      1124,
-      1125,
-      1126,
-      1127,
-      1128,
-      1129,
-      1130,
-      1131,
-      1132,
-      1133,
-      1134,
-      1135,
-      1136
+      1110
     ],
     "spec": {
       "material": "Cotton",
@@ -4827,6 +4775,32 @@
     "category": "Weddings",
     "title": "Seersucker Wedding Suits",
     "ids": [
+      1291,
+      1292,
+      1293,
+      1294,
+      1295,
+      1296,
+      1297,
+      1298,
+      1299,
+      1300,
+      1301,
+      1302,
+      1303,
+      1304,
+      1305,
+      1306,
+      1307,
+      1308,
+      1309,
+      1310,
+      1311,
+      1312,
+      1313,
+      1314,
+      1315,
+      1316,
       1317,
       1318,
       1319,
@@ -4836,7 +4810,18 @@
       1323,
       1324,
       1325,
-      1326,
+      1326
+    ],
+    "spec": {
+      "material": "Seersucker",
+      "kind": "suit",
+      "style": "Tailored"
+    }
+  },
+  "#collection/More/Accessories": {
+    "category": "More",
+    "title": "Accessories",
+    "ids": [
       1327,
       1328,
       1329,
@@ -4862,18 +4847,7 @@
       1349,
       1350,
       1351,
-      1352
-    ],
-    "spec": {
-      "material": "Seersucker",
-      "kind": "suit",
-      "style": "Tailored"
-    }
-  },
-  "#collection/More/Accessories": {
-    "category": "More",
-    "title": "Accessories",
-    "ids": [
+      1352,
       1353,
       1354,
       1355,
@@ -4883,7 +4857,18 @@
       1359,
       1360,
       1361,
-      1362,
+      1362
+    ],
+    "spec": {
+      "material": "Wool",
+      "kind": "accessory",
+      "style": "Tailored"
+    }
+  },
+  "#collection/More/Fabric%20Samples": {
+    "category": "More",
+    "title": "Fabric Samples",
+    "ids": [
       1363,
       1364,
       1365,
@@ -4909,18 +4894,7 @@
       1385,
       1386,
       1387,
-      1388
-    ],
-    "spec": {
-      "material": "Wool",
-      "kind": "accessory",
-      "style": "Tailored"
-    }
-  },
-  "#collection/More/Fabric%20Samples": {
-    "category": "More",
-    "title": "Fabric Samples",
-    "ids": [
+      1388,
       1389,
       1390,
       1391,
@@ -4930,7 +4904,18 @@
       1395,
       1396,
       1397,
-      1398,
+      1398
+    ],
+    "spec": {
+      "material": "Wool",
+      "kind": "swatch",
+      "style": "Tailored"
+    }
+  },
+  "#collection/More/Waist%20Coat": {
+    "category": "More",
+    "title": "Waist Coat",
+    "ids": [
       1399,
       1400,
       1401,
@@ -4956,18 +4941,7 @@
       1421,
       1422,
       1423,
-      1424
-    ],
-    "spec": {
-      "material": "Wool",
-      "kind": "swatch",
-      "style": "Tailored"
-    }
-  },
-  "#collection/More/Waist%20Coat": {
-    "category": "More",
-    "title": "Waist Coat",
-    "ids": [
+      1424,
       1425,
       1426,
       1427,
@@ -4977,7 +4951,18 @@
       1431,
       1432,
       1433,
-      1434,
+      1434
+    ],
+    "spec": {
+      "material": "Wool",
+      "kind": "waistcoat",
+      "style": "Tailored"
+    }
+  },
+  "#collection/Women/Suits": {
+    "category": "Women",
+    "title": "Suits",
+    "ids": [
       1435,
       1436,
       1437,
@@ -5003,18 +4988,7 @@
       1457,
       1458,
       1459,
-      1460
-    ],
-    "spec": {
-      "material": "Wool",
-      "kind": "waistcoat",
-      "style": "Tailored"
-    }
-  },
-  "#collection/Women/Suits": {
-    "category": "Women",
-    "title": "Suits",
-    "ids": [
+      1460,
       1461,
       1462,
       1463,
@@ -5024,7 +4998,18 @@
       1467,
       1468,
       1469,
-      1470,
+      1470
+    ],
+    "spec": {
+      "material": "Wool",
+      "kind": "suit",
+      "style": "Tailored"
+    }
+  },
+  "#collection/Women/Jackets": {
+    "category": "Women",
+    "title": "Jackets",
+    "ids": [
       1471,
       1472,
       1473,
@@ -5050,18 +5035,7 @@
       1493,
       1494,
       1495,
-      1496
-    ],
-    "spec": {
-      "material": "Wool",
-      "kind": "suit",
-      "style": "Tailored"
-    }
-  },
-  "#collection/Women/Jackets": {
-    "category": "Women",
-    "title": "Jackets",
-    "ids": [
+      1496,
       1497,
       1498,
       1499,
@@ -5071,7 +5045,18 @@
       1503,
       1504,
       1505,
-      1506,
+      1506
+    ],
+    "spec": {
+      "material": "Wool",
+      "kind": "jacket",
+      "style": "Tailored"
+    }
+  },
+  "#collection/Women/Trousers": {
+    "category": "Women",
+    "title": "Trousers",
+    "ids": [
       1507,
       1508,
       1509,
@@ -5097,18 +5082,7 @@
       1529,
       1530,
       1531,
-      1532
-    ],
-    "spec": {
-      "material": "Wool",
-      "kind": "jacket",
-      "style": "Tailored"
-    }
-  },
-  "#collection/Women/Trousers": {
-    "category": "Women",
-    "title": "Trousers",
-    "ids": [
+      1532,
       1533,
       1534,
       1535,
@@ -5118,7 +5092,18 @@
       1539,
       1540,
       1541,
-      1542,
+      1542
+    ],
+    "spec": {
+      "material": "Wool",
+      "kind": "pants",
+      "style": "Tailored"
+    }
+  },
+  "#collection/Women/Shirts": {
+    "category": "Women",
+    "title": "Shirts",
+    "ids": [
       1543,
       1544,
       1545,
@@ -5144,18 +5129,7 @@
       1565,
       1566,
       1567,
-      1568
-    ],
-    "spec": {
-      "material": "Wool",
-      "kind": "pants",
-      "style": "Tailored"
-    }
-  },
-  "#collection/Women/Shirts": {
-    "category": "Women",
-    "title": "Shirts",
-    "ids": [
+      1568,
       1569,
       1570,
       1571,
@@ -5165,7 +5139,18 @@
       1575,
       1576,
       1577,
-      1578,
+      1578
+    ],
+    "spec": {
+      "material": "Wool",
+      "kind": "shirt",
+      "style": "Tailored"
+    }
+  },
+  "#collection/Women/Leather%20Jackets": {
+    "category": "Women",
+    "title": "Leather Jackets",
+    "ids": [
       1579,
       1580,
       1581,
@@ -5191,18 +5176,7 @@
       1601,
       1602,
       1603,
-      1604
-    ],
-    "spec": {
-      "material": "Wool",
-      "kind": "shirt",
-      "style": "Tailored"
-    }
-  },
-  "#collection/Women/Leather%20Jackets": {
-    "category": "Women",
-    "title": "Leather Jackets",
-    "ids": [
+      1604,
       1605,
       1606,
       1607,
@@ -5212,7 +5186,18 @@
       1611,
       1612,
       1613,
-      1614,
+      1614
+    ],
+    "spec": {
+      "material": "Leather",
+      "kind": "jacket",
+      "style": "Tailored"
+    }
+  },
+  "#collection/Women/Leather%20Trousers": {
+    "category": "Women",
+    "title": "Leather Trousers",
+    "ids": [
       1615,
       1616,
       1617,
@@ -5238,18 +5223,7 @@
       1637,
       1638,
       1639,
-      1640
-    ],
-    "spec": {
-      "material": "Leather",
-      "kind": "jacket",
-      "style": "Tailored"
-    }
-  },
-  "#collection/Women/Leather%20Trousers": {
-    "category": "Women",
-    "title": "Leather Trousers",
-    "ids": [
+      1640,
       1641,
       1642,
       1643,
@@ -5259,7 +5233,18 @@
       1647,
       1648,
       1649,
-      1650,
+      1650
+    ],
+    "spec": {
+      "material": "Leather",
+      "kind": "pants",
+      "style": "Tailored"
+    }
+  },
+  "#collection/Women/Overcoats": {
+    "category": "Women",
+    "title": "Overcoats",
+    "ids": [
       1651,
       1652,
       1653,
@@ -5285,18 +5270,7 @@
       1673,
       1674,
       1675,
-      1676
-    ],
-    "spec": {
-      "material": "Leather",
-      "kind": "pants",
-      "style": "Tailored"
-    }
-  },
-  "#collection/Women/Overcoats": {
-    "category": "Women",
-    "title": "Overcoats",
-    "ids": [
+      1676,
       1677,
       1678,
       1679,
@@ -5306,7 +5280,18 @@
       1683,
       1684,
       1685,
-      1686,
+      1686
+    ],
+    "spec": {
+      "material": "Wool",
+      "kind": "jacket",
+      "style": "Overcoat"
+    }
+  },
+  "#collection/Women/Tuxedos": {
+    "category": "Women",
+    "title": "Tuxedos",
+    "ids": [
       1687,
       1688,
       1689,
@@ -5332,18 +5317,7 @@
       1709,
       1710,
       1711,
-      1712
-    ],
-    "spec": {
-      "material": "Wool",
-      "kind": "jacket",
-      "style": "Overcoat"
-    }
-  },
-  "#collection/Women/Tuxedos": {
-    "category": "Women",
-    "title": "Tuxedos",
-    "ids": [
+      1712,
       1713,
       1714,
       1715,
@@ -5353,33 +5327,7 @@
       1719,
       1720,
       1721,
-      1722,
-      1723,
-      1724,
-      1725,
-      1726,
-      1727,
-      1728,
-      1729,
-      1730,
-      1731,
-      1732,
-      1733,
-      1734,
-      1735,
-      1736,
-      1737,
-      1738,
-      1739,
-      1740,
-      1741,
-      1742,
-      1743,
-      1744,
-      1745,
-      1746,
-      1747,
-      1748
+      1722
     ],
     "spec": {
       "material": "Wool",
@@ -6458,7 +6406,13 @@
       1071,
       1072,
       1073,
-      1074,
+      1074
+    ]
+  },
+  "#collection/Shirts": {
+    "category": "Shirts",
+    "title": "Shirts",
+    "ids": [
       1075,
       1076,
       1077,
@@ -6484,13 +6438,7 @@
       1097,
       1098,
       1099,
-      1100
-    ]
-  },
-  "#collection/Shirts": {
-    "category": "Shirts",
-    "title": "Shirts",
-    "ids": [
+      1100,
       1101,
       1102,
       1103,
@@ -6680,33 +6628,7 @@
       1287,
       1288,
       1289,
-      1290,
-      1291,
-      1292,
-      1293,
-      1294,
-      1295,
-      1296,
-      1297,
-      1298,
-      1299,
-      1300,
-      1301,
-      1302,
-      1303,
-      1304,
-      1305,
-      1306,
-      1307,
-      1308,
-      1309,
-      1310,
-      1311,
-      1312,
-      1313,
-      1314,
-      1315,
-      1316
+      1290
     ]
   },
   "#collection/Weddings": {
@@ -6821,6 +6743,32 @@
       124,
       125,
       126,
+      1291,
+      1292,
+      1293,
+      1294,
+      1295,
+      1296,
+      1297,
+      1298,
+      1299,
+      1300,
+      1301,
+      1302,
+      1303,
+      1304,
+      1305,
+      1306,
+      1307,
+      1308,
+      1309,
+      1310,
+      1311,
+      1312,
+      1313,
+      1314,
+      1315,
+      1316,
       1317,
       1318,
       1319,
@@ -6830,7 +6778,13 @@
       1323,
       1324,
       1325,
-      1326,
+      1326
+    ]
+  },
+  "#collection/More": {
+    "category": "More",
+    "title": "More",
+    "ids": [
       1327,
       1328,
       1329,
@@ -6856,13 +6810,7 @@
       1349,
       1350,
       1351,
-      1352
-    ]
-  },
-  "#collection/More": {
-    "category": "More",
-    "title": "More",
-    "ids": [
+      1352,
       1353,
       1354,
       1355,
@@ -6944,7 +6892,13 @@
       1431,
       1432,
       1433,
-      1434,
+      1434
+    ]
+  },
+  "#collection/Women": {
+    "category": "Women",
+    "title": "Women",
+    "ids": [
       1435,
       1436,
       1437,
@@ -6970,13 +6924,7 @@
       1457,
       1458,
       1459,
-      1460
-    ]
-  },
-  "#collection/Women": {
-    "category": "Women",
-    "title": "Women",
-    "ids": [
+      1460,
       1461,
       1462,
       1463,
@@ -7238,33 +7186,7 @@
       1719,
       1720,
       1721,
-      1722,
-      1723,
-      1724,
-      1725,
-      1726,
-      1727,
-      1728,
-      1729,
-      1730,
-      1731,
-      1732,
-      1733,
-      1734,
-      1735,
-      1736,
-      1737,
-      1738,
-      1739,
-      1740,
-      1741,
-      1742,
-      1743,
-      1744,
-      1745,
-      1746,
-      1747,
-      1748
+      1722
     ]
   },
   "#collection": {
@@ -7607,6 +7529,32 @@
     "category": "More",
     "title": "Accessories",
     "ids": [
+      1327,
+      1328,
+      1329,
+      1330,
+      1331,
+      1332,
+      1333,
+      1334,
+      1335,
+      1336,
+      1337,
+      1338,
+      1339,
+      1340,
+      1341,
+      1342,
+      1343,
+      1344,
+      1345,
+      1346,
+      1347,
+      1348,
+      1349,
+      1350,
+      1351,
+      1352,
       1353,
       1354,
       1355,
@@ -7616,7 +7564,18 @@
       1359,
       1360,
       1361,
-      1362,
+      1362
+    ],
+    "spec": {
+      "material": "Wool",
+      "kind": "accessory",
+      "style": "Tailored"
+    }
+  },
+  "#collection/Fabrics": {
+    "category": "More",
+    "title": "Fabric Samples",
+    "ids": [
       1363,
       1364,
       1365,
@@ -7642,18 +7601,7 @@
       1385,
       1386,
       1387,
-      1388
-    ],
-    "spec": {
-      "material": "Wool",
-      "kind": "accessory",
-      "style": "Tailored"
-    }
-  },
-  "#collection/Fabrics": {
-    "category": "More",
-    "title": "Fabric Samples",
-    "ids": [
+      1388,
       1389,
       1390,
       1391,
@@ -7663,33 +7611,7 @@
       1395,
       1396,
       1397,
-      1398,
-      1399,
-      1400,
-      1401,
-      1402,
-      1403,
-      1404,
-      1405,
-      1406,
-      1407,
-      1408,
-      1409,
-      1410,
-      1411,
-      1412,
-      1413,
-      1414,
-      1415,
-      1416,
-      1417,
-      1418,
-      1419,
-      1420,
-      1421,
-      1422,
-      1423,
-      1424
+      1398
     ],
     "spec": {
       "material": "Wool",
@@ -11141,33 +11063,7 @@
       1071,
       1072,
       1073,
-      1074,
-      1075,
-      1076,
-      1077,
-      1078,
-      1079,
-      1080,
-      1081,
-      1082,
-      1083,
-      1084,
-      1085,
-      1086,
-      1087,
-      1088,
-      1089,
-      1090,
-      1091,
-      1092,
-      1093,
-      1094,
-      1095,
-      1096,
-      1097,
-      1098,
-      1099,
-      1100
+      1074
     ]
   },
   "#collection/Trousers/Shop%20all%20jackets": {
@@ -11497,33 +11393,7 @@
       1071,
       1072,
       1073,
-      1074,
-      1075,
-      1076,
-      1077,
-      1078,
-      1079,
-      1080,
-      1081,
-      1082,
-      1083,
-      1084,
-      1085,
-      1086,
-      1087,
-      1088,
-      1089,
-      1090,
-      1091,
-      1092,
-      1093,
-      1094,
-      1095,
-      1096,
-      1097,
-      1098,
-      1099,
-      1100
+      1074
     ]
   },
   "#collection/Trousers/Shop%20all%20trousers": {
@@ -11853,33 +11723,7 @@
       1071,
       1072,
       1073,
-      1074,
-      1075,
-      1076,
-      1077,
-      1078,
-      1079,
-      1080,
-      1081,
-      1082,
-      1083,
-      1084,
-      1085,
-      1086,
-      1087,
-      1088,
-      1089,
-      1090,
-      1091,
-      1092,
-      1093,
-      1094,
-      1095,
-      1096,
-      1097,
-      1098,
-      1099,
-      1100
+      1074
     ]
   },
   "#collection/Trousers/Shop%20all%20shirts": {
@@ -12209,7 +12053,13 @@
       1071,
       1072,
       1073,
-      1074,
+      1074
+    ]
+  },
+  "#collection/Shirts/Shop%20all%20suits": {
+    "category": "Shirts",
+    "title": "Shirts",
+    "ids": [
       1075,
       1076,
       1077,
@@ -12235,13 +12085,7 @@
       1097,
       1098,
       1099,
-      1100
-    ]
-  },
-  "#collection/Shirts/Shop%20all%20suits": {
-    "category": "Shirts",
-    "title": "Shirts",
-    "ids": [
+      1100,
       1101,
       1102,
       1103,
@@ -12431,39 +12275,39 @@
       1287,
       1288,
       1289,
-      1290,
-      1291,
-      1292,
-      1293,
-      1294,
-      1295,
-      1296,
-      1297,
-      1298,
-      1299,
-      1300,
-      1301,
-      1302,
-      1303,
-      1304,
-      1305,
-      1306,
-      1307,
-      1308,
-      1309,
-      1310,
-      1311,
-      1312,
-      1313,
-      1314,
-      1315,
-      1316
+      1290
     ]
   },
   "#collection/Shirts/Shop%20all%20jackets": {
     "category": "Shirts",
     "title": "Shirts",
     "ids": [
+      1075,
+      1076,
+      1077,
+      1078,
+      1079,
+      1080,
+      1081,
+      1082,
+      1083,
+      1084,
+      1085,
+      1086,
+      1087,
+      1088,
+      1089,
+      1090,
+      1091,
+      1092,
+      1093,
+      1094,
+      1095,
+      1096,
+      1097,
+      1098,
+      1099,
+      1100,
       1101,
       1102,
       1103,
@@ -12653,39 +12497,39 @@
       1287,
       1288,
       1289,
-      1290,
-      1291,
-      1292,
-      1293,
-      1294,
-      1295,
-      1296,
-      1297,
-      1298,
-      1299,
-      1300,
-      1301,
-      1302,
-      1303,
-      1304,
-      1305,
-      1306,
-      1307,
-      1308,
-      1309,
-      1310,
-      1311,
-      1312,
-      1313,
-      1314,
-      1315,
-      1316
+      1290
     ]
   },
   "#collection/Shirts/Shop%20all%20trousers": {
     "category": "Shirts",
     "title": "Shirts",
     "ids": [
+      1075,
+      1076,
+      1077,
+      1078,
+      1079,
+      1080,
+      1081,
+      1082,
+      1083,
+      1084,
+      1085,
+      1086,
+      1087,
+      1088,
+      1089,
+      1090,
+      1091,
+      1092,
+      1093,
+      1094,
+      1095,
+      1096,
+      1097,
+      1098,
+      1099,
+      1100,
       1101,
       1102,
       1103,
@@ -12875,39 +12719,39 @@
       1287,
       1288,
       1289,
-      1290,
-      1291,
-      1292,
-      1293,
-      1294,
-      1295,
-      1296,
-      1297,
-      1298,
-      1299,
-      1300,
-      1301,
-      1302,
-      1303,
-      1304,
-      1305,
-      1306,
-      1307,
-      1308,
-      1309,
-      1310,
-      1311,
-      1312,
-      1313,
-      1314,
-      1315,
-      1316
+      1290
     ]
   },
   "#collection/Shirts/Shop%20all%20shirts": {
     "category": "Shirts",
     "title": "Shirts",
     "ids": [
+      1075,
+      1076,
+      1077,
+      1078,
+      1079,
+      1080,
+      1081,
+      1082,
+      1083,
+      1084,
+      1085,
+      1086,
+      1087,
+      1088,
+      1089,
+      1090,
+      1091,
+      1092,
+      1093,
+      1094,
+      1095,
+      1096,
+      1097,
+      1098,
+      1099,
+      1100,
       1101,
       1102,
       1103,
@@ -13097,39 +12941,39 @@
       1287,
       1288,
       1289,
-      1290,
-      1291,
-      1292,
-      1293,
-      1294,
-      1295,
-      1296,
-      1297,
-      1298,
-      1299,
-      1300,
-      1301,
-      1302,
-      1303,
-      1304,
-      1305,
-      1306,
-      1307,
-      1308,
-      1309,
-      1310,
-      1311,
-      1312,
-      1313,
-      1314,
-      1315,
-      1316
+      1290
     ]
   },
   "#collection/Women/Shop%20all%20women": {
     "category": "Women",
     "title": "Suits",
     "ids": [
+      1435,
+      1436,
+      1437,
+      1438,
+      1439,
+      1440,
+      1441,
+      1442,
+      1443,
+      1444,
+      1445,
+      1446,
+      1447,
+      1448,
+      1449,
+      1450,
+      1451,
+      1452,
+      1453,
+      1454,
+      1455,
+      1456,
+      1457,
+      1458,
+      1459,
+      1460,
       1461,
       1462,
       1463,
@@ -13139,33 +12983,7 @@
       1467,
       1468,
       1469,
-      1470,
-      1471,
-      1472,
-      1473,
-      1474,
-      1475,
-      1476,
-      1477,
-      1478,
-      1479,
-      1480,
-      1481,
-      1482,
-      1483,
-      1484,
-      1485,
-      1486,
-      1487,
-      1488,
-      1489,
-      1490,
-      1491,
-      1492,
-      1493,
-      1494,
-      1495,
-      1496
+      1470
     ],
     "spec": {
       "material": "Wool",
@@ -13500,33 +13318,7 @@
       1071,
       1072,
       1073,
-      1074,
-      1075,
-      1076,
-      1077,
-      1078,
-      1079,
-      1080,
-      1081,
-      1082,
-      1083,
-      1084,
-      1085,
-      1086,
-      1087,
-      1088,
-      1089,
-      1090,
-      1091,
-      1092,
-      1093,
-      1094,
-      1095,
-      1096,
-      1097,
-      1098,
-      1099,
-      1100
+      1074
     ]
   },
   "#collection/Pants/Popular%20Pants": {
@@ -13663,7 +13455,18 @@
       819,
       820,
       821,
-      822,
+      822
+    ],
+    "spec": {
+      "material": "Linen",
+      "kind": "pants",
+      "style": "Tailored"
+    }
+  },
+  "#collection/Pants/Cotton%20Dress%20Pants": {
+    "category": "Trousers",
+    "title": "Cotton Dress Trousers",
+    "ids": [
       823,
       824,
       825,
@@ -13689,18 +13492,7 @@
       845,
       846,
       847,
-      848
-    ],
-    "spec": {
-      "material": "Linen",
-      "kind": "pants",
-      "style": "Tailored"
-    }
-  },
-  "#collection/Pants/Cotton%20Dress%20Pants": {
-    "category": "Trousers",
-    "title": "Cotton Dress Trousers",
-    "ids": [
+      848,
       849,
       850,
       851,
@@ -13710,7 +13502,18 @@
       855,
       856,
       857,
-      858,
+      858
+    ],
+    "spec": {
+      "material": "Cotton",
+      "kind": "pants",
+      "style": "Tailored"
+    }
+  },
+  "#collection/Pants/Corduroy%20Pants": {
+    "category": "Trousers",
+    "title": "Corduroy Trousers",
+    "ids": [
       859,
       860,
       861,
@@ -13736,18 +13539,7 @@
       881,
       882,
       883,
-      884
-    ],
-    "spec": {
-      "material": "Cotton",
-      "kind": "pants",
-      "style": "Tailored"
-    }
-  },
-  "#collection/Pants/Corduroy%20Pants": {
-    "category": "Trousers",
-    "title": "Corduroy Trousers",
-    "ids": [
+      884,
       885,
       886,
       887,
@@ -13757,33 +13549,7 @@
       891,
       892,
       893,
-      894,
-      895,
-      896,
-      897,
-      898,
-      899,
-      900,
-      901,
-      902,
-      903,
-      904,
-      905,
-      906,
-      907,
-      908,
-      909,
-      910,
-      911,
-      912,
-      913,
-      914,
-      915,
-      916,
-      917,
-      918,
-      919,
-      920
+      894
     ],
     "spec": {
       "material": "Corduroy",
@@ -13906,6 +13672,32 @@
     "category": "Trousers",
     "title": "Gurkha Trousers",
     "ids": [
+      895,
+      896,
+      897,
+      898,
+      899,
+      900,
+      901,
+      902,
+      903,
+      904,
+      905,
+      906,
+      907,
+      908,
+      909,
+      910,
+      911,
+      912,
+      913,
+      914,
+      915,
+      916,
+      917,
+      918,
+      919,
+      920,
       921,
       922,
       923,
@@ -13915,7 +13707,18 @@
       927,
       928,
       929,
-      930,
+      930
+    ],
+    "spec": {
+      "material": "Cotton",
+      "kind": "pants",
+      "style": "Gurkha"
+    }
+  },
+  "#collection/Pants/Easy%20Pants": {
+    "category": "Trousers",
+    "title": "Easy Trousers",
+    "ids": [
       931,
       932,
       933,
@@ -13941,18 +13744,7 @@
       953,
       954,
       955,
-      956
-    ],
-    "spec": {
-      "material": "Cotton",
-      "kind": "pants",
-      "style": "Gurkha"
-    }
-  },
-  "#collection/Pants/Easy%20Pants": {
-    "category": "Trousers",
-    "title": "Easy Trousers",
-    "ids": [
+      956,
       957,
       958,
       959,
@@ -13962,7 +13754,65 @@
       963,
       964,
       965,
-      966,
+      966
+    ],
+    "spec": {
+      "material": "Cotton",
+      "kind": "pants",
+      "style": "Relaxed"
+    }
+  },
+  "#collection/Pants/Washed%20Chino%20Pants": {
+    "category": "Trousers",
+    "title": "Washed Chino Trousers",
+    "ids": [
+      823,
+      824,
+      825,
+      826,
+      827,
+      828,
+      829,
+      830,
+      831,
+      832,
+      833,
+      834,
+      835,
+      836,
+      837,
+      838,
+      839,
+      840,
+      841,
+      842,
+      843,
+      844,
+      845,
+      846,
+      847,
+      848,
+      849,
+      850,
+      851,
+      852,
+      853,
+      854,
+      855,
+      856,
+      857,
+      858
+    ],
+    "spec": {
+      "material": "Cotton",
+      "kind": "pants",
+      "style": "Tailored"
+    }
+  },
+  "#collection/Pants/Leather%20Pants": {
+    "category": "Trousers",
+    "title": "Leather Trousers",
+    "ids": [
       967,
       968,
       969,
@@ -13988,65 +13838,7 @@
       989,
       990,
       991,
-      992
-    ],
-    "spec": {
-      "material": "Cotton",
-      "kind": "pants",
-      "style": "Relaxed"
-    }
-  },
-  "#collection/Pants/Washed%20Chino%20Pants": {
-    "category": "Trousers",
-    "title": "Washed Chino Trousers",
-    "ids": [
-      849,
-      850,
-      851,
-      852,
-      853,
-      854,
-      855,
-      856,
-      857,
-      858,
-      859,
-      860,
-      861,
-      862,
-      863,
-      864,
-      865,
-      866,
-      867,
-      868,
-      869,
-      870,
-      871,
-      872,
-      873,
-      874,
-      875,
-      876,
-      877,
-      878,
-      879,
-      880,
-      881,
-      882,
-      883,
-      884
-    ],
-    "spec": {
-      "material": "Cotton",
-      "kind": "pants",
-      "style": "Tailored"
-    }
-  },
-  "#collection/Pants/Leather%20Pants": {
-    "category": "Trousers",
-    "title": "Leather Trousers",
-    "ids": [
+      992,
       993,
       994,
       995,
@@ -14056,7 +13848,18 @@
       999,
       1000,
       1001,
-      1002,
+      1002
+    ],
+    "spec": {
+      "material": "Leather",
+      "kind": "pants",
+      "style": "Tailored"
+    }
+  },
+  "#collection/Pants/Custom%20Jeans": {
+    "category": "Trousers",
+    "title": "Custom Jeans",
+    "ids": [
       1003,
       1004,
       1005,
@@ -14082,18 +13885,7 @@
       1025,
       1026,
       1027,
-      1028
-    ],
-    "spec": {
-      "material": "Leather",
-      "kind": "pants",
-      "style": "Tailored"
-    }
-  },
-  "#collection/Pants/Custom%20Jeans": {
-    "category": "Trousers",
-    "title": "Custom Jeans",
-    "ids": [
+      1028,
       1029,
       1030,
       1031,
@@ -14103,7 +13895,18 @@
       1035,
       1036,
       1037,
-      1038,
+      1038
+    ],
+    "spec": {
+      "material": "Denim",
+      "kind": "pants",
+      "style": "Straight leg"
+    }
+  },
+  "#collection/Pants/Shorts": {
+    "category": "Trousers",
+    "title": "Shorts",
+    "ids": [
       1039,
       1040,
       1041,
@@ -14129,18 +13932,7 @@
       1061,
       1062,
       1063,
-      1064
-    ],
-    "spec": {
-      "material": "Denim",
-      "kind": "pants",
-      "style": "Straight leg"
-    }
-  },
-  "#collection/Pants/Shorts": {
-    "category": "Trousers",
-    "title": "Shorts",
-    "ids": [
+      1064,
       1065,
       1066,
       1067,
@@ -14150,33 +13942,7 @@
       1071,
       1072,
       1073,
-      1074,
-      1075,
-      1076,
-      1077,
-      1078,
-      1079,
-      1080,
-      1081,
-      1082,
-      1083,
-      1084,
-      1085,
-      1086,
-      1087,
-      1088,
-      1089,
-      1090,
-      1091,
-      1092,
-      1093,
-      1094,
-      1095,
-      1096,
-      1097,
-      1098,
-      1099,
-      1100
+      1074
     ],
     "spec": {
       "material": "Wool",
@@ -14262,6 +14028,32 @@
     "category": "Women",
     "title": "Trousers",
     "ids": [
+      1507,
+      1508,
+      1509,
+      1510,
+      1511,
+      1512,
+      1513,
+      1514,
+      1515,
+      1516,
+      1517,
+      1518,
+      1519,
+      1520,
+      1521,
+      1522,
+      1523,
+      1524,
+      1525,
+      1526,
+      1527,
+      1528,
+      1529,
+      1530,
+      1531,
+      1532,
       1533,
       1534,
       1535,
@@ -14271,33 +14063,7 @@
       1539,
       1540,
       1541,
-      1542,
-      1543,
-      1544,
-      1545,
-      1546,
-      1547,
-      1548,
-      1549,
-      1550,
-      1551,
-      1552,
-      1553,
-      1554,
-      1555,
-      1556,
-      1557,
-      1558,
-      1559,
-      1560,
-      1561,
-      1562,
-      1563,
-      1564,
-      1565,
-      1566,
-      1567,
-      1568
+      1542
     ],
     "spec": {
       "material": "Wool",
@@ -14309,6 +14075,32 @@
     "category": "Women",
     "title": "Leather Trousers",
     "ids": [
+      1615,
+      1616,
+      1617,
+      1618,
+      1619,
+      1620,
+      1621,
+      1622,
+      1623,
+      1624,
+      1625,
+      1626,
+      1627,
+      1628,
+      1629,
+      1630,
+      1631,
+      1632,
+      1633,
+      1634,
+      1635,
+      1636,
+      1637,
+      1638,
+      1639,
+      1640,
       1641,
       1642,
       1643,
@@ -14318,33 +14110,7 @@
       1647,
       1648,
       1649,
-      1650,
-      1651,
-      1652,
-      1653,
-      1654,
-      1655,
-      1656,
-      1657,
-      1658,
-      1659,
-      1660,
-      1661,
-      1662,
-      1663,
-      1664,
-      1665,
-      1666,
-      1667,
-      1668,
-      1669,
-      1670,
-      1671,
-      1672,
-      1673,
-      1674,
-      1675,
-      1676
+      1650
     ],
     "spec": {
       "material": "Leather",
@@ -14679,33 +14445,7 @@
       1071,
       1072,
       1073,
-      1074,
-      1075,
-      1076,
-      1077,
-      1078,
-      1079,
-      1080,
-      1081,
-      1082,
-      1083,
-      1084,
-      1085,
-      1086,
-      1087,
-      1088,
-      1089,
-      1090,
-      1091,
-      1092,
-      1093,
-      1094,
-      1095,
-      1096,
-      1097,
-      1098,
-      1099,
-      1100
+      1074
     ]
   },
   "#collection/Pants/Shop%20all%20suits": {
@@ -15035,33 +14775,7 @@
       1071,
       1072,
       1073,
-      1074,
-      1075,
-      1076,
-      1077,
-      1078,
-      1079,
-      1080,
-      1081,
-      1082,
-      1083,
-      1084,
-      1085,
-      1086,
-      1087,
-      1088,
-      1089,
-      1090,
-      1091,
-      1092,
-      1093,
-      1094,
-      1095,
-      1096,
-      1097,
-      1098,
-      1099,
-      1100
+      1074
     ]
   },
   "#collection/Pants/Shop%20all%20jackets": {
@@ -15391,33 +15105,7 @@
       1071,
       1072,
       1073,
-      1074,
-      1075,
-      1076,
-      1077,
-      1078,
-      1079,
-      1080,
-      1081,
-      1082,
-      1083,
-      1084,
-      1085,
-      1086,
-      1087,
-      1088,
-      1089,
-      1090,
-      1091,
-      1092,
-      1093,
-      1094,
-      1095,
-      1096,
-      1097,
-      1098,
-      1099,
-      1100
+      1074
     ]
   },
   "#collection/Pants/Shop%20all%20trousers": {
@@ -15747,33 +15435,7 @@
       1071,
       1072,
       1073,
-      1074,
-      1075,
-      1076,
-      1077,
-      1078,
-      1079,
-      1080,
-      1081,
-      1082,
-      1083,
-      1084,
-      1085,
-      1086,
-      1087,
-      1088,
-      1089,
-      1090,
-      1091,
-      1092,
-      1093,
-      1094,
-      1095,
-      1096,
-      1097,
-      1098,
-      1099,
-      1100
+      1074
     ]
   },
   "#collection/Pants/Shop%20all%20shirts": {
@@ -16103,33 +15765,7 @@
       1071,
       1072,
       1073,
-      1074,
-      1075,
-      1076,
-      1077,
-      1078,
-      1079,
-      1080,
-      1081,
-      1082,
-      1083,
-      1084,
-      1085,
-      1086,
-      1087,
-      1088,
-      1089,
-      1090,
-      1091,
-      1092,
-      1093,
-      1094,
-      1095,
-      1096,
-      1097,
-      1098,
-      1099,
-      1100
+      1074
     ]
   }
 }

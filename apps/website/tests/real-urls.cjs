@@ -179,7 +179,8 @@ const productDoc=id=>{const p=catalog[id];return expectedDoc({title:`${p.name} |
 
 // ------------------------------------------------------------------ 1
 {
-  const fresh=buildRealRoutes(menus,collections,catalog);
+  const trouserPins=JSON.parse(fs.readFileSync('data/trouser-fabrics.json','utf8'));
+  const fresh=buildRealRoutes(menus,collections,catalog,trouserPins);
   assert.deepEqual(committedMap,fresh,'the committed data/real-routes.json matches a fresh generation from the menu source, the catalog data and the product catalog');
   const dataCtx=vm.createContext({});
   vm.runInContext(fs.readFileSync('public/real-routes-data.js','utf8'),dataCtx);
@@ -272,7 +273,7 @@ const productDoc=id=>{const p=catalog[id];return expectedDoc({title:`${p.name} |
   assert.equal(probe.hashForRealPath('/studio/pants'),'#studio/pants');
   assert.equal(probe.hashForRealPath('/product/0'),'#product/0','the first catalog id boots');
   assert.equal(probe.hashForRealPath('/product/1964'),'#product/1964','a product path boots into its product route');
-  assert.equal(probe.hashForRealPath('/product/2244'),'#product/2244','the last catalog id boots');
+  assert.equal(probe.hashForRealPath('/product/2234'),'#product/2234','the last catalog id boots');
   assert.equal(probe.hashForRealPath('/product/01964'),'#product/1964','a leading zero spelling boots into the canonical product route');
   assert.equal(probe.hashForRealPath('/orders/DEMO-ABC123'),'#order/DEMO-ABC123','an order path boots into its order route with the id case preserved');
   assert.equal(probe.hashForRealPath('/orders/'),'#orders','the orders path with a trailing slash boots into the orders list');
@@ -282,7 +283,7 @@ const productDoc=id=>{const p=catalog[id];return expectedDoc({title:`${p.name} |
   assert.equal(probe.hashForRealPath('/fabrics/wool'),null,'an unknown fabrics kind maps to nothing');
   assert.equal(probe.hashForRealPath('/fabrics'),null,'the bare fabrics path maps to nothing');
   assert.equal(probe.hashForRealPath('/studio/tuxedo'),null,'an unknown studio kind maps to nothing');
-  assert.equal(probe.hashForRealPath('/product/2245'),null,'the first id past the catalog maps to nothing');
+  assert.equal(probe.hashForRealPath('/product/2235'),null,'the first id past the catalog maps to nothing');
   assert.equal(probe.hashForRealPath('/product/99999'),null,'an unknown product id maps to nothing');
   assert.equal(probe.hashForRealPath('/product/abc'),null,'a non-numeric product id maps to nothing');
   assert.equal(probe.hashForRealPath('/product/-1'),null,'a negative product id maps to nothing');
@@ -473,7 +474,7 @@ const productDoc=id=>{const p=catalog[id];return expectedDoc({title:`${p.name} |
   // Product: existing ids serve, unknown and non-numeric ids 404,
   // non-canonical spellings of existing ids redirect.
   const productGet=await routeGet('app/product/[id]/route.ts');
-  for(const path of ['/product/0','/product/1964','/product/2244']){
+  for(const path of ['/product/0','/product/1964','/product/2234']){
     const res=await productGet(path);
     assert.equal(res.status,200,`${path} serves the shell`);
     assert.equal(res.headers.get('Content-Type'),'text/html; charset=utf-8',`${path} carries the root route content type`);
@@ -481,10 +482,10 @@ const productDoc=id=>{const p=catalog[id];return expectedDoc({title:`${p.name} |
   }
   // Literal spot checks: the injected product values come from the
   // catalog entry the page renders.
-  const product1964Doc=await (await productGet('/product/1964')).text();
-  assert.ok(product1964Doc.includes('<title>Black Solid Suit · EB11127 | Suits.me</title>'),'literal: the product title comes from the catalog entry');
-  assert.ok(product1964Doc.includes('<link rel="canonical" href="https://suits.me/product/1964">'),'literal: the product canonical');
-  assert.ok(product1964Doc.includes('a 100% WOOL suit from the Suits collection'),'literal: the product description carries the catalog fabric, kind and category');
+  const product1954Doc=await (await productGet('/product/1954')).text();
+  assert.ok(product1954Doc.includes('<title>Black Solid Suit · EB11127 | Suits.me</title>'),'literal: the product title comes from the catalog entry');
+  assert.ok(product1954Doc.includes('<link rel="canonical" href="https://suits.me/product/1954">'),'literal: the product canonical');
+  assert.ok(product1954Doc.includes('a 100% WOOL suit from the Suits collection'),'literal: the product description carries the catalog fabric, kind and category');
   const product0Doc=await (await productGet('/product/0')).text();
   assert.ok(product0Doc.includes('<title>The Everyday Navy | Suits.me</title>'),'literal: the first catalog product title');
   for(const [path,to] of [['/product/01964','/product/1964'],['/product/1964/','/product/1964']]){
@@ -493,7 +494,7 @@ const productDoc=id=>{const p=catalog[id];return expectedDoc({title:`${p.name} |
     assert.equal(res.headers.get('Location'),to,`${path} redirects to the canonical form`);
     assert.equal(await res.text(),'','a product redirect carries no injected document');
   }
-  for(const path of ['/product/2245','/product/99999','/product/abc','/product/-1','/product','/product/1964/extra']){
+  for(const path of ['/product/2235','/product/99999','/product/abc','/product/-1','/product','/product/1964/extra']){
     const res=await productGet(path);
     assert.equal(res.status,404,`${path} is a 404`);
   }
@@ -675,8 +676,9 @@ const productDoc=id=>{const p=catalog[id];return expectedDoc({title:`${p.name} |
   const {buildSitemap,ORIGIN}=require('../scripts/build-sitemap.cjs');
   assert.equal(ORIGIN,'https://suits.me','the sitemap uses the production origin the shell canonical and Open Graph URLs already use');
   const fabricLibrary=JSON.parse(fs.readFileSync('data/fabric-library.json','utf8')).fabrics;
+  const trouserPins=JSON.parse(fs.readFileSync('data/trouser-fabrics.json','utf8'));
   const sitemapXml=fs.readFileSync('public/sitemap.xml','utf8');
-  assert.equal(sitemapXml,buildSitemap(committedMap,catalog,fabricLibrary),'public/sitemap.xml matches a fresh generation from the route map, the catalog and the fabric library');
+  assert.equal(sitemapXml,buildSitemap(committedMap,catalog,fabricLibrary,trouserPins),'public/sitemap.xml matches a fresh generation from the route map, the catalog and the fabric library');
   const locs=[...sitemapXml.matchAll(/<loc>([^<]+)<\/loc>/g)].map(m=>m[1]);
   const indexablePages=Object.entries(committedMap.heads.pages).filter(([,head])=>head.robots==='index').map(([path])=>path);
   const familyPaths=Object.entries(committedMap.heads.families).flatMap(([family,kinds])=>Object.keys(kinds).map(kind=>`/${family}/${kind}`));
@@ -689,7 +691,11 @@ const productDoc=id=>{const p=catalog[id];return expectedDoc({title:`${p.name} |
   assert.equal(activeFabrics.length,4313,'the fabric library holds 4,313 active fabrics (3,648 suit, 665 shirt)');
   assert.equal(activeFabrics.filter(f=>f.k==='suit').length,3648,'active suit fabrics counted from source data');
   assert.equal(activeFabrics.filter(f=>f.k==='shirt').length,665,'active shirt fabrics counted from source data');
-  assert.equal(locs.length,1+Object.keys(committedMap.paths).length+catalog.length+indexablePages.length+familyPaths.length+activeFabricPaths.length,'the sitemap lists the home page, every collection, every product, every indexable page and every active fabric page, counted from source data');
+  // Fabric defined trousers (owner decision, 2026-11-11): every
+  // pinned trousers fabric is listed at its product URL carrying the
+  // fabric code, /trousers/<group>/<code>, counted from the pin.
+  const trouserPaths=Object.entries(trouserPins.groups).flatMap(([group,def])=>def.fabrics.map(f=>`/trousers/${group}/${encodeURIComponent(f.code)}`));
+  assert.equal(locs.length,1+Object.keys(committedMap.paths).length+catalog.length+indexablePages.length+familyPaths.length+activeFabricPaths.length+trouserPaths.length,'the sitemap lists the home page, every collection, every product, every indexable page, every active fabric page and every fabric defined trousers page, counted from source data');
   assert.equal(new Set(locs).size,locs.length,'the sitemap lists no URL twice');
   assert.equal(locs[0],'https://suits.me/','the home page leads the sitemap');
   const locPaths=new Set(locs.map(u=>u.slice(ORIGIN.length)));
@@ -698,6 +704,9 @@ const productDoc=id=>{const p=catalog[id];return expectedDoc({title:`${p.name} |
   assert.equal(locs.filter(u=>u.startsWith(ORIGIN+'/product/')).length,catalog.length,'the sitemap lists exactly one URL per catalog product');
   for(const path of [...indexablePages,...familyPaths])assert.ok(locPaths.has(path),`the sitemap lists the indexable page ${path}`);
   for(const path of activeFabricPaths)assert.ok(locPaths.has(path),`the sitemap lists the active fabric page ${path}`);
+  for(const path of trouserPaths)assert.ok(locPaths.has(path),`the sitemap lists the fabric defined trousers page ${path}`);
+  const trouserPathSet=new Set(trouserPaths);
+  assert.deepEqual(committedMap.families.trousers.groups,Object.keys(trouserPins.groups).sort(),'the route map carries the trousers fabric groups from the pin');
   assert.ok(locPaths.has('/fabrics/suit/CB11001'),'the sitemap lists the CB11001 fabric page');
   assert.ok(locPaths.has('/fabrics/shirt/MONTI%203'),'the sitemap lists the space code fabric page at its canonical encoded URL');
   assert.ok(!locPaths.has('/fabrics/suit/6638%2F29'),'the sitemap never lists the inactive slash code fabric page');
@@ -715,6 +724,7 @@ const productDoc=id=>{const p=catalog[id];return expectedDoc({title:`${p.name} |
     // canonical exactly as the fabric route builds it; every other
     // URL uses the canonical lowercase form.
     if(activeFabricPathSet.has(path))assert.ok(path.startsWith('/fabrics/'),'fabric detail URL sits in the fabrics family: '+u);
+    else if(trouserPathSet.has(path))assert.ok(path.startsWith('/trousers/'),'trousers detail URL sits in the trousers family: '+u);
     else assert.equal(path,path.toLowerCase(),'sitemap URLs use the canonical lowercase form: '+u);
     assert.ok(path==='/'||!path.endsWith('/'),'sitemap URLs carry no trailing slash: '+u);
   }

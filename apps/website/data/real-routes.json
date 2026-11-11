@@ -356,12 +356,17 @@
       "idRanges": [
         [
           0,
-          2244
+          2234
         ]
       ]
     },
     "orders": {
       "anySingleSegment": true
+    },
+    "trousers": {
+      "groups": [
+        "wool"
+      ]
     }
   },
   "heads": {

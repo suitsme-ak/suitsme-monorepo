@@ -143,6 +143,33 @@ export function headForFabric(
   };
 }
 
+export interface TrouserHeadSource {
+  code: string;
+  color: string;
+  pattern: string;
+  mill: string;
+  material: string;
+}
+
+// Fabric defined trousers (owner decision, 2026-11-11): a trousers
+// product built from a real library fabric carries that fabric's
+// code in its URL, /trousers/<group>/<code>, the same pattern the
+// fabric detail pages use. The head names the fabric so the code in
+// the URL is also the code in the title and the canonical.
+export function headForTrouser(
+  entry: TrouserHeadSource | undefined,
+  group: string,
+): RouteHead | null {
+  if (!entry) return null;
+  const cloth = `${entry.color} ${entry.pattern} ${entry.material}`.trim();
+  return {
+    title: `${cloth} trousers, fabric ${entry.code} | Suits.me`,
+    description: `${cloth} trousers at Suits.me, made from fabric ${entry.code}${entry.mill ? `, woven by ${entry.mill}` : ""}, in the shop fabric library. The photograph is generated from this fabric's own swatch. Custom tailored to your measurements.`,
+    canonicalPath: `/trousers/${group}/${encodeURIComponent(entry.code)}`,
+    robots: "index",
+  };
+}
+
 export function headForOrderDetail(path: string): RouteHead {
   // Order detail is shopper state: it always carries noindex, and
   // its canonical is the URL itself, the only canonical form an

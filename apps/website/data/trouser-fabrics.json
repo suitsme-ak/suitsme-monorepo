@@ -187,6 +187,82 @@
      "img": "CR31009.jpg"
     }
    ]
+  },
+  "linen": {
+   "material": "Linen",
+   "style": "Tailored",
+   "fabrics": [
+    {
+     "code": "EN53324",
+     "color": "Navy",
+     "pattern": "Solid",
+     "mill": "BONINO",
+     "img": "EN53324.JPG"
+    },
+    {
+     "code": "EN53623",
+     "color": "Navy",
+     "pattern": "Herringbone",
+     "mill": "BONINO",
+     "img": "EN53623.jpg"
+    },
+    {
+     "code": "EN53699",
+     "color": "Navy",
+     "pattern": "Windowpane",
+     "mill": "BONINO",
+     "img": "EN53699.jpg"
+    },
+    {
+     "code": "KG22047",
+     "color": "Charcoal",
+     "pattern": "Solid",
+     "mill": "LANIER CHINA",
+     "img": "KG22047.jpg"
+    },
+    {
+     "code": "KO42061",
+     "color": "Forest",
+     "pattern": "Solid",
+     "mill": "LANIER CHINA",
+     "img": "KO42061.jpg"
+    },
+    {
+     "code": "EO80702",
+     "color": "Forest",
+     "pattern": "Windowpane",
+     "mill": "BONINO",
+     "img": "EO80702.jpg"
+    },
+    {
+     "code": "KO42055",
+     "color": "Sand",
+     "pattern": "Solid",
+     "mill": "LANIER CHINA",
+     "img": "KO42055.jpg"
+    },
+    {
+     "code": "ER33186",
+     "color": "Sand",
+     "pattern": "Fine Stripe",
+     "mill": "LORO PIANA",
+     "img": "ER33186.jpg"
+    },
+    {
+     "code": "KO42029",
+     "color": "Burgundy",
+     "pattern": "Solid",
+     "mill": "SUZHOU XINSHEN",
+     "img": "KO42029.jpg"
+    },
+    {
+     "code": "ER33063",
+     "color": "Chocolate",
+     "pattern": "Solid",
+     "mill": "BONINO",
+     "img": "ER33063.jpg"
+    }
+   ]
   }
  }
 }

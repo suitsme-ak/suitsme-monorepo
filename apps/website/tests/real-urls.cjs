@@ -674,12 +674,22 @@ const productDoc=id=>{const p=catalog[id];return expectedDoc({title:`${p.name} |
   // discipline as the generated route map.
   const {buildSitemap,ORIGIN}=require('../scripts/build-sitemap.cjs');
   assert.equal(ORIGIN,'https://suits.me','the sitemap uses the production origin the shell canonical and Open Graph URLs already use');
+  const fabricLibrary=JSON.parse(fs.readFileSync('data/fabric-library.json','utf8')).fabrics;
   const sitemapXml=fs.readFileSync('public/sitemap.xml','utf8');
-  assert.equal(sitemapXml,buildSitemap(committedMap,catalog),'public/sitemap.xml matches a fresh generation from the route map and the catalog');
+  assert.equal(sitemapXml,buildSitemap(committedMap,catalog,fabricLibrary),'public/sitemap.xml matches a fresh generation from the route map, the catalog and the fabric library');
   const locs=[...sitemapXml.matchAll(/<loc>([^<]+)<\/loc>/g)].map(m=>m[1]);
   const indexablePages=Object.entries(committedMap.heads.pages).filter(([,head])=>head.robots==='index').map(([path])=>path);
   const familyPaths=Object.entries(committedMap.heads.families).flatMap(([family,kinds])=>Object.keys(kinds).map(kind=>`/${family}/${kind}`));
-  assert.equal(locs.length,1+Object.keys(committedMap.paths).length+catalog.length+indexablePages.length+familyPaths.length,'the sitemap lists the home page, every collection, every product and every indexable page, counted from source data');
+  // Fabric detail pages (owner decision, 2026-11-11): active fabrics
+  // are listed at their canonical encoded URL; inactive fabrics are
+  // noindex on their pages and are never listed.
+  const fabricPathOf=f=>`/fabrics/${f.k}/${encodeURIComponent(f.c)}`;
+  const activeFabrics=fabricLibrary.filter(f=>f.act&&f.c);
+  const activeFabricPaths=activeFabrics.map(fabricPathOf);
+  assert.equal(activeFabrics.length,4313,'the fabric library holds 4,313 active fabrics (3,648 suit, 665 shirt)');
+  assert.equal(activeFabrics.filter(f=>f.k==='suit').length,3648,'active suit fabrics counted from source data');
+  assert.equal(activeFabrics.filter(f=>f.k==='shirt').length,665,'active shirt fabrics counted from source data');
+  assert.equal(locs.length,1+Object.keys(committedMap.paths).length+catalog.length+indexablePages.length+familyPaths.length+activeFabricPaths.length,'the sitemap lists the home page, every collection, every product, every indexable page and every active fabric page, counted from source data');
   assert.equal(new Set(locs).size,locs.length,'the sitemap lists no URL twice');
   assert.equal(locs[0],'https://suits.me/','the home page leads the sitemap');
   const locPaths=new Set(locs.map(u=>u.slice(ORIGIN.length)));
@@ -687,17 +697,29 @@ const productDoc=id=>{const p=catalog[id];return expectedDoc({title:`${p.name} |
   for(const p of catalog)assert.ok(locPaths.has('/product/'+p.id),`the sitemap lists product ${p.id}`);
   assert.equal(locs.filter(u=>u.startsWith(ORIGIN+'/product/')).length,catalog.length,'the sitemap lists exactly one URL per catalog product');
   for(const path of [...indexablePages,...familyPaths])assert.ok(locPaths.has(path),`the sitemap lists the indexable page ${path}`);
+  for(const path of activeFabricPaths)assert.ok(locPaths.has(path),`the sitemap lists the active fabric page ${path}`);
+  assert.ok(locPaths.has('/fabrics/suit/CB11001'),'the sitemap lists the CB11001 fabric page');
+  assert.ok(locPaths.has('/fabrics/shirt/MONTI%203'),'the sitemap lists the space code fabric page at its canonical encoded URL');
+  assert.ok(!locPaths.has('/fabrics/suit/6638%2F29'),'the sitemap never lists the inactive slash code fabric page');
+  for(const f of fabricLibrary.filter(f=>!f.act&&f.c))
+    assert.ok(!locPaths.has(fabricPathOf(f)),`the sitemap never lists the inactive fabric page ${fabricPathOf(f)}`);
+  assert.equal([...locPaths].filter(p=>/^\/fabrics\/(suit|shirt)\/.+/.test(p)).length,activeFabricPaths.length,'the sitemap lists exactly one URL per active fabric and no others');
   for(const state of ['/customize','/checkout','/orders','/payment-return'])
     assert.ok(!locPaths.has(state),`the sitemap never lists the noindex state page ${state}`);
   assert.ok(![...locPaths].some(p=>p.startsWith('/orders/')),'the sitemap never lists order detail URLs');
+  const activeFabricPathSet=new Set(activeFabricPaths);
   for(const u of locs){
     assert.ok(u.startsWith(ORIGIN+'/'),'every sitemap URL sits on the canonical origin: '+u);
     const path=u.slice(ORIGIN.length);
-    assert.equal(path,path.toLowerCase(),'sitemap URLs use the canonical lowercase form: '+u);
+    // Fabric codes are case sensitive, so a fabric detail URL is
+    // canonical exactly as the fabric route builds it; every other
+    // URL uses the canonical lowercase form.
+    if(activeFabricPathSet.has(path))assert.ok(path.startsWith('/fabrics/'),'fabric detail URL sits in the fabrics family: '+u);
+    else assert.equal(path,path.toLowerCase(),'sitemap URLs use the canonical lowercase form: '+u);
     assert.ok(path==='/'||!path.endsWith('/'),'sitemap URLs carry no trailing slash: '+u);
   }
   assert.ok(fs.readFileSync('public/robots.txt','utf8').includes('Sitemap: https://suits.me/sitemap.xml'),'robots.txt points at the sitemap');
-  console.log(`Sitemap checks passed: ${locs.length} URLs generated from the route map and the catalog (home, ${Object.keys(committedMap.paths).length} collections, ${catalog.length} products, ${indexablePages.length+familyPaths.length} indexable pages), canonical forms only, no state pages, fresh against the generator, and robots.txt points at it.`);
+  console.log(`Sitemap checks passed: ${locs.length} URLs generated from the route map, the catalog and the fabric library (home, ${Object.keys(committedMap.paths).length} collections, ${catalog.length} products, ${indexablePages.length+familyPaths.length} indexable pages, ${activeFabricPaths.length} active fabric pages), canonical forms only, no state pages, no inactive fabric pages, fresh against the generator, and robots.txt points at it.`);
 }
 
 })().catch(e=>{console.error(e);process.exit(1)});

@@ -8,10 +8,18 @@
 // for the canonical collection paths and the indexable pages, and
 // data/catalog.json for the product URLs. It lists, in order: the
 // home page, every canonical collection path (101), every product
-// URL (2,245), and the indexable content pages (the single segment
+// URL (2,245), the indexable content pages (the single segment
 // pages the route map marks indexable, plus the fabrics and studio
-// family URLs). State pages (customize, checkout, orders, order
-// detail, payment return) are noindex and are never listed.
+// family URLs), and the active fabric detail pages from
+// data/fabric-library.json (owner decision, 2026-11-11). A fabric
+// detail page is listed only while the fabric is active: inactive
+// fabric pages are served noindex (see headForFabric in
+// lib/route-head.ts), so listing one would contradict that. The
+// code segment uses the same encodeURIComponent canonical form as
+// the fabric route, so codes with spaces, slashes or parentheses
+// match the live canonical URL exactly. State pages (customize,
+// checkout, orders, order detail, payment return) are noindex and
+// are never listed.
 //
 // The origin is the one the shell's canonical and Open Graph URLs
 // already use: https://suits.me. Entries carry no lastmod: a
@@ -26,7 +34,7 @@ const fs=require('fs');
 
 const ORIGIN='https://suits.me';
 
-function buildSitemap(routeMap,catalog){
+function buildSitemap(routeMap,catalog,fabrics){
   const urls=[ORIGIN+'/'];
   for(const path of Object.keys(routeMap.paths))urls.push(ORIGIN+path);
   const ids=[...new Set(catalog.map(p=>p.id))].sort((a,b)=>a-b);
@@ -38,6 +46,10 @@ function buildSitemap(routeMap,catalog){
     for(const kind of Object.keys(kinds))extra.push(`/${family}/${kind}`);
   extra.sort();
   for(const path of extra)urls.push(ORIGIN+path);
+  const fabricPaths=(fabrics||[]).filter(f=>f.act&&f.c)
+    .map(f=>`/fabrics/${f.k}/${encodeURIComponent(f.c)}`);
+  fabricPaths.sort();
+  for(const path of fabricPaths)urls.push(ORIGIN+path);
   const esc=s=>s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
   return '<?xml version="1.0" encoding="UTF-8"?>\n'+
     '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'+
@@ -48,7 +60,8 @@ function buildSitemap(routeMap,catalog){
 function main(){
   const routeMap=JSON.parse(fs.readFileSync('data/real-routes.json','utf8'));
   const catalog=JSON.parse(fs.readFileSync('data/catalog.json','utf8'));
-  const xml=buildSitemap(routeMap,catalog);
+  const fabrics=JSON.parse(fs.readFileSync('data/fabric-library.json','utf8')).fabrics;
+  const xml=buildSitemap(routeMap,catalog,fabrics);
   fs.writeFileSync('public/sitemap.xml',xml);
   console.log(JSON.stringify({sitemapUrls:(xml.match(/<loc>/g)||[]).length}));
 }

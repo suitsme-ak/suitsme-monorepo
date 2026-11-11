@@ -32,7 +32,7 @@ const req=(route,body,owner='owner-1',key='test-attempt-00000001')=>new Request(
  tx.authAmount='79.00';assert.equal((await commerce(webhook(signature),env)).status,200);assert.equal(db.rows[0].status,'paid');
  assert.equal((await commerce(webhook(signature),env)).status,200);assert.equal(db.rows.length,1);
  assert.equal((await commerce(req('/api/checkout',input),env)).status,409,'Paid orders cannot reopen payment');
- const cloth=require('../lib/catalog.json').find(p=>p.fabricCode);
+ const cloth=require('../lib/catalog.json').find(p=>p.fabricCode&&p.sku.startsWith('SM-FAB-'));
  r=await commerce(req('/api/checkout',{...input,items:[{product:cloth.id,fabricCode:'TAMPERED',price:1,profile:{name:'Test fit',method:'ready',ready:{jacket:'40',length:'Regular',trouser:'34'}}}]},'owner-1','merchant-fabric-000000001'),env);assert.equal(r.status,200);assert.equal(JSON.parse(db.rows.at(-1).items)[0].fabricCode,cloth.fabricCode,'Fabric code is taken from server catalog');
  const bodyValues={chest:40,waist:34,shoulder:18,sleeve:25.5,jacket:29.5,seat:41,trouserWaist:34,thigh:24,inseam:32,outseam:42};
  const rowsBeforeBodyTests=db.rows.length;

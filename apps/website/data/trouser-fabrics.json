@@ -1,0 +1,192 @@
+{
+ "groups": {
+  "wool": {
+   "material": "Wool",
+   "style": "Tailored",
+   "fabrics": [
+    {
+     "code": "CN17300",
+     "color": "Navy",
+     "pattern": "Solid",
+     "mill": "CIMEXLANA",
+     "img": "CN17300.jpg"
+    },
+    {
+     "code": "CN51001",
+     "color": "Navy",
+     "pattern": "Herringbone",
+     "mill": "CIMEXLANA",
+     "img": "CN51001.jpg"
+    },
+    {
+     "code": "CN51034",
+     "color": "Navy",
+     "pattern": "Windowpane",
+     "mill": "CIMEXLANA",
+     "img": "CN51034.JPG"
+    },
+    {
+     "code": "CN51029",
+     "color": "Navy",
+     "pattern": "Fine Stripe",
+     "mill": "CIMEXLANA",
+     "img": "CN51029.jpg"
+    },
+    {
+     "code": "CN51028",
+     "color": "Navy",
+     "pattern": "Micro Check",
+     "mill": "CIMEXLANA",
+     "img": "CN51028.jpg"
+    },
+    {
+     "code": "EN53640",
+     "color": "Navy",
+     "pattern": "Birdseye",
+     "mill": "BONINO",
+     "img": "EN53640.jpg"
+    },
+    {
+     "code": "CG21036",
+     "color": "Charcoal",
+     "pattern": "Solid",
+     "mill": "CIMEXLANA",
+     "img": "CG21036.jpg"
+    },
+    {
+     "code": "CG21224",
+     "color": "Charcoal",
+     "pattern": "Herringbone",
+     "mill": "CIMEXLANA",
+     "img": "CG21224.jpg"
+    },
+    {
+     "code": "CG21208",
+     "color": "Charcoal",
+     "pattern": "Windowpane",
+     "mill": "CIMEXLANA",
+     "img": "CG21208.jpg"
+    },
+    {
+     "code": "EG23744",
+     "color": "Charcoal",
+     "pattern": "Fine Stripe",
+     "mill": "LORO PIANA",
+     "img": "EG23744.jpg"
+    },
+    {
+     "code": "EG23220",
+     "color": "Charcoal",
+     "pattern": "Micro Check",
+     "mill": "BONINO",
+     "img": "EG23220.JPG"
+    },
+    {
+     "code": "CG21355",
+     "color": "Charcoal",
+     "pattern": "Birdseye",
+     "mill": "CIMEXLANA",
+     "img": "CG21355.jpg"
+    },
+    {
+     "code": "CO41029",
+     "color": "Forest",
+     "pattern": "Solid",
+     "mill": "CIMEXLANA",
+     "img": "co41029.jpg"
+    },
+    {
+     "code": "EO43482",
+     "color": "Forest",
+     "pattern": "Herringbone",
+     "mill": "LORO PIANA",
+     "img": "EO43482.jpg"
+    },
+    {
+     "code": "CO41035",
+     "color": "Forest",
+     "pattern": "Windowpane",
+     "mill": "CIMEXLANA",
+     "img": "CO41035.jpg"
+    },
+    {
+     "code": "EO43094",
+     "color": "Forest",
+     "pattern": "Stripe",
+     "mill": "BONINO",
+     "img": "EO43094.jpg"
+    },
+    {
+     "code": "CO41046",
+     "color": "Sand",
+     "pattern": "Solid",
+     "mill": "CIMEXLANA",
+     "img": "CO41046.jpg"
+    },
+    {
+     "code": "CR31066",
+     "color": "Sand",
+     "pattern": "Herringbone",
+     "mill": "CIMEXLANA",
+     "img": "CR31066.jpg"
+    },
+    {
+     "code": "CR31074",
+     "color": "Sand",
+     "pattern": "Windowpane",
+     "mill": "CIMEXLANA",
+     "img": "CO41056.jpg"
+    },
+    {
+     "code": "CO41014",
+     "color": "Sand",
+     "pattern": "Stripe",
+     "mill": "CIMEXLANA",
+     "img": "CO41014.JPG"
+    },
+    {
+     "code": "CO41018",
+     "color": "Burgundy",
+     "pattern": "Solid",
+     "mill": "CIMEXLANA",
+     "img": "CO41018.jpg"
+    },
+    {
+     "code": "CO41115",
+     "color": "Burgundy",
+     "pattern": "Fine Stripe",
+     "mill": "CIMEXLANA",
+     "img": "CO41115.jpg"
+    },
+    {
+     "code": "CR31011",
+     "color": "Chocolate",
+     "pattern": "Solid",
+     "mill": "CIMEXLANA",
+     "img": "CR31011.jpg"
+    },
+    {
+     "code": "CR31062",
+     "color": "Chocolate",
+     "pattern": "Herringbone",
+     "mill": "CIMEXLANA",
+     "img": "CR31062.jpg"
+    },
+    {
+     "code": "CR31045",
+     "color": "Chocolate",
+     "pattern": "Windowpane",
+     "mill": "CIMEXLANA",
+     "img": "CR31045.jpg"
+    },
+    {
+     "code": "CR31009",
+     "color": "Chocolate",
+     "pattern": "Wide Stripe",
+     "mill": "CIMEXLANA",
+     "img": "CR31009.jpg"
+    }
+   ]
+  }
+ }
+}

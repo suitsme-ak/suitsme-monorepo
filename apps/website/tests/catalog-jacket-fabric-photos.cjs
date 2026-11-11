@@ -1,4 +1,4 @@
-const assert=require('node:assert/strict'),fs=require('node:fs'),path=require('node:path'),vm=require('node:vm');
+const assert=require('node:assert/strict'),crypto=require('node:crypto'),fs=require('node:fs'),path=require('node:path'),vm=require('node:vm');
 // Journey JF (jacket fabric photos): every jacket on the Jackets
 // New Arrivals page used to render the same model-jacket.webp photo
 // whatever its fabric, so a navy herringbone and a sand solid looked
@@ -9,6 +9,16 @@ const assert=require('node:assert/strict'),fs=require('node:fs'),path=require('n
 // collection sees 36 different photos, one per fabric, and other
 // categories keep their existing photography. Driven on the real
 // generated catalog data, in the style of the other suites.
+//
+// V2 (owner direction, 2026-11-10): the first set varied only the
+// fabric on one model in one courtyard, so the page still felt like
+// the same jacket 36 times. The photos were regenerated on the
+// Suits New Arrivals launch model set: ten different models in one
+// warm beige studio, rotated across the colors and patterns, each
+// shot framed closer on the jacket (head to mid thigh, contrasting
+// separate trousers, the named pattern clearly visible). The suite
+// therefore also pins that no two front files, and no two back
+// files, share the same image content.
 
 const ctx=vm.createContext({});
 vm.runInContext(fs.readFileSync('public/catalog-data.js','utf8')+'\n;globalThis.__cap={catalogExpansion,collectionDefinitions};',ctx,{filename:'catalog-data.js'});
@@ -39,6 +49,16 @@ for(const id of arrivals.ids){
 }
 assert.equal(seen.size,36,'all 36 jackets show different photos');
 
+// V2 content check: the 36 fronts are 36 different images, and so
+// are the 36 backs (the v1 failure mode was one repeated photo).
+const frontHashes=new Set(),backHashes=new Set();
+for(const img of seen){
+  frontHashes.add(crypto.createHash('sha256').update(fs.readFileSync(path.join('public','assets',img))).digest('hex'));
+  backHashes.add(crypto.createHash('sha256').update(fs.readFileSync(path.join('public','assets',img.replace('.webp','-back.webp')))).digest('hex'));
+}
+assert.equal(frontHashes.size,36,'all 36 front photos have different image content');
+assert.equal(backHashes.size,36,'all 36 back photos have different image content');
+
 // The rule lives in the generator, so the next catalog build keeps it.
 const generator=fs.readFileSync('scripts/generate-catalog.cjs','utf8');
 assert.ok(generator.includes("cat==='Jackets'&&s.kind==='jacket'&&s.material==='Wool'"),'generator assigns per fabric photos to wool jackets');
@@ -52,4 +72,4 @@ assert.equal(byId.get(suitArrivals.ids[0]).img,'model-navy.webp','suits keep the
 assert.ok(entries.some(p=>p.img==='model-tweed.webp'),'tweed photography is unchanged');
 assert.ok(entries.some(p=>p.img==='model-jacket.webp'),'non wool jackets keep the shared jacket photo');
 
-console.log('JF jacket fabric photos: ok (36 unique per fabric photos, files present, neighbours unchanged)');
+console.log('JF jacket fabric photos: ok (36 unique per fabric photos, distinct front and back content, neighbours unchanged)');

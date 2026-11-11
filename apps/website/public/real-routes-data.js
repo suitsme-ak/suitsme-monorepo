@@ -17,4 +17,4 @@ const realRoutePages={"/account":"#account","/charges":"#charges","/checkout":"#
 // listings and the catalog product id ranges the product routes
 // validate against. Order detail paths are deliberately absent: any
 // single segment id boots, because order ids are not enumerable.
-const realRouteFamilies={"fabrics":{"kinds":["shirt","suit"]},"studio":{"kinds":["jacket","pants","suit"]},"product":{"idRanges":[[0,2185]]},"orders":{"anySingleSegment":true},"trousers":{"groups":["cotton","linen","wool"]}};
+const realRouteFamilies={"fabrics":{"kinds":["shirt","suit"]},"studio":{"kinds":["jacket","pants","suit"]},"product":{"idRanges":[[0,2165]]},"orders":{"anySingleSegment":true},"trousers":{"groups":["cotton","linen","tweed","wool"]}};

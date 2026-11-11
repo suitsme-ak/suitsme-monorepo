@@ -30,6 +30,7 @@ const hashOf=f=>crypto.createHash('sha256').update(fs.readFileSync(f)).digest('h
 const SHIPPED=[
   {collection:'#collection/Trousers/Wool%20Trousers',group:'wool'},
   {collection:'#collection/Trousers/Linen%20Trousers',group:'linen'},
+  {collection:'#collection/Trousers/Cotton%20Dress%20Trousers',group:'cotton'},
 ];
 for(const g of SHIPPED){
   const def=pin.groups[g.group];
@@ -98,5 +99,45 @@ assert.ok(womenTrousers.length>0&&womenTrousers.every(p=>p.img==='model-woman.we
 const tweed=collections['#collection/Trousers/Tweed%20Trousers'];
 assert.equal(tweed.ids.length,36,'unshipped tweed trousers keep the 36 product grid for now');
 assert.ok(tweed.ids.every(id=>byId.get(id).img==='model-shirt.webp'),'unshipped tweed trousers keep the shared photo for now');
+
+// The listing card itself, rendered through the real script chain in
+// the page's load order (quick-add.js owns the card markup, merchant.js
+// wraps it last): a shipped group's card links to the fabric code URL
+// and shows the fabric code, not the /product/<id> link and SM sku.
+// (The first live deploy of PR #69/#70 failed exactly here: the
+// merchant.js override targeted markup quick-add.js had replaced, so
+// its replaces were no-ops and the source-string check above passed
+// while shoppers saw SM cards. Render the card, not the source.)
+{
+  function makeEl(){const el={innerHTML:'',textContent:'',value:'',checked:false,open:false,style:{},attrs:{},classList:{add(){},remove(){},toggle(){return false}},setAttribute(k,v){el.attrs[k]=String(v)},removeAttribute(k){delete el.attrs[k]},getAttribute(k){return k in el.attrs?el.attrs[k]:null},addEventListener(){},getBoundingClientRect:()=>({left:0,right:0,top:0,bottom:0}),showModal(){el.open=true},close(){el.open=false},scrollIntoView(){}};return el}
+  const store=new Map();
+  const localStorage={getItem:k=>store.has(k)?store.get(k):null,setItem:(k,v)=>store.set(k,String(v)),removeItem:k=>store.delete(k)};
+  const elements=new Map();
+  const elFor=s=>{if(!elements.has(s))elements.set(s,makeEl());return elements.get(s)};
+  const documentStub={title:'',querySelector:s=>elFor(s),querySelectorAll:()=>[],getElementById:id=>elFor('#'+id),addEventListener(){},createElement:()=>makeEl(),body:makeEl()};
+  class JTFormData{constructor(form){this.data=(form&&form.__data)||{}}get(k){return k in this.data?this.data[k]:null}}
+  const location={hash:'',pathname:'/'};
+  const sandbox={console,localStorage,document:documentStub,location,setTimeout,clearTimeout,crypto:crypto.webcrypto,fetch:()=>Promise.resolve({ok:false,json:async()=>null}),FormData:JTFormData,addEventListener(){},scrollTo(){}};
+  sandbox.window=sandbox;
+  const wctx=vm.createContext(sandbox);
+  for(const f of ['real-routes-data.js','real-routes.js','measurement-schema.js','app.js','complete.js','catalog-data.js','expanded.js','navigation-data.js','navigation.js','gallery.js','quick-add.js','merchant-data.js','merchant.js'])vm.runInContext(fs.readFileSync('public/'+f,'utf8'),wctx,{filename:f});
+  const run=s=>vm.runInContext(s,wctx);
+  const fullCatalog=JSON.parse(fs.readFileSync('data/catalog.json','utf8'));
+  for(const g of SHIPPED){
+    const p=fullCatalog.find(q=>q.trouserGroup===g.group&&q.fabricCode);
+    assert.ok(p,'a '+g.group+' fabric defined product exists in the full catalog');
+    const card=run('productCard(products['+p.id+'],'+p.id+')');
+    const url='/trousers/'+g.group+'/'+encodeURIComponent(p.fabricCode);
+    assert.ok(card.includes('href="'+url+'"'),'the '+g.group+' listing card links to '+url);
+    assert.ok(card.includes('Fabric '+p.fabricCode),'the '+g.group+' listing card shows Fabric '+p.fabricCode);
+    assert.ok(!card.includes('href="/product/'+p.id+'"'),'the '+g.group+' listing card no longer links to /product/'+p.id);
+    assert.ok(!card.includes('sku-label">'+p.sku+'</span>'),'the '+g.group+' listing card no longer shows the SM sku '+p.sku+' as its label');
+    console.log('JT '+g.group+' listing card: links to '+url+' and shows Fabric '+p.fabricCode);
+  }
+  const tweedId=tweed.ids[0],tweedProduct=byId.get(tweedId);
+  const tweedCard=run('productCard(products['+tweedId+'],'+tweedId+')');
+  assert.ok(tweedCard.includes('href="/product/'+tweedId+'"'),'an unshipped group card keeps its /product link');
+  assert.ok(tweedCard.includes(tweedProduct.sku),'an unshipped group card keeps its SM sku');
+}
 
 console.log('JT fabric defined trousers: ok (shipped groups built from real fabrics, neighbours unchanged)');

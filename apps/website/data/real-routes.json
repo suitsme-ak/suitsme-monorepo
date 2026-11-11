@@ -356,7 +356,7 @@
       "idRanges": [
         [
           0,
-          2208
+          2185
         ]
       ]
     },
@@ -365,6 +365,7 @@
     },
     "trousers": {
       "groups": [
+        "cotton",
         "linen",
         "wool"
       ]

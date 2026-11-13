@@ -360,6 +360,124 @@
      "img": "EO43382.jpg"
     }
    ]
+  },
+  "tweed": {
+   "material": "Tweed",
+   "style": "Tailored",
+   "fabrics": [
+    {
+     "code": "EN54010",
+     "color": "Navy",
+     "pattern": "Herringbone",
+     "mill": "KENNETH MACKENZIE",
+     "img": "EN53207.jpg"
+    },
+    {
+     "code": "EN53993",
+     "color": "Navy",
+     "pattern": "Windowpane",
+     "mill": "KENNETH MACKENZIE",
+     "img": "EN53993.jpg"
+    },
+    {
+     "code": "EG23600",
+     "color": "Charcoal",
+     "pattern": "Herringbone",
+     "mill": "KENNETH MACKENZIE",
+     "img": "EG23600.jpg"
+    },
+    {
+     "code": "EG23563",
+     "color": "Grey",
+     "pattern": "Herringbone",
+     "mill": "KENNETH MACKENZIE",
+     "img": "EG23106.JPG"
+    },
+    {
+     "code": "EG23564",
+     "color": "Grey",
+     "pattern": "Check",
+     "mill": "KENNETH MACKENZIE",
+     "img": "EG23034.jpg"
+    },
+    {
+     "code": "EG23465",
+     "color": "Grey",
+     "pattern": "Solid",
+     "mill": "MACKENZIE",
+     "img": "EG23465.jpg"
+    },
+    {
+     "code": "EG23562",
+     "color": "Grey Red",
+     "pattern": "Plaid",
+     "mill": "KENNETH MACKENZIE",
+     "img": "EG23105.jpg"
+    },
+    {
+     "code": "EG23879",
+     "color": "Grey Brown",
+     "pattern": "Check",
+     "mill": "LORO PIANA",
+     "img": "EG23879.jpg"
+    },
+    {
+     "code": "EN54718",
+     "color": "Navy Green",
+     "pattern": "Check",
+     "mill": "LORO PIANA",
+     "img": "EN54718.jpg"
+    },
+    {
+     "code": "EN53991",
+     "color": "Light Blue Red",
+     "pattern": "Plaid",
+     "mill": "KENNETH MACKENZIE",
+     "img": "EN53991.jpg"
+    },
+    {
+     "code": "EN53992",
+     "color": "Light Blue Orange",
+     "pattern": "Overcheck",
+     "mill": "KENNETH MACKENZIE",
+     "img": "EN53992.jpg"
+    },
+    {
+     "code": "EN54009",
+     "color": "Barley Corn Blue",
+     "pattern": "Multi",
+     "mill": "KENNETH MACKENZIE",
+     "img": "EN53208.jpg"
+    },
+    {
+     "code": "EN54156",
+     "color": "Blue",
+     "pattern": "Solid",
+     "mill": "MACKENZIE",
+     "img": "EN54156.jpg"
+    },
+    {
+     "code": "EO43189",
+     "color": "Forest",
+     "pattern": "Solid",
+     "mill": "MACKENZIE",
+     "img": "EO43189.jpg"
+    },
+    {
+     "code": "EO43190",
+     "color": "Red",
+     "pattern": "Solid",
+     "mill": "MACKENZIE",
+     "img": "EO43190.jpg"
+    },
+    {
+     "code": "EO43191",
+     "color": "Pink",
+     "pattern": "Solid",
+     "mill": "MACKENZIE",
+     "img": "EO43191.jpg"
+    }
+   ]
   }
  }
 }

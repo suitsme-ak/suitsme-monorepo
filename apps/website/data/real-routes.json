@@ -356,7 +356,7 @@
       "idRanges": [
         [
           0,
-          2185
+          2165
         ]
       ]
     },
@@ -367,6 +367,7 @@
       "groups": [
         "cotton",
         "linen",
+        "tweed",
         "wool"
       ]
     }

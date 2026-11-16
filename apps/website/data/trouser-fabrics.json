@@ -478,6 +478,285 @@
      "img": "EO43191.jpg"
     }
    ]
+  },
+  "corduroy": {
+   "material": "Corduroy",
+   "style": "Tailored",
+   "fabrics": [
+    {
+     "code": "EB13123",
+     "color": "Black",
+     "pattern": "9 Wale",
+     "mill": "OLIMPIAS",
+     "img": "EB13123.jpg"
+    },
+    {
+     "code": "EB13146",
+     "color": "Black",
+     "pattern": "Fine Pin Wale",
+     "mill": "ERMENEGILDO ZEGNA",
+     "img": "EB13146.jpg"
+    },
+    {
+     "code": "EB13188",
+     "color": "Black",
+     "pattern": "Pin Wale",
+     "mill": "ERMENEGILDO ZEGNA",
+     "img": "EB13188.jpg"
+    },
+    {
+     "code": "EB13198",
+     "color": "Black",
+     "pattern": "12 Wale",
+     "mill": "ERMENEGILDO ZEGNA",
+     "img": "EB13198.jpg"
+    },
+    {
+     "code": "EB13220",
+     "color": "Black",
+     "pattern": "5 Wale",
+     "mill": "ERMENEGILDO ZEGNA",
+     "img": "EB13220.jpg"
+    },
+    {
+     "code": "EG23040",
+     "color": "Charcoal",
+     "pattern": "Plain",
+     "mill": "MADE IN ITALY",
+     "img": "EG23040.jpg"
+    },
+    {
+     "code": "EG23535",
+     "color": "Dark Grey",
+     "pattern": "9 Wale",
+     "mill": "OLIMPIAS",
+     "img": "EG23535.jpg"
+    },
+    {
+     "code": "EG23669",
+     "color": "Grey",
+     "pattern": "300g",
+     "mill": "PONTOGLIO",
+     "img": "EG23669.jpg"
+    },
+    {
+     "code": "EG23884",
+     "color": "Grey",
+     "pattern": "7 Wale",
+     "mill": "ERMENEGILDO ZEGNA",
+     "img": "EG23884.jpg"
+    },
+    {
+     "code": "EN53072",
+     "color": "Navy",
+     "pattern": "Plain",
+     "mill": "MADE IN ITALY",
+     "img": "EN53072.jpg"
+    },
+    {
+     "code": "EN54191",
+     "color": "Navy",
+     "pattern": "Stretch",
+     "mill": "REGGIANI",
+     "img": "EN54191.jpg"
+    },
+    {
+     "code": "EN54238",
+     "color": "Dark Navy",
+     "pattern": "8 Wale",
+     "mill": "ERMENEGILDO ZEGNA",
+     "img": "EN54238.jpg"
+    },
+    {
+     "code": "EN54245",
+     "color": "Navy",
+     "pattern": "300g",
+     "mill": "PONTOGLIO",
+     "img": "EN54245.jpg"
+    },
+    {
+     "code": "EN54246",
+     "color": "Dark Navy",
+     "pattern": "260g",
+     "mill": "PONTOGLIO",
+     "img": "EN54246.jpg"
+    },
+    {
+     "code": "EN54459",
+     "color": "Navy",
+     "pattern": "3/16 Inch",
+     "mill": "ERMENEGILDO ZEGNA",
+     "img": "EN54459.jpg"
+    },
+    {
+     "code": "EN54460",
+     "color": "Dark Navy",
+     "pattern": "1/4 Inch",
+     "mill": "ERMENEGILDO ZEGNA",
+     "img": "EN54460.jpg"
+    },
+    {
+     "code": "EO43213",
+     "color": "Blue",
+     "pattern": "Plain",
+     "mill": "BONINO",
+     "img": "EO43213.jpg"
+    },
+    {
+     "code": "EO43221",
+     "color": "Burgundy",
+     "pattern": "Stretch",
+     "mill": "BONINO",
+     "img": "EO43221.jpg"
+    },
+    {
+     "code": "EO43283",
+     "color": "Ivory",
+     "pattern": "10 Wale",
+     "mill": "ERMENEGILDO ZEGNA",
+     "img": "EO43283.jpg"
+    },
+    {
+     "code": "EO43291",
+     "color": "Burgundy",
+     "pattern": "12 Wale",
+     "mill": "OLIMPIAS",
+     "img": "EO43291.jpg"
+    },
+    {
+     "code": "EO43332",
+     "color": "Pastel Pink",
+     "pattern": "300g",
+     "mill": "PONTOGLIO",
+     "img": "EO43332.jpg"
+    },
+    {
+     "code": "EO43382",
+     "color": "Brown",
+     "pattern": "200g",
+     "mill": "PONTOGLIO",
+     "img": "EO43382.jpg"
+    },
+    {
+     "code": "EO43383",
+     "color": "Burgundy",
+     "pattern": "300g",
+     "mill": "PONTOGLIO",
+     "img": "EO43383.jpg"
+    },
+    {
+     "code": "EO43398",
+     "color": "Beige",
+     "pattern": "260g",
+     "mill": "PONTOGLIO",
+     "img": "EO43398.jpg"
+    },
+    {
+     "code": "EO43406",
+     "color": "Light Green",
+     "pattern": "300g",
+     "mill": "PONTOGLIO",
+     "img": "EO43406.jpg"
+    },
+    {
+     "code": "EO43473",
+     "color": "Sea Green",
+     "pattern": "Stretch",
+     "mill": "ERMENEGILDO ZEGNA",
+     "img": "EO43473.jpg"
+    },
+    {
+     "code": "ER33160",
+     "color": "Dark Brown",
+     "pattern": "Fine",
+     "mill": "ERMENEGILDO ZEGNA",
+     "img": "ER33160.jpg"
+    },
+    {
+     "code": "ER33258",
+     "color": "Amber Brown",
+     "pattern": "8 Wale",
+     "mill": "ERMENEGILDO ZEGNA",
+     "img": "ER33258.jpg"
+    },
+    {
+     "code": "ER33278",
+     "color": "Brown",
+     "pattern": "7 Wale",
+     "mill": "ERMENEGILDO ZEGNA",
+     "img": "ER33278.jpg"
+    },
+    {
+     "code": "ER33279",
+     "color": "Brown",
+     "pattern": "10 Wale",
+     "mill": "ERMENEGILDO ZEGNA",
+     "img": "ER33279.jpg"
+    },
+    {
+     "code": "KB12052",
+     "color": "Black",
+     "pattern": "19 Wale",
+     "mill": "DAG",
+     "img": "KB12052.jpg"
+    },
+    {
+     "code": "KG22053",
+     "color": "Grey",
+     "pattern": "19 Wale",
+     "mill": "DAG",
+     "img": "KG22053.jpg"
+    },
+    {
+     "code": "KN52082",
+     "color": "Navy",
+     "pattern": "19 Wale",
+     "mill": "DAG",
+     "img": "KN52082.jpg"
+    },
+    {
+     "code": "KO42092",
+     "color": "Beige",
+     "pattern": "19 Wale",
+     "mill": "DAG",
+     "img": "KO42092.jpg"
+    },
+    {
+     "code": "KO42093",
+     "color": "Cranberry",
+     "pattern": "19 Wale",
+     "mill": "DAG",
+     "img": "KO42093.jpg"
+    },
+    {
+     "code": "KO42094",
+     "color": "Burgundy",
+     "pattern": "19 Wale",
+     "mill": "DAG",
+     "img": "KO42094.jpg"
+    },
+    {
+     "code": "KO42095",
+     "color": "Purple",
+     "pattern": "19 Wale",
+     "mill": "DAG",
+     "img": "KO42095.jpg"
+    },
+    {
+     "code": "KR32033",
+     "color": "Camel",
+     "pattern": "19 Wale",
+     "mill": "DAG",
+     "img": "KR32033.jpg"
+    },
+    {
+     "code": "KR32034",
+     "color": "Brown",
+     "pattern": "19 Wale",
+     "mill": "DAG",
+     "img": "KR32034.jpg"
+    }
+   ]
   }
  }
 }

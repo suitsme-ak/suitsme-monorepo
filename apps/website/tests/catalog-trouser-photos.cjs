@@ -23,7 +23,7 @@ const byId=new Map(entries.map(p=>[p.id,p]));
 const pin=JSON.parse(fs.readFileSync('data/trouser-fabrics.json','utf8'));
 const library=JSON.parse(fs.readFileSync('data/fabric-library.json','utf8')).fabrics;
 const libByCode=new Map(library.filter(f=>f.c).map(f=>[f.c,f]));
-const slug=s=>s.toLowerCase().replace(/ /g,'-');
+const slug=s=>s.toLowerCase().replace(/ /g,'-').replace(/\//g,'-');
 const hashOf=f=>crypto.createHash('sha256').update(fs.readFileSync(f)).digest('hex');
 
 // Shipped groups: collection key, group slug, material, style.
@@ -32,6 +32,7 @@ const SHIPPED=[
   {collection:'#collection/Trousers/Linen%20Trousers',group:'linen'},
   {collection:'#collection/Trousers/Cotton%20Dress%20Trousers',group:'cotton'},
   {collection:'#collection/Trousers/Tweed%20Trousers',group:'tweed'},
+  {collection:'#collection/Trousers/Corduroy%20Trousers',group:'corduroy'},
 ];
 for(const g of SHIPPED){
   const def=pin.groups[g.group];
@@ -39,7 +40,7 @@ for(const g of SHIPPED){
   const col=collections[g.collection];
   assert.ok(col,'the '+g.collection+' collection exists');
   assert.equal(col.ids.length,def.fabrics.length,'the collection holds one product per pinned '+g.group+' fabric');
-  const seen=new Set(),frontHashes=new Set(),backHashes=new Set();
+  const seen=new Set(),frontHashes=new Set(),backHashes=new Set(),imgNames=new Set();
   for(const id of col.ids){
     const p=byId.get(id);
     assert.ok(p,'collection product '+id+' resolves');
@@ -52,10 +53,12 @@ for(const g of SHIPPED){
     assert.equal(p.pattern,pinEntry.pattern,'product '+p.sku+' pattern matches its fabric pin');
     assert.equal(p.fabric,def.material,'product '+p.sku+' material matches its group');
     // The pin is honest: the code is a real active library suit
-    // fabric of the group's material, with a swatch image. Tweed is
-    // the exception by the owner's by fabric ruling: JPOS has no
-    // tweed material, so a tweed fabric is an active wool suit fabric
-    // whose own description names tweed.
+    // fabric of the group's material, with a swatch image. Tweed and
+    // corduroy are the exceptions by the owner's by fabric ruling:
+    // JPOS has neither material, so a tweed fabric is an active wool
+    // suit fabric whose own description names tweed, and a corduroy
+    // fabric is an active suit fabric (cotton, wool or other) whose
+    // own description or weave names corduroy.
     const lib=libByCode.get(p.fabricCode);
     assert.ok(lib,'fabric '+p.fabricCode+' exists in the library');
     assert.equal(lib.k,'suit','fabric '+p.fabricCode+' is a suit fabric');
@@ -63,13 +66,23 @@ for(const g of SHIPPED){
     if(g.group==='tweed'){
       assert.equal(lib.mat,'Wool','tweed fabric '+p.fabricCode+' is a wool suit fabric');
       assert.ok(/tweed/i.test(lib.d),'tweed fabric '+p.fabricCode+' is named tweed in its own description');
+    }else if(g.group==='corduroy'){
+      // EO43332 is the edge case: its description misspells the word
+      // as CORDORUOY, while its own pattern field names CORDUROY.
+      assert.ok(/corduroy/i.test(lib.d)||/corduroy/i.test(lib.wv||'')||/corduroy/i.test(lib.pat||'')||/cordoruoy/i.test(lib.d),'corduroy fabric '+p.fabricCode+' is named corduroy in its own description, weave or pattern');
     }else{
       assert.equal(lib.mat,def.material,'fabric '+p.fabricCode+' is '+def.material.toLowerCase());
     }
     assert.ok(lib.img,'fabric '+p.fabricCode+' has a swatch image');
     assert.ok(!seen.has(p.fabricCode),'fabric '+p.fabricCode+' is used once in the group');
     seen.add(p.fabricCode);
-    const expected='trouser-'+g.group+'-'+slug(p.color)+'-'+slug(p.pattern)+'.webp';
+    // The photo filename comes from the color and pattern slugs;
+    // when two fabrics in a group share both (three navy corduroys),
+    // the generator appends the fabric code to the later filenames
+    // so every product keeps its own photo.
+    let expected='trouser-'+g.group+'-'+slug(p.color)+'-'+slug(p.pattern)+'.webp';
+    if(imgNames.has(expected))expected=expected.replace('.webp','-'+p.fabricCode.toLowerCase()+'.webp');
+    imgNames.add(expected);
     assert.equal(p.img,expected,'product '+p.sku+' ('+p.color+' '+p.pattern+') uses the photo generated from fabric '+p.fabricCode);
     const file=path.join('public','assets',p.img);
     assert.ok(fs.existsSync(file),'photo file exists for '+p.sku+': '+p.img);
@@ -99,15 +112,15 @@ assert.ok(fs.existsSync('app/trousers/[group]/[code]/route.ts'),'the trousers co
 
 // Neighbours are untouched: shirts keep the shared shirt photo,
 // women's trousers keep the women's photo, and an unshipped trousers
-// group (corduroy) keeps the grid and the shared photo until its turn.
+// group (gurkha) keeps the grid and the shared photo until its turn.
 const shirtArrivals=collections['#collection/Shirts/New%20Arrivals'];
 assert.ok(shirtArrivals.ids.length>0,'shirts new arrivals exist');
 assert.equal(byId.get(shirtArrivals.ids[0]).img,'model-shirt.webp','shirts keep their existing photo');
 const womenTrousers=entries.filter(p=>p.category==='Women'&&p.kind==='pants'&&p.fabric==='Wool');
 assert.ok(womenTrousers.length>0&&womenTrousers.every(p=>p.img==='model-woman.webp'),'women wool trousers keep the women photo');
-const corduroy=collections['#collection/Trousers/Corduroy%20Trousers'];
-assert.equal(corduroy.ids.length,36,'unshipped corduroy trousers keep the 36 product grid for now');
-assert.ok(corduroy.ids.every(id=>byId.get(id).img==='model-shirt.webp'),'unshipped corduroy trousers keep the shared photo for now');
+const gurkha=collections['#collection/Trousers/Gurkha%20Trousers'];
+assert.equal(gurkha.ids.length,36,'unshipped gurkha trousers keep the 36 product grid for now');
+assert.ok(gurkha.ids.every(id=>byId.get(id).img==='model-shirt.webp'),'unshipped gurkha trousers keep the shared photo for now');
 
 // The listing card itself, rendered through the real script chain in
 // the page's load order (quick-add.js owns the card markup, merchant.js
@@ -143,10 +156,10 @@ assert.ok(corduroy.ids.every(id=>byId.get(id).img==='model-shirt.webp'),'unshipp
     assert.ok(!card.includes('sku-label">'+p.sku+'</span>'),'the '+g.group+' listing card no longer shows the SM sku '+p.sku+' as its label');
     console.log('JT '+g.group+' listing card: links to '+url+' and shows Fabric '+p.fabricCode);
   }
-  const corduroyId=corduroy.ids[0],corduroyProduct=byId.get(corduroyId);
-  const corduroyCard=run('productCard(products['+corduroyId+'],'+corduroyId+')');
-  assert.ok(corduroyCard.includes('href="/product/'+corduroyId+'"'),'an unshipped group card keeps its /product link');
-  assert.ok(corduroyCard.includes(corduroyProduct.sku),'an unshipped group card keeps its SM sku');
+  const gurkhaId=gurkha.ids[0],gurkhaProduct=byId.get(gurkhaId);
+  const gurkhaCard=run('productCard(products['+gurkhaId+'],'+gurkhaId+')');
+  assert.ok(gurkhaCard.includes('href="/product/'+gurkhaId+'"'),'an unshipped group card keeps its /product link');
+  assert.ok(gurkhaCard.includes(gurkhaProduct.sku),'an unshipped group card keeps its SM sku');
 }
 
 console.log('JT fabric defined trousers: ok (shipped groups built from real fabrics, neighbours unchanged)');

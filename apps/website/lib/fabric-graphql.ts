@@ -27,6 +27,12 @@ type StorePresence {
   storeId: Int
   hanger: Int
 }
+type GarmentMake {
+  garment: String!
+  yardsPerGarment: Float!
+  count: Int!
+  value: Float
+}
 type Inventory {
   stock: Float
   qtyActual: Float
@@ -35,6 +41,7 @@ type Inventory {
   purchaseOrderQty: Float
   minimumQty: Float
   stores: [StorePresence!]!
+  makes: [GarmentMake!]!
 }
 type Fabric {
   code: String
@@ -160,8 +167,50 @@ function fabricObject(db: D1Database, row: Row) {
         )
         .bind(row.fabric_id)
         .all<Row>();
+      // What the stock on hand would make, and what those garments would
+      // sell for at this fabric's tier prices. Yards per garment are the
+      // shop's real cutting figures, mined from JPOS fabricused history
+      // (api_garment_yield). A value is null whenever the tier has no
+      // price for that garment kind; the count is still reported.
+      const stock = num(row.stock);
+      let ladder: Row | null = null;
+      if (tier !== null) {
+        ladder = await db
+          .prepare("SELECT * FROM api_fabric_tiers WHERE tier = ?")
+          .bind(tier)
+          .first<Row>();
+      }
+      const yieldRows = await db
+        .prepare("SELECT garment, yards_per FROM api_garment_yield")
+        .bind()
+        .all<Row>();
+      const ladderCol: Record<string, string> = {
+        suit: "suit",
+        suitVest: "suit_vest",
+        sportCoat: "sport_coat",
+        dressPants: "dress_pants",
+        vest: "vest",
+        dressShirt: "dress_shirt",
+      };
+      const order = ["suit", "suitVest", "sportCoat", "dressPants", "vest", "dressShirt"];
+      const yields = new Map(
+        (yieldRows.results || []).map((y) => [String(y.garment), num(y.yards_per)])
+      );
+      const makes = order
+        .filter((g) => yields.has(g) && yields.get(g)! > 0)
+        .map((g) => {
+          const yardsPer = yields.get(g)!;
+          const count = stock !== null && stock > 0 ? Math.floor(stock / yardsPer) : 0;
+          const price = ladder ? num(ladder[ladderCol[g]]) : null;
+          return {
+            garment: g,
+            yardsPerGarment: yardsPer,
+            count,
+            value: price !== null ? count * price : null,
+          };
+        });
       return {
-        stock: num(row.stock),
+        stock,
         qtyActual: num(row.qty_actual),
         qtyReserved: num(row.qty_reserved),
         backorderQty: num(row.backorder_qty),
@@ -171,6 +220,7 @@ function fabricObject(db: D1Database, row: Row) {
           storeId: num(s.store_id),
           hanger: num(s.hanger),
         })),
+        makes,
       };
     },
   };

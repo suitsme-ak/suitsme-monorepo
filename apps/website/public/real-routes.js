@@ -69,6 +69,18 @@ function familyHash(key,raw){
     if(seg.length===2)return '#fabrics/'+seg[1];
     return null;
   }
+  if(seg[0]==='jackets'&&routeFamilies.jackets&&routeFamilies.jackets.fabrics){
+    // Fabric defined jackets carry the fabric code, the same pattern
+    // as the fabric defined trousers below: the code is case
+    // sensitive and can contain spaces or slashes, so it is matched
+    // on the raw (decoded) segments and rejoined into the hash.
+    const rawSeg=raw.split('/').filter(Boolean);
+    if(rawSeg.length>=2&&rawSeg[1]){
+      const code=rawSeg.slice(1).join('/');
+      if(routeFamilies.jackets.fabrics.includes(code))return '#jacket/'+encodeURIComponent(code);
+    }
+    return null;
+  }
   if(seg[0]==='trousers'&&routeFamilies.trousers&&routeFamilies.trousers.groups.includes(seg[1])){
     // Fabric defined trousers carry the fabric code, the same
     // pattern as the fabric detail paths above: the code is case
@@ -111,6 +123,8 @@ function realUrlForHash(hash){
   if(m)return '/product/'+m[1];
   m=/^#order\/(.+)$/.exec(hash);
   if(m)return '/orders/'+m[1];
+  m=/^#jacket\/(.+)$/.exec(hash);
+  if(m&&routeFamilies.jackets&&routeFamilies.jackets.fabrics&&routeFamilies.jackets.fabrics.includes(decodeURIComponent(m[1])))return '/jackets/'+m[1];
   m=/^#trouser\/([a-z0-9-]+)\/(.+)$/.exec(hash);
   if(m&&routeFamilies.trousers&&routeFamilies.trousers.groups.includes(m[1]))return '/trousers/'+m[1]+'/'+m[2];
   m=/^#fabrics\/([a-z]+)$/.exec(hash);

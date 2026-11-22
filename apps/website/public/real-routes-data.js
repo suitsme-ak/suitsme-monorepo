@@ -17,4 +17,4 @@ const realRoutePages={"/account":"#account","/charges":"#charges","/checkout":"#
 // listings and the catalog product id ranges the product routes
 // validate against. Order detail paths are deliberately absent: any
 // single segment id boots, because order ids are not enumerable.
-const realRouteFamilies={"fabrics":{"kinds":["shirt","suit"]},"studio":{"kinds":["jacket","pants","suit"]},"product":{"idRanges":[[0,2115]]},"orders":{"anySingleSegment":true},"trousers":{"groups":["cotton","linen","tweed","wool"]}};
+const realRouteFamilies={"fabrics":{"kinds":["shirt","suit"]},"studio":{"kinds":["jacket","pants","suit"]},"product":{"idRanges":[[0,2095]]},"orders":{"anySingleSegment":true},"trousers":{"groups":["cotton","linen","tweed","wool"]},"jackets":{"fabrics":["CG21034","CG21083","CG21289","CN51009","CN51018","CN51049","CN51072","CN51299","CO41042","CO41048","CO41130","CR31003","CR31031","CR31073","EG12111","EG12400","EG23255","EN53874","EO10706","EO43511","ER33078","ER33163"]}};

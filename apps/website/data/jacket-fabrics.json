@@ -1,0 +1,159 @@
+{
+ "material": "Wool",
+ "fabrics": [
+  {
+   "code": "CN51009",
+   "color": "Navy",
+   "pattern": "Solid",
+   "mill": "CIMEXLANA",
+   "img": "CN51009.jpg"
+  },
+  {
+   "code": "CN51018",
+   "color": "Navy",
+   "pattern": "Herringbone",
+   "mill": "CIMEXLANA",
+   "img": "CN51018.jpg"
+  },
+  {
+   "code": "CN51072",
+   "color": "Navy",
+   "pattern": "Windowpane",
+   "mill": "CIMEXLANA",
+   "img": "CN51072.jpg"
+  },
+  {
+   "code": "CN51049",
+   "color": "Navy",
+   "pattern": "Fine Stripe",
+   "mill": "CIMEXLANA",
+   "img": "CN51049.jpg"
+  },
+  {
+   "code": "CN51299",
+   "color": "Navy",
+   "pattern": "Micro Check",
+   "mill": "NOVALAN",
+   "img": "CN51299.jpg"
+  },
+  {
+   "code": "EN53874",
+   "color": "Navy",
+   "pattern": "Birdseye",
+   "mill": "BONINO",
+   "img": "EN53874.JPG"
+  },
+  {
+   "code": "CG21083",
+   "color": "Charcoal",
+   "pattern": "Solid",
+   "mill": "CIMEXLANA",
+   "img": "CG21083.jpg"
+  },
+  {
+   "code": "EG12400",
+   "color": "Charcoal",
+   "pattern": "Herringbone",
+   "mill": "VITALE BARBERIS CANONICO",
+   "img": "EG12400.jpg"
+  },
+  {
+   "code": "CG21289",
+   "color": "Charcoal",
+   "pattern": "Windowpane",
+   "mill": "CIMEXLANA",
+   "img": "CG21289.jpg"
+  },
+  {
+   "code": "CG21034",
+   "color": "Charcoal",
+   "pattern": "Fine Stripe",
+   "mill": "CIMEXLANA",
+   "img": "CG21034.jpg"
+  },
+  {
+   "code": "EG23255",
+   "color": "Charcoal",
+   "pattern": "Micro Check",
+   "mill": "BONINO",
+   "img": "EG23255.JPG"
+  },
+  {
+   "code": "EG12111",
+   "color": "Charcoal",
+   "pattern": "Birdseye",
+   "mill": "VITALE BARBERIS CANONICO",
+   "img": "EG12111.jpg"
+  },
+  {
+   "code": "CO41048",
+   "color": "Forest",
+   "pattern": "Solid",
+   "mill": "CIMEXLANA",
+   "img": "CO41048.jpg"
+  },
+  {
+   "code": "EO10706",
+   "color": "Forest",
+   "pattern": "Windowpane",
+   "mill": "BONINO",
+   "img": "EO10706.jpg"
+  },
+  {
+   "code": "CO41042",
+   "color": "Sand",
+   "pattern": "Solid",
+   "mill": "CIMEXLANA",
+   "img": "CO41042.jpg"
+  },
+  {
+   "code": "CR31073",
+   "color": "Sand",
+   "pattern": "Herringbone",
+   "mill": "CIMEXLANA",
+   "img": "CR31073.jpg"
+  },
+  {
+   "code": "EO43511",
+   "color": "Sand",
+   "pattern": "Fine Stripe",
+   "mill": "ERMENEGILDO ZEGNA",
+   "img": "EO43511.jpg"
+  },
+  {
+   "code": "CO41130",
+   "color": "Burgundy",
+   "pattern": "Solid",
+   "mill": "CIMEXLANA",
+   "img": "CO41130.jpg"
+  },
+  {
+   "code": "CR31031",
+   "color": "Chocolate",
+   "pattern": "Solid",
+   "mill": "CIMEXLANA",
+   "img": "CR31031.jpg"
+  },
+  {
+   "code": "ER33163",
+   "color": "Chocolate",
+   "pattern": "Herringbone",
+   "mill": "VITALE BARBERIS CANONICO",
+   "img": "ER33163.jpg"
+  },
+  {
+   "code": "ER33078",
+   "color": "Chocolate",
+   "pattern": "Windowpane",
+   "mill": "BONINO",
+   "img": "ER33078.jpg"
+  },
+  {
+   "code": "CR31003",
+   "color": "Chocolate",
+   "pattern": "Fine Stripe",
+   "mill": "CIMEXLANA",
+   "img": "CR31003.jpg"
+  }
+ ]
+}

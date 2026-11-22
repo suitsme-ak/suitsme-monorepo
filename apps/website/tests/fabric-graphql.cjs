@@ -64,6 +64,14 @@ class DB {
       { tier: 7, sport_coat: 475, dress_pants: 245, suit: 695, suit_vest: 920, dress_shirt: null, vest: 225 },
       { tier: 9, sport_coat: 615, dress_pants: 325, suit: 895, suit_vest: 1180, dress_shirt: null, vest: 285 },
     ];
+    this.api_garment_yield = [
+      { garment: 'suit', yards_per: 4.0 },
+      { garment: 'suitVest', yards_per: 4.6 },
+      { garment: 'sportCoat', yards_per: 2.5 },
+      { garment: 'dressPants', yards_per: 2.05 },
+      { garment: 'vest', yards_per: 1.1 },
+      { garment: 'dressShirt', yards_per: 2.0 },
+    ];
     this.api_fabric_stores = [
       { fabric_id: 4786, store_id: 2, hanger: 1 },
       { fabric_id: 4786, store_id: 8, hanger: 1 },
@@ -81,6 +89,7 @@ class DB {
   }
   query(sql, args) {
     let mm;
+    if (mm = sql.match(/^SELECT garment, yards_per FROM api_garment_yield$/)) return this.api_garment_yield.map(r => ({ garment: r.garment, yards_per: r.yards_per }));
     if (mm = sql.match(/^SELECT \* FROM api_fabric_tiers ORDER BY tier ASC$/)) return sortRows(this.api_fabric_tiers, 'tier ASC');
     if (mm = sql.match(/^SELECT \* FROM api_fabric_tiers WHERE tier = \?$/)) return this.api_fabric_tiers.filter(r => r.tier === args[0]);
     if (mm = sql.match(/^SELECT store_id, hanger FROM api_fabric_stores WHERE fabric_id = \? ORDER BY store_id$/)) return sortRows(this.api_fabric_stores.filter(r => r.fabric_id === args[0]), 'store_id ASC').map(r => ({ store_id: r.store_id, hanger: r.hanger }));
@@ -206,6 +215,29 @@ async function post(query, variables) {
   r = await post('{ fabric(code:"CN17300") { nope } }');
   assert.ok(r.body.errors && r.body.errors.length > 0, 'unknown field is a GraphQL error');
   console.log('G11 error paths: ok');
+
+  // G13: inventory makes values the stock at tier prices using mined yields.
+  r = await post('{ fabric(code:"CN17300") { inventory { makes { garment yardsPerGarment count value } } } }');
+  const makes = Object.fromEntries(r.body.data.fabric.inventory.makes.map(x => [x.garment, x]));
+  assert.equal(makes.suit.yardsPerGarment, 4.0);
+  assert.equal(makes.suit.count, 221, 'floor(886.1 / 4.0)');
+  assert.equal(makes.suit.value, 221 * 695);
+  assert.equal(makes.dressPants.count, 432, 'floor(886.1 / 2.05)');
+  assert.equal(makes.dressPants.value, 432 * 245);
+  assert.equal(makes.dressShirt.count, 443);
+  assert.equal(makes.dressShirt.value, null, 'tier 7 has no shirt price, count without a value');
+  console.log('G13 inventory makes and values: ok');
+
+  // G14: zero stock makes zero garments; a tier 0 fabric has counts but no values.
+  r = await post('{ fabric(code:"CB11001") { inventory { makes { garment count value } } } }');
+  assert.ok(r.body.data.fabric.inventory.makes.every(x => x.count === 0));
+  const cbMakes = Object.fromEntries(r.body.data.fabric.inventory.makes.map(x => [x.garment, x]));
+  assert.equal(cbMakes.suit.value, 0, 'priced garment at zero stock is worth zero');
+  assert.equal(cbMakes.dressShirt.value, null, 'tier 5 has no shirt price at any stock level');
+  r = await post('{ fabric(code:"XX00000") { inventory { stock makes { garment count value } } } }');
+  assert.equal(r.body.data.fabric.inventory.stock, null);
+  assert.ok(r.body.data.fabric.inventory.makes.every(x => x.count === 0 && x.value === null));
+  console.log('G14 zero and missing stock makes: ok');
 
   // G12: the route file wires the handler.
   const route = fs.readFileSync(path.resolve('app/api/graphql/route.ts'), 'utf8');

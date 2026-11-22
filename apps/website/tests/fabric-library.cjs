@@ -158,4 +158,42 @@ const detailRoute=fs.readFileSync('app/fabrics/[kind]/[code]/route.ts','utf8');
 assert.ok(detailRoute.includes('fabric-library.json')&&detailRoute.includes('headForFabric'),'the fabric detail route validates codes against the library data');
 assert.ok(fs.readFileSync('lib/route-head.ts','utf8').includes('export function headForFabric'),'route-head builds the fabric detail head');
 
+// L8 tier prices (owner decision 2026-11-21: site prices come from
+//    the API only): the served library data carries the tier ladder;
+//    active fabric cards show the headline garment price and detail
+//    pages list every priced garment kind for the fabric's tier;
+//    fabrics on tiers with no ladder row show no prices at all, and
+//    inactive fabrics show no prices because they cannot be ordered.
+assert.equal(w.run('Object.keys(fabricLibraryData.tiers).length'),28,'served library data carries the 28 tier ladder rows');
+const tiersJson=JSON.parse(fs.readFileSync('data/fabric-tiers.json','utf8')).tiers;
+assert.equal(w.run('JSON.stringify(fabricLibraryData.tiers)'),JSON.stringify(tiersJson),'served ladder matches data/fabric-tiers.json exactly');
+const wp=makeWorld('#fabric/suit/CN17300');
+html=wp.elFor('#main').innerHTML;
+assert.ok(html.includes('Suit price')&&html.includes('$695'),'CN17300 detail shows the tier 7 suit price');
+assert.ok(html.includes('Suit and vest price')&&html.includes('$920'),'CN17300 detail shows the suit and vest price');
+assert.ok(html.includes('Sport coat price')&&html.includes('$475'),'CN17300 detail shows the sport coat price');
+assert.ok(html.includes('Dress pants price')&&html.includes('$245'),'CN17300 detail shows the dress pants price');
+assert.ok(html.includes('Vest price')&&html.includes('$225'),'CN17300 detail shows the vest price');
+assert.ok(!html.includes('Dress shirt price'),'tier 7 prices no dress shirt, so CN17300 shows none');
+const wc=makeWorld('#fabrics/suit');
+wc.run("libSearch='CN17300';libPage=1;render(false)");
+html=wc.elFor('#main').innerHTML;
+assert.ok(html.includes('class="fabric-price">Suit $695<'),'the CN17300 card shows its headline suit price');
+const unpricedSuit=suit.find(f=>f.act&&f.c&&[30,32,34].includes(Number(f.tier)));
+assert.ok(unpricedSuit,'the library holds active suits on tiers with no ladder row');
+const wu2=makeWorld('#fabric/suit/'+encodeURIComponent(unpricedSuit.c));
+html=wu2.elFor('#main').innerHTML;
+assert.ok(!html.includes(' price</span>'),'a fabric on a tier with no ladder row shows no garment prices');
+const inactivePriced=suit.find(f=>!f.act&&f.c&&tiersJson[String(f.tier)]&&tiersJson[String(f.tier)].suit);
+assert.ok(inactivePriced,'the library holds inactive fabrics on priced tiers');
+const wi2=makeWorld('#fabric/suit/'+encodeURIComponent(inactivePriced.c));
+html=wi2.elFor('#main').innerHTML;
+assert.ok(!html.includes(' price</span>'),'an inactive fabric shows no garment prices');
+const shirtTier1=shirt.find(f=>f.act&&f.c&&Number(f.tier)===1.8);
+assert.ok(shirtTier1,'the library holds an active tier 1.8 shirt fabric');
+const ws2=makeWorld('#fabric/shirt/'+encodeURIComponent(shirtTier1.c));
+html=ws2.elFor('#main').innerHTML;
+assert.ok(html.includes('Dress shirt price')&&html.includes('$175'),'a tier 1.8 shirt fabric shows its dress shirt price');
+assert.ok(!html.includes('Suit price'),'a shirt fabric tier prices no suit');
+
 console.log('fabric-library journeys: all assertions passed');

@@ -20,9 +20,30 @@ function libSearchText(f){return [f.c,f.d,f.m,f.col,f.cf,f.pat,f.pc,f.con,f.mat,
 function libFacetValues(items,key){return [...new Set(items.map(f=>f[key]).filter(Boolean))].sort()}
 function libCollectionValues(items){return [...new Set(items.flatMap(f=>f.grp||[]))].sort()}
 function libTitle(f){const t=(f.col+' '+f.pat).trim();return t||f.d||f.c||'Fabric '+f.id}
+// Garment prices for a fabric come from its tier in the API price
+// ladder, served inside the library data (owner decision 2026-11-21:
+// site prices come from the API only). A tier with no ladder row, or
+// a garment kind the tier does not price, yields no price: the site
+// never invents one. Inactive fabrics show no prices, because they
+// cannot be ordered.
+const libPriceKinds=[['Suit','suit'],['Suit and vest','suitVest'],['Sport coat','sportCoat'],['Dress pants','dressPants'],['Vest','vest'],['Dress shirt','dressShirt']];
+function libGarmentPrices(f){
+  if(!f.act||f.tier==null||f.tier===''||!fabricLibraryData.tiers)return [];
+  const row=fabricLibraryData.tiers[String(f.tier)];
+  if(!row)return [];
+  return libPriceKinds.filter(pair=>typeof row[pair[1]]==='number'&&row[pair[1]]>0).map(pair=>[pair[0],row[pair[1]]]);
+}
+function libHeadlinePrice(f){
+  const prices=libGarmentPrices(f);
+  if(!prices.length)return '';
+  const want=f.k==='shirt'?'Dress shirt':'Suit';
+  const hit=prices.find(pair=>pair[0]===want)||prices[0];
+  return `${hit[0]} $${hit[1].toLocaleString('en-US')}`;
+}
 function libCard(f){
   const meta=[f.m,f.sea,f.wv,f.wt].filter(Boolean).join(' · ');
-  const inner=`${f.img?`<img src="${libImageUrl(f)}" alt="Fabric swatch ${esc(f.c)}: ${esc(libTitle(f))}" loading="lazy" onerror="this.style.display='none'">`:''}<span class="sku-label">${esc(f.c)}</span>${f.act?'':'<span class="fabric-status">Inactive</span>'}<h3>${esc(libTitle(f))}</h3><p>${esc(f.con||f.d)}</p>${meta?`<small>${esc(meta)}</small>`:''}${f.grp&&f.grp.length?`<small>${esc(f.grp[0])}</small>`:''}<span class="textlink">View fabric →</span>`;
+  const headline=libHeadlinePrice(f);
+  const inner=`${f.img?`<img src="${libImageUrl(f)}" alt="Fabric swatch ${esc(f.c)}: ${esc(libTitle(f))}" loading="lazy" onerror="this.style.display='none'">`:''}<span class="sku-label">${esc(f.c)}</span>${f.act?'':'<span class="fabric-status">Inactive</span>'}<h3>${esc(libTitle(f))}</h3><p>${esc(f.con||f.d)}</p>${headline?`<p class="fabric-price">${esc(headline)}</p>`:''}${meta?`<small>${esc(meta)}</small>`:''}${f.grp&&f.grp.length?`<small>${esc(f.grp[0])}</small>`:''}<span class="textlink">View fabric →</span>`;
   return `<article class="product merchant-swatch fabric-lib${f.act?'':' is-inactive'}"><a href="/fabrics/${f.k}/${encodeURIComponent(f.c)}">${inner}</a></article>`;
 }
 function libDecoded(code){try{return decodeURIComponent(code)}catch(e){return code}}
@@ -33,6 +54,7 @@ function fabricDetailScreen(kind,rawCode){
   if(!f)return `<section class="catalog-heading"><div class="breadcrumb"><a href="/">Home</a> / <a href="/fabrics/${kind}">Fabrics</a> / ${kind==='suit'?'Suits':'Shirts'}</div><span class="eyebrow">Fabrics</span><h1>Fabric not found.</h1><p>We could not find a ${kind} fabric with code ${esc(code)} in the shop fabric library.</p><p><a class="btn light" href="/fabrics/${kind}">Browse ${kind} fabrics</a></p></section>`;
   const p=libMerchantProduct(f.c);
   const facts=[['Fabric code',f.c],['Status',f.act?'Active':'Inactive'],['Mill',f.m],['Color',f.col],['Pattern',f.pat],['Content',f.con],['Material',f.mat],['Season',f.sea],['Weave',f.wv],['Weight',f.wt?f.wt+' g/m':''],['Occasion',f.occ],['Tier',f.tier!=null&&f.tier!==''?'Tier '+f.tier:''],['Collections',(f.grp||[]).join(', ')]].filter(row=>row[1]);
+  for(const pair of libGarmentPrices(f))facts.push([pair[0]+' price','$'+pair[1].toLocaleString('en-US')]);
   return `<section class="catalog-heading"><div class="breadcrumb"><a href="/">Home</a> / <a href="/fabrics/${kind}">Fabrics</a> / ${kind==='suit'?'Suits':'Shirts'} / ${esc(f.c)}</div><span class="eyebrow">Fabric ${esc(f.c)}</span><h1>${esc(libTitle(f))}.</h1>${f.act?'':'<p><span class="fabric-status">Inactive</span> This fabric is not currently available to order.</p>'}</section><section class="catalog-body fabric-detail">${f.img?`<img class="fabric-detail-img" src="${libImageUrl(f)}" alt="Fabric swatch ${esc(f.c)}: ${esc(libTitle(f))}">`:''}<div class="detail-facts">${facts.map(row=>`<div><span>${esc(row[0])}</span><strong>${esc(row[1])}</strong></div>`).join('')}</div>${f.d&&f.d!==f.con?`<p>${esc(f.d)}</p>`:''}<p class="fabric-detail-actions">${p?`<a class="btn" href="/product/${p.id}">Design your ${kind} in this fabric</a>`:''}<a class="btn light" href="/fabrics/${kind}">Back to ${kind} fabrics</a></p>${p?'':f.act?`<p class="ai-note">This fabric can be ordered in store with fabric code ${esc(f.c)}.</p>`:`<p class="ai-note">Inactive fabrics stay in the library for reference and cannot be ordered.</p>`}</section>`;
 }
 function fabricLibraryScreen(kind){

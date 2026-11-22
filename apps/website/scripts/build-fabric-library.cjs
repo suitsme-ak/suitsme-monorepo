@@ -19,7 +19,13 @@ const source = JSON.parse(fs.readFileSync(path.join(root, 'data', 'fabric-librar
 if (!source || !Array.isArray(source.fabrics)) throw new Error('data/fabric-library.json has no fabrics array');
 const fabrics = source.fabrics.filter(f => f.c);
 const dropped = source.fabrics.length - fabrics.length;
-const served = { ...source, fabrics };
+// The library screens show each fabric's garment prices from the same
+// tier ladder the API and the product pricing use (data/fabric-tiers.json,
+// owner decision 2026-11-21: site prices come from the API only), so the
+// ladder ships inside the served library data keyed by tier.
+const tierFile = JSON.parse(fs.readFileSync(path.join(root, 'data', 'fabric-tiers.json'), 'utf8'));
+if (!tierFile || typeof tierFile.tiers !== 'object' || !tierFile.tiers) throw new Error('data/fabric-tiers.json has no tiers map');
+const served = { ...source, fabrics, tiers: tierFile.tiers };
 for (const kind of ['suit', 'shirt']) {
   const rows = fabrics.filter(f => f.k === kind);
   if (!rows.length) throw new Error('fabric library has no ' + kind + ' fabrics');

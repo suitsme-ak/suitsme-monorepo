@@ -2,3 +2,4 @@
 
 .fabric-lib .fabric-status{display:inline-block;background:#8a2f2b;color:#fff;font-size:13px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:4px 10px;border-radius:2px;margin:0 0 8px 10px;vertical-align:middle}.fabric-lib.is-inactive img{filter:grayscale(.65);opacity:.6}.fabric-lib.is-inactive h3,.fabric-lib.is-inactive p{color:#6f6a61}
 .fabric-detail-img{width:100%;max-width:520px;aspect-ratio:1;object-fit:cover;border-radius:2px;display:block;margin-bottom:22px}.fabric-detail-actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:20px}
+.fabric-lib .fabric-price{font-size:19px;font-weight:700;margin:0 0 7px}

@@ -17,11 +17,11 @@
     "group": "wool",
     "fabricCode": "ER33214"
   },
-  "wool-EG23537": {
-    "image": "merchant-models/wool-EG23537-individual.webp",
+  "wool-CG21017": {
+    "image": "merchant-models/wool-CG21017-individual.webp",
     "casting": "white European man age 52 with silver hair, clean-shaven angular face, medium build",
     "group": "wool",
-    "fabricCode": "EG23537"
+    "fabricCode": "CG21017"
   },
   "wool-EO43411": {
     "image": "merchant-models/wool-EO43411-individual.webp",
@@ -317,11 +317,11 @@
     "group": "double",
     "fabricCode": "ER33214"
   },
-  "double-EG23537": {
-    "image": "merchant-models/double-EG23537-individual.webp",
+  "double-CG21017": {
+    "image": "merchant-models/double-CG21017-individual.webp",
     "casting": "white European man age 52 with silver hair, clean-shaven angular face, medium build",
     "group": "double",
-    "fabricCode": "EG23537"
+    "fabricCode": "CG21017"
   },
   "double-EO43411": {
     "image": "merchant-models/double-EO43411-individual.webp",

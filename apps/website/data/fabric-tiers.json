@@ -1,0 +1,229 @@
+{
+ "source": "JPOS FabricTierPricing export 2026-11-04, the same table loaded into D1 as api_fabric_tiers for the fabric GraphQL API. Prices are the shop tier ladder per garment kind; null means the tier has no price for that kind.",
+ "tiers": {
+  "1": {
+   "suit": null,
+   "suitVest": null,
+   "sportCoat": null,
+   "dressPants": null,
+   "vest": null,
+   "dressShirt": 95.0
+  },
+  "1.1": {
+   "suit": null,
+   "suitVest": null,
+   "sportCoat": null,
+   "dressPants": null,
+   "vest": null,
+   "dressShirt": 105.0
+  },
+  "1.3": {
+   "suit": null,
+   "suitVest": null,
+   "sportCoat": null,
+   "dressPants": null,
+   "vest": null,
+   "dressShirt": 125.0
+  },
+  "1.5": {
+   "suit": null,
+   "suitVest": null,
+   "sportCoat": null,
+   "dressPants": null,
+   "vest": null,
+   "dressShirt": 145.0
+  },
+  "1.8": {
+   "suit": null,
+   "suitVest": null,
+   "sportCoat": null,
+   "dressPants": null,
+   "vest": null,
+   "dressShirt": 175.0
+  },
+  "2": {
+   "suit": null,
+   "suitVest": null,
+   "sportCoat": null,
+   "dressPants": null,
+   "vest": null,
+   "dressShirt": 195.0
+  },
+  "2.3": {
+   "suit": null,
+   "suitVest": null,
+   "sportCoat": null,
+   "dressPants": null,
+   "vest": null,
+   "dressShirt": 225.0
+  },
+  "5": {
+   "suit": 495.0,
+   "suitVest": 660.0,
+   "sportCoat": 335.0,
+   "dressPants": 165.0,
+   "vest": 165.0,
+   "dressShirt": null
+  },
+  "6": {
+   "suit": 595.0,
+   "suitVest": 790.0,
+   "sportCoat": 405.0,
+   "dressPants": 205.0,
+   "vest": 195.0,
+   "dressShirt": null
+  },
+  "7": {
+   "suit": 695.0,
+   "suitVest": 920.0,
+   "sportCoat": 475.0,
+   "dressPants": 245.0,
+   "vest": 225.0,
+   "dressShirt": null
+  },
+  "8": {
+   "suit": 795.0,
+   "suitVest": 1050.0,
+   "sportCoat": 545.0,
+   "dressPants": 285.0,
+   "vest": 255.0,
+   "dressShirt": null
+  },
+  "9": {
+   "suit": 895.0,
+   "suitVest": 1180.0,
+   "sportCoat": 615.0,
+   "dressPants": 325.0,
+   "vest": 285.0,
+   "dressShirt": null
+  },
+  "10": {
+   "suit": 995.0,
+   "suitVest": 1310.0,
+   "sportCoat": 685.0,
+   "dressPants": 365.0,
+   "vest": 315.0,
+   "dressShirt": null
+  },
+  "11": {
+   "suit": 1100.0,
+   "suitVest": 1455.0,
+   "sportCoat": 755.0,
+   "dressPants": 415.0,
+   "vest": 355.0,
+   "dressShirt": null
+  },
+  "12": {
+   "suit": 1200.0,
+   "suitVest": 1595.0,
+   "sportCoat": 825.0,
+   "dressPants": 465.0,
+   "vest": 395.0,
+   "dressShirt": null
+  },
+  "13": {
+   "suit": 1300.0,
+   "suitVest": 1735.0,
+   "sportCoat": 895.0,
+   "dressPants": 515.0,
+   "vest": 435.0,
+   "dressShirt": null
+  },
+  "14": {
+   "suit": 1400.0,
+   "suitVest": 1875.0,
+   "sportCoat": 965.0,
+   "dressPants": 565.0,
+   "vest": 475.0,
+   "dressShirt": null
+  },
+  "15": {
+   "suit": 1500.0,
+   "suitVest": 2015.0,
+   "sportCoat": 1035.0,
+   "dressPants": 615.0,
+   "vest": 515.0,
+   "dressShirt": null
+  },
+  "16": {
+   "suit": 1600.0,
+   "suitVest": 2155.0,
+   "sportCoat": 1105.0,
+   "dressPants": 665.0,
+   "vest": 555.0,
+   "dressShirt": null
+  },
+  "17": {
+   "suit": 1700.0,
+   "suitVest": 2295.0,
+   "sportCoat": 1175.0,
+   "dressPants": 715.0,
+   "vest": 595.0,
+   "dressShirt": null
+  },
+  "18": {
+   "suit": 1800.0,
+   "suitVest": 2435.0,
+   "sportCoat": 1245.0,
+   "dressPants": 765.0,
+   "vest": 635.0,
+   "dressShirt": null
+  },
+  "19": {
+   "suit": 1900.0,
+   "suitVest": 2575.0,
+   "sportCoat": 1315.0,
+   "dressPants": 815.0,
+   "vest": 675.0,
+   "dressShirt": null
+  },
+  "20": {
+   "suit": 2000.0,
+   "suitVest": 2715.0,
+   "sportCoat": 1385.0,
+   "dressPants": 865.0,
+   "vest": 715.0,
+   "dressShirt": null
+  },
+  "21": {
+   "suit": 2100.0,
+   "suitVest": 2855.0,
+   "sportCoat": 1455.0,
+   "dressPants": 915.0,
+   "vest": 755.0,
+   "dressShirt": null
+  },
+  "22": {
+   "suit": 2200.0,
+   "suitVest": 2995.0,
+   "sportCoat": 1525.0,
+   "dressPants": 965.0,
+   "vest": 795.0,
+   "dressShirt": null
+  },
+  "23": {
+   "suit": 2300.0,
+   "suitVest": 3135.0,
+   "sportCoat": 1595.0,
+   "dressPants": 1015.0,
+   "vest": 835.0,
+   "dressShirt": null
+  },
+  "24": {
+   "suit": 2400.0,
+   "suitVest": 3275.0,
+   "sportCoat": 1665.0,
+   "dressPants": 1065.0,
+   "vest": 875.0,
+   "dressShirt": null
+  },
+  "25": {
+   "suit": 2500.0,
+   "suitVest": 3415.0,
+   "sportCoat": 1735.0,
+   "dressPants": 1115.0,
+   "vest": 915.0,
+   "dressShirt": null
+  }
+ }
+}

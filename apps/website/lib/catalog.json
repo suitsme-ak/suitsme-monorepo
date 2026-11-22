@@ -11065,2309 +11065,1787 @@
   {
     "id": 1372,
     "name": "Rivington Navy Solid Wool Suit",
-    "priceCents": 39900,
+    "priceCents": 59500,
     "kind": "suit",
     "sku": "SM-01372",
-    "sample": true
+    "sample": true,
+    "fabricCode": "CN51036"
   },
   {
     "id": 1373,
     "name": "Hudson Navy Herringbone Wool Suit",
-    "priceCents": 40700,
+    "priceCents": 79500,
     "kind": "suit",
     "sku": "SM-01373",
-    "sample": true
+    "sample": true,
+    "fabricCode": "CN51069"
   },
   {
     "id": 1374,
     "name": "Mercer Navy Windowpane Wool Suit",
-    "priceCents": 41500,
+    "priceCents": 79500,
     "kind": "suit",
     "sku": "SM-01374",
-    "sample": true
+    "sample": true,
+    "fabricCode": "CN51073"
   },
   {
     "id": 1375,
     "name": "Sullivan Navy Fine Stripe Wool Suit",
-    "priceCents": 42300,
+    "priceCents": 59500,
     "kind": "suit",
     "sku": "SM-01375",
-    "sample": true
+    "sample": true,
+    "fabricCode": "CN51225"
   },
   {
     "id": 1376,
     "name": "Bleecker Navy Micro Check Wool Suit",
-    "priceCents": 43100,
+    "priceCents": 89500,
     "kind": "suit",
     "sku": "SM-01376",
-    "sample": true
+    "sample": true,
+    "fabricCode": "EN16119"
   },
   {
     "id": 1377,
     "name": "Waverly Navy Birdseye Wool Suit",
-    "priceCents": 43900,
+    "priceCents": 89500,
     "kind": "suit",
     "sku": "SM-01377",
-    "sample": true
+    "sample": true,
+    "fabricCode": "EN54316"
   },
   {
     "id": 1378,
     "name": "Rivington Charcoal Solid Wool Suit",
-    "priceCents": 40400,
+    "priceCents": 69500,
     "kind": "suit",
     "sku": "SM-01378",
-    "sample": true
+    "sample": true,
+    "fabricCode": "CG21127"
   },
   {
     "id": 1379,
     "name": "Hudson Charcoal Herringbone Wool Suit",
-    "priceCents": 41200,
+    "priceCents": 89500,
     "kind": "suit",
     "sku": "SM-01379",
-    "sample": true
+    "sample": true,
+    "fabricCode": "EG23394"
   },
   {
     "id": 1380,
     "name": "Mercer Charcoal Windowpane Wool Suit",
-    "priceCents": 42000,
+    "priceCents": 89500,
     "kind": "suit",
     "sku": "SM-01380",
-    "sample": true
+    "sample": true,
+    "fabricCode": "EG23073"
   },
   {
     "id": 1381,
     "name": "Sullivan Charcoal Fine Stripe Wool Suit",
-    "priceCents": 42800,
+    "priceCents": 59500,
     "kind": "suit",
     "sku": "SM-01381",
-    "sample": true
+    "sample": true,
+    "fabricCode": "CG21085"
   },
   {
     "id": 1382,
     "name": "Bleecker Charcoal Micro Check Wool Suit",
-    "priceCents": 43600,
+    "priceCents": 89500,
     "kind": "suit",
     "sku": "SM-01382",
-    "sample": true
+    "sample": true,
+    "fabricCode": "EG23477"
   },
   {
     "id": 1383,
     "name": "Waverly Charcoal Birdseye Wool Suit",
-    "priceCents": 44400,
+    "priceCents": 89500,
     "kind": "suit",
     "sku": "SM-01383",
-    "sample": true
+    "sample": true,
+    "fabricCode": "EG23350"
   },
   {
     "id": 1384,
     "name": "Rivington Forest Solid Wool Suit",
-    "priceCents": 40900,
+    "priceCents": 59500,
     "kind": "suit",
     "sku": "SM-01384",
-    "sample": true
+    "sample": true,
+    "fabricCode": "CO41119"
   },
   {
     "id": 1385,
-    "name": "Hudson Forest Herringbone Wool Suit",
-    "priceCents": 41700,
+    "name": "Hudson Forest Windowpane Wool Suit",
+    "priceCents": 99500,
     "kind": "suit",
     "sku": "SM-01385",
-    "sample": true
+    "sample": true,
+    "fabricCode": "EO10708"
   },
   {
     "id": 1386,
-    "name": "Mercer Forest Windowpane Wool Suit",
-    "priceCents": 42500,
+    "name": "Mercer Sand Solid Wool Suit",
+    "priceCents": 59500,
     "kind": "suit",
     "sku": "SM-01386",
-    "sample": true
+    "sample": true,
+    "fabricCode": "CO41043"
   },
   {
     "id": 1387,
-    "name": "Sullivan Forest Fine Stripe Wool Suit",
-    "priceCents": 43300,
+    "name": "Sullivan Sand Herringbone Wool Suit",
+    "priceCents": 89500,
     "kind": "suit",
     "sku": "SM-01387",
-    "sample": true
+    "sample": true,
+    "fabricCode": "EO43496"
   },
   {
     "id": 1388,
-    "name": "Bleecker Forest Micro Check Wool Suit",
-    "priceCents": 44100,
+    "name": "Bleecker Sand Fine Stripe Wool Suit",
+    "priceCents": 89500,
     "kind": "suit",
     "sku": "SM-01388",
-    "sample": true
+    "sample": true,
+    "fabricCode": "ER33253"
   },
   {
     "id": 1389,
-    "name": "Waverly Forest Birdseye Wool Suit",
-    "priceCents": 44900,
+    "name": "Waverly Burgundy Solid Wool Suit",
+    "priceCents": 59500,
     "kind": "suit",
     "sku": "SM-01389",
-    "sample": true
+    "sample": true,
+    "fabricCode": "CO80309"
   },
   {
     "id": 1390,
-    "name": "Rivington Sand Solid Wool Suit",
-    "priceCents": 41400,
+    "name": "Rivington Chocolate Solid Wool Suit",
+    "priceCents": 69500,
     "kind": "suit",
     "sku": "SM-01390",
-    "sample": true
+    "sample": true,
+    "fabricCode": "CR31037"
   },
   {
     "id": 1391,
-    "name": "Hudson Sand Herringbone Wool Suit",
-    "priceCents": 42200,
+    "name": "Hudson Chocolate Herringbone Wool Suit",
+    "priceCents": 79500,
     "kind": "suit",
     "sku": "SM-01391",
-    "sample": true
+    "sample": true,
+    "fabricCode": "ER33211"
   },
   {
     "id": 1392,
-    "name": "Mercer Sand Windowpane Wool Suit",
-    "priceCents": 43000,
+    "name": "Mercer Chocolate Windowpane Wool Suit",
+    "priceCents": 89500,
     "kind": "suit",
     "sku": "SM-01392",
-    "sample": true
+    "sample": true,
+    "fabricCode": "ER33116"
   },
   {
     "id": 1393,
-    "name": "Sullivan Sand Fine Stripe Wool Suit",
-    "priceCents": 43800,
+    "name": "Sullivan Chocolate Fine Stripe Wool Suit",
+    "priceCents": 79500,
     "kind": "suit",
     "sku": "SM-01393",
-    "sample": true
+    "sample": true,
+    "fabricCode": "CR31008"
   },
   {
     "id": 1394,
-    "name": "Bleecker Sand Micro Check Wool Suit",
-    "priceCents": 44600,
-    "kind": "suit",
+    "name": "Rivington Navy Solid Wool Jacket",
+    "priceCents": 40500,
+    "kind": "jacket",
     "sku": "SM-01394",
-    "sample": true
+    "sample": true,
+    "fabricCode": "CN51037"
   },
   {
     "id": 1395,
-    "name": "Waverly Sand Birdseye Wool Suit",
-    "priceCents": 45400,
-    "kind": "suit",
+    "name": "Hudson Navy Herringbone Wool Jacket",
+    "priceCents": 47500,
+    "kind": "jacket",
     "sku": "SM-01395",
-    "sample": true
+    "sample": true,
+    "fabricCode": "CN51198"
   },
   {
     "id": 1396,
-    "name": "Rivington Burgundy Solid Wool Suit",
-    "priceCents": 41900,
-    "kind": "suit",
+    "name": "Mercer Navy Windowpane Wool Jacket",
+    "priceCents": 47500,
+    "kind": "jacket",
     "sku": "SM-01396",
-    "sample": true
+    "sample": true,
+    "fabricCode": "CN51074"
   },
   {
     "id": 1397,
-    "name": "Hudson Burgundy Herringbone Wool Suit",
-    "priceCents": 42700,
-    "kind": "suit",
+    "name": "Sullivan Navy Fine Stripe Wool Jacket",
+    "priceCents": 47500,
+    "kind": "jacket",
     "sku": "SM-01397",
-    "sample": true
+    "sample": true,
+    "fabricCode": "CN51364"
   },
   {
     "id": 1398,
-    "name": "Mercer Burgundy Windowpane Wool Suit",
-    "priceCents": 43500,
-    "kind": "suit",
+    "name": "Bleecker Navy Micro Check Wool Jacket",
+    "priceCents": 61500,
+    "kind": "jacket",
     "sku": "SM-01398",
-    "sample": true
+    "sample": true,
+    "fabricCode": "EN53819"
   },
   {
     "id": 1399,
-    "name": "Sullivan Burgundy Fine Stripe Wool Suit",
-    "priceCents": 44300,
-    "kind": "suit",
+    "name": "Waverly Charcoal Solid Wool Jacket",
+    "priceCents": 40500,
+    "kind": "jacket",
     "sku": "SM-01399",
-    "sample": true
+    "sample": true,
+    "fabricCode": "CG21170"
   },
   {
     "id": 1400,
-    "name": "Bleecker Burgundy Micro Check Wool Suit",
-    "priceCents": 45100,
-    "kind": "suit",
+    "name": "Rivington Charcoal Herringbone Wool Jacket",
+    "priceCents": 75500,
+    "kind": "jacket",
     "sku": "SM-01400",
-    "sample": true
+    "sample": true,
+    "fabricCode": "EG23613"
   },
   {
     "id": 1401,
-    "name": "Waverly Burgundy Birdseye Wool Suit",
-    "priceCents": 45900,
-    "kind": "suit",
+    "name": "Hudson Charcoal Windowpane Wool Jacket",
+    "priceCents": 68500,
+    "kind": "jacket",
     "sku": "SM-01401",
-    "sample": true
+    "sample": true,
+    "fabricCode": "EG23223"
   },
   {
     "id": 1402,
-    "name": "Rivington Chocolate Solid Wool Suit",
-    "priceCents": 42400,
-    "kind": "suit",
+    "name": "Mercer Charcoal Fine Stripe Wool Jacket",
+    "priceCents": 47500,
+    "kind": "jacket",
     "sku": "SM-01402",
-    "sample": true
+    "sample": true,
+    "fabricCode": "CG21150"
   },
   {
     "id": 1403,
-    "name": "Hudson Chocolate Herringbone Wool Suit",
-    "priceCents": 43200,
-    "kind": "suit",
+    "name": "Sullivan Charcoal Birdseye Wool Jacket",
+    "priceCents": 61500,
+    "kind": "jacket",
     "sku": "SM-01403",
-    "sample": true
+    "sample": true,
+    "fabricCode": "EG23717"
   },
   {
     "id": 1404,
-    "name": "Mercer Chocolate Windowpane Wool Suit",
-    "priceCents": 44000,
-    "kind": "suit",
+    "name": "Bleecker Forest Solid Wool Jacket",
+    "priceCents": 40500,
+    "kind": "jacket",
     "sku": "SM-01404",
-    "sample": true
+    "sample": true,
+    "fabricCode": "CO41127"
   },
   {
     "id": 1405,
-    "name": "Sullivan Chocolate Fine Stripe Wool Suit",
-    "priceCents": 44800,
-    "kind": "suit",
+    "name": "Waverly Forest Windowpane Wool Jacket",
+    "priceCents": 61500,
+    "kind": "jacket",
     "sku": "SM-01405",
-    "sample": true
+    "sample": true,
+    "fabricCode": "EO10713"
   },
   {
     "id": 1406,
-    "name": "Bleecker Chocolate Micro Check Wool Suit",
-    "priceCents": 45600,
-    "kind": "suit",
+    "name": "Rivington Sand Solid Wool Jacket",
+    "priceCents": 47500,
+    "kind": "jacket",
     "sku": "SM-01406",
-    "sample": true
+    "sample": true,
+    "fabricCode": "CO41088"
   },
   {
     "id": 1407,
-    "name": "Waverly Chocolate Birdseye Wool Suit",
-    "priceCents": 46400,
-    "kind": "suit",
+    "name": "Hudson Sand Herringbone Wool Jacket",
+    "priceCents": 75500,
+    "kind": "jacket",
     "sku": "SM-01407",
-    "sample": true
+    "sample": true,
+    "fabricCode": "ER33187"
   },
   {
     "id": 1408,
-    "name": "Rivington Navy Solid Wool Jacket",
-    "priceCents": 27900,
+    "name": "Mercer Sand Fine Stripe Wool Jacket",
+    "priceCents": 75500,
     "kind": "jacket",
     "sku": "SM-01408",
-    "sample": true
+    "sample": true,
+    "fabricCode": "ER33254"
   },
   {
     "id": 1409,
-    "name": "Hudson Navy Herringbone Wool Jacket",
-    "priceCents": 28700,
+    "name": "Sullivan Burgundy Solid Wool Jacket",
+    "priceCents": 54500,
     "kind": "jacket",
     "sku": "SM-01409",
-    "sample": true
+    "sample": true,
+    "fabricCode": "EO10120"
   },
   {
     "id": 1410,
-    "name": "Mercer Navy Windowpane Wool Jacket",
-    "priceCents": 29500,
+    "name": "Bleecker Chocolate Solid Wool Jacket",
+    "priceCents": 47500,
     "kind": "jacket",
     "sku": "SM-01410",
-    "sample": true
+    "sample": true,
+    "fabricCode": "CR31039"
   },
   {
     "id": 1411,
-    "name": "Sullivan Navy Fine Stripe Wool Jacket",
-    "priceCents": 30300,
+    "name": "Waverly Chocolate Herringbone Wool Jacket",
+    "priceCents": 68500,
     "kind": "jacket",
     "sku": "SM-01411",
-    "sample": true
+    "sample": true,
+    "fabricCode": "KR32005"
   },
   {
     "id": 1412,
-    "name": "Bleecker Navy Micro Check Wool Jacket",
-    "priceCents": 31100,
+    "name": "Rivington Chocolate Fine Stripe Wool Jacket",
+    "priceCents": 47500,
     "kind": "jacket",
     "sku": "SM-01412",
-    "sample": true
+    "sample": true,
+    "fabricCode": "CR31014"
   },
   {
     "id": 1413,
-    "name": "Waverly Navy Birdseye Wool Jacket",
-    "priceCents": 31900,
-    "kind": "jacket",
+    "name": "Rivington Navy Solid Wool Trouser",
+    "priceCents": 24500,
+    "kind": "pants",
     "sku": "SM-01413",
-    "sample": true
+    "sample": true,
+    "fabricCode": "CN51060"
   },
   {
     "id": 1414,
-    "name": "Rivington Charcoal Solid Wool Jacket",
-    "priceCents": 28400,
-    "kind": "jacket",
+    "name": "Hudson Navy Herringbone Wool Trouser",
+    "priceCents": 20500,
+    "kind": "pants",
     "sku": "SM-01414",
-    "sample": true
+    "sample": true,
+    "fabricCode": "CN51330"
   },
   {
     "id": 1415,
-    "name": "Hudson Charcoal Herringbone Wool Jacket",
-    "priceCents": 29200,
-    "kind": "jacket",
+    "name": "Mercer Navy Windowpane Wool Trouser",
+    "priceCents": 24500,
+    "kind": "pants",
     "sku": "SM-01415",
-    "sample": true
+    "sample": true,
+    "fabricCode": "CN51075"
   },
   {
     "id": 1416,
-    "name": "Mercer Charcoal Windowpane Wool Jacket",
-    "priceCents": 30000,
-    "kind": "jacket",
+    "name": "Sullivan Navy Fine Stripe Wool Trouser",
+    "priceCents": 32500,
+    "kind": "pants",
     "sku": "SM-01416",
-    "sample": true
+    "sample": true,
+    "fabricCode": "EN53008"
   },
   {
     "id": 1417,
-    "name": "Sullivan Charcoal Fine Stripe Wool Jacket",
-    "priceCents": 30800,
-    "kind": "jacket",
+    "name": "Bleecker Navy Micro Check Wool Trouser",
+    "priceCents": 36500,
+    "kind": "pants",
     "sku": "SM-01417",
-    "sample": true
+    "sample": true,
+    "fabricCode": "EN54224"
   },
   {
     "id": 1418,
-    "name": "Bleecker Charcoal Micro Check Wool Jacket",
-    "priceCents": 31600,
-    "kind": "jacket",
+    "name": "Waverly Charcoal Solid Wool Trouser",
+    "priceCents": 28500,
+    "kind": "pants",
     "sku": "SM-01418",
-    "sample": true
+    "sample": true,
+    "fabricCode": "CG21198"
   },
   {
     "id": 1419,
-    "name": "Waverly Charcoal Birdseye Wool Jacket",
-    "priceCents": 32400,
-    "kind": "jacket",
+    "name": "Rivington Charcoal Herringbone Wool Trouser",
+    "priceCents": 32500,
+    "kind": "pants",
     "sku": "SM-01419",
-    "sample": true
+    "sample": true,
+    "fabricCode": "EG23667"
   },
   {
     "id": 1420,
-    "name": "Rivington Forest Solid Wool Jacket",
-    "priceCents": 28900,
-    "kind": "jacket",
+    "name": "Hudson Charcoal Windowpane Wool Trouser",
+    "priceCents": 32500,
+    "kind": "pants",
     "sku": "SM-01420",
-    "sample": true
+    "sample": true,
+    "fabricCode": "EG23227"
   },
   {
     "id": 1421,
-    "name": "Hudson Forest Herringbone Wool Jacket",
-    "priceCents": 29700,
-    "kind": "jacket",
+    "name": "Mercer Charcoal Fine Stripe Wool Trouser",
+    "priceCents": 24500,
+    "kind": "pants",
     "sku": "SM-01421",
-    "sample": true
+    "sample": true,
+    "fabricCode": "CG21219"
   },
   {
     "id": 1422,
-    "name": "Mercer Forest Windowpane Wool Jacket",
-    "priceCents": 30500,
-    "kind": "jacket",
+    "name": "Sullivan Forest Solid Wool Trouser",
+    "priceCents": 20500,
+    "kind": "pants",
     "sku": "SM-01422",
-    "sample": true
+    "sample": true,
+    "fabricCode": "CO80305"
   },
   {
     "id": 1423,
-    "name": "Sullivan Forest Fine Stripe Wool Jacket",
-    "priceCents": 31300,
-    "kind": "jacket",
+    "name": "Bleecker Sand Solid Wool Trouser",
+    "priceCents": 24500,
+    "kind": "pants",
     "sku": "SM-01423",
-    "sample": true
+    "sample": true,
+    "fabricCode": "CO41095"
   },
   {
     "id": 1424,
-    "name": "Bleecker Forest Micro Check Wool Jacket",
-    "priceCents": 32100,
-    "kind": "jacket",
+    "name": "Waverly Sand Herringbone Wool Trouser",
+    "priceCents": 32500,
+    "kind": "pants",
     "sku": "SM-01424",
-    "sample": true
+    "sample": true,
+    "fabricCode": "ER33188"
   },
   {
     "id": 1425,
-    "name": "Waverly Forest Birdseye Wool Jacket",
-    "priceCents": 32900,
-    "kind": "jacket",
+    "name": "Rivington Sand Fine Stripe Wool Trouser",
+    "priceCents": 46500,
+    "kind": "pants",
     "sku": "SM-01425",
-    "sample": true
+    "sample": true,
+    "fabricCode": "ER33270"
   },
   {
     "id": 1426,
-    "name": "Rivington Sand Solid Wool Jacket",
-    "priceCents": 29400,
-    "kind": "jacket",
+    "name": "Hudson Burgundy Solid Wool Trouser",
+    "priceCents": 32500,
+    "kind": "pants",
     "sku": "SM-01426",
-    "sample": true
+    "sample": true,
+    "fabricCode": "EO10129"
   },
   {
     "id": 1427,
-    "name": "Hudson Sand Herringbone Wool Jacket",
-    "priceCents": 30200,
-    "kind": "jacket",
+    "name": "Mercer Chocolate Solid Wool Trouser",
+    "priceCents": 20500,
+    "kind": "pants",
     "sku": "SM-01427",
-    "sample": true
+    "sample": true,
+    "fabricCode": "CR31042"
   },
   {
     "id": 1428,
-    "name": "Mercer Sand Windowpane Wool Jacket",
-    "priceCents": 31000,
-    "kind": "jacket",
+    "name": "Sullivan Chocolate Herringbone Wool Trouser",
+    "priceCents": 16500,
+    "kind": "pants",
     "sku": "SM-01428",
-    "sample": true
+    "sample": true,
+    "fabricCode": "KR32031"
   },
   {
     "id": 1429,
-    "name": "Sullivan Sand Fine Stripe Wool Jacket",
-    "priceCents": 31800,
-    "kind": "jacket",
+    "name": "Bleecker Chocolate Windowpane Wool Trouser",
+    "priceCents": 76500,
+    "kind": "pants",
     "sku": "SM-01429",
-    "sample": true
+    "sample": true,
+    "fabricCode": "ER33215"
   },
   {
     "id": 1430,
-    "name": "Bleecker Sand Micro Check Wool Jacket",
-    "priceCents": 32600,
-    "kind": "jacket",
+    "name": "Waverly Chocolate Fine Stripe Wool Trouser",
+    "priceCents": 28500,
+    "kind": "pants",
     "sku": "SM-01430",
-    "sample": true
+    "sample": true,
+    "fabricCode": "CR31038"
   },
   {
     "id": 1431,
-    "name": "Waverly Sand Birdseye Wool Jacket",
-    "priceCents": 33400,
-    "kind": "jacket",
+    "name": "Rivington Navy Solid Cotton Shirt",
+    "priceCents": 12500,
+    "kind": "shirt",
     "sku": "SM-01431",
-    "sample": true
+    "sample": true,
+    "fabricCode": "10-1288-06"
   },
   {
     "id": 1432,
-    "name": "Rivington Burgundy Solid Wool Jacket",
-    "priceCents": 29900,
-    "kind": "jacket",
+    "name": "Hudson Navy Fine Stripe Cotton Shirt",
+    "priceCents": 12500,
+    "kind": "shirt",
     "sku": "SM-01432",
-    "sample": true
+    "sample": true,
+    "fabricCode": "10-1077-05"
   },
   {
     "id": 1433,
-    "name": "Hudson Burgundy Herringbone Wool Jacket",
-    "priceCents": 30700,
-    "kind": "jacket",
+    "name": "Mercer Navy Micro Check Cotton Shirt",
+    "priceCents": 17500,
+    "kind": "shirt",
     "sku": "SM-01433",
-    "sample": true
+    "sample": true,
+    "fabricCode": "30-3246-05"
   },
   {
     "id": 1434,
-    "name": "Mercer Burgundy Windowpane Wool Jacket",
-    "priceCents": 31500,
-    "kind": "jacket",
+    "name": "Sullivan Charcoal Solid Cotton Shirt",
+    "priceCents": 12500,
+    "kind": "shirt",
     "sku": "SM-01434",
-    "sample": true
+    "sample": true,
+    "fabricCode": "10-1309-02"
   },
   {
     "id": 1435,
-    "name": "Sullivan Burgundy Fine Stripe Wool Jacket",
-    "priceCents": 32300,
-    "kind": "jacket",
+    "name": "Bleecker Forest Solid Cotton Shirt",
+    "priceCents": 12500,
+    "kind": "shirt",
     "sku": "SM-01435",
-    "sample": true
+    "sample": true,
+    "fabricCode": "10-1307-09"
   },
   {
     "id": 1436,
-    "name": "Bleecker Burgundy Micro Check Wool Jacket",
-    "priceCents": 33100,
-    "kind": "jacket",
+    "name": "Waverly Forest Fine Stripe Cotton Shirt",
+    "priceCents": 17500,
+    "kind": "shirt",
     "sku": "SM-01436",
-    "sample": true
+    "sample": true,
+    "fabricCode": "30-3018-28"
   },
   {
     "id": 1437,
-    "name": "Waverly Burgundy Birdseye Wool Jacket",
-    "priceCents": 33900,
-    "kind": "jacket",
+    "name": "Rivington Sand Fine Stripe Cotton Shirt",
+    "priceCents": 17500,
+    "kind": "shirt",
     "sku": "SM-01437",
-    "sample": true
+    "sample": true,
+    "fabricCode": "30-3010-13"
   },
   {
     "id": 1438,
-    "name": "Rivington Chocolate Solid Wool Jacket",
-    "priceCents": 30400,
-    "kind": "jacket",
+    "name": "Hudson Burgundy Solid Wool Shirt",
+    "priceCents": 22500,
+    "kind": "shirt",
     "sku": "SM-01438",
-    "sample": true
+    "sample": true,
+    "fabricCode": "80-8084-22"
   },
   {
     "id": 1439,
-    "name": "Hudson Chocolate Herringbone Wool Jacket",
-    "priceCents": 31200,
-    "kind": "jacket",
+    "name": "Mercer Burgundy Fine Stripe Cotton Shirt",
+    "priceCents": 17500,
+    "kind": "shirt",
     "sku": "SM-01439",
-    "sample": true
+    "sample": true,
+    "fabricCode": "30-3385-22"
   },
   {
     "id": 1440,
-    "name": "Mercer Chocolate Windowpane Wool Jacket",
-    "priceCents": 32000,
-    "kind": "jacket",
+    "name": "Sullivan Burgundy Micro Check Cotton Shirt",
+    "priceCents": 12500,
+    "kind": "shirt",
     "sku": "SM-01440",
-    "sample": true
+    "sample": true,
+    "fabricCode": "10-1251-22"
   },
   {
     "id": 1441,
-    "name": "Sullivan Chocolate Fine Stripe Wool Jacket",
-    "priceCents": 32800,
-    "kind": "jacket",
+    "name": "Bleecker Chocolate Fine Stripe Cotton Shirt",
+    "priceCents": 12500,
+    "kind": "shirt",
     "sku": "SM-01441",
-    "sample": true
+    "sample": true,
+    "fabricCode": "10-1328-10"
   },
   {
     "id": 1442,
-    "name": "Bleecker Chocolate Micro Check Wool Jacket",
-    "priceCents": 33600,
+    "name": "Rivington Navy Solid Leather Jacket",
+    "priceCents": 41900,
     "kind": "jacket",
     "sku": "SM-01442",
     "sample": true
   },
   {
     "id": 1443,
-    "name": "Waverly Chocolate Birdseye Wool Jacket",
-    "priceCents": 34400,
+    "name": "Hudson Navy Herringbone Leather Jacket",
+    "priceCents": 42700,
     "kind": "jacket",
     "sku": "SM-01443",
     "sample": true
   },
   {
     "id": 1444,
-    "name": "Rivington Navy Solid Wool Trouser",
-    "priceCents": 15900,
-    "kind": "pants",
+    "name": "Mercer Navy Windowpane Leather Jacket",
+    "priceCents": 43500,
+    "kind": "jacket",
     "sku": "SM-01444",
     "sample": true
   },
   {
     "id": 1445,
-    "name": "Hudson Navy Herringbone Wool Trouser",
-    "priceCents": 16700,
-    "kind": "pants",
+    "name": "Sullivan Navy Fine Stripe Leather Jacket",
+    "priceCents": 44300,
+    "kind": "jacket",
     "sku": "SM-01445",
     "sample": true
   },
   {
     "id": 1446,
-    "name": "Mercer Navy Windowpane Wool Trouser",
-    "priceCents": 17500,
-    "kind": "pants",
+    "name": "Bleecker Navy Micro Check Leather Jacket",
+    "priceCents": 45100,
+    "kind": "jacket",
     "sku": "SM-01446",
     "sample": true
   },
   {
     "id": 1447,
-    "name": "Sullivan Navy Fine Stripe Wool Trouser",
-    "priceCents": 18300,
-    "kind": "pants",
+    "name": "Waverly Navy Birdseye Leather Jacket",
+    "priceCents": 45900,
+    "kind": "jacket",
     "sku": "SM-01447",
     "sample": true
   },
   {
     "id": 1448,
-    "name": "Bleecker Navy Micro Check Wool Trouser",
-    "priceCents": 19100,
-    "kind": "pants",
+    "name": "Rivington Charcoal Solid Leather Jacket",
+    "priceCents": 42400,
+    "kind": "jacket",
     "sku": "SM-01448",
     "sample": true
   },
   {
     "id": 1449,
-    "name": "Waverly Navy Birdseye Wool Trouser",
-    "priceCents": 19900,
-    "kind": "pants",
+    "name": "Hudson Charcoal Herringbone Leather Jacket",
+    "priceCents": 43200,
+    "kind": "jacket",
     "sku": "SM-01449",
     "sample": true
   },
   {
     "id": 1450,
-    "name": "Rivington Charcoal Solid Wool Trouser",
-    "priceCents": 16400,
-    "kind": "pants",
+    "name": "Mercer Charcoal Windowpane Leather Jacket",
+    "priceCents": 44000,
+    "kind": "jacket",
     "sku": "SM-01450",
     "sample": true
   },
   {
     "id": 1451,
-    "name": "Hudson Charcoal Herringbone Wool Trouser",
-    "priceCents": 17200,
-    "kind": "pants",
+    "name": "Sullivan Charcoal Fine Stripe Leather Jacket",
+    "priceCents": 44800,
+    "kind": "jacket",
     "sku": "SM-01451",
     "sample": true
   },
   {
     "id": 1452,
-    "name": "Mercer Charcoal Windowpane Wool Trouser",
-    "priceCents": 18000,
-    "kind": "pants",
+    "name": "Bleecker Charcoal Micro Check Leather Jacket",
+    "priceCents": 45600,
+    "kind": "jacket",
     "sku": "SM-01452",
     "sample": true
   },
   {
     "id": 1453,
-    "name": "Sullivan Charcoal Fine Stripe Wool Trouser",
-    "priceCents": 18800,
-    "kind": "pants",
+    "name": "Waverly Charcoal Birdseye Leather Jacket",
+    "priceCents": 46400,
+    "kind": "jacket",
     "sku": "SM-01453",
     "sample": true
   },
   {
     "id": 1454,
-    "name": "Bleecker Charcoal Micro Check Wool Trouser",
-    "priceCents": 19600,
-    "kind": "pants",
+    "name": "Rivington Forest Solid Leather Jacket",
+    "priceCents": 42900,
+    "kind": "jacket",
     "sku": "SM-01454",
     "sample": true
   },
   {
     "id": 1455,
-    "name": "Waverly Charcoal Birdseye Wool Trouser",
-    "priceCents": 20400,
-    "kind": "pants",
+    "name": "Hudson Forest Herringbone Leather Jacket",
+    "priceCents": 43700,
+    "kind": "jacket",
     "sku": "SM-01455",
     "sample": true
   },
   {
     "id": 1456,
-    "name": "Rivington Forest Solid Wool Trouser",
-    "priceCents": 16900,
-    "kind": "pants",
+    "name": "Mercer Forest Windowpane Leather Jacket",
+    "priceCents": 44500,
+    "kind": "jacket",
     "sku": "SM-01456",
     "sample": true
   },
   {
     "id": 1457,
-    "name": "Hudson Forest Herringbone Wool Trouser",
-    "priceCents": 17700,
-    "kind": "pants",
+    "name": "Sullivan Forest Fine Stripe Leather Jacket",
+    "priceCents": 45300,
+    "kind": "jacket",
     "sku": "SM-01457",
     "sample": true
   },
   {
     "id": 1458,
-    "name": "Mercer Forest Windowpane Wool Trouser",
-    "priceCents": 18500,
-    "kind": "pants",
+    "name": "Bleecker Forest Micro Check Leather Jacket",
+    "priceCents": 46100,
+    "kind": "jacket",
     "sku": "SM-01458",
     "sample": true
   },
   {
     "id": 1459,
-    "name": "Sullivan Forest Fine Stripe Wool Trouser",
-    "priceCents": 19300,
-    "kind": "pants",
+    "name": "Waverly Forest Birdseye Leather Jacket",
+    "priceCents": 46900,
+    "kind": "jacket",
     "sku": "SM-01459",
     "sample": true
   },
   {
     "id": 1460,
-    "name": "Bleecker Forest Micro Check Wool Trouser",
-    "priceCents": 20100,
-    "kind": "pants",
+    "name": "Rivington Sand Solid Leather Jacket",
+    "priceCents": 43400,
+    "kind": "jacket",
     "sku": "SM-01460",
     "sample": true
   },
   {
     "id": 1461,
-    "name": "Waverly Forest Birdseye Wool Trouser",
-    "priceCents": 20900,
-    "kind": "pants",
+    "name": "Hudson Sand Herringbone Leather Jacket",
+    "priceCents": 44200,
+    "kind": "jacket",
     "sku": "SM-01461",
     "sample": true
   },
   {
     "id": 1462,
-    "name": "Rivington Sand Solid Wool Trouser",
-    "priceCents": 17400,
-    "kind": "pants",
+    "name": "Mercer Sand Windowpane Leather Jacket",
+    "priceCents": 45000,
+    "kind": "jacket",
     "sku": "SM-01462",
     "sample": true
   },
   {
     "id": 1463,
-    "name": "Hudson Sand Herringbone Wool Trouser",
-    "priceCents": 18200,
-    "kind": "pants",
+    "name": "Sullivan Sand Fine Stripe Leather Jacket",
+    "priceCents": 45800,
+    "kind": "jacket",
     "sku": "SM-01463",
     "sample": true
   },
   {
     "id": 1464,
-    "name": "Mercer Sand Windowpane Wool Trouser",
-    "priceCents": 19000,
-    "kind": "pants",
+    "name": "Bleecker Sand Micro Check Leather Jacket",
+    "priceCents": 46600,
+    "kind": "jacket",
     "sku": "SM-01464",
     "sample": true
   },
   {
     "id": 1465,
-    "name": "Sullivan Sand Fine Stripe Wool Trouser",
-    "priceCents": 19800,
-    "kind": "pants",
+    "name": "Waverly Sand Birdseye Leather Jacket",
+    "priceCents": 47400,
+    "kind": "jacket",
     "sku": "SM-01465",
     "sample": true
   },
   {
     "id": 1466,
-    "name": "Bleecker Sand Micro Check Wool Trouser",
-    "priceCents": 20600,
-    "kind": "pants",
+    "name": "Rivington Burgundy Solid Leather Jacket",
+    "priceCents": 43900,
+    "kind": "jacket",
     "sku": "SM-01466",
     "sample": true
   },
   {
     "id": 1467,
-    "name": "Waverly Sand Birdseye Wool Trouser",
-    "priceCents": 21400,
-    "kind": "pants",
+    "name": "Hudson Burgundy Herringbone Leather Jacket",
+    "priceCents": 44700,
+    "kind": "jacket",
     "sku": "SM-01467",
     "sample": true
   },
   {
     "id": 1468,
-    "name": "Rivington Burgundy Solid Wool Trouser",
-    "priceCents": 17900,
-    "kind": "pants",
+    "name": "Mercer Burgundy Windowpane Leather Jacket",
+    "priceCents": 45500,
+    "kind": "jacket",
     "sku": "SM-01468",
     "sample": true
   },
   {
     "id": 1469,
-    "name": "Hudson Burgundy Herringbone Wool Trouser",
-    "priceCents": 18700,
-    "kind": "pants",
+    "name": "Sullivan Burgundy Fine Stripe Leather Jacket",
+    "priceCents": 46300,
+    "kind": "jacket",
     "sku": "SM-01469",
     "sample": true
   },
   {
     "id": 1470,
-    "name": "Mercer Burgundy Windowpane Wool Trouser",
-    "priceCents": 19500,
-    "kind": "pants",
+    "name": "Bleecker Burgundy Micro Check Leather Jacket",
+    "priceCents": 47100,
+    "kind": "jacket",
     "sku": "SM-01470",
     "sample": true
   },
   {
     "id": 1471,
-    "name": "Sullivan Burgundy Fine Stripe Wool Trouser",
-    "priceCents": 20300,
-    "kind": "pants",
+    "name": "Waverly Burgundy Birdseye Leather Jacket",
+    "priceCents": 47900,
+    "kind": "jacket",
     "sku": "SM-01471",
     "sample": true
   },
   {
     "id": 1472,
-    "name": "Bleecker Burgundy Micro Check Wool Trouser",
-    "priceCents": 21100,
-    "kind": "pants",
+    "name": "Rivington Chocolate Solid Leather Jacket",
+    "priceCents": 44400,
+    "kind": "jacket",
     "sku": "SM-01472",
     "sample": true
   },
   {
     "id": 1473,
-    "name": "Waverly Burgundy Birdseye Wool Trouser",
-    "priceCents": 21900,
-    "kind": "pants",
+    "name": "Hudson Chocolate Herringbone Leather Jacket",
+    "priceCents": 45200,
+    "kind": "jacket",
     "sku": "SM-01473",
     "sample": true
   },
   {
     "id": 1474,
-    "name": "Rivington Chocolate Solid Wool Trouser",
-    "priceCents": 18400,
-    "kind": "pants",
+    "name": "Mercer Chocolate Windowpane Leather Jacket",
+    "priceCents": 46000,
+    "kind": "jacket",
     "sku": "SM-01474",
     "sample": true
   },
   {
     "id": 1475,
-    "name": "Hudson Chocolate Herringbone Wool Trouser",
-    "priceCents": 19200,
-    "kind": "pants",
+    "name": "Sullivan Chocolate Fine Stripe Leather Jacket",
+    "priceCents": 46800,
+    "kind": "jacket",
     "sku": "SM-01475",
     "sample": true
   },
   {
     "id": 1476,
-    "name": "Mercer Chocolate Windowpane Wool Trouser",
-    "priceCents": 20000,
-    "kind": "pants",
+    "name": "Bleecker Chocolate Micro Check Leather Jacket",
+    "priceCents": 47600,
+    "kind": "jacket",
     "sku": "SM-01476",
     "sample": true
   },
   {
     "id": 1477,
-    "name": "Sullivan Chocolate Fine Stripe Wool Trouser",
-    "priceCents": 20800,
-    "kind": "pants",
+    "name": "Waverly Chocolate Birdseye Leather Jacket",
+    "priceCents": 48400,
+    "kind": "jacket",
     "sku": "SM-01477",
     "sample": true
   },
   {
     "id": 1478,
-    "name": "Bleecker Chocolate Micro Check Wool Trouser",
-    "priceCents": 21600,
+    "name": "Rivington Navy Solid Leather Trouser",
+    "priceCents": 29900,
     "kind": "pants",
     "sku": "SM-01478",
     "sample": true
   },
   {
     "id": 1479,
-    "name": "Waverly Chocolate Birdseye Wool Trouser",
-    "priceCents": 22400,
+    "name": "Hudson Navy Herringbone Leather Trouser",
+    "priceCents": 30700,
     "kind": "pants",
     "sku": "SM-01479",
     "sample": true
   },
   {
     "id": 1480,
-    "name": "Rivington Navy Solid Wool Shirt",
-    "priceCents": 9900,
-    "kind": "shirt",
+    "name": "Mercer Navy Windowpane Leather Trouser",
+    "priceCents": 31500,
+    "kind": "pants",
     "sku": "SM-01480",
     "sample": true
   },
   {
     "id": 1481,
-    "name": "Hudson Navy Herringbone Wool Shirt",
-    "priceCents": 10700,
-    "kind": "shirt",
+    "name": "Sullivan Navy Fine Stripe Leather Trouser",
+    "priceCents": 32300,
+    "kind": "pants",
     "sku": "SM-01481",
     "sample": true
   },
   {
     "id": 1482,
-    "name": "Mercer Navy Windowpane Wool Shirt",
-    "priceCents": 11500,
-    "kind": "shirt",
+    "name": "Bleecker Navy Micro Check Leather Trouser",
+    "priceCents": 33100,
+    "kind": "pants",
     "sku": "SM-01482",
     "sample": true
   },
   {
     "id": 1483,
-    "name": "Sullivan Navy Fine Stripe Wool Shirt",
-    "priceCents": 12300,
-    "kind": "shirt",
+    "name": "Waverly Navy Birdseye Leather Trouser",
+    "priceCents": 33900,
+    "kind": "pants",
     "sku": "SM-01483",
     "sample": true
   },
   {
     "id": 1484,
-    "name": "Bleecker Navy Micro Check Wool Shirt",
-    "priceCents": 13100,
-    "kind": "shirt",
+    "name": "Rivington Charcoal Solid Leather Trouser",
+    "priceCents": 30400,
+    "kind": "pants",
     "sku": "SM-01484",
     "sample": true
   },
   {
     "id": 1485,
-    "name": "Waverly Navy Birdseye Wool Shirt",
-    "priceCents": 13900,
-    "kind": "shirt",
+    "name": "Hudson Charcoal Herringbone Leather Trouser",
+    "priceCents": 31200,
+    "kind": "pants",
     "sku": "SM-01485",
     "sample": true
   },
   {
     "id": 1486,
-    "name": "Rivington Charcoal Solid Wool Shirt",
-    "priceCents": 10400,
-    "kind": "shirt",
+    "name": "Mercer Charcoal Windowpane Leather Trouser",
+    "priceCents": 32000,
+    "kind": "pants",
     "sku": "SM-01486",
     "sample": true
   },
   {
     "id": 1487,
-    "name": "Hudson Charcoal Herringbone Wool Shirt",
-    "priceCents": 11200,
-    "kind": "shirt",
+    "name": "Sullivan Charcoal Fine Stripe Leather Trouser",
+    "priceCents": 32800,
+    "kind": "pants",
     "sku": "SM-01487",
     "sample": true
   },
   {
     "id": 1488,
-    "name": "Mercer Charcoal Windowpane Wool Shirt",
-    "priceCents": 12000,
-    "kind": "shirt",
+    "name": "Bleecker Charcoal Micro Check Leather Trouser",
+    "priceCents": 33600,
+    "kind": "pants",
     "sku": "SM-01488",
     "sample": true
   },
   {
     "id": 1489,
-    "name": "Sullivan Charcoal Fine Stripe Wool Shirt",
-    "priceCents": 12800,
-    "kind": "shirt",
+    "name": "Waverly Charcoal Birdseye Leather Trouser",
+    "priceCents": 34400,
+    "kind": "pants",
     "sku": "SM-01489",
     "sample": true
   },
   {
     "id": 1490,
-    "name": "Bleecker Charcoal Micro Check Wool Shirt",
-    "priceCents": 13600,
-    "kind": "shirt",
+    "name": "Rivington Forest Solid Leather Trouser",
+    "priceCents": 30900,
+    "kind": "pants",
     "sku": "SM-01490",
     "sample": true
   },
   {
     "id": 1491,
-    "name": "Waverly Charcoal Birdseye Wool Shirt",
-    "priceCents": 14400,
-    "kind": "shirt",
+    "name": "Hudson Forest Herringbone Leather Trouser",
+    "priceCents": 31700,
+    "kind": "pants",
     "sku": "SM-01491",
     "sample": true
   },
   {
     "id": 1492,
-    "name": "Rivington Forest Solid Wool Shirt",
-    "priceCents": 10900,
-    "kind": "shirt",
+    "name": "Mercer Forest Windowpane Leather Trouser",
+    "priceCents": 32500,
+    "kind": "pants",
     "sku": "SM-01492",
     "sample": true
   },
   {
     "id": 1493,
-    "name": "Hudson Forest Herringbone Wool Shirt",
-    "priceCents": 11700,
-    "kind": "shirt",
+    "name": "Sullivan Forest Fine Stripe Leather Trouser",
+    "priceCents": 33300,
+    "kind": "pants",
     "sku": "SM-01493",
     "sample": true
   },
   {
     "id": 1494,
-    "name": "Mercer Forest Windowpane Wool Shirt",
-    "priceCents": 12500,
-    "kind": "shirt",
+    "name": "Bleecker Forest Micro Check Leather Trouser",
+    "priceCents": 34100,
+    "kind": "pants",
     "sku": "SM-01494",
     "sample": true
   },
   {
     "id": 1495,
-    "name": "Sullivan Forest Fine Stripe Wool Shirt",
-    "priceCents": 13300,
-    "kind": "shirt",
+    "name": "Waverly Forest Birdseye Leather Trouser",
+    "priceCents": 34900,
+    "kind": "pants",
     "sku": "SM-01495",
     "sample": true
   },
   {
     "id": 1496,
-    "name": "Bleecker Forest Micro Check Wool Shirt",
-    "priceCents": 14100,
-    "kind": "shirt",
+    "name": "Rivington Sand Solid Leather Trouser",
+    "priceCents": 31400,
+    "kind": "pants",
     "sku": "SM-01496",
     "sample": true
   },
   {
     "id": 1497,
-    "name": "Waverly Forest Birdseye Wool Shirt",
-    "priceCents": 14900,
-    "kind": "shirt",
+    "name": "Hudson Sand Herringbone Leather Trouser",
+    "priceCents": 32200,
+    "kind": "pants",
     "sku": "SM-01497",
     "sample": true
   },
   {
     "id": 1498,
-    "name": "Rivington Sand Solid Wool Shirt",
-    "priceCents": 11400,
-    "kind": "shirt",
+    "name": "Mercer Sand Windowpane Leather Trouser",
+    "priceCents": 33000,
+    "kind": "pants",
     "sku": "SM-01498",
     "sample": true
   },
   {
     "id": 1499,
-    "name": "Hudson Sand Herringbone Wool Shirt",
-    "priceCents": 12200,
-    "kind": "shirt",
+    "name": "Sullivan Sand Fine Stripe Leather Trouser",
+    "priceCents": 33800,
+    "kind": "pants",
     "sku": "SM-01499",
     "sample": true
   },
   {
     "id": 1500,
-    "name": "Mercer Sand Windowpane Wool Shirt",
-    "priceCents": 13000,
-    "kind": "shirt",
+    "name": "Bleecker Sand Micro Check Leather Trouser",
+    "priceCents": 34600,
+    "kind": "pants",
     "sku": "SM-01500",
     "sample": true
   },
   {
     "id": 1501,
-    "name": "Sullivan Sand Fine Stripe Wool Shirt",
-    "priceCents": 13800,
-    "kind": "shirt",
+    "name": "Waverly Sand Birdseye Leather Trouser",
+    "priceCents": 35400,
+    "kind": "pants",
     "sku": "SM-01501",
     "sample": true
   },
   {
     "id": 1502,
-    "name": "Bleecker Sand Micro Check Wool Shirt",
-    "priceCents": 14600,
-    "kind": "shirt",
+    "name": "Rivington Burgundy Solid Leather Trouser",
+    "priceCents": 31900,
+    "kind": "pants",
     "sku": "SM-01502",
     "sample": true
   },
   {
     "id": 1503,
-    "name": "Waverly Sand Birdseye Wool Shirt",
-    "priceCents": 15400,
-    "kind": "shirt",
+    "name": "Hudson Burgundy Herringbone Leather Trouser",
+    "priceCents": 32700,
+    "kind": "pants",
     "sku": "SM-01503",
     "sample": true
   },
   {
     "id": 1504,
-    "name": "Rivington Burgundy Solid Wool Shirt",
-    "priceCents": 11900,
-    "kind": "shirt",
+    "name": "Mercer Burgundy Windowpane Leather Trouser",
+    "priceCents": 33500,
+    "kind": "pants",
     "sku": "SM-01504",
     "sample": true
   },
   {
     "id": 1505,
-    "name": "Hudson Burgundy Herringbone Wool Shirt",
-    "priceCents": 12700,
-    "kind": "shirt",
+    "name": "Sullivan Burgundy Fine Stripe Leather Trouser",
+    "priceCents": 34300,
+    "kind": "pants",
     "sku": "SM-01505",
     "sample": true
   },
   {
     "id": 1506,
-    "name": "Mercer Burgundy Windowpane Wool Shirt",
-    "priceCents": 13500,
-    "kind": "shirt",
+    "name": "Bleecker Burgundy Micro Check Leather Trouser",
+    "priceCents": 35100,
+    "kind": "pants",
     "sku": "SM-01506",
     "sample": true
   },
   {
     "id": 1507,
-    "name": "Sullivan Burgundy Fine Stripe Wool Shirt",
-    "priceCents": 14300,
-    "kind": "shirt",
+    "name": "Waverly Burgundy Birdseye Leather Trouser",
+    "priceCents": 35900,
+    "kind": "pants",
     "sku": "SM-01507",
     "sample": true
   },
   {
     "id": 1508,
-    "name": "Bleecker Burgundy Micro Check Wool Shirt",
-    "priceCents": 15100,
-    "kind": "shirt",
+    "name": "Rivington Chocolate Solid Leather Trouser",
+    "priceCents": 32400,
+    "kind": "pants",
     "sku": "SM-01508",
     "sample": true
   },
   {
     "id": 1509,
-    "name": "Waverly Burgundy Birdseye Wool Shirt",
-    "priceCents": 15900,
-    "kind": "shirt",
+    "name": "Hudson Chocolate Herringbone Leather Trouser",
+    "priceCents": 33200,
+    "kind": "pants",
     "sku": "SM-01509",
     "sample": true
   },
   {
     "id": 1510,
-    "name": "Rivington Chocolate Solid Wool Shirt",
-    "priceCents": 12400,
-    "kind": "shirt",
+    "name": "Mercer Chocolate Windowpane Leather Trouser",
+    "priceCents": 34000,
+    "kind": "pants",
     "sku": "SM-01510",
     "sample": true
   },
   {
     "id": 1511,
-    "name": "Hudson Chocolate Herringbone Wool Shirt",
-    "priceCents": 13200,
-    "kind": "shirt",
+    "name": "Sullivan Chocolate Fine Stripe Leather Trouser",
+    "priceCents": 34800,
+    "kind": "pants",
     "sku": "SM-01511",
     "sample": true
   },
   {
     "id": 1512,
-    "name": "Mercer Chocolate Windowpane Wool Shirt",
-    "priceCents": 14000,
-    "kind": "shirt",
+    "name": "Bleecker Chocolate Micro Check Leather Trouser",
+    "priceCents": 35600,
+    "kind": "pants",
     "sku": "SM-01512",
     "sample": true
   },
   {
     "id": 1513,
-    "name": "Sullivan Chocolate Fine Stripe Wool Shirt",
-    "priceCents": 14800,
-    "kind": "shirt",
+    "name": "Waverly Chocolate Birdseye Leather Trouser",
+    "priceCents": 36400,
+    "kind": "pants",
     "sku": "SM-01513",
     "sample": true
   },
   {
     "id": 1514,
-    "name": "Bleecker Chocolate Micro Check Wool Shirt",
-    "priceCents": 15600,
-    "kind": "shirt",
+    "name": "Rivington Navy Solid Wool Overcoat Overcoat",
+    "priceCents": 27900,
+    "kind": "jacket",
     "sku": "SM-01514",
     "sample": true
   },
   {
     "id": 1515,
-    "name": "Waverly Chocolate Birdseye Wool Shirt",
-    "priceCents": 16400,
-    "kind": "shirt",
+    "name": "Hudson Navy Herringbone Wool Overcoat Overcoat",
+    "priceCents": 28700,
+    "kind": "jacket",
     "sku": "SM-01515",
     "sample": true
   },
   {
     "id": 1516,
-    "name": "Rivington Navy Solid Leather Jacket",
-    "priceCents": 41900,
+    "name": "Mercer Navy Windowpane Wool Overcoat Overcoat",
+    "priceCents": 29500,
     "kind": "jacket",
     "sku": "SM-01516",
     "sample": true
   },
   {
     "id": 1517,
-    "name": "Hudson Navy Herringbone Leather Jacket",
-    "priceCents": 42700,
+    "name": "Sullivan Navy Fine Stripe Wool Overcoat Overcoat",
+    "priceCents": 30300,
     "kind": "jacket",
     "sku": "SM-01517",
     "sample": true
   },
   {
     "id": 1518,
-    "name": "Mercer Navy Windowpane Leather Jacket",
-    "priceCents": 43500,
+    "name": "Bleecker Navy Micro Check Wool Overcoat Overcoat",
+    "priceCents": 31100,
     "kind": "jacket",
     "sku": "SM-01518",
     "sample": true
   },
   {
     "id": 1519,
-    "name": "Sullivan Navy Fine Stripe Leather Jacket",
-    "priceCents": 44300,
+    "name": "Waverly Navy Birdseye Wool Overcoat Overcoat",
+    "priceCents": 31900,
     "kind": "jacket",
     "sku": "SM-01519",
     "sample": true
   },
   {
     "id": 1520,
-    "name": "Bleecker Navy Micro Check Leather Jacket",
-    "priceCents": 45100,
+    "name": "Rivington Charcoal Solid Wool Overcoat Overcoat",
+    "priceCents": 28400,
     "kind": "jacket",
     "sku": "SM-01520",
     "sample": true
   },
   {
     "id": 1521,
-    "name": "Waverly Navy Birdseye Leather Jacket",
-    "priceCents": 45900,
+    "name": "Hudson Charcoal Herringbone Wool Overcoat Overcoat",
+    "priceCents": 29200,
     "kind": "jacket",
     "sku": "SM-01521",
     "sample": true
   },
   {
     "id": 1522,
-    "name": "Rivington Charcoal Solid Leather Jacket",
-    "priceCents": 42400,
+    "name": "Mercer Charcoal Windowpane Wool Overcoat Overcoat",
+    "priceCents": 30000,
     "kind": "jacket",
     "sku": "SM-01522",
     "sample": true
   },
   {
     "id": 1523,
-    "name": "Hudson Charcoal Herringbone Leather Jacket",
-    "priceCents": 43200,
+    "name": "Sullivan Charcoal Fine Stripe Wool Overcoat Overcoat",
+    "priceCents": 30800,
     "kind": "jacket",
     "sku": "SM-01523",
     "sample": true
   },
   {
     "id": 1524,
-    "name": "Mercer Charcoal Windowpane Leather Jacket",
-    "priceCents": 44000,
+    "name": "Bleecker Charcoal Micro Check Wool Overcoat Overcoat",
+    "priceCents": 31600,
     "kind": "jacket",
     "sku": "SM-01524",
     "sample": true
   },
   {
     "id": 1525,
-    "name": "Sullivan Charcoal Fine Stripe Leather Jacket",
-    "priceCents": 44800,
+    "name": "Waverly Charcoal Birdseye Wool Overcoat Overcoat",
+    "priceCents": 32400,
     "kind": "jacket",
     "sku": "SM-01525",
     "sample": true
   },
   {
     "id": 1526,
-    "name": "Bleecker Charcoal Micro Check Leather Jacket",
-    "priceCents": 45600,
+    "name": "Rivington Forest Solid Wool Overcoat Overcoat",
+    "priceCents": 28900,
     "kind": "jacket",
     "sku": "SM-01526",
     "sample": true
   },
   {
     "id": 1527,
-    "name": "Waverly Charcoal Birdseye Leather Jacket",
-    "priceCents": 46400,
+    "name": "Hudson Forest Herringbone Wool Overcoat Overcoat",
+    "priceCents": 29700,
     "kind": "jacket",
     "sku": "SM-01527",
     "sample": true
   },
   {
     "id": 1528,
-    "name": "Rivington Forest Solid Leather Jacket",
-    "priceCents": 42900,
+    "name": "Mercer Forest Windowpane Wool Overcoat Overcoat",
+    "priceCents": 30500,
     "kind": "jacket",
     "sku": "SM-01528",
     "sample": true
   },
   {
     "id": 1529,
-    "name": "Hudson Forest Herringbone Leather Jacket",
-    "priceCents": 43700,
+    "name": "Sullivan Forest Fine Stripe Wool Overcoat Overcoat",
+    "priceCents": 31300,
     "kind": "jacket",
     "sku": "SM-01529",
     "sample": true
   },
   {
     "id": 1530,
-    "name": "Mercer Forest Windowpane Leather Jacket",
-    "priceCents": 44500,
+    "name": "Bleecker Forest Micro Check Wool Overcoat Overcoat",
+    "priceCents": 32100,
     "kind": "jacket",
     "sku": "SM-01530",
     "sample": true
   },
   {
     "id": 1531,
-    "name": "Sullivan Forest Fine Stripe Leather Jacket",
-    "priceCents": 45300,
+    "name": "Waverly Forest Birdseye Wool Overcoat Overcoat",
+    "priceCents": 32900,
     "kind": "jacket",
     "sku": "SM-01531",
     "sample": true
   },
   {
     "id": 1532,
-    "name": "Bleecker Forest Micro Check Leather Jacket",
-    "priceCents": 46100,
+    "name": "Rivington Sand Solid Wool Overcoat Overcoat",
+    "priceCents": 29400,
     "kind": "jacket",
     "sku": "SM-01532",
     "sample": true
   },
   {
     "id": 1533,
-    "name": "Waverly Forest Birdseye Leather Jacket",
-    "priceCents": 46900,
+    "name": "Hudson Sand Herringbone Wool Overcoat Overcoat",
+    "priceCents": 30200,
     "kind": "jacket",
     "sku": "SM-01533",
     "sample": true
   },
   {
     "id": 1534,
-    "name": "Rivington Sand Solid Leather Jacket",
-    "priceCents": 43400,
+    "name": "Mercer Sand Windowpane Wool Overcoat Overcoat",
+    "priceCents": 31000,
     "kind": "jacket",
     "sku": "SM-01534",
     "sample": true
   },
   {
     "id": 1535,
-    "name": "Hudson Sand Herringbone Leather Jacket",
-    "priceCents": 44200,
+    "name": "Sullivan Sand Fine Stripe Wool Overcoat Overcoat",
+    "priceCents": 31800,
     "kind": "jacket",
     "sku": "SM-01535",
     "sample": true
   },
   {
     "id": 1536,
-    "name": "Mercer Sand Windowpane Leather Jacket",
-    "priceCents": 45000,
+    "name": "Bleecker Sand Micro Check Wool Overcoat Overcoat",
+    "priceCents": 32600,
     "kind": "jacket",
     "sku": "SM-01536",
     "sample": true
   },
   {
     "id": 1537,
-    "name": "Sullivan Sand Fine Stripe Leather Jacket",
-    "priceCents": 45800,
+    "name": "Waverly Sand Birdseye Wool Overcoat Overcoat",
+    "priceCents": 33400,
     "kind": "jacket",
     "sku": "SM-01537",
     "sample": true
   },
   {
     "id": 1538,
-    "name": "Bleecker Sand Micro Check Leather Jacket",
-    "priceCents": 46600,
+    "name": "Rivington Burgundy Solid Wool Overcoat Overcoat",
+    "priceCents": 29900,
     "kind": "jacket",
     "sku": "SM-01538",
     "sample": true
   },
   {
     "id": 1539,
-    "name": "Waverly Sand Birdseye Leather Jacket",
-    "priceCents": 47400,
+    "name": "Hudson Burgundy Herringbone Wool Overcoat Overcoat",
+    "priceCents": 30700,
     "kind": "jacket",
     "sku": "SM-01539",
     "sample": true
   },
   {
     "id": 1540,
-    "name": "Rivington Burgundy Solid Leather Jacket",
-    "priceCents": 43900,
+    "name": "Mercer Burgundy Windowpane Wool Overcoat Overcoat",
+    "priceCents": 31500,
     "kind": "jacket",
     "sku": "SM-01540",
     "sample": true
   },
   {
     "id": 1541,
-    "name": "Hudson Burgundy Herringbone Leather Jacket",
-    "priceCents": 44700,
+    "name": "Sullivan Burgundy Fine Stripe Wool Overcoat Overcoat",
+    "priceCents": 32300,
     "kind": "jacket",
     "sku": "SM-01541",
     "sample": true
   },
   {
     "id": 1542,
-    "name": "Mercer Burgundy Windowpane Leather Jacket",
-    "priceCents": 45500,
+    "name": "Bleecker Burgundy Micro Check Wool Overcoat Overcoat",
+    "priceCents": 33100,
     "kind": "jacket",
     "sku": "SM-01542",
     "sample": true
   },
   {
     "id": 1543,
-    "name": "Sullivan Burgundy Fine Stripe Leather Jacket",
-    "priceCents": 46300,
+    "name": "Waverly Burgundy Birdseye Wool Overcoat Overcoat",
+    "priceCents": 33900,
     "kind": "jacket",
     "sku": "SM-01543",
     "sample": true
   },
   {
     "id": 1544,
-    "name": "Bleecker Burgundy Micro Check Leather Jacket",
-    "priceCents": 47100,
+    "name": "Rivington Chocolate Solid Wool Overcoat Overcoat",
+    "priceCents": 30400,
     "kind": "jacket",
     "sku": "SM-01544",
     "sample": true
   },
   {
     "id": 1545,
-    "name": "Waverly Burgundy Birdseye Leather Jacket",
-    "priceCents": 47900,
+    "name": "Hudson Chocolate Herringbone Wool Overcoat Overcoat",
+    "priceCents": 31200,
     "kind": "jacket",
     "sku": "SM-01545",
     "sample": true
   },
   {
     "id": 1546,
-    "name": "Rivington Chocolate Solid Leather Jacket",
-    "priceCents": 44400,
+    "name": "Mercer Chocolate Windowpane Wool Overcoat Overcoat",
+    "priceCents": 32000,
     "kind": "jacket",
     "sku": "SM-01546",
     "sample": true
   },
   {
     "id": 1547,
-    "name": "Hudson Chocolate Herringbone Leather Jacket",
-    "priceCents": 45200,
+    "name": "Sullivan Chocolate Fine Stripe Wool Overcoat Overcoat",
+    "priceCents": 32800,
     "kind": "jacket",
     "sku": "SM-01547",
     "sample": true
   },
   {
     "id": 1548,
-    "name": "Mercer Chocolate Windowpane Leather Jacket",
-    "priceCents": 46000,
+    "name": "Bleecker Chocolate Micro Check Wool Overcoat Overcoat",
+    "priceCents": 33600,
     "kind": "jacket",
     "sku": "SM-01548",
     "sample": true
   },
   {
     "id": 1549,
-    "name": "Sullivan Chocolate Fine Stripe Leather Jacket",
-    "priceCents": 46800,
+    "name": "Waverly Chocolate Birdseye Wool Overcoat Overcoat",
+    "priceCents": 34400,
     "kind": "jacket",
     "sku": "SM-01549",
     "sample": true
   },
   {
     "id": 1550,
-    "name": "Bleecker Chocolate Micro Check Leather Jacket",
-    "priceCents": 47600,
-    "kind": "jacket",
+    "name": "Rivington Navy Solid Wool Tuxedo Suit",
+    "priceCents": 39900,
+    "kind": "suit",
     "sku": "SM-01550",
     "sample": true
   },
   {
     "id": 1551,
-    "name": "Waverly Chocolate Birdseye Leather Jacket",
-    "priceCents": 48400,
-    "kind": "jacket",
+    "name": "Hudson Navy Herringbone Wool Tuxedo Suit",
+    "priceCents": 40700,
+    "kind": "suit",
     "sku": "SM-01551",
     "sample": true
   },
   {
     "id": 1552,
-    "name": "Rivington Navy Solid Leather Trouser",
-    "priceCents": 29900,
-    "kind": "pants",
+    "name": "Mercer Navy Windowpane Wool Tuxedo Suit",
+    "priceCents": 41500,
+    "kind": "suit",
     "sku": "SM-01552",
     "sample": true
   },
   {
     "id": 1553,
-    "name": "Hudson Navy Herringbone Leather Trouser",
-    "priceCents": 30700,
-    "kind": "pants",
+    "name": "Sullivan Navy Fine Stripe Wool Tuxedo Suit",
+    "priceCents": 42300,
+    "kind": "suit",
     "sku": "SM-01553",
     "sample": true
   },
   {
     "id": 1554,
-    "name": "Mercer Navy Windowpane Leather Trouser",
-    "priceCents": 31500,
-    "kind": "pants",
+    "name": "Bleecker Navy Micro Check Wool Tuxedo Suit",
+    "priceCents": 43100,
+    "kind": "suit",
     "sku": "SM-01554",
     "sample": true
   },
   {
     "id": 1555,
-    "name": "Sullivan Navy Fine Stripe Leather Trouser",
-    "priceCents": 32300,
-    "kind": "pants",
+    "name": "Waverly Navy Birdseye Wool Tuxedo Suit",
+    "priceCents": 43900,
+    "kind": "suit",
     "sku": "SM-01555",
     "sample": true
   },
   {
     "id": 1556,
-    "name": "Bleecker Navy Micro Check Leather Trouser",
-    "priceCents": 33100,
-    "kind": "pants",
+    "name": "Rivington Charcoal Solid Wool Tuxedo Suit",
+    "priceCents": 40400,
+    "kind": "suit",
     "sku": "SM-01556",
     "sample": true
   },
   {
     "id": 1557,
-    "name": "Waverly Navy Birdseye Leather Trouser",
-    "priceCents": 33900,
-    "kind": "pants",
+    "name": "Hudson Charcoal Herringbone Wool Tuxedo Suit",
+    "priceCents": 41200,
+    "kind": "suit",
     "sku": "SM-01557",
     "sample": true
   },
   {
     "id": 1558,
-    "name": "Rivington Charcoal Solid Leather Trouser",
-    "priceCents": 30400,
-    "kind": "pants",
+    "name": "Mercer Charcoal Windowpane Wool Tuxedo Suit",
+    "priceCents": 42000,
+    "kind": "suit",
     "sku": "SM-01558",
     "sample": true
   },
   {
     "id": 1559,
-    "name": "Hudson Charcoal Herringbone Leather Trouser",
-    "priceCents": 31200,
-    "kind": "pants",
+    "name": "Sullivan Charcoal Fine Stripe Wool Tuxedo Suit",
+    "priceCents": 42800,
+    "kind": "suit",
     "sku": "SM-01559",
     "sample": true
   },
   {
     "id": 1560,
-    "name": "Mercer Charcoal Windowpane Leather Trouser",
-    "priceCents": 32000,
-    "kind": "pants",
+    "name": "Bleecker Charcoal Micro Check Wool Tuxedo Suit",
+    "priceCents": 43600,
+    "kind": "suit",
     "sku": "SM-01560",
     "sample": true
   },
   {
     "id": 1561,
-    "name": "Sullivan Charcoal Fine Stripe Leather Trouser",
-    "priceCents": 32800,
-    "kind": "pants",
+    "name": "Waverly Charcoal Birdseye Wool Tuxedo Suit",
+    "priceCents": 44400,
+    "kind": "suit",
     "sku": "SM-01561",
     "sample": true
   },
   {
     "id": 1562,
-    "name": "Bleecker Charcoal Micro Check Leather Trouser",
-    "priceCents": 33600,
-    "kind": "pants",
+    "name": "Rivington Forest Solid Wool Tuxedo Suit",
+    "priceCents": 40900,
+    "kind": "suit",
     "sku": "SM-01562",
     "sample": true
   },
   {
     "id": 1563,
-    "name": "Waverly Charcoal Birdseye Leather Trouser",
-    "priceCents": 34400,
-    "kind": "pants",
+    "name": "Hudson Forest Herringbone Wool Tuxedo Suit",
+    "priceCents": 41700,
+    "kind": "suit",
     "sku": "SM-01563",
     "sample": true
   },
   {
     "id": 1564,
-    "name": "Rivington Forest Solid Leather Trouser",
-    "priceCents": 30900,
-    "kind": "pants",
+    "name": "Mercer Forest Windowpane Wool Tuxedo Suit",
+    "priceCents": 42500,
+    "kind": "suit",
     "sku": "SM-01564",
     "sample": true
   },
   {
     "id": 1565,
-    "name": "Hudson Forest Herringbone Leather Trouser",
-    "priceCents": 31700,
-    "kind": "pants",
+    "name": "Sullivan Forest Fine Stripe Wool Tuxedo Suit",
+    "priceCents": 43300,
+    "kind": "suit",
     "sku": "SM-01565",
     "sample": true
   },
   {
     "id": 1566,
-    "name": "Mercer Forest Windowpane Leather Trouser",
-    "priceCents": 32500,
-    "kind": "pants",
+    "name": "Bleecker Forest Micro Check Wool Tuxedo Suit",
+    "priceCents": 44100,
+    "kind": "suit",
     "sku": "SM-01566",
     "sample": true
   },
   {
     "id": 1567,
-    "name": "Sullivan Forest Fine Stripe Leather Trouser",
-    "priceCents": 33300,
-    "kind": "pants",
+    "name": "Waverly Forest Birdseye Wool Tuxedo Suit",
+    "priceCents": 44900,
+    "kind": "suit",
     "sku": "SM-01567",
     "sample": true
   },
   {
     "id": 1568,
-    "name": "Bleecker Forest Micro Check Leather Trouser",
-    "priceCents": 34100,
-    "kind": "pants",
+    "name": "Rivington Sand Solid Wool Tuxedo Suit",
+    "priceCents": 41400,
+    "kind": "suit",
     "sku": "SM-01568",
     "sample": true
   },
   {
     "id": 1569,
-    "name": "Waverly Forest Birdseye Leather Trouser",
-    "priceCents": 34900,
-    "kind": "pants",
+    "name": "Hudson Sand Herringbone Wool Tuxedo Suit",
+    "priceCents": 42200,
+    "kind": "suit",
     "sku": "SM-01569",
     "sample": true
   },
   {
     "id": 1570,
-    "name": "Rivington Sand Solid Leather Trouser",
-    "priceCents": 31400,
-    "kind": "pants",
+    "name": "Mercer Sand Windowpane Wool Tuxedo Suit",
+    "priceCents": 43000,
+    "kind": "suit",
     "sku": "SM-01570",
     "sample": true
   },
   {
     "id": 1571,
-    "name": "Hudson Sand Herringbone Leather Trouser",
-    "priceCents": 32200,
-    "kind": "pants",
+    "name": "Sullivan Sand Fine Stripe Wool Tuxedo Suit",
+    "priceCents": 43800,
+    "kind": "suit",
     "sku": "SM-01571",
     "sample": true
   },
   {
     "id": 1572,
-    "name": "Mercer Sand Windowpane Leather Trouser",
-    "priceCents": 33000,
-    "kind": "pants",
+    "name": "Bleecker Sand Micro Check Wool Tuxedo Suit",
+    "priceCents": 44600,
+    "kind": "suit",
     "sku": "SM-01572",
     "sample": true
   },
   {
     "id": 1573,
-    "name": "Sullivan Sand Fine Stripe Leather Trouser",
-    "priceCents": 33800,
-    "kind": "pants",
+    "name": "Waverly Sand Birdseye Wool Tuxedo Suit",
+    "priceCents": 45400,
+    "kind": "suit",
     "sku": "SM-01573",
     "sample": true
   },
   {
     "id": 1574,
-    "name": "Bleecker Sand Micro Check Leather Trouser",
-    "priceCents": 34600,
-    "kind": "pants",
+    "name": "Rivington Burgundy Solid Wool Tuxedo Suit",
+    "priceCents": 41900,
+    "kind": "suit",
     "sku": "SM-01574",
     "sample": true
   },
   {
     "id": 1575,
-    "name": "Waverly Sand Birdseye Leather Trouser",
-    "priceCents": 35400,
-    "kind": "pants",
+    "name": "Hudson Burgundy Herringbone Wool Tuxedo Suit",
+    "priceCents": 42700,
+    "kind": "suit",
     "sku": "SM-01575",
     "sample": true
   },
   {
     "id": 1576,
-    "name": "Rivington Burgundy Solid Leather Trouser",
-    "priceCents": 31900,
-    "kind": "pants",
+    "name": "Mercer Burgundy Windowpane Wool Tuxedo Suit",
+    "priceCents": 43500,
+    "kind": "suit",
     "sku": "SM-01576",
     "sample": true
   },
   {
     "id": 1577,
-    "name": "Hudson Burgundy Herringbone Leather Trouser",
-    "priceCents": 32700,
-    "kind": "pants",
+    "name": "Sullivan Burgundy Fine Stripe Wool Tuxedo Suit",
+    "priceCents": 44300,
+    "kind": "suit",
     "sku": "SM-01577",
     "sample": true
   },
   {
     "id": 1578,
-    "name": "Mercer Burgundy Windowpane Leather Trouser",
-    "priceCents": 33500,
-    "kind": "pants",
+    "name": "Bleecker Burgundy Micro Check Wool Tuxedo Suit",
+    "priceCents": 45100,
+    "kind": "suit",
     "sku": "SM-01578",
     "sample": true
   },
   {
     "id": 1579,
-    "name": "Sullivan Burgundy Fine Stripe Leather Trouser",
-    "priceCents": 34300,
-    "kind": "pants",
+    "name": "Waverly Burgundy Birdseye Wool Tuxedo Suit",
+    "priceCents": 45900,
+    "kind": "suit",
     "sku": "SM-01579",
     "sample": true
   },
   {
     "id": 1580,
-    "name": "Bleecker Burgundy Micro Check Leather Trouser",
-    "priceCents": 35100,
-    "kind": "pants",
+    "name": "Rivington Chocolate Solid Wool Tuxedo Suit",
+    "priceCents": 42400,
+    "kind": "suit",
     "sku": "SM-01580",
     "sample": true
   },
   {
     "id": 1581,
-    "name": "Waverly Burgundy Birdseye Leather Trouser",
-    "priceCents": 35900,
-    "kind": "pants",
+    "name": "Hudson Chocolate Herringbone Wool Tuxedo Suit",
+    "priceCents": 43200,
+    "kind": "suit",
     "sku": "SM-01581",
     "sample": true
   },
   {
     "id": 1582,
-    "name": "Rivington Chocolate Solid Leather Trouser",
-    "priceCents": 32400,
-    "kind": "pants",
+    "name": "Mercer Chocolate Windowpane Wool Tuxedo Suit",
+    "priceCents": 44000,
+    "kind": "suit",
     "sku": "SM-01582",
     "sample": true
   },
   {
     "id": 1583,
-    "name": "Hudson Chocolate Herringbone Leather Trouser",
-    "priceCents": 33200,
-    "kind": "pants",
+    "name": "Sullivan Chocolate Fine Stripe Wool Tuxedo Suit",
+    "priceCents": 44800,
+    "kind": "suit",
     "sku": "SM-01583",
     "sample": true
   },
   {
     "id": 1584,
-    "name": "Mercer Chocolate Windowpane Leather Trouser",
-    "priceCents": 34000,
-    "kind": "pants",
+    "name": "Bleecker Chocolate Micro Check Wool Tuxedo Suit",
+    "priceCents": 45600,
+    "kind": "suit",
     "sku": "SM-01584",
     "sample": true
   },
   {
     "id": 1585,
-    "name": "Sullivan Chocolate Fine Stripe Leather Trouser",
-    "priceCents": 34800,
-    "kind": "pants",
+    "name": "Waverly Chocolate Birdseye Wool Tuxedo Suit",
+    "priceCents": 46400,
+    "kind": "suit",
     "sku": "SM-01585",
     "sample": true
   },
   {
     "id": 1586,
-    "name": "Bleecker Chocolate Micro Check Leather Trouser",
-    "priceCents": 35600,
-    "kind": "pants",
-    "sku": "SM-01586",
-    "sample": true
-  },
-  {
-    "id": 1587,
-    "name": "Waverly Chocolate Birdseye Leather Trouser",
-    "priceCents": 36400,
-    "kind": "pants",
-    "sku": "SM-01587",
-    "sample": true
-  },
-  {
-    "id": 1588,
-    "name": "Rivington Navy Solid Wool Overcoat Overcoat",
-    "priceCents": 27900,
-    "kind": "jacket",
-    "sku": "SM-01588",
-    "sample": true
-  },
-  {
-    "id": 1589,
-    "name": "Hudson Navy Herringbone Wool Overcoat Overcoat",
-    "priceCents": 28700,
-    "kind": "jacket",
-    "sku": "SM-01589",
-    "sample": true
-  },
-  {
-    "id": 1590,
-    "name": "Mercer Navy Windowpane Wool Overcoat Overcoat",
-    "priceCents": 29500,
-    "kind": "jacket",
-    "sku": "SM-01590",
-    "sample": true
-  },
-  {
-    "id": 1591,
-    "name": "Sullivan Navy Fine Stripe Wool Overcoat Overcoat",
-    "priceCents": 30300,
-    "kind": "jacket",
-    "sku": "SM-01591",
-    "sample": true
-  },
-  {
-    "id": 1592,
-    "name": "Bleecker Navy Micro Check Wool Overcoat Overcoat",
-    "priceCents": 31100,
-    "kind": "jacket",
-    "sku": "SM-01592",
-    "sample": true
-  },
-  {
-    "id": 1593,
-    "name": "Waverly Navy Birdseye Wool Overcoat Overcoat",
-    "priceCents": 31900,
-    "kind": "jacket",
-    "sku": "SM-01593",
-    "sample": true
-  },
-  {
-    "id": 1594,
-    "name": "Rivington Charcoal Solid Wool Overcoat Overcoat",
-    "priceCents": 28400,
-    "kind": "jacket",
-    "sku": "SM-01594",
-    "sample": true
-  },
-  {
-    "id": 1595,
-    "name": "Hudson Charcoal Herringbone Wool Overcoat Overcoat",
-    "priceCents": 29200,
-    "kind": "jacket",
-    "sku": "SM-01595",
-    "sample": true
-  },
-  {
-    "id": 1596,
-    "name": "Mercer Charcoal Windowpane Wool Overcoat Overcoat",
-    "priceCents": 30000,
-    "kind": "jacket",
-    "sku": "SM-01596",
-    "sample": true
-  },
-  {
-    "id": 1597,
-    "name": "Sullivan Charcoal Fine Stripe Wool Overcoat Overcoat",
-    "priceCents": 30800,
-    "kind": "jacket",
-    "sku": "SM-01597",
-    "sample": true
-  },
-  {
-    "id": 1598,
-    "name": "Bleecker Charcoal Micro Check Wool Overcoat Overcoat",
-    "priceCents": 31600,
-    "kind": "jacket",
-    "sku": "SM-01598",
-    "sample": true
-  },
-  {
-    "id": 1599,
-    "name": "Waverly Charcoal Birdseye Wool Overcoat Overcoat",
-    "priceCents": 32400,
-    "kind": "jacket",
-    "sku": "SM-01599",
-    "sample": true
-  },
-  {
-    "id": 1600,
-    "name": "Rivington Forest Solid Wool Overcoat Overcoat",
-    "priceCents": 28900,
-    "kind": "jacket",
-    "sku": "SM-01600",
-    "sample": true
-  },
-  {
-    "id": 1601,
-    "name": "Hudson Forest Herringbone Wool Overcoat Overcoat",
-    "priceCents": 29700,
-    "kind": "jacket",
-    "sku": "SM-01601",
-    "sample": true
-  },
-  {
-    "id": 1602,
-    "name": "Mercer Forest Windowpane Wool Overcoat Overcoat",
-    "priceCents": 30500,
-    "kind": "jacket",
-    "sku": "SM-01602",
-    "sample": true
-  },
-  {
-    "id": 1603,
-    "name": "Sullivan Forest Fine Stripe Wool Overcoat Overcoat",
-    "priceCents": 31300,
-    "kind": "jacket",
-    "sku": "SM-01603",
-    "sample": true
-  },
-  {
-    "id": 1604,
-    "name": "Bleecker Forest Micro Check Wool Overcoat Overcoat",
-    "priceCents": 32100,
-    "kind": "jacket",
-    "sku": "SM-01604",
-    "sample": true
-  },
-  {
-    "id": 1605,
-    "name": "Waverly Forest Birdseye Wool Overcoat Overcoat",
-    "priceCents": 32900,
-    "kind": "jacket",
-    "sku": "SM-01605",
-    "sample": true
-  },
-  {
-    "id": 1606,
-    "name": "Rivington Sand Solid Wool Overcoat Overcoat",
-    "priceCents": 29400,
-    "kind": "jacket",
-    "sku": "SM-01606",
-    "sample": true
-  },
-  {
-    "id": 1607,
-    "name": "Hudson Sand Herringbone Wool Overcoat Overcoat",
-    "priceCents": 30200,
-    "kind": "jacket",
-    "sku": "SM-01607",
-    "sample": true
-  },
-  {
-    "id": 1608,
-    "name": "Mercer Sand Windowpane Wool Overcoat Overcoat",
-    "priceCents": 31000,
-    "kind": "jacket",
-    "sku": "SM-01608",
-    "sample": true
-  },
-  {
-    "id": 1609,
-    "name": "Sullivan Sand Fine Stripe Wool Overcoat Overcoat",
-    "priceCents": 31800,
-    "kind": "jacket",
-    "sku": "SM-01609",
-    "sample": true
-  },
-  {
-    "id": 1610,
-    "name": "Bleecker Sand Micro Check Wool Overcoat Overcoat",
-    "priceCents": 32600,
-    "kind": "jacket",
-    "sku": "SM-01610",
-    "sample": true
-  },
-  {
-    "id": 1611,
-    "name": "Waverly Sand Birdseye Wool Overcoat Overcoat",
-    "priceCents": 33400,
-    "kind": "jacket",
-    "sku": "SM-01611",
-    "sample": true
-  },
-  {
-    "id": 1612,
-    "name": "Rivington Burgundy Solid Wool Overcoat Overcoat",
-    "priceCents": 29900,
-    "kind": "jacket",
-    "sku": "SM-01612",
-    "sample": true
-  },
-  {
-    "id": 1613,
-    "name": "Hudson Burgundy Herringbone Wool Overcoat Overcoat",
-    "priceCents": 30700,
-    "kind": "jacket",
-    "sku": "SM-01613",
-    "sample": true
-  },
-  {
-    "id": 1614,
-    "name": "Mercer Burgundy Windowpane Wool Overcoat Overcoat",
-    "priceCents": 31500,
-    "kind": "jacket",
-    "sku": "SM-01614",
-    "sample": true
-  },
-  {
-    "id": 1615,
-    "name": "Sullivan Burgundy Fine Stripe Wool Overcoat Overcoat",
-    "priceCents": 32300,
-    "kind": "jacket",
-    "sku": "SM-01615",
-    "sample": true
-  },
-  {
-    "id": 1616,
-    "name": "Bleecker Burgundy Micro Check Wool Overcoat Overcoat",
-    "priceCents": 33100,
-    "kind": "jacket",
-    "sku": "SM-01616",
-    "sample": true
-  },
-  {
-    "id": 1617,
-    "name": "Waverly Burgundy Birdseye Wool Overcoat Overcoat",
-    "priceCents": 33900,
-    "kind": "jacket",
-    "sku": "SM-01617",
-    "sample": true
-  },
-  {
-    "id": 1618,
-    "name": "Rivington Chocolate Solid Wool Overcoat Overcoat",
-    "priceCents": 30400,
-    "kind": "jacket",
-    "sku": "SM-01618",
-    "sample": true
-  },
-  {
-    "id": 1619,
-    "name": "Hudson Chocolate Herringbone Wool Overcoat Overcoat",
-    "priceCents": 31200,
-    "kind": "jacket",
-    "sku": "SM-01619",
-    "sample": true
-  },
-  {
-    "id": 1620,
-    "name": "Mercer Chocolate Windowpane Wool Overcoat Overcoat",
-    "priceCents": 32000,
-    "kind": "jacket",
-    "sku": "SM-01620",
-    "sample": true
-  },
-  {
-    "id": 1621,
-    "name": "Sullivan Chocolate Fine Stripe Wool Overcoat Overcoat",
-    "priceCents": 32800,
-    "kind": "jacket",
-    "sku": "SM-01621",
-    "sample": true
-  },
-  {
-    "id": 1622,
-    "name": "Bleecker Chocolate Micro Check Wool Overcoat Overcoat",
-    "priceCents": 33600,
-    "kind": "jacket",
-    "sku": "SM-01622",
-    "sample": true
-  },
-  {
-    "id": 1623,
-    "name": "Waverly Chocolate Birdseye Wool Overcoat Overcoat",
-    "priceCents": 34400,
-    "kind": "jacket",
-    "sku": "SM-01623",
-    "sample": true
-  },
-  {
-    "id": 1624,
-    "name": "Rivington Navy Solid Wool Tuxedo Suit",
-    "priceCents": 39900,
-    "kind": "suit",
-    "sku": "SM-01624",
-    "sample": true
-  },
-  {
-    "id": 1625,
-    "name": "Hudson Navy Herringbone Wool Tuxedo Suit",
-    "priceCents": 40700,
-    "kind": "suit",
-    "sku": "SM-01625",
-    "sample": true
-  },
-  {
-    "id": 1626,
-    "name": "Mercer Navy Windowpane Wool Tuxedo Suit",
-    "priceCents": 41500,
-    "kind": "suit",
-    "sku": "SM-01626",
-    "sample": true
-  },
-  {
-    "id": 1627,
-    "name": "Sullivan Navy Fine Stripe Wool Tuxedo Suit",
-    "priceCents": 42300,
-    "kind": "suit",
-    "sku": "SM-01627",
-    "sample": true
-  },
-  {
-    "id": 1628,
-    "name": "Bleecker Navy Micro Check Wool Tuxedo Suit",
-    "priceCents": 43100,
-    "kind": "suit",
-    "sku": "SM-01628",
-    "sample": true
-  },
-  {
-    "id": 1629,
-    "name": "Waverly Navy Birdseye Wool Tuxedo Suit",
-    "priceCents": 43900,
-    "kind": "suit",
-    "sku": "SM-01629",
-    "sample": true
-  },
-  {
-    "id": 1630,
-    "name": "Rivington Charcoal Solid Wool Tuxedo Suit",
-    "priceCents": 40400,
-    "kind": "suit",
-    "sku": "SM-01630",
-    "sample": true
-  },
-  {
-    "id": 1631,
-    "name": "Hudson Charcoal Herringbone Wool Tuxedo Suit",
-    "priceCents": 41200,
-    "kind": "suit",
-    "sku": "SM-01631",
-    "sample": true
-  },
-  {
-    "id": 1632,
-    "name": "Mercer Charcoal Windowpane Wool Tuxedo Suit",
-    "priceCents": 42000,
-    "kind": "suit",
-    "sku": "SM-01632",
-    "sample": true
-  },
-  {
-    "id": 1633,
-    "name": "Sullivan Charcoal Fine Stripe Wool Tuxedo Suit",
-    "priceCents": 42800,
-    "kind": "suit",
-    "sku": "SM-01633",
-    "sample": true
-  },
-  {
-    "id": 1634,
-    "name": "Bleecker Charcoal Micro Check Wool Tuxedo Suit",
-    "priceCents": 43600,
-    "kind": "suit",
-    "sku": "SM-01634",
-    "sample": true
-  },
-  {
-    "id": 1635,
-    "name": "Waverly Charcoal Birdseye Wool Tuxedo Suit",
-    "priceCents": 44400,
-    "kind": "suit",
-    "sku": "SM-01635",
-    "sample": true
-  },
-  {
-    "id": 1636,
-    "name": "Rivington Forest Solid Wool Tuxedo Suit",
-    "priceCents": 40900,
-    "kind": "suit",
-    "sku": "SM-01636",
-    "sample": true
-  },
-  {
-    "id": 1637,
-    "name": "Hudson Forest Herringbone Wool Tuxedo Suit",
-    "priceCents": 41700,
-    "kind": "suit",
-    "sku": "SM-01637",
-    "sample": true
-  },
-  {
-    "id": 1638,
-    "name": "Mercer Forest Windowpane Wool Tuxedo Suit",
-    "priceCents": 42500,
-    "kind": "suit",
-    "sku": "SM-01638",
-    "sample": true
-  },
-  {
-    "id": 1639,
-    "name": "Sullivan Forest Fine Stripe Wool Tuxedo Suit",
-    "priceCents": 43300,
-    "kind": "suit",
-    "sku": "SM-01639",
-    "sample": true
-  },
-  {
-    "id": 1640,
-    "name": "Bleecker Forest Micro Check Wool Tuxedo Suit",
-    "priceCents": 44100,
-    "kind": "suit",
-    "sku": "SM-01640",
-    "sample": true
-  },
-  {
-    "id": 1641,
-    "name": "Waverly Forest Birdseye Wool Tuxedo Suit",
-    "priceCents": 44900,
-    "kind": "suit",
-    "sku": "SM-01641",
-    "sample": true
-  },
-  {
-    "id": 1642,
-    "name": "Rivington Sand Solid Wool Tuxedo Suit",
-    "priceCents": 41400,
-    "kind": "suit",
-    "sku": "SM-01642",
-    "sample": true
-  },
-  {
-    "id": 1643,
-    "name": "Hudson Sand Herringbone Wool Tuxedo Suit",
-    "priceCents": 42200,
-    "kind": "suit",
-    "sku": "SM-01643",
-    "sample": true
-  },
-  {
-    "id": 1644,
-    "name": "Mercer Sand Windowpane Wool Tuxedo Suit",
-    "priceCents": 43000,
-    "kind": "suit",
-    "sku": "SM-01644",
-    "sample": true
-  },
-  {
-    "id": 1645,
-    "name": "Sullivan Sand Fine Stripe Wool Tuxedo Suit",
-    "priceCents": 43800,
-    "kind": "suit",
-    "sku": "SM-01645",
-    "sample": true
-  },
-  {
-    "id": 1646,
-    "name": "Bleecker Sand Micro Check Wool Tuxedo Suit",
-    "priceCents": 44600,
-    "kind": "suit",
-    "sku": "SM-01646",
-    "sample": true
-  },
-  {
-    "id": 1647,
-    "name": "Waverly Sand Birdseye Wool Tuxedo Suit",
-    "priceCents": 45400,
-    "kind": "suit",
-    "sku": "SM-01647",
-    "sample": true
-  },
-  {
-    "id": 1648,
-    "name": "Rivington Burgundy Solid Wool Tuxedo Suit",
-    "priceCents": 41900,
-    "kind": "suit",
-    "sku": "SM-01648",
-    "sample": true
-  },
-  {
-    "id": 1649,
-    "name": "Hudson Burgundy Herringbone Wool Tuxedo Suit",
-    "priceCents": 42700,
-    "kind": "suit",
-    "sku": "SM-01649",
-    "sample": true
-  },
-  {
-    "id": 1650,
-    "name": "Mercer Burgundy Windowpane Wool Tuxedo Suit",
-    "priceCents": 43500,
-    "kind": "suit",
-    "sku": "SM-01650",
-    "sample": true
-  },
-  {
-    "id": 1651,
-    "name": "Sullivan Burgundy Fine Stripe Wool Tuxedo Suit",
-    "priceCents": 44300,
-    "kind": "suit",
-    "sku": "SM-01651",
-    "sample": true
-  },
-  {
-    "id": 1652,
-    "name": "Bleecker Burgundy Micro Check Wool Tuxedo Suit",
-    "priceCents": 45100,
-    "kind": "suit",
-    "sku": "SM-01652",
-    "sample": true
-  },
-  {
-    "id": 1653,
-    "name": "Waverly Burgundy Birdseye Wool Tuxedo Suit",
-    "priceCents": 45900,
-    "kind": "suit",
-    "sku": "SM-01653",
-    "sample": true
-  },
-  {
-    "id": 1654,
-    "name": "Rivington Chocolate Solid Wool Tuxedo Suit",
-    "priceCents": 42400,
-    "kind": "suit",
-    "sku": "SM-01654",
-    "sample": true
-  },
-  {
-    "id": 1655,
-    "name": "Hudson Chocolate Herringbone Wool Tuxedo Suit",
-    "priceCents": 43200,
-    "kind": "suit",
-    "sku": "SM-01655",
-    "sample": true
-  },
-  {
-    "id": 1656,
-    "name": "Mercer Chocolate Windowpane Wool Tuxedo Suit",
-    "priceCents": 44000,
-    "kind": "suit",
-    "sku": "SM-01656",
-    "sample": true
-  },
-  {
-    "id": 1657,
-    "name": "Sullivan Chocolate Fine Stripe Wool Tuxedo Suit",
-    "priceCents": 44800,
-    "kind": "suit",
-    "sku": "SM-01657",
-    "sample": true
-  },
-  {
-    "id": 1658,
-    "name": "Bleecker Chocolate Micro Check Wool Tuxedo Suit",
-    "priceCents": 45600,
-    "kind": "suit",
-    "sku": "SM-01658",
-    "sample": true
-  },
-  {
-    "id": 1659,
-    "name": "Waverly Chocolate Birdseye Wool Tuxedo Suit",
-    "priceCents": 46400,
-    "kind": "suit",
-    "sku": "SM-01659",
-    "sample": true
-  },
-  {
-    "id": 1660,
     "name": "Black Mini Herringbone Suit · CB11001",
     "priceCents": 49500,
     "kind": "suit",
@@ -13376,7 +12854,7 @@
     "fabricCode": "CB11001"
   },
   {
-    "id": 1661,
+    "id": 1587,
     "name": "Black Plain Suit · CB11009",
     "priceCents": 49500,
     "kind": "suit",
@@ -13385,7 +12863,7 @@
     "fabricCode": "CB11009"
   },
   {
-    "id": 1662,
+    "id": 1588,
     "name": "Black Plain Suit · CB11024",
     "priceCents": 59500,
     "kind": "suit",
@@ -13394,7 +12872,7 @@
     "fabricCode": "CB11024"
   },
   {
-    "id": 1663,
+    "id": 1589,
     "name": "Black Plain Suit · CB11027",
     "priceCents": 49500,
     "kind": "suit",
@@ -13403,7 +12881,7 @@
     "fabricCode": "CB11027"
   },
   {
-    "id": 1664,
+    "id": 1590,
     "name": "Black Solid Suit · CB11032",
     "priceCents": 79500,
     "kind": "suit",
@@ -13412,7 +12890,7 @@
     "fabricCode": "CB11032"
   },
   {
-    "id": 1665,
+    "id": 1591,
     "name": "Dk Grey Plain Suit · CG21002",
     "priceCents": 49500,
     "kind": "suit",
@@ -13421,7 +12899,7 @@
     "fabricCode": "CG21002"
   },
   {
-    "id": 1666,
+    "id": 1592,
     "name": "Dk Grey Plain Suit · CG21017",
     "priceCents": 49500,
     "kind": "suit",
@@ -13430,7 +12908,7 @@
     "fabricCode": "CG21017"
   },
   {
-    "id": 1667,
+    "id": 1593,
     "name": "Lt Grey Solid Suit · CG21196",
     "priceCents": 69500,
     "kind": "suit",
@@ -13439,7 +12917,7 @@
     "fabricCode": "CG21196"
   },
   {
-    "id": 1668,
+    "id": 1594,
     "name": "Dk Green Solid Suit · CO41029",
     "priceCents": 59500,
     "kind": "suit",
@@ -13448,7 +12926,7 @@
     "fabricCode": "CO41029"
   },
   {
-    "id": 1669,
+    "id": 1595,
     "name": "Beige Solid Suit · CO80311",
     "priceCents": 49500,
     "kind": "suit",
@@ -13457,7 +12935,7 @@
     "fabricCode": "CO80311"
   },
   {
-    "id": 1670,
+    "id": 1596,
     "name": "Navy Twill Solid Suit · CN17300",
     "priceCents": 69500,
     "kind": "suit",
@@ -13466,7 +12944,7 @@
     "fabricCode": "CN17300"
   },
   {
-    "id": 1671,
+    "id": 1597,
     "name": "Navy Plain Suit · CN51012",
     "priceCents": 49500,
     "kind": "suit",
@@ -13475,7 +12953,7 @@
     "fabricCode": "CN51012"
   },
   {
-    "id": 1672,
+    "id": 1598,
     "name": "Off White Plain Suit · EO43345",
     "priceCents": 99500,
     "kind": "suit",
@@ -13484,7 +12962,7 @@
     "fabricCode": "EO43345"
   },
   {
-    "id": 1673,
+    "id": 1599,
     "name": "Navy Solid Suit · CN51055",
     "priceCents": 49500,
     "kind": "suit",
@@ -13493,7 +12971,7 @@
     "fabricCode": "CN51055"
   },
   {
-    "id": 1674,
+    "id": 1600,
     "name": "Med Blue Plain Suit · CN51120",
     "priceCents": 69500,
     "kind": "suit",
@@ -13502,7 +12980,7 @@
     "fabricCode": "CN51120"
   },
   {
-    "id": 1675,
+    "id": 1601,
     "name": "Blue Solid Suit · CN51168",
     "priceCents": 59500,
     "kind": "suit",
@@ -13511,7 +12989,7 @@
     "fabricCode": "CN51168"
   },
   {
-    "id": 1676,
+    "id": 1602,
     "name": "Brown Solid Suit · CR31011",
     "priceCents": 49500,
     "kind": "suit",
@@ -13520,7 +12998,7 @@
     "fabricCode": "CR31011"
   },
   {
-    "id": 1677,
+    "id": 1603,
     "name": "Brown Sharkskin Suit · CR31004",
     "priceCents": 69500,
     "kind": "suit",
@@ -13529,7 +13007,7 @@
     "fabricCode": "CR31004"
   },
   {
-    "id": 1678,
+    "id": 1604,
     "name": "Camel Solid Suit · CO41046",
     "priceCents": 69500,
     "kind": "suit",
@@ -13538,7 +13016,7 @@
     "fabricCode": "CO41046"
   },
   {
-    "id": 1679,
+    "id": 1605,
     "name": "Burgundy Plain Suit · CO41018",
     "priceCents": 69500,
     "kind": "suit",
@@ -13547,7 +13025,7 @@
     "fabricCode": "CO41018"
   },
   {
-    "id": 1680,
+    "id": 1606,
     "name": "Navy Sharkskin Suit · CN85301",
     "priceCents": 69500,
     "kind": "suit",
@@ -13556,7 +13034,7 @@
     "fabricCode": "CN85301"
   },
   {
-    "id": 1681,
+    "id": 1607,
     "name": "Grey Sharkskin Suit · CG21077",
     "priceCents": 79500,
     "kind": "suit",
@@ -13565,7 +13043,7 @@
     "fabricCode": "CG21077"
   },
   {
-    "id": 1682,
+    "id": 1608,
     "name": "Navy Solid Suit · CN51068",
     "priceCents": 79500,
     "kind": "suit",
@@ -13574,7 +13052,7 @@
     "fabricCode": "CN51068"
   },
   {
-    "id": 1683,
+    "id": 1609,
     "name": "Taupe Sharkskin Suit · CO41019",
     "priceCents": 79500,
     "kind": "suit",
@@ -13583,7 +13061,7 @@
     "fabricCode": "CO41019"
   },
   {
-    "id": 1684,
+    "id": 1610,
     "name": "Black Solid Suit · CB11070",
     "priceCents": 69500,
     "kind": "suit",
@@ -13592,7 +13070,7 @@
     "fabricCode": "CB11070"
   },
   {
-    "id": 1685,
+    "id": 1611,
     "name": "Green Glenplaid Suit · CO41110",
     "priceCents": 59500,
     "kind": "suit",
@@ -13601,7 +13079,7 @@
     "fabricCode": "CO41110"
   },
   {
-    "id": 1686,
+    "id": 1612,
     "name": "Blue/Burgundy Check Suit · EN54125",
     "priceCents": 140000,
     "kind": "suit",
@@ -13610,7 +13088,7 @@
     "fabricCode": "EN54125"
   },
   {
-    "id": 1687,
+    "id": 1613,
     "name": "Ston Blue Glenplaid Suit · EN54390",
     "priceCents": 99500,
     "kind": "suit",
@@ -13619,7 +13097,7 @@
     "fabricCode": "EN54390"
   },
   {
-    "id": 1688,
+    "id": 1614,
     "name": "Dk Navy Hopsack Plain Suit · KN52022",
     "priceCents": 120000,
     "kind": "suit",
@@ -13628,7 +13106,7 @@
     "fabricCode": "KN52022"
   },
   {
-    "id": 1689,
+    "id": 1615,
     "name": "Black Hopsack Suit · CB11048",
     "priceCents": 69500,
     "kind": "suit",
@@ -13637,7 +13115,7 @@
     "fabricCode": "CB11048"
   },
   {
-    "id": 1690,
+    "id": 1616,
     "name": "Burnt Orange Plain Suit · EO43355",
     "priceCents": 150000,
     "kind": "suit",
@@ -13646,7 +13124,7 @@
     "fabricCode": "EO43355"
   },
   {
-    "id": 1691,
+    "id": 1617,
     "name": "Black Check Suit · CB11035",
     "priceCents": 79500,
     "kind": "suit",
@@ -13655,7 +13133,7 @@
     "fabricCode": "CB11035"
   },
   {
-    "id": 1692,
+    "id": 1618,
     "name": "Dk Blue Windowpane Suit · CN51094",
     "priceCents": 79500,
     "kind": "suit",
@@ -13664,7 +13142,7 @@
     "fabricCode": "CN51094"
   },
   {
-    "id": 1693,
+    "id": 1619,
     "name": "Indigo Blue Check Suit · EN54127",
     "priceCents": 140000,
     "kind": "suit",
@@ -13673,7 +13151,7 @@
     "fabricCode": "EN54127"
   },
   {
-    "id": 1694,
+    "id": 1620,
     "name": "Dk Teal/ Blue Windowpane Suit · EO43324",
     "priceCents": 150000,
     "kind": "suit",
@@ -13682,7 +13160,7 @@
     "fabricCode": "EO43324"
   },
   {
-    "id": 1695,
+    "id": 1621,
     "name": "Blue/Orange Basket Weave Suit · CO41040",
     "priceCents": 69500,
     "kind": "suit",
@@ -13691,7 +13169,7 @@
     "fabricCode": "CO41040"
   },
   {
-    "id": 1696,
+    "id": 1622,
     "name": "Lt Blue Check Suit · CN51132",
     "priceCents": 59500,
     "kind": "suit",
@@ -13700,7 +13178,7 @@
     "fabricCode": "CN51132"
   },
   {
-    "id": 1697,
+    "id": 1623,
     "name": "Ink Blue Herringbone Suit · CN51134",
     "priceCents": 59500,
     "kind": "suit",
@@ -13709,7 +13187,7 @@
     "fabricCode": "CN51134"
   },
   {
-    "id": 1698,
+    "id": 1624,
     "name": "Lt Green/Lt Brown/Navy Check Suit · EO43295",
     "priceCents": 99500,
     "kind": "suit",
@@ -13718,7 +13196,7 @@
     "fabricCode": "EO43295"
   },
   {
-    "id": 1699,
+    "id": 1625,
     "name": "Brown/Green Mini Check Suit · EO43470",
     "priceCents": 220000,
     "kind": "suit",
@@ -13727,7 +13205,7 @@
     "fabricCode": "EO43470"
   },
   {
-    "id": 1700,
+    "id": 1626,
     "name": "Lt Wine Glenplaid Suit · EO43457",
     "priceCents": 89500,
     "kind": "suit",
@@ -13736,7 +13214,7 @@
     "fabricCode": "EO43457"
   },
   {
-    "id": 1701,
+    "id": 1627,
     "name": "Navy Solid Suit · CN51078",
     "priceCents": 69500,
     "kind": "suit",
@@ -13745,7 +13223,7 @@
     "fabricCode": "CN51078"
   },
   {
-    "id": 1702,
+    "id": 1628,
     "name": "Navy Vertical Wave Suit · KN52012",
     "priceCents": 99500,
     "kind": "suit",
@@ -13754,7 +13232,7 @@
     "fabricCode": "KN52012"
   },
   {
-    "id": 1703,
+    "id": 1629,
     "name": "Tan Glenplaid Suit · ER33190",
     "priceCents": 110000,
     "kind": "suit",
@@ -13763,7 +13241,7 @@
     "fabricCode": "ER33190"
   },
   {
-    "id": 1704,
+    "id": 1630,
     "name": "Sky Blue/Taupe Glenplaid Suit · EN54491",
     "priceCents": 99500,
     "kind": "suit",
@@ -13772,7 +13250,7 @@
     "fabricCode": "EN54491"
   },
   {
-    "id": 1705,
+    "id": 1631,
     "name": "Lt Blue/Taupe Glenplaid Suit · CN51370",
     "priceCents": 59500,
     "kind": "suit",
@@ -13781,7 +13259,7 @@
     "fabricCode": "CN51370"
   },
   {
-    "id": 1706,
+    "id": 1632,
     "name": "Lt Pink/Magenta Glenplaid Suit · CO41049",
     "priceCents": 79500,
     "kind": "suit",
@@ -13790,7 +13268,7 @@
     "fabricCode": "CO41049"
   },
   {
-    "id": 1707,
+    "id": 1633,
     "name": "Magenta Textured Suit · CO41123",
     "priceCents": 69500,
     "kind": "suit",
@@ -13799,7 +13277,7 @@
     "fabricCode": "CO41123"
   },
   {
-    "id": 1708,
+    "id": 1634,
     "name": "Lt Gold Yellow 3/4 Inch Herringbone Suit · CO41124",
     "priceCents": 69500,
     "kind": "suit",
@@ -13808,7 +13286,7 @@
     "fabricCode": "CO41124"
   },
   {
-    "id": 1709,
+    "id": 1635,
     "name": "White Twill Solid Suit · EO43008",
     "priceCents": 89500,
     "kind": "suit",
@@ -13817,7 +13295,7 @@
     "fabricCode": "EO43008"
   },
   {
-    "id": 1710,
+    "id": 1636,
     "name": "Beige Stripe Suit · EO43053",
     "priceCents": 89500,
     "kind": "suit",
@@ -13826,7 +13304,7 @@
     "fabricCode": "EO43053"
   },
   {
-    "id": 1711,
+    "id": 1637,
     "name": "Navy Solid Suit · EN53333",
     "priceCents": 59500,
     "kind": "suit",
@@ -13835,7 +13313,7 @@
     "fabricCode": "EN53333"
   },
   {
-    "id": 1712,
+    "id": 1638,
     "name": "Dk Lavender Solid Suit · EO43115",
     "priceCents": 59500,
     "kind": "suit",
@@ -13844,7 +13322,7 @@
     "fabricCode": "EO43115"
   },
   {
-    "id": 1713,
+    "id": 1639,
     "name": "Orange Solid Suit · EO43117",
     "priceCents": 59500,
     "kind": "suit",
@@ -13853,7 +13331,7 @@
     "fabricCode": "EO43117"
   },
   {
-    "id": 1714,
+    "id": 1640,
     "name": "Lt Blue Herringbone Suit · EN54175",
     "priceCents": 59500,
     "kind": "suit",
@@ -13862,7 +13340,7 @@
     "fabricCode": "EN54175"
   },
   {
-    "id": 1715,
+    "id": 1641,
     "name": "Taupe/Red Herringbone Suit · ER33162",
     "priceCents": 69500,
     "kind": "suit",
@@ -13871,7 +13349,7 @@
     "fabricCode": "ER33162"
   },
   {
-    "id": 1716,
+    "id": 1642,
     "name": "Lt Camel Solid Suit · ER33071",
     "priceCents": 59500,
     "kind": "suit",
@@ -13880,7 +13358,7 @@
     "fabricCode": "ER33071"
   },
   {
-    "id": 1717,
+    "id": 1643,
     "name": "Teal Solid Suit · EO43113",
     "priceCents": 59500,
     "kind": "suit",
@@ -13889,7 +13367,7 @@
     "fabricCode": "EO43113"
   },
   {
-    "id": 1718,
+    "id": 1644,
     "name": "Grey Stripe Suit · EG23010",
     "priceCents": 69500,
     "kind": "suit",
@@ -13898,7 +13376,7 @@
     "fabricCode": "EG23010"
   },
   {
-    "id": 1719,
+    "id": 1645,
     "name": "Blue Stripe Suit · EN53022",
     "priceCents": 69500,
     "kind": "suit",
@@ -13907,7 +13385,7 @@
     "fabricCode": "EN53022"
   },
   {
-    "id": 1720,
+    "id": 1646,
     "name": "Sand Twill Suit · EO43495",
     "priceCents": 69500,
     "kind": "suit",
@@ -13916,7 +13394,7 @@
     "fabricCode": "EO43495"
   },
   {
-    "id": 1721,
+    "id": 1647,
     "name": "Orange Solid Suit · EO43016",
     "priceCents": 69500,
     "kind": "suit",
@@ -13925,7 +13403,7 @@
     "fabricCode": "EO43016"
   },
   {
-    "id": 1722,
+    "id": 1648,
     "name": "Stone Blue Plain Suit · EN54178",
     "priceCents": 69500,
     "kind": "suit",
@@ -13934,7 +13412,7 @@
     "fabricCode": "EN54178"
   },
   {
-    "id": 1723,
+    "id": 1649,
     "name": "Tan Tan Mini Check Suit · ER33012",
     "priceCents": 69500,
     "kind": "suit",
@@ -13943,7 +13421,7 @@
     "fabricCode": "ER33012"
   },
   {
-    "id": 1724,
+    "id": 1650,
     "name": "White Solid Suit · EO43330",
     "priceCents": 69500,
     "kind": "suit",
@@ -13952,7 +13430,7 @@
     "fabricCode": "EO43330"
   },
   {
-    "id": 1725,
+    "id": 1651,
     "name": "Black Solid Suit · EB13125",
     "priceCents": 69500,
     "kind": "suit",
@@ -13961,7 +13439,7 @@
     "fabricCode": "EB13125"
   },
   {
-    "id": 1726,
+    "id": 1652,
     "name": "Stone Grey Solid Suit · EG23549",
     "priceCents": 69500,
     "kind": "suit",
@@ -13970,7 +13448,7 @@
     "fabricCode": "EG23549"
   },
   {
-    "id": 1727,
+    "id": 1653,
     "name": "Dk Green Twill Suit · EO43393",
     "priceCents": 140000,
     "kind": "suit",
@@ -13979,7 +13457,7 @@
     "fabricCode": "EO43393"
   },
   {
-    "id": 1728,
+    "id": 1654,
     "name": "Beige Solid Suit · EO43326",
     "priceCents": 69500,
     "kind": "suit",
@@ -13988,7 +13466,7 @@
     "fabricCode": "EO43326"
   },
   {
-    "id": 1729,
+    "id": 1655,
     "name": "Black Plain Suit · KB12054",
     "priceCents": 49500,
     "kind": "suit",
@@ -13997,7 +13475,7 @@
     "fabricCode": "KB12054"
   },
   {
-    "id": 1730,
+    "id": 1656,
     "name": "Silver Plain Suit · KG22054",
     "priceCents": 49500,
     "kind": "suit",
@@ -14006,7 +13484,7 @@
     "fabricCode": "KG22054"
   },
   {
-    "id": 1731,
+    "id": 1657,
     "name": "Navy Plain Suit · KN52087",
     "priceCents": 49500,
     "kind": "suit",
@@ -14015,7 +13493,7 @@
     "fabricCode": "KN52087"
   },
   {
-    "id": 1732,
+    "id": 1658,
     "name": "Stone Plain Suit · KO42098",
     "priceCents": 49500,
     "kind": "suit",
@@ -14024,7 +13502,7 @@
     "fabricCode": "KO42098"
   },
   {
-    "id": 1733,
+    "id": 1659,
     "name": "Peach Plain Suit · KO42099",
     "priceCents": 49500,
     "kind": "suit",
@@ -14033,7 +13511,7 @@
     "fabricCode": "KO42099"
   },
   {
-    "id": 1734,
+    "id": 1660,
     "name": "White Plain Suit · KO42100",
     "priceCents": 49500,
     "kind": "suit",
@@ -14042,7 +13520,7 @@
     "fabricCode": "KO42100"
   },
   {
-    "id": 1735,
+    "id": 1661,
     "name": "Brown Plain Suit · KR32036",
     "priceCents": 49500,
     "kind": "suit",
@@ -14051,7 +13529,7 @@
     "fabricCode": "KR32036"
   },
   {
-    "id": 1736,
+    "id": 1662,
     "name": "Charcoal Plain Suit · EG23734",
     "priceCents": 130000,
     "kind": "suit",
@@ -14060,7 +13538,7 @@
     "fabricCode": "EG23734"
   },
   {
-    "id": 1737,
+    "id": 1663,
     "name": "Black Solid Suit · CB11014",
     "priceCents": 59500,
     "kind": "suit",
@@ -14069,7 +13547,7 @@
     "fabricCode": "CB11014"
   },
   {
-    "id": 1738,
+    "id": 1664,
     "name": "Dk Navy Solid Suit · CN51024",
     "priceCents": 59500,
     "kind": "suit",
@@ -14078,7 +13556,7 @@
     "fabricCode": "CN51024"
   },
   {
-    "id": 1739,
+    "id": 1665,
     "name": "Brown Solid Suit · CR31010",
     "priceCents": 59500,
     "kind": "suit",
@@ -14087,7 +13565,7 @@
     "fabricCode": "CR31010"
   },
   {
-    "id": 1740,
+    "id": 1666,
     "name": "Charcoal/Grey Wide Stripe Suit · CG21032",
     "priceCents": 59500,
     "kind": "suit",
@@ -14096,7 +13574,7 @@
     "fabricCode": "CG21032"
   },
   {
-    "id": 1741,
+    "id": 1667,
     "name": "Brown Wide Stripe Suit · CR31009",
     "priceCents": 59500,
     "kind": "suit",
@@ -14105,7 +13583,7 @@
     "fabricCode": "CR31009"
   },
   {
-    "id": 1742,
+    "id": 1668,
     "name": "Grey Check Suit · CG21060",
     "priceCents": 69500,
     "kind": "suit",
@@ -14114,7 +13592,7 @@
     "fabricCode": "CG21060"
   },
   {
-    "id": 1743,
+    "id": 1669,
     "name": "Grey Stripe Suit · CG21061",
     "priceCents": 69500,
     "kind": "suit",
@@ -14123,7 +13601,7 @@
     "fabricCode": "CG21061"
   },
   {
-    "id": 1744,
+    "id": 1670,
     "name": "Taupe Glen Plaid Suit · EO43307",
     "priceCents": 79500,
     "kind": "suit",
@@ -14132,7 +13610,7 @@
     "fabricCode": "EO43307"
   },
   {
-    "id": 1745,
+    "id": 1671,
     "name": "Brown Twill Suit · ER33213",
     "priceCents": 150000,
     "kind": "suit",
@@ -14141,7 +13619,7 @@
     "fabricCode": "ER33213"
   },
   {
-    "id": 1746,
+    "id": 1672,
     "name": "Grey/ Burgundy Mini Check Suit · EO43472",
     "priceCents": 200000,
     "kind": "suit",
@@ -14150,7 +13628,7 @@
     "fabricCode": "EO43472"
   },
   {
-    "id": 1747,
+    "id": 1673,
     "name": "Grey Plaid Suit · EG23551",
     "priceCents": 130000,
     "kind": "suit",
@@ -14159,7 +13637,7 @@
     "fabricCode": "EG23551"
   },
   {
-    "id": 1748,
+    "id": 1674,
     "name": "Black/White Plaid Suit · CO41020",
     "priceCents": 69500,
     "kind": "suit",
@@ -14168,7 +13646,7 @@
     "fabricCode": "CO41020"
   },
   {
-    "id": 1749,
+    "id": 1675,
     "name": "Grey Solid Suit · CG21211",
     "priceCents": 59500,
     "kind": "suit",
@@ -14177,7 +13655,7 @@
     "fabricCode": "CG21211"
   },
   {
-    "id": 1750,
+    "id": 1676,
     "name": "Grey Windowpane Suit · CG93901",
     "priceCents": 59500,
     "kind": "suit",
@@ -14186,7 +13664,7 @@
     "fabricCode": "CG93901"
   },
   {
-    "id": 1751,
+    "id": 1677,
     "name": "Green/ Brown Check Suit · EO43502",
     "priceCents": 120000,
     "kind": "suit",
@@ -14195,7 +13673,7 @@
     "fabricCode": "EO43502"
   },
   {
-    "id": 1752,
+    "id": 1678,
     "name": "Black Stripe Suit · CB11033",
     "priceCents": 69500,
     "kind": "suit",
@@ -14204,7 +13682,7 @@
     "fabricCode": "CB11033"
   },
   {
-    "id": 1753,
+    "id": 1679,
     "name": "Green Solid Suit · EO43166",
     "priceCents": 89500,
     "kind": "suit",
@@ -14213,7 +13691,7 @@
     "fabricCode": "EO43166"
   },
   {
-    "id": 1754,
+    "id": 1680,
     "name": "Off White Solid Suit · EO10109",
     "priceCents": 89500,
     "kind": "suit",
@@ -14222,7 +13700,7 @@
     "fabricCode": "EO10109"
   },
   {
-    "id": 1755,
+    "id": 1681,
     "name": "Lt Grey Check Suit · EG23642",
     "priceCents": 130000,
     "kind": "suit",
@@ -14231,7 +13709,7 @@
     "fabricCode": "EG23642"
   },
   {
-    "id": 1756,
+    "id": 1682,
     "name": "Grey Check Suit · EG23640",
     "priceCents": 130000,
     "kind": "suit",
@@ -14240,7 +13718,7 @@
     "fabricCode": "EG23640"
   },
   {
-    "id": 1757,
+    "id": 1683,
     "name": "Tan Glenplaid Suit · ER33235",
     "priceCents": 130000,
     "kind": "suit",
@@ -14249,7 +13727,7 @@
     "fabricCode": "ER33235"
   },
   {
-    "id": 1758,
+    "id": 1684,
     "name": "Taupe Stripe Suit · EO43128",
     "priceCents": 89500,
     "kind": "suit",
@@ -14258,7 +13736,7 @@
     "fabricCode": "EO43128"
   },
   {
-    "id": 1759,
+    "id": 1685,
     "name": "Lt Brown Solid Suit · ER33159",
     "priceCents": 200000,
     "kind": "suit",
@@ -14267,7 +13745,7 @@
     "fabricCode": "ER33159"
   },
   {
-    "id": 1760,
+    "id": 1686,
     "name": "Tan Tan Suit · ER33233",
     "priceCents": 99500,
     "kind": "suit",
@@ -14276,7 +13754,7 @@
     "fabricCode": "ER33233"
   },
   {
-    "id": 1761,
+    "id": 1687,
     "name": "Brown/Beige Check Suit · ER33234",
     "priceCents": 110000,
     "kind": "suit",
@@ -14285,7 +13763,7 @@
     "fabricCode": "ER33234"
   },
   {
-    "id": 1762,
+    "id": 1688,
     "name": "Med Tan Plain Suit · KR32024",
     "priceCents": 59500,
     "kind": "suit",
@@ -14294,7 +13772,7 @@
     "fabricCode": "KR32024"
   },
   {
-    "id": 1763,
+    "id": 1689,
     "name": "Taupe Plain Suit · KR32026",
     "priceCents": 59500,
     "kind": "suit",
@@ -14303,7 +13781,7 @@
     "fabricCode": "KR32026"
   },
   {
-    "id": 1764,
+    "id": 1690,
     "name": "Burgundy Solid Suit · KO42029",
     "priceCents": 59500,
     "kind": "suit",
@@ -14312,7 +13790,7 @@
     "fabricCode": "KO42029"
   },
   {
-    "id": 1765,
+    "id": 1691,
     "name": "Lavender Solid Suit · KO42030",
     "priceCents": 59500,
     "kind": "suit",
@@ -14321,7 +13799,7 @@
     "fabricCode": "KO42030"
   },
   {
-    "id": 1766,
+    "id": 1692,
     "name": "Teal Green Solid Suit · KO42032",
     "priceCents": 59500,
     "kind": "suit",
@@ -14330,7 +13808,7 @@
     "fabricCode": "KO42032"
   },
   {
-    "id": 1767,
+    "id": 1693,
     "name": "Fern Green Plain Suit · KO42086",
     "priceCents": 59500,
     "kind": "suit",
@@ -14339,7 +13817,7 @@
     "fabricCode": "KO42086"
   },
   {
-    "id": 1768,
+    "id": 1694,
     "name": "White Plain Suit · KO42053",
     "priceCents": 59500,
     "kind": "suit",
@@ -14348,7 +13826,7 @@
     "fabricCode": "KO42053"
   },
   {
-    "id": 1769,
+    "id": 1695,
     "name": "Lt Sand Plain Suit · KO42056",
     "priceCents": 59500,
     "kind": "suit",
@@ -14357,7 +13835,7 @@
     "fabricCode": "KO42056"
   },
   {
-    "id": 1770,
+    "id": 1696,
     "name": "Lt Pink Plain Suit · KO42058",
     "priceCents": 59500,
     "kind": "suit",
@@ -14366,7 +13844,7 @@
     "fabricCode": "KO42058"
   },
   {
-    "id": 1771,
+    "id": 1697,
     "name": "Green Plain Suit · KO42061",
     "priceCents": 59500,
     "kind": "suit",
@@ -14375,7 +13853,7 @@
     "fabricCode": "KO42061"
   },
   {
-    "id": 1772,
+    "id": 1698,
     "name": "White Plain Suit · KO42062",
     "priceCents": 59500,
     "kind": "suit",
@@ -14384,7 +13862,7 @@
     "fabricCode": "KO42062"
   },
   {
-    "id": 1773,
+    "id": 1699,
     "name": "Beige Plain Suit · KO42055",
     "priceCents": 59500,
     "kind": "suit",
@@ -14393,7 +13871,7 @@
     "fabricCode": "KO42055"
   },
   {
-    "id": 1774,
+    "id": 1700,
     "name": "Pink Melange Suit · KO42064",
     "priceCents": 69500,
     "kind": "suit",
@@ -14402,7 +13880,7 @@
     "fabricCode": "KO42064"
   },
   {
-    "id": 1775,
+    "id": 1701,
     "name": "Ivory Plain Suit · KO42083",
     "priceCents": 59500,
     "kind": "suit",
@@ -14411,7 +13889,7 @@
     "fabricCode": "KO42083"
   },
   {
-    "id": 1776,
+    "id": 1702,
     "name": "Beige Plain Suit · KO42084",
     "priceCents": 59500,
     "kind": "suit",
@@ -14420,7 +13898,7 @@
     "fabricCode": "KO42084"
   },
   {
-    "id": 1777,
+    "id": 1703,
     "name": "Sand Plain Suit · KO42085",
     "priceCents": 59500,
     "kind": "suit",
@@ -14429,7 +13907,7 @@
     "fabricCode": "KO42085"
   },
   {
-    "id": 1778,
+    "id": 1704,
     "name": "Black Solid Suit · EB13039",
     "priceCents": 59500,
     "kind": "suit",
@@ -14438,7 +13916,7 @@
     "fabricCode": "EB13039"
   },
   {
-    "id": 1779,
+    "id": 1705,
     "name": "Grey Plain Suit · EG23687",
     "priceCents": 79500,
     "kind": "suit",
@@ -14447,7 +13925,7 @@
     "fabricCode": "EG23687"
   },
   {
-    "id": 1780,
+    "id": 1706,
     "name": "Lt Grey Plain Suit · EG23750",
     "priceCents": 79500,
     "kind": "suit",
@@ -14456,7 +13934,7 @@
     "fabricCode": "EG23750"
   },
   {
-    "id": 1781,
+    "id": 1707,
     "name": "Blue/ Lt Orange Windowpane Suit · EN17745",
     "priceCents": 79500,
     "kind": "suit",
@@ -14465,7 +13943,7 @@
     "fabricCode": "EN17745"
   },
   {
-    "id": 1782,
+    "id": 1708,
     "name": "Blue Windowpane Suit · EN17746",
     "priceCents": 79500,
     "kind": "suit",
@@ -14474,7 +13952,7 @@
     "fabricCode": "EN17746"
   },
   {
-    "id": 1783,
+    "id": 1709,
     "name": "Lt Blue Plain Suit · EN54247",
     "priceCents": 79500,
     "kind": "suit",
@@ -14483,7 +13961,7 @@
     "fabricCode": "EN54247"
   },
   {
-    "id": 1784,
+    "id": 1710,
     "name": "Lt Blue Plain Suit · EN54232",
     "priceCents": 79500,
     "kind": "suit",
@@ -14492,7 +13970,7 @@
     "fabricCode": "EN54232"
   },
   {
-    "id": 1785,
+    "id": 1711,
     "name": "Lt Blue Glenplaid Suit · EN54262",
     "priceCents": 79500,
     "kind": "suit",
@@ -14501,7 +13979,7 @@
     "fabricCode": "EN54262"
   },
   {
-    "id": 1786,
+    "id": 1712,
     "name": "Azalea Red Solid Suit · EO10150",
     "priceCents": 59500,
     "kind": "suit",
@@ -14510,7 +13988,7 @@
     "fabricCode": "EO10150"
   },
   {
-    "id": 1787,
+    "id": 1713,
     "name": "Pastel Orange Solid Suit · EO10151",
     "priceCents": 59500,
     "kind": "suit",
@@ -14519,7 +13997,7 @@
     "fabricCode": "EO10151"
   },
   {
-    "id": 1788,
+    "id": 1714,
     "name": "Blue / Lt Green Plaid Suit · EN18729",
     "priceCents": 79500,
     "kind": "suit",
@@ -14528,7 +14006,7 @@
     "fabricCode": "EN18729"
   },
   {
-    "id": 1789,
+    "id": 1715,
     "name": "Sand Plain Suit · KO42052",
     "priceCents": 59500,
     "kind": "suit",
@@ -14537,7 +14015,7 @@
     "fabricCode": "KO42052"
   },
   {
-    "id": 1790,
+    "id": 1716,
     "name": "Royal Blue Solid Suit · CN51258",
     "priceCents": 59500,
     "kind": "suit",
@@ -14546,7 +14024,7 @@
     "fabricCode": "CN51258"
   },
   {
-    "id": 1791,
+    "id": 1717,
     "name": "Blue/ Grey Windowpane Suit · EN54047",
     "priceCents": 150000,
     "kind": "suit",
@@ -14555,7 +14033,7 @@
     "fabricCode": "EN54047"
   },
   {
-    "id": 1792,
+    "id": 1718,
     "name": "Black Plain Suit · CB11142",
     "priceCents": 59500,
     "kind": "suit",
@@ -14564,7 +14042,7 @@
     "fabricCode": "CB11142"
   },
   {
-    "id": 1793,
+    "id": 1719,
     "name": "Grey Sharkskin Suit · EG23505",
     "priceCents": 150000,
     "kind": "suit",
@@ -14573,7 +14051,7 @@
     "fabricCode": "EG23505"
   },
   {
-    "id": 1794,
+    "id": 1720,
     "name": "Lt Blue Plaid Suit · EN54046",
     "priceCents": 150000,
     "kind": "suit",
@@ -14582,7 +14060,7 @@
     "fabricCode": "EN54046"
   },
   {
-    "id": 1795,
+    "id": 1721,
     "name": "Taupe Micro Check Suit · ER33229",
     "priceCents": 120000,
     "kind": "suit",
@@ -14591,7 +14069,7 @@
     "fabricCode": "ER33229"
   },
   {
-    "id": 1796,
+    "id": 1722,
     "name": "Dk Grey Solid Suit · EG12103",
     "priceCents": 99500,
     "kind": "suit",
@@ -14600,7 +14078,7 @@
     "fabricCode": "EG12103"
   },
   {
-    "id": 1797,
+    "id": 1723,
     "name": "Sand Solid Suit · EOX0105",
     "priceCents": 89500,
     "kind": "suit",
@@ -14609,7 +14087,7 @@
     "fabricCode": "EOX0105"
   },
   {
-    "id": 1798,
+    "id": 1724,
     "name": "Navy/Taupe Windowpane Suit · EN54546",
     "priceCents": 110000,
     "kind": "suit",
@@ -14618,7 +14096,7 @@
     "fabricCode": "EN54546"
   },
   {
-    "id": 1799,
+    "id": 1725,
     "name": "Black Solid Suit · CB11067",
     "priceCents": 59500,
     "kind": "suit",
@@ -14627,7 +14105,7 @@
     "fabricCode": "CB11067"
   },
   {
-    "id": 1800,
+    "id": 1726,
     "name": "Navy Solid Suit · CN51260",
     "priceCents": 59500,
     "kind": "suit",
@@ -14636,7 +14114,7 @@
     "fabricCode": "CN51260"
   },
   {
-    "id": 1801,
+    "id": 1727,
     "name": "Charcoal Solid Suit · CG21269",
     "priceCents": 59500,
     "kind": "suit",
@@ -14645,7 +14123,7 @@
     "fabricCode": "CG21269"
   },
   {
-    "id": 1802,
+    "id": 1728,
     "name": "Lt Grey Glen Plaid Suit · CG21260",
     "priceCents": 59500,
     "kind": "suit",
@@ -14654,7 +14132,7 @@
     "fabricCode": "CG21260"
   },
   {
-    "id": 1803,
+    "id": 1729,
     "name": "Green Solid Suit · KO42077",
     "priceCents": 69500,
     "kind": "suit",
@@ -14663,7 +14141,7 @@
     "fabricCode": "KO42077"
   },
   {
-    "id": 1804,
+    "id": 1730,
     "name": "Pink Solid Suit · KO42078",
     "priceCents": 69500,
     "kind": "suit",
@@ -14672,7 +14150,7 @@
     "fabricCode": "KO42078"
   },
   {
-    "id": 1805,
+    "id": 1731,
     "name": "Beige Solid Suit · KR32030",
     "priceCents": 69500,
     "kind": "suit",
@@ -14681,7 +14159,7 @@
     "fabricCode": "KR32030"
   },
   {
-    "id": 1806,
+    "id": 1732,
     "name": "Red Stripe Suit · EO10401",
     "priceCents": 89500,
     "kind": "suit",
@@ -14690,7 +14168,7 @@
     "fabricCode": "EO10401"
   },
   {
-    "id": 1807,
+    "id": 1733,
     "name": "Black Herringbone Suit · EB11402",
     "priceCents": 89500,
     "kind": "suit",
@@ -14699,7 +14177,7 @@
     "fabricCode": "EB11402"
   },
   {
-    "id": 1808,
+    "id": 1734,
     "name": "Lt Blue Stripe Suit · EN54367",
     "priceCents": 130000,
     "kind": "suit",
@@ -14708,7 +14186,7 @@
     "fabricCode": "EN54367"
   },
   {
-    "id": 1809,
+    "id": 1735,
     "name": "Green Solid Suit · KO42018",
     "priceCents": 69500,
     "kind": "suit",
@@ -14717,7 +14195,7 @@
     "fabricCode": "KO42018"
   },
   {
-    "id": 1810,
+    "id": 1736,
     "name": "Camel Solid Suit · KR32013",
     "priceCents": 69500,
     "kind": "suit",
@@ -14726,7 +14204,7 @@
     "fabricCode": "KR32013"
   },
   {
-    "id": 1811,
+    "id": 1737,
     "name": "Burgundy Solid Suit · KO42014",
     "priceCents": 69500,
     "kind": "suit",
@@ -14735,7 +14213,7 @@
     "fabricCode": "KO42014"
   },
   {
-    "id": 1812,
+    "id": 1738,
     "name": "Purple Solid Suit · KO42043",
     "priceCents": 49500,
     "kind": "suit",
@@ -14744,7 +14222,7 @@
     "fabricCode": "KO42043"
   },
   {
-    "id": 1813,
+    "id": 1739,
     "name": "Sea Green Corduroy Suit · EO43473",
     "priceCents": 140000,
     "kind": "suit",
@@ -14753,7 +14231,7 @@
     "fabricCode": "EO43473"
   },
   {
-    "id": 1814,
+    "id": 1740,
     "name": "Steel Blue Twill Suit · EN54181",
     "priceCents": 69500,
     "kind": "suit",
@@ -14762,7 +14240,7 @@
     "fabricCode": "EN54181"
   },
   {
-    "id": 1815,
+    "id": 1741,
     "name": "Indigo Blue Twill Suit · EN54237",
     "priceCents": 69500,
     "kind": "suit",
@@ -14771,7 +14249,7 @@
     "fabricCode": "EN54237"
   },
   {
-    "id": 1816,
+    "id": 1742,
     "name": "Lt Blue Solid Suit · EN54060",
     "priceCents": 59500,
     "kind": "suit",
@@ -14780,7 +14258,7 @@
     "fabricCode": "EN54060"
   },
   {
-    "id": 1817,
+    "id": 1743,
     "name": "Navy Corduroy Suit · EN54245",
     "priceCents": 69500,
     "kind": "suit",
@@ -14789,7 +14267,7 @@
     "fabricCode": "EN54245"
   },
   {
-    "id": 1818,
+    "id": 1744,
     "name": "Dk Navy Corduroy Suit · EN54246",
     "priceCents": 69500,
     "kind": "suit",
@@ -14798,7 +14276,7 @@
     "fabricCode": "EN54246"
   },
   {
-    "id": 1819,
+    "id": 1745,
     "name": "Black Solid Suit · EB13123",
     "priceCents": 59500,
     "kind": "suit",
@@ -14807,7 +14285,7 @@
     "fabricCode": "EB13123"
   },
   {
-    "id": 1820,
+    "id": 1746,
     "name": "Black Paisley Suit · EB13135",
     "priceCents": 69500,
     "kind": "suit",
@@ -14816,7 +14294,7 @@
     "fabricCode": "EB13135"
   },
   {
-    "id": 1821,
+    "id": 1747,
     "name": "Dk Grey Corduroy Suit · EG23535",
     "priceCents": 59500,
     "kind": "suit",
@@ -14825,7 +14303,7 @@
     "fabricCode": "EG23535"
   },
   {
-    "id": 1822,
+    "id": 1748,
     "name": "Dk Grey Micro Design Suit · EG23673",
     "priceCents": 140000,
     "kind": "suit",
@@ -14834,7 +14312,7 @@
     "fabricCode": "EG23673"
   },
   {
-    "id": 1823,
+    "id": 1749,
     "name": "Grey Fancy Velvet Suit · EG23534",
     "priceCents": 69500,
     "kind": "suit",
@@ -14843,7 +14321,7 @@
     "fabricCode": "EG23534"
   },
   {
-    "id": 1824,
+    "id": 1750,
     "name": "Soft Stone Twill Suit · EO43380",
     "priceCents": 69500,
     "kind": "suit",
@@ -14852,7 +14330,7 @@
     "fabricCode": "EO43380"
   },
   {
-    "id": 1825,
+    "id": 1751,
     "name": "Burgundy Twill Suit · EO43403",
     "priceCents": 69500,
     "kind": "suit",
@@ -14861,7 +14339,7 @@
     "fabricCode": "EO43403"
   },
   {
-    "id": 1826,
+    "id": 1752,
     "name": "Lavender Fancy Velvet Suit · EO43289",
     "priceCents": 69500,
     "kind": "suit",
@@ -14870,7 +14348,7 @@
     "fabricCode": "EO43289"
   },
   {
-    "id": 1827,
+    "id": 1753,
     "name": "Taupe Fancy Velvet Suit · EO43288",
     "priceCents": 69500,
     "kind": "suit",
@@ -14879,7 +14357,7 @@
     "fabricCode": "EO43288"
   },
   {
-    "id": 1828,
+    "id": 1754,
     "name": "Pastel Pink Corduroy Suit · EO43332",
     "priceCents": 59500,
     "kind": "suit",
@@ -14888,7 +14366,7 @@
     "fabricCode": "EO43332"
   },
   {
-    "id": 1829,
+    "id": 1755,
     "name": "Dk Brown Fine Corduroy Suit · ER33160",
     "priceCents": 140000,
     "kind": "suit",
@@ -14897,7 +14375,7 @@
     "fabricCode": "ER33160"
   },
   {
-    "id": 1830,
+    "id": 1756,
     "name": "Lt Green Corduroy Suit · EO43406",
     "priceCents": 69500,
     "kind": "suit",
@@ -14906,7 +14384,7 @@
     "fabricCode": "EO43406"
   },
   {
-    "id": 1831,
+    "id": 1757,
     "name": "Burgundy Stripe Suit · EO43383",
     "priceCents": 69500,
     "kind": "suit",
@@ -14915,7 +14393,7 @@
     "fabricCode": "EO43383"
   },
   {
-    "id": 1832,
+    "id": 1758,
     "name": "Beige Corduroy Suit · EO43398",
     "priceCents": 69500,
     "kind": "suit",
@@ -14924,7 +14402,7 @@
     "fabricCode": "EO43398"
   },
   {
-    "id": 1833,
+    "id": 1759,
     "name": "Black Mini Dot Suit · EB13136",
     "priceCents": 89500,
     "kind": "suit",
@@ -14933,7 +14411,7 @@
     "fabricCode": "EB13136"
   },
   {
-    "id": 1834,
+    "id": 1760,
     "name": "Navy Plain Suit · KN52084",
     "priceCents": 69500,
     "kind": "suit",
@@ -14942,7 +14420,7 @@
     "fabricCode": "KN52084"
   },
   {
-    "id": 1835,
+    "id": 1761,
     "name": "Black Paisley Suit · KG22035",
     "priceCents": 49500,
     "kind": "suit",
@@ -14951,7 +14429,7 @@
     "fabricCode": "KG22035"
   },
   {
-    "id": 1836,
+    "id": 1762,
     "name": "Black Plain Suit · CB11015",
     "priceCents": 59500,
     "kind": "suit",
@@ -14960,7 +14438,7 @@
     "fabricCode": "CB11015"
   },
   {
-    "id": 1837,
+    "id": 1763,
     "name": "Black Solid Suit · CB11084",
     "priceCents": 89500,
     "kind": "suit",
@@ -14969,7 +14447,7 @@
     "fabricCode": "CB11084"
   },
   {
-    "id": 1838,
+    "id": 1764,
     "name": "Grey Plain Suit · CG21035",
     "priceCents": 59500,
     "kind": "suit",
@@ -14978,7 +14456,7 @@
     "fabricCode": "CG21035"
   },
   {
-    "id": 1839,
+    "id": 1765,
     "name": "Charcoal Plain Suit · CG21036",
     "priceCents": 59500,
     "kind": "suit",
@@ -14987,7 +14465,7 @@
     "fabricCode": "CG21036"
   },
   {
-    "id": 1840,
+    "id": 1766,
     "name": "Charcoal Solid Suit · CG21309",
     "priceCents": 89500,
     "kind": "suit",
@@ -14996,7 +14474,7 @@
     "fabricCode": "CG21309"
   },
   {
-    "id": 1841,
+    "id": 1767,
     "name": "Navy Plain Suit · CN51025",
     "priceCents": 59500,
     "kind": "suit",
@@ -15005,7 +14483,7 @@
     "fabricCode": "CN51025"
   },
   {
-    "id": 1842,
+    "id": 1768,
     "name": "Lt Blue Plain Suit · CN51255",
     "priceCents": 59500,
     "kind": "suit",
@@ -15014,7 +14492,7 @@
     "fabricCode": "CN51255"
   },
   {
-    "id": 1843,
+    "id": 1769,
     "name": "Navy Solid Suit · CN51317",
     "priceCents": 89500,
     "kind": "suit",
@@ -15023,7 +14501,7 @@
     "fabricCode": "CN51317"
   },
   {
-    "id": 1844,
+    "id": 1770,
     "name": "White Plain Suit · KO42051",
     "priceCents": 59500,
     "kind": "suit",
@@ -15032,7 +14510,7 @@
     "fabricCode": "KO42051"
   },
   {
-    "id": 1845,
+    "id": 1771,
     "name": "Olive Plain Suit · CO41008",
     "priceCents": 59500,
     "kind": "suit",
@@ -15041,7 +14519,7 @@
     "fabricCode": "CO41008"
   },
   {
-    "id": 1846,
+    "id": 1772,
     "name": "Beige Solid Suit · CO41078",
     "priceCents": 89500,
     "kind": "suit",
@@ -15050,7 +14528,7 @@
     "fabricCode": "CO41078"
   },
   {
-    "id": 1847,
+    "id": 1773,
     "name": "Brown Plain Suit · CR31015",
     "priceCents": 59500,
     "kind": "suit",
@@ -15059,7 +14537,7 @@
     "fabricCode": "CR31015"
   },
   {
-    "id": 1848,
+    "id": 1774,
     "name": "Sand Plain Suit · CR31052",
     "priceCents": 59500,
     "kind": "suit",
@@ -15068,7 +14546,7 @@
     "fabricCode": "CR31052"
   },
   {
-    "id": 1849,
+    "id": 1775,
     "name": "Lilac Grey Solid Suit · EO10131",
     "priceCents": 99500,
     "kind": "suit",
@@ -15077,7 +14555,7 @@
     "fabricCode": "EO10131"
   },
   {
-    "id": 1850,
+    "id": 1776,
     "name": "Lt Green Solid Suit · EO10140",
     "priceCents": 99500,
     "kind": "suit",
@@ -15086,7 +14564,7 @@
     "fabricCode": "EO10140"
   },
   {
-    "id": 1851,
+    "id": 1777,
     "name": "Blue Solid Suit · CN87304",
     "priceCents": 69500,
     "kind": "suit",
@@ -15095,7 +14573,7 @@
     "fabricCode": "CN87304"
   },
   {
-    "id": 1852,
+    "id": 1778,
     "name": "Charcoal Solid Suit · CG21237",
     "priceCents": 69500,
     "kind": "suit",
@@ -15104,7 +14582,7 @@
     "fabricCode": "CG21237"
   },
   {
-    "id": 1853,
+    "id": 1779,
     "name": "Navy Solid Suit · CN85300",
     "priceCents": 69500,
     "kind": "suit",
@@ -15113,7 +14591,7 @@
     "fabricCode": "CN85300"
   },
   {
-    "id": 1854,
+    "id": 1780,
     "name": "Navy Solid Suit · EN54202",
     "priceCents": 140000,
     "kind": "suit",
@@ -15122,7 +14600,7 @@
     "fabricCode": "EN54202"
   },
   {
-    "id": 1855,
+    "id": 1781,
     "name": "Dk Sand Plain Suit · ER33212",
     "priceCents": 140000,
     "kind": "suit",
@@ -15131,7 +14609,7 @@
     "fabricCode": "ER33212"
   },
   {
-    "id": 1856,
+    "id": 1782,
     "name": "Khaki Solid Suit · EO43391",
     "priceCents": 140000,
     "kind": "suit",
@@ -15140,7 +14618,7 @@
     "fabricCode": "EO43391"
   },
   {
-    "id": 1857,
+    "id": 1783,
     "name": "Lt Grey Solid Suit · EG23753",
     "priceCents": 99500,
     "kind": "suit",
@@ -15149,7 +14627,7 @@
     "fabricCode": "EG23753"
   },
   {
-    "id": 1858,
+    "id": 1784,
     "name": "Navy Solid Suit · KN52071",
     "priceCents": 69500,
     "kind": "suit",
@@ -15158,7 +14636,7 @@
     "fabricCode": "KN52071"
   },
   {
-    "id": 1859,
+    "id": 1785,
     "name": "Navy Solid Suit · CN51340",
     "priceCents": 69500,
     "kind": "suit",
@@ -15167,7 +14645,7 @@
     "fabricCode": "CN51340"
   },
   {
-    "id": 1860,
+    "id": 1786,
     "name": "Black Solid Suit · EB11107",
     "priceCents": 99500,
     "kind": "suit",
@@ -15176,7 +14654,7 @@
     "fabricCode": "EB11107"
   },
   {
-    "id": 1861,
+    "id": 1787,
     "name": "Blue Solid Suit · EN17111",
     "priceCents": 99500,
     "kind": "suit",
@@ -15185,7 +14663,7 @@
     "fabricCode": "EN17111"
   },
   {
-    "id": 1862,
+    "id": 1788,
     "name": "Black Solid Suit · KB12044",
     "priceCents": 69500,
     "kind": "suit",
@@ -15194,7 +14672,7 @@
     "fabricCode": "KB12044"
   },
   {
-    "id": 1863,
+    "id": 1789,
     "name": "Black Solid Suit · EB11127",
     "priceCents": 150000,
     "kind": "suit",
@@ -15203,7 +14681,7 @@
     "fabricCode": "EB11127"
   },
   {
-    "id": 1864,
+    "id": 1790,
     "name": "Blue Glenplaid Suit · EN54229",
     "priceCents": 180000,
     "kind": "suit",
@@ -15212,7 +14690,7 @@
     "fabricCode": "EN54229"
   },
   {
-    "id": 1865,
+    "id": 1791,
     "name": "Lt Brown Glenplaid Suit · ER33214",
     "priceCents": 180000,
     "kind": "suit",
@@ -15221,7 +14699,7 @@
     "fabricCode": "ER33214"
   },
   {
-    "id": 1866,
+    "id": 1792,
     "name": "Black Solid Tasmanian Suit · EB13179",
     "priceCents": 180000,
     "kind": "suit",
@@ -15230,7 +14708,7 @@
     "fabricCode": "EB13179"
   },
   {
-    "id": 1867,
+    "id": 1793,
     "name": "Taupe Glenplaid Suit · ER33191",
     "priceCents": 110000,
     "kind": "suit",
@@ -15239,7 +14717,7 @@
     "fabricCode": "ER33191"
   },
   {
-    "id": 1868,
+    "id": 1794,
     "name": "Blue Solid Suit · EN54255",
     "priceCents": 120000,
     "kind": "suit",
@@ -15248,7 +14726,7 @@
     "fabricCode": "EN54255"
   },
   {
-    "id": 1869,
+    "id": 1795,
     "name": "Off White Solid Suit · EO43411",
     "priceCents": 180000,
     "kind": "suit",
@@ -15257,7 +14735,7 @@
     "fabricCode": "EO43411"
   },
   {
-    "id": 1870,
+    "id": 1796,
     "name": "Camel Solid Suit · ER33137",
     "priceCents": 200000,
     "kind": "suit",
@@ -15266,7 +14744,7 @@
     "fabricCode": "ER33137"
   },
   {
-    "id": 1871,
+    "id": 1797,
     "name": "Lt Brown Herringbone Suit · EO43306",
     "priceCents": 170000,
     "kind": "suit",
@@ -15275,7 +14753,7 @@
     "fabricCode": "EO43306"
   },
   {
-    "id": 1872,
+    "id": 1798,
     "name": "Blue Herringbone Suit · EN53942",
     "priceCents": 170000,
     "kind": "suit",
@@ -15284,7 +14762,7 @@
     "fabricCode": "EN53942"
   },
   {
-    "id": 1873,
+    "id": 1799,
     "name": "Stone Blue Glenplaid Suit · EN54212",
     "priceCents": 200000,
     "kind": "suit",
@@ -15293,7 +14771,7 @@
     "fabricCode": "EN54212"
   },
   {
-    "id": 1874,
+    "id": 1800,
     "name": "Lt Burgundy Solid Suit · EO43487",
     "priceCents": 140000,
     "kind": "suit",
@@ -15302,7 +14780,7 @@
     "fabricCode": "EO43487"
   },
   {
-    "id": 1875,
+    "id": 1801,
     "name": "Navy Solid Suit · EN53895",
     "priceCents": 200000,
     "kind": "suit",
@@ -15311,7 +14789,7 @@
     "fabricCode": "EN53895"
   },
   {
-    "id": 1876,
+    "id": 1802,
     "name": "Navy Solid Suit · EN16108",
     "priceCents": 140000,
     "kind": "suit",
@@ -15320,7 +14798,7 @@
     "fabricCode": "EN16108"
   },
   {
-    "id": 1877,
+    "id": 1803,
     "name": "Black Solid Suit · CB11049",
     "priceCents": 89500,
     "kind": "suit",
@@ -15329,7 +14807,7 @@
     "fabricCode": "CB11049"
   },
   {
-    "id": 1878,
+    "id": 1804,
     "name": "Beige/ Brown Mini Check Suit · EO43471",
     "priceCents": 220000,
     "kind": "suit",
@@ -15338,7 +14816,7 @@
     "fabricCode": "EO43471"
   },
   {
-    "id": 1879,
+    "id": 1805,
     "name": "Lt Green Mini Design Suit · EO43426",
     "priceCents": 130000,
     "kind": "suit",
@@ -15347,7 +14825,7 @@
     "fabricCode": "EO43426"
   },
   {
-    "id": 1880,
+    "id": 1806,
     "name": "Dk Magenta Plain Suit · EO43474",
     "priceCents": 130000,
     "kind": "suit",
@@ -15356,7 +14834,7 @@
     "fabricCode": "EO43474"
   },
   {
-    "id": 1881,
+    "id": 1807,
     "name": "Green 1/4 Inch Herringbone Suit · EO43482",
     "priceCents": 130000,
     "kind": "suit",
@@ -15365,7 +14843,7 @@
     "fabricCode": "EO43482"
   },
   {
-    "id": 1882,
+    "id": 1808,
     "name": "Black Solid Suit · CB11047",
     "priceCents": 69500,
     "kind": "suit",
@@ -15374,7 +14852,7 @@
     "fabricCode": "CB11047"
   },
   {
-    "id": 1883,
+    "id": 1809,
     "name": "Charcoal Plain Suit · CG21272",
     "priceCents": 59500,
     "kind": "suit",
@@ -15383,7 +14861,7 @@
     "fabricCode": "CG21272"
   },
   {
-    "id": 1884,
+    "id": 1810,
     "name": "Navy Plain Suit · CN51261",
     "priceCents": 59500,
     "kind": "suit",
@@ -15392,7 +14870,7 @@
     "fabricCode": "CN51261"
   },
   {
-    "id": 1885,
+    "id": 1811,
     "name": "Grey Stripe Suit · KG22026",
     "priceCents": 89500,
     "kind": "suit",
@@ -15401,7 +14879,7 @@
     "fabricCode": "KG22026"
   },
   {
-    "id": 1886,
+    "id": 1812,
     "name": "Black Plain Suit · EB13152",
     "priceCents": 140000,
     "kind": "suit",
@@ -15410,7 +14888,7 @@
     "fabricCode": "EB13152"
   },
   {
-    "id": 1887,
+    "id": 1813,
     "name": "Off White Solid Suit · EO43314",
     "priceCents": 140000,
     "kind": "suit",
@@ -15419,7 +14897,7 @@
     "fabricCode": "EO43314"
   },
   {
-    "id": 1888,
+    "id": 1814,
     "name": "Black Solid Suit · KB12033",
     "priceCents": 140000,
     "kind": "suit",
@@ -15428,7 +14906,7 @@
     "fabricCode": "KB12033"
   },
   {
-    "id": 1889,
+    "id": 1815,
     "name": "Navy Stripe Suit · KN52018",
     "priceCents": 99500,
     "kind": "suit",
@@ -15437,7 +14915,7 @@
     "fabricCode": "KN52018"
   },
   {
-    "id": 1890,
+    "id": 1816,
     "name": "Burgundy Plain Suit · EO43347",
     "priceCents": 140000,
     "kind": "suit",
@@ -15446,7 +14924,7 @@
     "fabricCode": "EO43347"
   },
   {
-    "id": 1891,
+    "id": 1817,
     "name": "Blue Plain Suit · EN53940",
     "priceCents": 140000,
     "kind": "suit",
@@ -15455,7 +14933,7 @@
     "fabricCode": "EN53940"
   },
   {
-    "id": 1892,
+    "id": 1818,
     "name": "Off White Plain Suit · EO43363",
     "priceCents": 140000,
     "kind": "suit",
@@ -15464,7 +14942,7 @@
     "fabricCode": "EO43363"
   },
   {
-    "id": 1893,
+    "id": 1819,
     "name": "Black Geo Design Suit · EB13204",
     "priceCents": 180000,
     "kind": "suit",
@@ -15473,7 +14951,7 @@
     "fabricCode": "EB13204"
   },
   {
-    "id": 1894,
+    "id": 1820,
     "name": "Black Embroidery Suit · EB11126",
     "priceCents": 99500,
     "kind": "suit",
@@ -15482,7 +14960,7 @@
     "fabricCode": "EB11126"
   },
   {
-    "id": 1895,
+    "id": 1821,
     "name": "Off White Solid Suit · EO43277",
     "priceCents": 170000,
     "kind": "suit",
@@ -15491,7 +14969,7 @@
     "fabricCode": "EO43277"
   },
   {
-    "id": 1896,
+    "id": 1822,
     "name": "Navy Fancy Suit · EN53531",
     "priceCents": 89500,
     "kind": "suit",
@@ -15500,7 +14978,7 @@
     "fabricCode": "EN53531"
   },
   {
-    "id": 1897,
+    "id": 1823,
     "name": "Lt Gold Solid Suit · CO41017",
     "priceCents": 89500,
     "kind": "suit",
@@ -15509,7 +14987,7 @@
     "fabricCode": "CO41017"
   },
   {
-    "id": 1898,
+    "id": 1824,
     "name": "Black Solid Suit · CB11039",
     "priceCents": 69500,
     "kind": "suit",
@@ -15518,7 +14996,7 @@
     "fabricCode": "CB11039"
   },
   {
-    "id": 1899,
+    "id": 1825,
     "name": "Gold Solid Suit · EO43315",
     "priceCents": 140000,
     "kind": "suit",
@@ -15527,7 +15005,7 @@
     "fabricCode": "EO43315"
   },
   {
-    "id": 1900,
+    "id": 1826,
     "name": "White Solid Suit · EO43325",
     "priceCents": 69500,
     "kind": "suit",
@@ -15536,7 +15014,7 @@
     "fabricCode": "EO43325"
   },
   {
-    "id": 1901,
+    "id": 1827,
     "name": "Black Embroidery Suit · EB11125",
     "priceCents": 99500,
     "kind": "suit",
@@ -15545,7 +15023,7 @@
     "fabricCode": "EB11125"
   },
   {
-    "id": 1902,
+    "id": 1828,
     "name": "Navy Solid Suit · CN51269",
     "priceCents": 69500,
     "kind": "suit",
@@ -15554,7 +15032,7 @@
     "fabricCode": "CN51269"
   },
   {
-    "id": 1903,
+    "id": 1829,
     "name": "Burgundy Solid Suit · CO41047",
     "priceCents": 69500,
     "kind": "suit",
@@ -15563,7 +15041,7 @@
     "fabricCode": "CO41047"
   },
   {
-    "id": 1904,
+    "id": 1830,
     "name": "Black Stripe Fancy Suit · EB13202",
     "priceCents": 140000,
     "kind": "suit",
@@ -15572,7 +15050,7 @@
     "fabricCode": "EB13202"
   },
   {
-    "id": 1905,
+    "id": 1831,
     "name": "Dk Navy Plain Suit · KN52020",
     "priceCents": 120000,
     "kind": "suit",
@@ -15581,7 +15059,7 @@
     "fabricCode": "KN52020"
   },
   {
-    "id": 1906,
+    "id": 1832,
     "name": "Black Windowpane Suit · CB11050",
     "priceCents": 69500,
     "kind": "suit",
@@ -15590,7 +15068,7 @@
     "fabricCode": "CB11050"
   },
   {
-    "id": 1907,
+    "id": 1833,
     "name": "Black Solid Suit · EB13114",
     "priceCents": 160000,
     "kind": "suit",
@@ -15599,7 +15077,7 @@
     "fabricCode": "EB13114"
   },
   {
-    "id": 1908,
+    "id": 1834,
     "name": "White Twill Shirt · 25-2542-23",
     "priceCents": 14500,
     "kind": "shirt",
@@ -15608,7 +15086,7 @@
     "fabricCode": "25-2542-23"
   },
   {
-    "id": 1909,
+    "id": 1835,
     "name": "White Plain Shirt · 30-3082-23",
     "priceCents": 17500,
     "kind": "shirt",
@@ -15617,7 +15095,7 @@
     "fabricCode": "30-3082-23"
   },
   {
-    "id": 1910,
+    "id": 1836,
     "name": "White Design Shirt · 30-3083-23",
     "priceCents": 17500,
     "kind": "shirt",
@@ -15626,7 +15104,7 @@
     "fabricCode": "30-3083-23"
   },
   {
-    "id": 1911,
+    "id": 1837,
     "name": "White Plain Shirt · 30-3087-23",
     "priceCents": 17500,
     "kind": "shirt",
@@ -15635,7 +15113,7 @@
     "fabricCode": "30-3087-23"
   },
   {
-    "id": 1912,
+    "id": 1838,
     "name": "White Twill Solid Shirt · 10-1182-23",
     "priceCents": 10500,
     "kind": "shirt",
@@ -15644,7 +15122,7 @@
     "fabricCode": "10-1182-23"
   },
   {
-    "id": 1913,
+    "id": 1839,
     "name": "Blue Twill Shirt · 30-3091-07",
     "priceCents": 17500,
     "kind": "shirt",
@@ -15653,7 +15131,7 @@
     "fabricCode": "30-3091-07"
   },
   {
-    "id": 1914,
+    "id": 1840,
     "name": "White Plain Shirt · 15-1524-23",
     "priceCents": 12500,
     "kind": "shirt",
@@ -15662,7 +15140,7 @@
     "fabricCode": "15-1524-23"
   },
   {
-    "id": 1915,
+    "id": 1841,
     "name": "White Design Shirt · 30-3085-23",
     "priceCents": 17500,
     "kind": "shirt",
@@ -15671,7 +15149,7 @@
     "fabricCode": "30-3085-23"
   },
   {
-    "id": 1916,
+    "id": 1842,
     "name": "White Design Shirt · 30-3089-23",
     "priceCents": 17500,
     "kind": "shirt",
@@ -15680,7 +15158,7 @@
     "fabricCode": "30-3089-23"
   },
   {
-    "id": 1917,
+    "id": 1843,
     "name": "White Herringbone Shirt · 30-3084-23",
     "priceCents": 17500,
     "kind": "shirt",
@@ -15689,7 +15167,7 @@
     "fabricCode": "30-3084-23"
   },
   {
-    "id": 1918,
+    "id": 1844,
     "name": "White Solid Shirt · 15-1501-23",
     "priceCents": 12500,
     "kind": "shirt",
@@ -15698,7 +15176,7 @@
     "fabricCode": "15-1501-23"
   },
   {
-    "id": 1919,
+    "id": 1845,
     "name": "White Plain Shirt · 15-1536-23",
     "priceCents": 12500,
     "kind": "shirt",
@@ -15707,7 +15185,7 @@
     "fabricCode": "15-1536-23"
   },
   {
-    "id": 1920,
+    "id": 1846,
     "name": "Black Plain Shirt · 25-2540-01",
     "priceCents": 14500,
     "kind": "shirt",
@@ -15716,7 +15194,7 @@
     "fabricCode": "25-2540-01"
   },
   {
-    "id": 1921,
+    "id": 1847,
     "name": "White Plain Shirt · 15-1570-23",
     "priceCents": 12500,
     "kind": "shirt",
@@ -15725,7 +15203,7 @@
     "fabricCode": "15-1570-23"
   },
   {
-    "id": 1922,
+    "id": 1848,
     "name": "White Plain Shirt · 15-1538-23",
     "priceCents": 12500,
     "kind": "shirt",
@@ -15734,7 +15212,7 @@
     "fabricCode": "15-1538-23"
   },
   {
-    "id": 1923,
+    "id": 1849,
     "name": "White Herringbone Shirt · 10-1183-23",
     "priceCents": 12500,
     "kind": "shirt",
@@ -15743,7 +15221,7 @@
     "fabricCode": "10-1183-23"
   },
   {
-    "id": 1924,
+    "id": 1850,
     "name": "White Solid Shirt · 30-3306-23",
     "priceCents": 17500,
     "kind": "shirt",
@@ -15752,7 +15230,7 @@
     "fabricCode": "30-3306-23"
   },
   {
-    "id": 1925,
+    "id": 1851,
     "name": "White Plain Shirt · 10-1270-23",
     "priceCents": 10500,
     "kind": "shirt",
@@ -15761,7 +15239,7 @@
     "fabricCode": "10-1270-23"
   },
   {
-    "id": 1926,
+    "id": 1852,
     "name": "Lt Blue Solid Shirt · 15-1516-07",
     "priceCents": 12500,
     "kind": "shirt",
@@ -15770,7 +15248,7 @@
     "fabricCode": "15-1516-07"
   },
   {
-    "id": 1927,
+    "id": 1853,
     "name": "Lt Blue Plain Shirt · 10-1065-07",
     "priceCents": 10500,
     "kind": "shirt",
@@ -15779,7 +15257,7 @@
     "fabricCode": "10-1065-07"
   },
   {
-    "id": 1928,
+    "id": 1854,
     "name": "White Plain Shirt · 15-1540-23",
     "priceCents": 12500,
     "kind": "shirt",
@@ -15788,7 +15266,7 @@
     "fabricCode": "15-1540-23"
   },
   {
-    "id": 1929,
+    "id": 1855,
     "name": "White Plain Shirt · 25-2538-23",
     "priceCents": 14500,
     "kind": "shirt",
@@ -15797,7 +15275,7 @@
     "fabricCode": "25-2538-23"
   },
   {
-    "id": 1930,
+    "id": 1856,
     "name": "Pink Solid Shirt · 15-1515-26",
     "priceCents": 12500,
     "kind": "shirt",
@@ -15806,7 +15284,7 @@
     "fabricCode": "15-1515-26"
   },
   {
-    "id": 1931,
+    "id": 1857,
     "name": "Blue Plain Shirt · 30-3094-06",
     "priceCents": 17500,
     "kind": "shirt",
@@ -15815,7 +15293,7 @@
     "fabricCode": "30-3094-06"
   },
   {
-    "id": 1932,
+    "id": 1858,
     "name": "White Plain Shirt · 10-1181-23",
     "priceCents": 12500,
     "kind": "shirt",
@@ -15824,7 +15302,7 @@
     "fabricCode": "10-1181-23"
   },
   {
-    "id": 1933,
+    "id": 1859,
     "name": "White Design Shirt · 30-3088-23",
     "priceCents": 17500,
     "kind": "shirt",
@@ -15833,7 +15311,7 @@
     "fabricCode": "30-3088-23"
   },
   {
-    "id": 1934,
+    "id": 1860,
     "name": "White Plain Shirt · 10-1271-23",
     "priceCents": 10500,
     "kind": "shirt",
@@ -15842,7 +15320,7 @@
     "fabricCode": "10-1271-23"
   },
   {
-    "id": 1935,
+    "id": 1861,
     "name": "Blue Herringbone Shirt · 30-3097-06",
     "priceCents": 17500,
     "kind": "shirt",
@@ -15851,7 +15329,7 @@
     "fabricCode": "30-3097-06"
   },
   {
-    "id": 1936,
+    "id": 1862,
     "name": "White/ Lt Blue Pin Stripe Shirt · 10-1202-23",
     "priceCents": 12500,
     "kind": "shirt",
@@ -15860,7 +15338,7 @@
     "fabricCode": "10-1202-23"
   },
   {
-    "id": 1937,
+    "id": 1863,
     "name": "Lt Blue Check Shirt · 10-1232-07",
     "priceCents": 12500,
     "kind": "shirt",
@@ -15869,7 +15347,7 @@
     "fabricCode": "10-1232-07"
   },
   {
-    "id": 1938,
+    "id": 1864,
     "name": "White Plain Shirt · 10-1237-23",
     "priceCents": 12500,
     "kind": "shirt",
@@ -15878,7 +15356,7 @@
     "fabricCode": "10-1237-23"
   },
   {
-    "id": 1939,
+    "id": 1865,
     "name": "Lt Blue Stripe Shirt · 10-1230-07",
     "priceCents": 12500,
     "kind": "shirt",
@@ -15887,7 +15365,7 @@
     "fabricCode": "10-1230-07"
   },
   {
-    "id": 1940,
+    "id": 1866,
     "name": "Lt Blue Gingham Shirt · 15-1508-07",
     "priceCents": 12500,
     "kind": "shirt",
@@ -15896,7 +15374,7 @@
     "fabricCode": "15-1508-07"
   },
   {
-    "id": 1941,
+    "id": 1867,
     "name": "Lt Blue Houndstooth Shirt · 15-1509-07",
     "priceCents": 12500,
     "kind": "shirt",
@@ -15905,7 +15383,7 @@
     "fabricCode": "15-1509-07"
   },
   {
-    "id": 1942,
+    "id": 1868,
     "name": "Lt Blue Stripe Shirt · 15-1537-07",
     "priceCents": 12500,
     "kind": "shirt",
@@ -15914,7 +15392,7 @@
     "fabricCode": "15-1537-07"
   },
   {
-    "id": 1943,
+    "id": 1869,
     "name": "Lt Blue Check Shirt · 15-1548-07",
     "priceCents": 12500,
     "kind": "shirt",
@@ -15923,7 +15401,7 @@
     "fabricCode": "15-1548-07"
   },
   {
-    "id": 1944,
+    "id": 1870,
     "name": "Blue Plain Shirt · 15-1549-06",
     "priceCents": 12500,
     "kind": "shirt",
@@ -15932,7 +15410,7 @@
     "fabricCode": "15-1549-06"
   },
   {
-    "id": 1945,
+    "id": 1871,
     "name": "Sand/ Lt Blue Stripe Shirt · 30-3423-13",
     "priceCents": 17500,
     "kind": "shirt",
@@ -15941,7 +15419,7 @@
     "fabricCode": "30-3423-13"
   },
   {
-    "id": 1946,
+    "id": 1872,
     "name": "Lavender/Green Stripe Shirt · 30-3414-20",
     "priceCents": 17500,
     "kind": "shirt",
@@ -15950,7 +15428,7 @@
     "fabricCode": "30-3414-20"
   },
   {
-    "id": 1947,
+    "id": 1873,
     "name": "Brown Stripe Shirt · 30-3187-10",
     "priceCents": 17500,
     "kind": "shirt",
@@ -15959,7 +15437,7 @@
     "fabricCode": "30-3187-10"
   },
   {
-    "id": 1948,
+    "id": 1874,
     "name": "Lt Blue Stripe Shirt · 30-3126-07",
     "priceCents": 17500,
     "kind": "shirt",
@@ -15968,7 +15446,7 @@
     "fabricCode": "30-3126-07"
   },
   {
-    "id": 1949,
+    "id": 1875,
     "name": "Blue Stripe Shirt · 30-3127-06",
     "priceCents": 17500,
     "kind": "shirt",
@@ -15977,7 +15455,7 @@
     "fabricCode": "30-3127-06"
   },
   {
-    "id": 1950,
+    "id": 1876,
     "name": "Blue Stripe Shirt · 30-3207-06",
     "priceCents": 17500,
     "kind": "shirt",
@@ -15986,7 +15464,7 @@
     "fabricCode": "30-3207-06"
   },
   {
-    "id": 1951,
+    "id": 1877,
     "name": "Red/Brown/White Plaid Shirt · 30-3454-10",
     "priceCents": 17500,
     "kind": "shirt",
@@ -15995,7 +15473,7 @@
     "fabricCode": "30-3454-10"
   },
   {
-    "id": 1952,
+    "id": 1878,
     "name": "White/Navy/Brown Plaid Shirt · 30-3453-05",
     "priceCents": 17500,
     "kind": "shirt",
@@ -16004,7 +15482,7 @@
     "fabricCode": "30-3453-05"
   },
   {
-    "id": 1953,
+    "id": 1879,
     "name": "Lt Blue/Brown Check Shirt · 30-3463-07",
     "priceCents": 17500,
     "kind": "shirt",
@@ -16013,7 +15491,7 @@
     "fabricCode": "30-3463-07"
   },
   {
-    "id": 1954,
+    "id": 1880,
     "name": "Brown/Navy Check Shirt · 30-3465-10",
     "priceCents": 17500,
     "kind": "shirt",
@@ -16022,7 +15500,7 @@
     "fabricCode": "30-3465-10"
   },
   {
-    "id": 1955,
+    "id": 1881,
     "name": "Red/Beige Tartan Check Shirt · 30-3467-21",
     "priceCents": 17500,
     "kind": "shirt",
@@ -16031,7 +15509,7 @@
     "fabricCode": "30-3467-21"
   },
   {
-    "id": 1956,
+    "id": 1882,
     "name": "Red/Grey Tartan Check Shirt · 30-3468-99",
     "priceCents": 17500,
     "kind": "shirt",
@@ -16040,7 +15518,7 @@
     "fabricCode": "30-3468-99"
   },
   {
-    "id": 1957,
+    "id": 1883,
     "name": "Beige/Dk Navy Glenplaid Shirt · 30-3471-05",
     "priceCents": 17500,
     "kind": "shirt",
@@ -16049,7 +15527,7 @@
     "fabricCode": "30-3471-05"
   },
   {
-    "id": 1958,
+    "id": 1884,
     "name": "Grey/Navy/Red Check Shirt · 10-1199-21",
     "priceCents": 12500,
     "kind": "shirt",
@@ -16058,7 +15536,7 @@
     "fabricCode": "10-1199-21"
   },
   {
-    "id": 1959,
+    "id": 1885,
     "name": "Grey/Navy/Green Multi Face Peached Shirt · 10-1200-05",
     "priceCents": 12500,
     "kind": "shirt",
@@ -16067,7 +15545,7 @@
     "fabricCode": "10-1200-05"
   },
   {
-    "id": 1960,
+    "id": 1886,
     "name": "Grey/Navy/Brown Multi Face Peached Shirt · 10-1201-10",
     "priceCents": 12500,
     "kind": "shirt",
@@ -16076,7 +15554,7 @@
     "fabricCode": "10-1201-10"
   },
   {
-    "id": 1961,
+    "id": 1887,
     "name": "Slate Blue Mini Diamond Shirt · 10-1206-06",
     "priceCents": 12500,
     "kind": "shirt",
@@ -16085,7 +15563,7 @@
     "fabricCode": "10-1206-06"
   },
   {
-    "id": 1962,
+    "id": 1888,
     "name": "Grey Mini Diamond Shirt · 10-1207-03",
     "priceCents": 12500,
     "kind": "shirt",
@@ -16094,7 +15572,7 @@
     "fabricCode": "10-1207-03"
   },
   {
-    "id": 1963,
+    "id": 1889,
     "name": "White Mini Floral Shirt · 10-1208-23",
     "priceCents": 12500,
     "kind": "shirt",
@@ -16103,7 +15581,7 @@
     "fabricCode": "10-1208-23"
   },
   {
-    "id": 1964,
+    "id": 1890,
     "name": "Lt Blue Mini Floral Shirt · 10-1209-07",
     "priceCents": 12500,
     "kind": "shirt",
@@ -16112,7 +15590,7 @@
     "fabricCode": "10-1209-07"
   },
   {
-    "id": 1965,
+    "id": 1891,
     "name": "Dk Navy Mini Floral Shirt · 10-1210-05",
     "priceCents": 12500,
     "kind": "shirt",
@@ -16121,7 +15599,7 @@
     "fabricCode": "10-1210-05"
   },
   {
-    "id": 1966,
+    "id": 1892,
     "name": "Navy Jacquard Shirt · 10-1211-05",
     "priceCents": 12500,
     "kind": "shirt",
@@ -16130,7 +15608,7 @@
     "fabricCode": "10-1211-05"
   },
   {
-    "id": 1967,
+    "id": 1893,
     "name": "White Plain Shirt · 10-1238-23",
     "priceCents": 12500,
     "kind": "shirt",
@@ -16139,7 +15617,7 @@
     "fabricCode": "10-1238-23"
   },
   {
-    "id": 1968,
+    "id": 1894,
     "name": "Lt Blue Plain Shirt · 10-1239-07",
     "priceCents": 12500,
     "kind": "shirt",
@@ -16148,7 +15626,7 @@
     "fabricCode": "10-1239-07"
   },
   {
-    "id": 1969,
+    "id": 1895,
     "name": "Navy Plain Shirt · 10-1240-05",
     "priceCents": 12500,
     "kind": "shirt",
@@ -16157,7 +15635,7 @@
     "fabricCode": "10-1240-05"
   },
   {
-    "id": 1970,
+    "id": 1896,
     "name": "White Check Shirt · 10-1241-23",
     "priceCents": 12500,
     "kind": "shirt",
@@ -16166,7 +15644,7 @@
     "fabricCode": "10-1241-23"
   },
   {
-    "id": 1971,
+    "id": 1897,
     "name": "Color Shown In Swatch Plain Shirt · 10-1246-07",
     "priceCents": 12500,
     "kind": "shirt",
@@ -16175,7 +15653,7 @@
     "fabricCode": "10-1246-07"
   },
   {
-    "id": 1972,
+    "id": 1898,
     "name": "Burgundy/White Mini Check Shirt · 30-3447-22",
     "priceCents": 17500,
     "kind": "shirt",
@@ -16184,7 +15662,7 @@
     "fabricCode": "30-3447-22"
   },
   {
-    "id": 1973,
+    "id": 1899,
     "name": "Blue Stripe Shirt · 30-3272-06",
     "priceCents": 17500,
     "kind": "shirt",
@@ -16193,7 +15671,7 @@
     "fabricCode": "30-3272-06"
   },
   {
-    "id": 1974,
+    "id": 1900,
     "name": "White Plain Shirt · 25-2507-23",
     "priceCents": 14500,
     "kind": "shirt",
@@ -16202,7 +15680,7 @@
     "fabricCode": "25-2507-23"
   },
   {
-    "id": 1975,
+    "id": 1901,
     "name": "Ivory Plain Shirt · 25-2508-24",
     "priceCents": 14500,
     "kind": "shirt",
@@ -16211,7 +15689,7 @@
     "fabricCode": "25-2508-24"
   },
   {
-    "id": 1976,
+    "id": 1902,
     "name": "Lt Blue Lt Blue Shirt · 25-2509-07",
     "priceCents": 14500,
     "kind": "shirt",
@@ -16220,7 +15698,7 @@
     "fabricCode": "25-2509-07"
   },
   {
-    "id": 1977,
+    "id": 1903,
     "name": "Lt Blue Stripe Shirt · 25-2510-07",
     "priceCents": 14500,
     "kind": "shirt",
@@ -16229,7 +15707,7 @@
     "fabricCode": "25-2510-07"
   },
   {
-    "id": 1978,
+    "id": 1904,
     "name": "Lt Blue Plain Shirt · 25-2511-07",
     "priceCents": 14500,
     "kind": "shirt",
@@ -16238,7 +15716,7 @@
     "fabricCode": "25-2511-07"
   },
   {
-    "id": 1979,
+    "id": 1905,
     "name": "Blue Plain Shirt · 25-2512-08",
     "priceCents": 14500,
     "kind": "shirt",
@@ -16247,7 +15725,7 @@
     "fabricCode": "25-2512-08"
   },
   {
-    "id": 1980,
+    "id": 1906,
     "name": "Blue Plain Shirt · 25-2514-06",
     "priceCents": 14500,
     "kind": "shirt",
@@ -16256,7 +15734,7 @@
     "fabricCode": "25-2514-06"
   },
   {
-    "id": 1981,
+    "id": 1907,
     "name": "Pink Check Shirt · 25-2516-26",
     "priceCents": 14500,
     "kind": "shirt",
@@ -16265,7 +15743,7 @@
     "fabricCode": "25-2516-26"
   },
   {
-    "id": 1982,
+    "id": 1908,
     "name": "Pink Plain Shirt · 25-2517-26",
     "priceCents": 14500,
     "kind": "shirt",
@@ -16274,7 +15752,7 @@
     "fabricCode": "25-2517-26"
   },
   {
-    "id": 1983,
+    "id": 1909,
     "name": "Lavender Plain Shirt · 25-2518-20",
     "priceCents": 14500,
     "kind": "shirt",
@@ -16283,7 +15761,7 @@
     "fabricCode": "25-2518-20"
   },
   {
-    "id": 1984,
+    "id": 1910,
     "name": "Lavender Stripe Shirt · 25-2519-20",
     "priceCents": 14500,
     "kind": "shirt",
@@ -16292,7 +15770,7 @@
     "fabricCode": "25-2519-20"
   },
   {
-    "id": 1985,
+    "id": 1911,
     "name": "Lavender Check Shirt · 25-2521-20",
     "priceCents": 14500,
     "kind": "shirt",
@@ -16301,7 +15779,7 @@
     "fabricCode": "25-2521-20"
   },
   {
-    "id": 1986,
+    "id": 1912,
     "name": "Lavender Plain Shirt · 25-2522-20",
     "priceCents": 14500,
     "kind": "shirt",
@@ -16310,7 +15788,7 @@
     "fabricCode": "25-2522-20"
   },
   {
-    "id": 1987,
+    "id": 1913,
     "name": "Black Plain Shirt · 25-2523-01",
     "priceCents": 14500,
     "kind": "shirt",
@@ -16319,7 +15797,7 @@
     "fabricCode": "25-2523-01"
   },
   {
-    "id": 1988,
+    "id": 1914,
     "name": "Blue Plain Shirt · 25-2529-06",
     "priceCents": 14500,
     "kind": "shirt",
@@ -16328,7 +15806,7 @@
     "fabricCode": "25-2529-06"
   },
   {
-    "id": 1989,
+    "id": 1915,
     "name": "Blue/Red Plain Shirt · 25-2530-06",
     "priceCents": 14500,
     "kind": "shirt",
@@ -16337,7 +15815,7 @@
     "fabricCode": "25-2530-06"
   },
   {
-    "id": 1990,
+    "id": 1916,
     "name": "Indigo Blue Plain Shirt · 25-2531-06",
     "priceCents": 14500,
     "kind": "shirt",
@@ -16346,7 +15824,7 @@
     "fabricCode": "25-2531-06"
   },
   {
-    "id": 1991,
+    "id": 1917,
     "name": "Navy Plain Shirt · 25-2541-05",
     "priceCents": 14500,
     "kind": "shirt",
@@ -16355,7 +15833,7 @@
     "fabricCode": "25-2541-05"
   },
   {
-    "id": 1992,
+    "id": 1918,
     "name": "Lt Tan Plain Shirt · 25-2543-13",
     "priceCents": 14500,
     "kind": "shirt",
@@ -16364,7 +15842,7 @@
     "fabricCode": "25-2543-13"
   },
   {
-    "id": 1993,
+    "id": 1919,
     "name": "Pink Plain Shirt · 25-2544-11",
     "priceCents": 14500,
     "kind": "shirt",
@@ -16373,7 +15851,7 @@
     "fabricCode": "25-2544-11"
   },
   {
-    "id": 1994,
+    "id": 1920,
     "name": "Lt Brown Plain Shirt · 25-2545-26",
     "priceCents": 14500,
     "kind": "shirt",
@@ -16382,7 +15860,7 @@
     "fabricCode": "25-2545-26"
   },
   {
-    "id": 1995,
+    "id": 1921,
     "name": "Lt Sand Plain Shirt · 25-2546-24",
     "priceCents": 14500,
     "kind": "shirt",
@@ -16391,7 +15869,7 @@
     "fabricCode": "25-2546-24"
   },
   {
-    "id": 1996,
+    "id": 1922,
     "name": "Brown Stripe Shirt · 30-3268-10",
     "priceCents": 17500,
     "kind": "shirt",
@@ -16400,7 +15878,7 @@
     "fabricCode": "30-3268-10"
   },
   {
-    "id": 1997,
+    "id": 1923,
     "name": "Blue Mini Check Shirt · 30-3276-06",
     "priceCents": 17500,
     "kind": "shirt",
@@ -16409,7 +15887,7 @@
     "fabricCode": "30-3276-06"
   },
   {
-    "id": 1998,
+    "id": 1924,
     "name": "Indigo Blue Stripe Shirt · 30-3348-06",
     "priceCents": 17500,
     "kind": "shirt",
@@ -16418,7 +15896,7 @@
     "fabricCode": "30-3348-06"
   },
   {
-    "id": 1999,
+    "id": 1925,
     "name": "Red/Blue Check Shirt · 30-3477-21",
     "priceCents": 17500,
     "kind": "shirt",
@@ -16427,7 +15905,7 @@
     "fabricCode": "30-3477-21"
   },
   {
-    "id": 2000,
+    "id": 1926,
     "name": "Red/White Check Shirt · 30-3478-21",
     "priceCents": 17500,
     "kind": "shirt",
@@ -16436,7 +15914,7 @@
     "fabricCode": "30-3478-21"
   },
   {
-    "id": 2001,
+    "id": 1927,
     "name": "Lt Blue Solid Shirt · 25-2536-07",
     "priceCents": 14500,
     "kind": "shirt",
@@ -16445,7 +15923,7 @@
     "fabricCode": "25-2536-07"
   },
   {
-    "id": 2002,
+    "id": 1928,
     "name": "White Plain Shirt · 10-1269-23",
     "priceCents": 10500,
     "kind": "shirt",
@@ -16454,7 +15932,7 @@
     "fabricCode": "10-1269-23"
   },
   {
-    "id": 2003,
+    "id": 1929,
     "name": "Black Solid Shirt · 10-1272-01",
     "priceCents": 12500,
     "kind": "shirt",
@@ -16463,7 +15941,7 @@
     "fabricCode": "10-1272-01"
   },
   {
-    "id": 2004,
+    "id": 1930,
     "name": "White Solid Shirt · 30-3457-23",
     "priceCents": 17500,
     "kind": "shirt",
@@ -16472,7 +15950,7 @@
     "fabricCode": "30-3457-23"
   },
   {
-    "id": 2005,
+    "id": 1931,
     "name": "White Solid Shirt · 30-3458-23",
     "priceCents": 17500,
     "kind": "shirt",
@@ -16481,7 +15959,7 @@
     "fabricCode": "30-3458-23"
   },
   {
-    "id": 2006,
+    "id": 1932,
     "name": "Blue Mini Medallion Knit Shirt · 15-1510-06",
     "priceCents": 12500,
     "kind": "shirt",
@@ -16490,7 +15968,7 @@
     "fabricCode": "15-1510-06"
   },
   {
-    "id": 2007,
+    "id": 1933,
     "name": "Blue Mini Geo Shirt · 15-1511-06",
     "priceCents": 12500,
     "kind": "shirt",
@@ -16499,7 +15977,7 @@
     "fabricCode": "15-1511-06"
   },
   {
-    "id": 2008,
+    "id": 1934,
     "name": "Lt Blue Plain Shirt · 15-1566-07",
     "priceCents": 12500,
     "kind": "shirt",
@@ -16508,7 +15986,7 @@
     "fabricCode": "15-1566-07"
   },
   {
-    "id": 2009,
+    "id": 1935,
     "name": "Blue Plain Shirt · 15-1567-06",
     "priceCents": 12500,
     "kind": "shirt",
@@ -16517,7 +15995,7 @@
     "fabricCode": "15-1567-06"
   },
   {
-    "id": 2010,
+    "id": 1936,
     "name": "Navy Print Shirt · 30-3419-05",
     "priceCents": 17500,
     "kind": "shirt",
@@ -16526,7 +16004,7 @@
     "fabricCode": "30-3419-05"
   },
   {
-    "id": 2011,
+    "id": 1937,
     "name": "Navy/White Print Shirt · 30-3420-05",
     "priceCents": 17500,
     "kind": "shirt",
@@ -16535,7 +16013,7 @@
     "fabricCode": "30-3420-05"
   },
   {
-    "id": 2012,
+    "id": 1938,
     "name": "Purple/ Fern Green Print Shirt · 30-3355-99",
     "priceCents": 17500,
     "kind": "shirt",
@@ -16544,7 +16022,7 @@
     "fabricCode": "30-3355-99"
   },
   {
-    "id": 2013,
+    "id": 1939,
     "name": "Purple/Green Print Shirt · 30-3356-18",
     "priceCents": 17500,
     "kind": "shirt",
@@ -16553,7 +16031,7 @@
     "fabricCode": "30-3356-18"
   },
   {
-    "id": 2014,
+    "id": 1940,
     "name": "Green/Navy Print Shirt · 30-3357-27",
     "priceCents": 17500,
     "kind": "shirt",
@@ -16562,7 +16040,7 @@
     "fabricCode": "30-3357-27"
   },
   {
-    "id": 2015,
+    "id": 1941,
     "name": "Olive Green Print Shirt · 30-3358-27",
     "priceCents": 17500,
     "kind": "shirt",
@@ -16571,7 +16049,7 @@
     "fabricCode": "30-3358-27"
   },
   {
-    "id": 2016,
+    "id": 1942,
     "name": "Green/Blue Stripe Shirt · 30-3359-99",
     "priceCents": 17500,
     "kind": "shirt",
@@ -16580,7 +16058,7 @@
     "fabricCode": "30-3359-99"
   },
   {
-    "id": 2017,
+    "id": 1943,
     "name": "Purple/Blue/Green Print Shirt · 30-3361-99",
     "priceCents": 17500,
     "kind": "shirt",
@@ -16589,7 +16067,7 @@
     "fabricCode": "30-3361-99"
   },
   {
-    "id": 2018,
+    "id": 1944,
     "name": "Steel Blue Print Shirt · 30-3363-06",
     "priceCents": 17500,
     "kind": "shirt",
@@ -16598,7 +16076,7 @@
     "fabricCode": "30-3363-06"
   },
   {
-    "id": 2019,
+    "id": 1945,
     "name": "Red/Blue Print Shirt · 30-3364-99",
     "priceCents": 17500,
     "kind": "shirt",
@@ -16607,7 +16085,7 @@
     "fabricCode": "30-3364-99"
   },
   {
-    "id": 2020,
+    "id": 1946,
     "name": "Indigo/Steel Blue Print Shirt · 30-3365-06",
     "priceCents": 17500,
     "kind": "shirt",
@@ -16616,7 +16094,7 @@
     "fabricCode": "30-3365-06"
   },
   {
-    "id": 2021,
+    "id": 1947,
     "name": "Royal Blue Print Shirt · 30-3366-06",
     "priceCents": 17500,
     "kind": "shirt",
@@ -16625,7 +16103,7 @@
     "fabricCode": "30-3366-06"
   },
   {
-    "id": 2022,
+    "id": 1948,
     "name": "Blue Print Shirt · 30-3367-06",
     "priceCents": 17500,
     "kind": "shirt",
@@ -16634,7 +16112,7 @@
     "fabricCode": "30-3367-06"
   },
   {
-    "id": 2023,
+    "id": 1949,
     "name": "Violet Print Shirt · 30-3368-18",
     "priceCents": 17500,
     "kind": "shirt",
@@ -16643,7 +16121,7 @@
     "fabricCode": "30-3368-18"
   },
   {
-    "id": 2024,
+    "id": 1950,
     "name": "Blue/Teal Print Shirt · 30-3369-09",
     "priceCents": 17500,
     "kind": "shirt",
@@ -16652,7 +16130,7 @@
     "fabricCode": "30-3369-09"
   },
   {
-    "id": 2025,
+    "id": 1951,
     "name": "Red/ Brown Print Shirt · 30-3370-14",
     "priceCents": 17500,
     "kind": "shirt",
@@ -16661,7 +16139,7 @@
     "fabricCode": "30-3370-14"
   },
   {
-    "id": 2026,
+    "id": 1952,
     "name": "Violet/Red Print Shirt · 30-3371-18",
     "priceCents": 17500,
     "kind": "shirt",
@@ -16670,7 +16148,7 @@
     "fabricCode": "30-3371-18"
   },
   {
-    "id": 2027,
+    "id": 1953,
     "name": "Orange/ Olive Green Print Shirt · 30-3372-14",
     "priceCents": 17500,
     "kind": "shirt",
@@ -16679,7 +16157,7 @@
     "fabricCode": "30-3372-14"
   },
   {
-    "id": 2028,
+    "id": 1954,
     "name": "Lavender Multi Plain Shirt · 30-3373-18",
     "priceCents": 17500,
     "kind": "shirt",
@@ -16688,7 +16166,7 @@
     "fabricCode": "30-3373-18"
   },
   {
-    "id": 2029,
+    "id": 1955,
     "name": "Lt Blue Plain Shirt · 30-3374-06",
     "priceCents": 17500,
     "kind": "shirt",
@@ -16697,7 +16175,7 @@
     "fabricCode": "30-3374-06"
   },
   {
-    "id": 2030,
+    "id": 1956,
     "name": "Blue/White Floral Shirt · 10-1190-06",
     "priceCents": 12500,
     "kind": "shirt",
@@ -16706,7 +16184,7 @@
     "fabricCode": "10-1190-06"
   },
   {
-    "id": 2031,
+    "id": 1957,
     "name": "Indigo Blue/White Floral Shirt · 10-1192-06",
     "priceCents": 12500,
     "kind": "shirt",
@@ -16715,7 +16193,7 @@
     "fabricCode": "10-1192-06"
   },
   {
-    "id": 2032,
+    "id": 1958,
     "name": "Blue/Yellow Geo Shirt · 10-1193-06",
     "priceCents": 12500,
     "kind": "shirt",
@@ -16724,7 +16202,7 @@
     "fabricCode": "10-1193-06"
   },
   {
-    "id": 2033,
+    "id": 1959,
     "name": "Blue/Red/Yellow Paisley Shirt · 10-1194-06",
     "priceCents": 12500,
     "kind": "shirt",
@@ -16733,7 +16211,7 @@
     "fabricCode": "10-1194-06"
   },
   {
-    "id": 2034,
+    "id": 1960,
     "name": "Navy/White Mini Paisley Shirt · 10-1195-05",
     "priceCents": 12500,
     "kind": "shirt",
@@ -16742,7 +16220,7 @@
     "fabricCode": "10-1195-05"
   },
   {
-    "id": 2035,
+    "id": 1961,
     "name": "Blue/Lt Blue/White Snowflake Shirt · 10-1196-06",
     "priceCents": 12500,
     "kind": "shirt",
@@ -16751,7 +16229,7 @@
     "fabricCode": "10-1196-06"
   },
   {
-    "id": 2036,
+    "id": 1962,
     "name": "Indigo Blue/White Poinsettia Print Shirt · 10-1197-06",
     "priceCents": 12500,
     "kind": "shirt",
@@ -16760,7 +16238,7 @@
     "fabricCode": "10-1197-06"
   },
   {
-    "id": 2037,
+    "id": 1963,
     "name": "Burgundy/Navy Print Shirt · 30-3360-22",
     "priceCents": 17500,
     "kind": "shirt",
@@ -16769,7 +16247,7 @@
     "fabricCode": "30-3360-22"
   },
   {
-    "id": 2038,
+    "id": 1964,
     "name": "Dusk Blue Polka Dot Shirt · 10-1205-06",
     "priceCents": 12500,
     "kind": "shirt",
@@ -16778,7 +16256,7 @@
     "fabricCode": "10-1205-06"
   },
   {
-    "id": 2039,
+    "id": 1965,
     "name": "Lt Blue Plain Shirt · 10-1243-07",
     "priceCents": 12500,
     "kind": "shirt",
@@ -16787,7 +16265,7 @@
     "fabricCode": "10-1243-07"
   },
   {
-    "id": 2040,
+    "id": 1966,
     "name": "Color Shown In Swatch Plain Shirt · 10-1244-07",
     "priceCents": 12500,
     "kind": "shirt",
@@ -16796,7 +16274,7 @@
     "fabricCode": "10-1244-07"
   },
   {
-    "id": 2041,
+    "id": 1967,
     "name": "Lt Blue Plain Shirt · 10-1245-07",
     "priceCents": 12500,
     "kind": "shirt",
@@ -16805,7 +16283,7 @@
     "fabricCode": "10-1245-07"
   },
   {
-    "id": 2042,
+    "id": 1968,
     "name": "Blue/White Winterberry Shirt · 15-1500-06",
     "priceCents": 12500,
     "kind": "shirt",
@@ -16814,7 +16292,7 @@
     "fabricCode": "15-1500-06"
   },
   {
-    "id": 2043,
+    "id": 1969,
     "name": "Sky Blue Mini Polka Dot Shirt · 15-1505-08",
     "priceCents": 12500,
     "kind": "shirt",
@@ -16823,7 +16301,7 @@
     "fabricCode": "15-1505-08"
   },
   {
-    "id": 2044,
+    "id": 1970,
     "name": "Lt Blue Mini Polka Dot Shirt · 15-1506-07",
     "priceCents": 12500,
     "kind": "shirt",
@@ -16832,7 +16310,7 @@
     "fabricCode": "15-1506-07"
   },
   {
-    "id": 2045,
+    "id": 1971,
     "name": "Brown Mini Polka Shirt · 15-1507-10",
     "priceCents": 12500,
     "kind": "shirt",
@@ -16841,7 +16319,7 @@
     "fabricCode": "15-1507-10"
   },
   {
-    "id": 2046,
+    "id": 1972,
     "name": "Blue Mini Medallion Shirt · 15-1512-06",
     "priceCents": 12500,
     "kind": "shirt",
@@ -16850,7 +16328,7 @@
     "fabricCode": "15-1512-06"
   },
   {
-    "id": 2047,
+    "id": 1973,
     "name": "Navy/Red Multi Shirt · 15-1513-05",
     "priceCents": 12500,
     "kind": "shirt",
@@ -16859,7 +16337,7 @@
     "fabricCode": "15-1513-05"
   },
   {
-    "id": 2048,
+    "id": 1974,
     "name": "Blue/Pink Plain Shirt · 15-1564-06",
     "priceCents": 12500,
     "kind": "shirt",
@@ -16868,7 +16346,7 @@
     "fabricCode": "15-1564-06"
   },
   {
-    "id": 2049,
+    "id": 1975,
     "name": "Lt Blue/Merlot Plain Shirt · 15-1565-06",
     "priceCents": 12500,
     "kind": "shirt",
@@ -16877,7 +16355,7 @@
     "fabricCode": "15-1565-06"
   },
   {
-    "id": 2050,
+    "id": 1976,
     "name": "White/Grey Plain Shirt · 15-1568-03",
     "priceCents": 12500,
     "kind": "shirt",
@@ -16886,7 +16364,7 @@
     "fabricCode": "15-1568-03"
   },
   {
-    "id": 2051,
+    "id": 1977,
     "name": "Chambray Blue Mini Floral Shirt · 25-2500-06",
     "priceCents": 14500,
     "kind": "shirt",
@@ -16895,7 +16373,7 @@
     "fabricCode": "25-2500-06"
   },
   {
-    "id": 2052,
+    "id": 1978,
     "name": "Chambray White Mini Daisy Shirt · 25-2501-06",
     "priceCents": 14500,
     "kind": "shirt",
@@ -16904,7 +16382,7 @@
     "fabricCode": "25-2501-06"
   },
   {
-    "id": 2053,
+    "id": 1979,
     "name": "Color Shown In Swatch Multi Pattern Shirt · 30-3117-21",
     "priceCents": 17500,
     "kind": "shirt",
@@ -16913,7 +16391,7 @@
     "fabricCode": "30-3117-21"
   },
   {
-    "id": 2054,
+    "id": 1980,
     "name": "Orange Multi Pattern Shirt · 30-3118-14",
     "priceCents": 17500,
     "kind": "shirt",
@@ -16922,7 +16400,7 @@
     "fabricCode": "30-3118-14"
   },
   {
-    "id": 2055,
+    "id": 1981,
     "name": "Lt Blue Geo Shirt · 80-8020-07",
     "priceCents": 22500,
     "kind": "shirt",
@@ -16931,7 +16409,7 @@
     "fabricCode": "80-8020-07"
   },
   {
-    "id": 2056,
+    "id": 1982,
     "name": "White/Blue Check Shirt · 80-8021-23",
     "priceCents": 22500,
     "kind": "shirt",
@@ -16940,7 +16418,7 @@
     "fabricCode": "80-8021-23"
   },
   {
-    "id": 2057,
+    "id": 1983,
     "name": "White Twill Shirt · 80-8023-23",
     "priceCents": 22500,
     "kind": "shirt",
@@ -16949,7 +16427,7 @@
     "fabricCode": "80-8023-23"
   },
   {
-    "id": 2058,
+    "id": 1984,
     "name": "Blue/Pink Geo Shirt · 80-8025-99",
     "priceCents": 22500,
     "kind": "shirt",
@@ -16958,7 +16436,7 @@
     "fabricCode": "80-8025-99"
   },
   {
-    "id": 2059,
+    "id": 1985,
     "name": "White Herringbone Shirt · 70-7539-23",
     "priceCents": 19500,
     "kind": "shirt",
@@ -16967,7 +16445,7 @@
     "fabricCode": "70-7539-23"
   },
   {
-    "id": 2060,
+    "id": 1986,
     "name": "White Diamond Shirt · 70-7541-23",
     "priceCents": 19500,
     "kind": "shirt",
@@ -16976,7 +16454,7 @@
     "fabricCode": "70-7541-23"
   },
   {
-    "id": 2061,
+    "id": 1987,
     "name": "White/ Sky Blue Check Shirt · 70-7548-07",
     "priceCents": 19500,
     "kind": "shirt",
@@ -16985,7 +16463,7 @@
     "fabricCode": "70-7548-07"
   },
   {
-    "id": 2062,
+    "id": 1988,
     "name": "Lt Blue Geo Shirt · 70-7549-07",
     "priceCents": 19500,
     "kind": "shirt",
@@ -16994,7 +16472,7 @@
     "fabricCode": "70-7549-07"
   },
   {
-    "id": 2063,
+    "id": 1989,
     "name": "Blue Geo Chevron Shirt · 70-7551-06",
     "priceCents": 19500,
     "kind": "shirt",
@@ -17003,7 +16481,7 @@
     "fabricCode": "70-7551-06"
   },
   {
-    "id": 2064,
+    "id": 1990,
     "name": "Lt Blue Glen Plaid Shirt · 80-8004-06",
     "priceCents": 22500,
     "kind": "shirt",
@@ -17012,7 +16490,7 @@
     "fabricCode": "80-8004-06"
   },
   {
-    "id": 2065,
+    "id": 1991,
     "name": "Lt Blue Plain Shirt · 80-8016-07",
     "priceCents": 22500,
     "kind": "shirt",
@@ -17021,7 +16499,7 @@
     "fabricCode": "80-8016-07"
   },
   {
-    "id": 2066,
+    "id": 1992,
     "name": "Black Solid Double Breasted Suit · EB11127",
     "priceCents": 150000,
     "kind": "suit",
@@ -17030,7 +16508,7 @@
     "fabricCode": "EB11127"
   },
   {
-    "id": 2067,
+    "id": 1993,
     "name": "Blue Glenplaid Double Breasted Suit · EN54229",
     "priceCents": 180000,
     "kind": "suit",
@@ -17039,7 +16517,7 @@
     "fabricCode": "EN54229"
   },
   {
-    "id": 2068,
+    "id": 1994,
     "name": "Lt Brown Glenplaid Double Breasted Suit · ER33214",
     "priceCents": 180000,
     "kind": "suit",
@@ -17048,7 +16526,7 @@
     "fabricCode": "ER33214"
   },
   {
-    "id": 2069,
+    "id": 1995,
     "name": "Dk Grey Plain Double Breasted Suit · CG21017",
     "priceCents": 49500,
     "kind": "suit",
@@ -17057,7 +16535,7 @@
     "fabricCode": "CG21017"
   },
   {
-    "id": 2070,
+    "id": 1996,
     "name": "Off White Solid Double Breasted Suit · EO43411",
     "priceCents": 180000,
     "kind": "suit",
@@ -17066,7 +16544,7 @@
     "fabricCode": "EO43411"
   },
   {
-    "id": 2071,
+    "id": 1997,
     "name": "Lt Green Mini Design Double Breasted Suit · EO43426",
     "priceCents": 130000,
     "kind": "suit",
@@ -17075,7 +16553,7 @@
     "fabricCode": "EO43426"
   },
   {
-    "id": 2072,
+    "id": 1998,
     "name": "Dk Magenta Plain Double Breasted Suit · EO43474",
     "priceCents": 130000,
     "kind": "suit",
@@ -17084,7 +16562,7 @@
     "fabricCode": "EO43474"
   },
   {
-    "id": 2073,
+    "id": 1999,
     "name": "Black Solid Tasmanian Double Breasted Suit · EB13179",
     "priceCents": 180000,
     "kind": "suit",
@@ -17093,7 +16571,7 @@
     "fabricCode": "EB13179"
   },
   {
-    "id": 2074,
+    "id": 2000,
     "name": "Taupe Glenplaid Double Breasted Suit · ER33191",
     "priceCents": 110000,
     "kind": "suit",
@@ -17102,7 +16580,7 @@
     "fabricCode": "ER33191"
   },
   {
-    "id": 2075,
+    "id": 2001,
     "name": "Blue Solid Double Breasted Suit · EN54255",
     "priceCents": 120000,
     "kind": "suit",
@@ -17111,7 +16589,7 @@
     "fabricCode": "EN54255"
   },
   {
-    "id": 2076,
+    "id": 2002,
     "name": "Black Solid Tuxedo · CB11047",
     "priceCents": 69500,
     "kind": "suit",
@@ -17120,7 +16598,7 @@
     "fabricCode": "CB11047"
   },
   {
-    "id": 2077,
+    "id": 2003,
     "name": "Charcoal Plain Tuxedo · CG21272",
     "priceCents": 59500,
     "kind": "suit",
@@ -17129,7 +16607,7 @@
     "fabricCode": "CG21272"
   },
   {
-    "id": 2078,
+    "id": 2004,
     "name": "Navy Plain Tuxedo · CN51261",
     "priceCents": 59500,
     "kind": "suit",
@@ -17138,7 +16616,7 @@
     "fabricCode": "CN51261"
   },
   {
-    "id": 2079,
+    "id": 2005,
     "name": "Burgundy Plain Tuxedo · EO43347",
     "priceCents": 140000,
     "kind": "suit",
@@ -17147,7 +16625,7 @@
     "fabricCode": "EO43347"
   },
   {
-    "id": 2080,
+    "id": 2006,
     "name": "Off White Plain Tuxedo · EO43363",
     "priceCents": 140000,
     "kind": "suit",
@@ -17156,7 +16634,7 @@
     "fabricCode": "EO43363"
   },
   {
-    "id": 2081,
+    "id": 2007,
     "name": "Lt Gold Solid Tuxedo · CO41017",
     "priceCents": 89500,
     "kind": "suit",
@@ -17165,7 +16643,7 @@
     "fabricCode": "CO41017"
   },
   {
-    "id": 2082,
+    "id": 2008,
     "name": "Grey Stripe Tuxedo · KG22026",
     "priceCents": 89500,
     "kind": "suit",
@@ -17174,7 +16652,7 @@
     "fabricCode": "KG22026"
   },
   {
-    "id": 2083,
+    "id": 2009,
     "name": "Black Plain Tuxedo · EB13152",
     "priceCents": 140000,
     "kind": "suit",
@@ -17183,7 +16661,7 @@
     "fabricCode": "EB13152"
   },
   {
-    "id": 2084,
+    "id": 2010,
     "name": "Black Solid Tuxedo · KB12033",
     "priceCents": 140000,
     "kind": "suit",
@@ -17192,7 +16670,7 @@
     "fabricCode": "KB12033"
   },
   {
-    "id": 2085,
+    "id": 2011,
     "name": "Navy Stripe Tuxedo · KN52018",
     "priceCents": 99500,
     "kind": "suit",
@@ -17201,7 +16679,7 @@
     "fabricCode": "KN52018"
   },
   {
-    "id": 2086,
+    "id": 2012,
     "name": "White Twill Solid Boys Suit · EO43008",
     "priceCents": 89500,
     "kind": "suit",
@@ -17210,7 +16688,7 @@
     "fabricCode": "EO43008"
   },
   {
-    "id": 2087,
+    "id": 2013,
     "name": "Beige Stripe Boys Suit · EO43053",
     "priceCents": 89500,
     "kind": "suit",
@@ -17219,7 +16697,7 @@
     "fabricCode": "EO43053"
   },
   {
-    "id": 2088,
+    "id": 2014,
     "name": "Navy Solid Boys Suit · EN53333",
     "priceCents": 59500,
     "kind": "suit",
@@ -17228,7 +16706,7 @@
     "fabricCode": "EN53333"
   },
   {
-    "id": 2089,
+    "id": 2015,
     "name": "Dk Lavender Solid Boys Suit · EO43115",
     "priceCents": 59500,
     "kind": "suit",
@@ -17237,7 +16715,7 @@
     "fabricCode": "EO43115"
   },
   {
-    "id": 2090,
+    "id": 2016,
     "name": "Orange Solid Boys Suit · EO43117",
     "priceCents": 59500,
     "kind": "suit",
@@ -17246,7 +16724,7 @@
     "fabricCode": "EO43117"
   },
   {
-    "id": 2091,
+    "id": 2017,
     "name": "Lt Green Mini Design Boys Suit · EO43426",
     "priceCents": 130000,
     "kind": "suit",
@@ -17255,7 +16733,7 @@
     "fabricCode": "EO43426"
   },
   {
-    "id": 2092,
+    "id": 2018,
     "name": "Dk Magenta Plain Boys Suit · EO43474",
     "priceCents": 130000,
     "kind": "suit",
@@ -17264,7 +16742,7 @@
     "fabricCode": "EO43474"
   },
   {
-    "id": 2093,
+    "id": 2019,
     "name": "Black Solid Tasmanian Boys Suit · EB13179",
     "priceCents": 180000,
     "kind": "suit",
@@ -17273,7 +16751,7 @@
     "fabricCode": "EB13179"
   },
   {
-    "id": 2094,
+    "id": 2020,
     "name": "Taupe Glenplaid Boys Suit · ER33191",
     "priceCents": 110000,
     "kind": "suit",
@@ -17282,7 +16760,7 @@
     "fabricCode": "ER33191"
   },
   {
-    "id": 2095,
+    "id": 2021,
     "name": "Blue Solid Boys Suit · EN54255",
     "priceCents": 120000,
     "kind": "suit",

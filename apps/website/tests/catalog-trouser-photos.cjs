@@ -98,13 +98,15 @@ assert.ok(fabricLib.includes("startsWith('#trouser/')"),'the trouser route rende
 assert.ok(fs.existsSync('app/trousers/[group]/[code]/route.ts'),'the trousers code route exists');
 
 // Neighbours are untouched: shirts keep the shared shirt photo,
-// women's trousers keep the women's photo, and an unshipped trousers
-// group (corduroy) keeps the grid and the shared photo until its turn.
+// women's leather trousers keep the women's leather photo (the wool
+// tailored women's trousers are fabric defined now, covered by the
+// WF suite), and an unshipped trousers group (corduroy) keeps the
+// grid and the shared photo until its turn.
 const shirtArrivals=collections['#collection/Shirts/New%20Arrivals'];
 assert.ok(shirtArrivals.ids.length>0,'shirts new arrivals exist');
 assert.equal(byId.get(shirtArrivals.ids[0]).img,'model-shirt.webp','shirts keep their existing photo');
-const womenTrousers=entries.filter(p=>p.category==='Women'&&p.kind==='pants'&&p.fabric==='Wool');
-assert.ok(womenTrousers.length>0&&womenTrousers.every(p=>p.img==='model-woman.webp'),'women wool trousers keep the women photo');
+const womenTrousers=entries.filter(p=>p.category==='Women'&&p.kind==='pants'&&p.fabric==='Leather');
+assert.ok(womenTrousers.length>0&&womenTrousers.every(p=>p.img==='model-women-leather.webp'),'women leather trousers keep the women leather photo');
 const corduroy=collections['#collection/Trousers/Corduroy%20Trousers'];
 assert.equal(corduroy.ids.length,36,'unshipped corduroy trousers keep the 36 product grid for now');
 assert.ok(corduroy.ids.every(id=>byId.get(id).img==='model-shirt.webp'),'unshipped corduroy trousers keep the shared photo for now');

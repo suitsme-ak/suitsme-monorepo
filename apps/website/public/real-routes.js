@@ -81,6 +81,19 @@ function familyHash(key,raw){
     }
     return null;
   }
+  if(seg[0]==='women'&&routeFamilies.women&&routeFamilies.women.groups&&routeFamilies.women.groups[seg[1]]){
+    // Fabric defined women's products carry the fabric code, the
+    // same pattern as the fabric defined trousers below: the code
+    // is case sensitive and can contain spaces or slashes, so it is
+    // matched on the raw (decoded) segments and rejoined into the
+    // hash.
+    const rawSeg=raw.split('/').filter(Boolean);
+    if(rawSeg.length>=3&&rawSeg[2]){
+      const code=rawSeg.slice(2).join('/');
+      if(routeFamilies.women.groups[seg[1]].includes(code))return '#women/'+seg[1]+'/'+encodeURIComponent(code);
+    }
+    return null;
+  }
   if(seg[0]==='trousers'&&routeFamilies.trousers&&routeFamilies.trousers.groups.includes(seg[1])){
     // Fabric defined trousers carry the fabric code, the same
     // pattern as the fabric detail paths above: the code is case
@@ -127,6 +140,8 @@ function realUrlForHash(hash){
   if(m&&routeFamilies.jackets&&routeFamilies.jackets.fabrics&&routeFamilies.jackets.fabrics.includes(decodeURIComponent(m[1])))return '/jackets/'+m[1];
   m=/^#trouser\/([a-z0-9-]+)\/(.+)$/.exec(hash);
   if(m&&routeFamilies.trousers&&routeFamilies.trousers.groups.includes(m[1]))return '/trousers/'+m[1]+'/'+m[2];
+  m=/^#women\/([a-z]+)\/(.+)$/.exec(hash);
+  if(m&&routeFamilies.women&&routeFamilies.women.groups&&routeFamilies.women.groups[m[1]]&&routeFamilies.women.groups[m[1]].includes(decodeURIComponent(m[2])))return '/women/'+m[1]+'/'+m[2];
   m=/^#fabrics\/([a-z]+)$/.exec(hash);
   if(m&&routeFamilies.fabrics&&routeFamilies.fabrics.kinds.includes(m[1]))return '/fabrics/'+m[1];
   m=/^#studio\/([a-z]+)$/.exec(hash);

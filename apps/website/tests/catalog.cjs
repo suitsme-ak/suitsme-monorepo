@@ -22,10 +22,10 @@ for(const p of catalog.filter(p=>p.kind!=="gift"&&!p.merchantFabric)){const view
 console.log("All garment/accessory galleries have front/overview, generated companion and detail views; image references verified.");
 
 const merchant=catalog.filter(p=>p.merchantFabric&&!p.suitEditVariant),source=require('../data/merchant-fabrics.json').fabrics,models=require('../data/merchant-models.json');
-assert.equal(merchant.length,456);assert.equal(merchant.filter(p=>p.kind==='suit').length,256);assert.equal(merchant.filter(p=>p.kind==='shirt').length,200);
+assert.equal(merchant.length,406);assert.equal(merchant.filter(p=>p.kind==='suit').length,248);assert.equal(merchant.filter(p=>p.kind==='shirt').length,158);
 for(const p of merchant){const f=source.find(f=>f.kind===p.kind&&f.fabric_code===p.fabricCode);assert.ok(f);assert.equal(p.fabricImage,f.image);assert.ok(fs.existsSync('public/assets/'+p.fabricImage));assert.equal(prices[p.id].fabricCode,p.fabricCode);if(p.hasModel){assert.equal((p.modelKey?require('../data/suit-edit-models.json')[p.modelKey]:models[p.kind+':'+p.fabricCode]).image,p.img);assert.notEqual(p.img,p.fabricImage)}else assert.equal(p.img,p.fabricImage);}
 for(const kind of ['suit','shirt'])assert.equal(merchant.filter(p=>p.kind===kind&&p.launch&&p.hasModel).length,36);
-console.log('Merchant catalog: 456 original swatches, 36 suit and 36 shirt fabric-matched model images, server-owned fabric codes and complete asset mappings verified.');
+console.log('Merchant catalog: 406 original swatches, 36 suit and 36 shirt fabric-matched model images, server-owned fabric codes and complete asset mappings verified.');
 
 const suitEdits=require('../data/suit-collections.json'),cast=require('../data/suit-edit-models.json');
 for(const [name,c] of Object.entries(suitEdits)){assert.equal(c.ids.length,10,name);assert.equal(new Set(c.ids).size,10,name);const looks=c.ids.map(id=>catalog[id]);assert.equal(new Set(looks.map(p=>p.img)).size,10,name+' needs different photos');assert.equal(new Set(looks.map(p=>p.modelCasting)).size,10,name+' needs different models');for(const p of looks){assert.ok(p.hasModel,name);assert.ok(source.some(f=>f.kind==='suit'&&f.fabric_code===p.fabricCode));assert.equal(cast[p.modelKey].image,p.img);assert.ok(fs.existsSync('public/assets/'+p.img));}}

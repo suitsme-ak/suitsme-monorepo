@@ -91,12 +91,14 @@ assert.ok(fs.existsSync('app/jackets/[code]/route.ts'),'the jackets code route e
 const sitemap=fs.readFileSync('public/sitemap.xml','utf8');
 for(const f of pin.fabrics)assert.ok(sitemap.includes('/jackets/'+encodeURIComponent(f.code)),'sitemap lists /jackets/'+f.code);
 
-// Neighbours are untouched: suits keep their shared photo, tweed
-// jackets keep the tweed photo, and non wool jackets keep the
-// shared jacket photo.
+// Neighbours: tweed jackets keep the tweed photo, and non wool
+// jackets keep the shared jacket photo. (Suits new arrivals were
+// a shared photo neighbour when this suite was written; since the
+// fabric defined suits package, 2026-11-22, they lead with a
+// fabric defined suit instead, which the SF suite verifies.)
 const suitArrivals=collections['#collection/Suits/New%20Arrivals'];
 assert.ok(suitArrivals.ids.length>0,'suits new arrivals exist');
-assert.equal(byId.get(suitArrivals.ids[0]).img,'model-navy.webp','suits keep their existing photo');
+assert.ok(byId.get(suitArrivals.ids[0]).suitFabric,'suits new arrivals are now fabric defined');
 assert.ok(entries.some(p=>p.img==='model-tweed.webp'),'tweed photography is unchanged');
 assert.ok(entries.some(p=>p.img==='model-jacket.webp'),'non wool jackets keep the shared jacket photo');
 

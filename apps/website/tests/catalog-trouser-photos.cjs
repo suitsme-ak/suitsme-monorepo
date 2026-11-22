@@ -97,14 +97,15 @@ const fabricLib=fs.readFileSync('public/fabric-library.js','utf8');
 assert.ok(fabricLib.includes("startsWith('#trouser/')"),'the trouser route renders the product page for its fabric code');
 assert.ok(fs.existsSync('app/trousers/[group]/[code]/route.ts'),'the trousers code route exists');
 
-// Neighbours are untouched: shirts keep the shared shirt photo,
+// Neighbours: shirts new arrivals are fabric defined now (shirts
+// package, 2026-11-22, covered by the SH suite),
 // women's leather trousers keep the women's leather photo (the wool
 // tailored women's trousers are fabric defined now, covered by the
 // WF suite), and an unshipped trousers group (corduroy) keeps the
 // grid and the shared photo until its turn.
 const shirtArrivals=collections['#collection/Shirts/New%20Arrivals'];
 assert.ok(shirtArrivals.ids.length>0,'shirts new arrivals exist');
-assert.equal(byId.get(shirtArrivals.ids[0]).img,'model-shirt.webp','shirts keep their existing photo');
+assert.ok(byId.get(shirtArrivals.ids[0]).shirtFabric,'shirts new arrivals are now fabric defined (shirts package, 2026-11-22)');
 const womenTrousers=entries.filter(p=>p.category==='Women'&&p.kind==='pants'&&p.fabric==='Leather');
 assert.ok(womenTrousers.length>0&&womenTrousers.every(p=>p.img==='model-women-leather.webp'),'women leather trousers keep the women leather photo');
 const corduroy=collections['#collection/Trousers/Corduroy%20Trousers'];

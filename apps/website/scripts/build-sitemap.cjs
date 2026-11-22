@@ -34,7 +34,7 @@ const fs=require('fs');
 
 const ORIGIN='https://suits.me';
 
-function buildSitemap(routeMap,catalog,fabrics,trouserPins,jacketPins,womenPins){
+function buildSitemap(routeMap,catalog,fabrics,trouserPins,jacketPins,womenPins,suitPins,shirtPins){
   const urls=[ORIGIN+'/'];
   for(const path of Object.keys(routeMap.paths))urls.push(ORIGIN+path);
   const ids=[...new Set(catalog.map(p=>p.id))].sort((a,b)=>a-b);
@@ -64,6 +64,16 @@ function buildSitemap(routeMap,catalog,fabrics,trouserPins,jacketPins,womenPins)
     for(const f of list||[])womenPaths.push(`/women/${group}/${encodeURIComponent(f.code)}`);
   womenPaths.sort();
   for(const path of womenPaths)urls.push(ORIGIN+path);
+  const suitPaths=[];
+  for(const [group,list] of Object.entries(suitPins||{}))
+    for(const f of list||[])suitPaths.push(`/suits/${encodeURIComponent(f.code)}`);
+  suitPaths.sort();
+  for(const path of suitPaths)urls.push(ORIGIN+path);
+  const shirtPaths=[];
+  for(const [group,list] of Object.entries(shirtPins||{}))
+    for(const f of list||[])shirtPaths.push(`/shirts/${encodeURIComponent(f.code)}`);
+  shirtPaths.sort();
+  for(const path of shirtPaths)urls.push(ORIGIN+path);
   const esc=s=>s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
   return '<?xml version="1.0" encoding="UTF-8"?>\n'+
     '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'+
@@ -78,7 +88,9 @@ function main(){
   let trouserPins={groups:{}};try{trouserPins=JSON.parse(fs.readFileSync('data/trouser-fabrics.json','utf8'))}catch(e){}
   let jacketPins={fabrics:[]};try{jacketPins=JSON.parse(fs.readFileSync('data/jacket-fabrics.json','utf8'))}catch(e){}
   let womenPins={};try{womenPins=JSON.parse(fs.readFileSync('data/women-fabrics.json','utf8'))}catch(e){}
-  const xml=buildSitemap(routeMap,catalog,fabrics,trouserPins,jacketPins,womenPins);
+  let suitPins={};try{suitPins=JSON.parse(fs.readFileSync('data/suit-fabrics.json','utf8'))}catch(e){}
+  let shirtPins={};try{shirtPins=JSON.parse(fs.readFileSync('data/shirt-fabrics.json','utf8'))}catch(e){}
+  const xml=buildSitemap(routeMap,catalog,fabrics,trouserPins,jacketPins,womenPins,suitPins,shirtPins);
   fs.writeFileSync('public/sitemap.xml',xml);
   console.log(JSON.stringify({sitemapUrls:(xml.match(/<loc>/g)||[]).length}));
 }

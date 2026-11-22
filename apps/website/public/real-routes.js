@@ -69,6 +69,26 @@ function familyHash(key,raw){
     if(seg.length===2)return '#fabrics/'+seg[1];
     return null;
   }
+  if(seg[0]==='shirts'&&routeFamilies.shirts&&routeFamilies.shirts.groups){
+    // Fabric defined shirts carry the fabric code, the same
+    // pattern as the fabric suits: /shirts/<code> boots the
+    // #shirt/ route. The code is everything after the shirts
+    // segment, rejoined, so codes with slashes keep working.
+    const code=seg.slice(1).join('/');
+    for(const list of Object.values(routeFamilies.shirts.groups)){
+      if(list.includes(code))return '#shirt/'+encodeURIComponent(code);
+    }
+  }
+  if(seg[0]==='suits'&&routeFamilies.suits&&routeFamilies.suits.groups){
+    // Fabric defined suits carry the fabric code, the same pattern
+    // as the fabric jackets: /suits/<code> boots the #suit/ route.
+    // The code is everything after the suits segment, rejoined, so
+    // codes with slashes keep working.
+    const code=seg.slice(1).join('/');
+    for(const list of Object.values(routeFamilies.suits.groups)){
+      if(list.includes(code))return '#suit/'+encodeURIComponent(code);
+    }
+  }
   if(seg[0]==='jackets'&&routeFamilies.jackets&&routeFamilies.jackets.fabrics){
     // Fabric defined jackets carry the fabric code, the same pattern
     // as the fabric defined trousers below: the code is case
@@ -136,6 +156,10 @@ function realUrlForHash(hash){
   if(m)return '/product/'+m[1];
   m=/^#order\/(.+)$/.exec(hash);
   if(m)return '/orders/'+m[1];
+  m=/^#shirt\/(.+)$/.exec(hash);
+  if(m&&routeFamilies.shirts&&routeFamilies.shirts.groups&&Object.values(routeFamilies.shirts.groups).some(list=>list.includes(decodeURIComponent(m[1]))))return '/shirts/'+m[1];
+  m=/^#suit\/(.+)$/.exec(hash);
+  if(m&&routeFamilies.suits&&routeFamilies.suits.groups&&Object.values(routeFamilies.suits.groups).some(list=>list.includes(decodeURIComponent(m[1]))))return '/suits/'+m[1];
   m=/^#jacket\/(.+)$/.exec(hash);
   if(m&&routeFamilies.jackets&&routeFamilies.jackets.fabrics&&routeFamilies.jackets.fabrics.includes(decodeURIComponent(m[1])))return '/jackets/'+m[1];
   m=/^#trouser\/([a-z0-9-]+)\/(.+)$/.exec(hash);

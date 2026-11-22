@@ -103,8 +103,8 @@ function makeEntryWorld({pathname='/',hash='',profiles=null}={}){
     totalAnchors+=menu.anchors.length;
     for(const a of menu.anchors)destinations.add(a.href);
   }
-  assert.equal(totalAnchors,96,'rendered menu rows match the audited baseline');
-  assert.equal(destinations.size,94,'rendered destination count matches the catalog suite baseline of 94');
+  assert.equal(totalAnchors,95,'rendered menu rows match the audited baseline (96 before the silk shirts removal, owner decision 2026-11-22)');
+  assert.equal(destinations.size,93,'rendered destination count matches the catalog suite baseline of 93 (94 before the silk shirts removal)');
   for(const name of ['Suits','Jackets','Trousers']){
     const menu=menus.find(m=>m.name===name);
     assert.ok(menu.headings.includes('Shop by Collection'),name+' group is headed Shop by Collection');

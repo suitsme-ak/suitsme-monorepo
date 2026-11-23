@@ -1,0 +1,366 @@
+{
+ "cotton": [
+  {
+   "code": "10-1295-05",
+   "color": "Navy",
+   "pattern": "Solid",
+   "mill": "LUTHAI",
+   "img": "10-1295-05.jpg",
+   "mat": "Cotton"
+  },
+  {
+   "code": "10-1327-05",
+   "color": "Navy",
+   "pattern": "Stripe",
+   "mill": "LUTHAI",
+   "img": "10-1327-05.jpg",
+   "mat": "Cotton"
+  },
+  {
+   "code": "30-3290-05",
+   "color": "Navy",
+   "pattern": "Micro Check",
+   "mill": "ALBINI",
+   "img": "30-3290-05.jpg",
+   "mat": "Cotton"
+  },
+  {
+   "code": "10-1079-05",
+   "color": "Navy",
+   "pattern": "Check",
+   "mill": "",
+   "img": "10-1079-05.jpg",
+   "mat": "Cotton"
+  },
+  {
+   "code": "30-3469-06",
+   "color": "Navy",
+   "pattern": "Glen Plaid",
+   "mill": "ALBINI",
+   "img": "30-3469-06.jpg",
+   "mat": "Cotton"
+  },
+  {
+   "code": "30-3226-06",
+   "color": "Navy",
+   "pattern": "Plaid",
+   "mill": "JAMES FABRICS",
+   "img": "30-3226-06.jpg",
+   "mat": "Cotton"
+  },
+  {
+   "code": "30-3482-05",
+   "color": "Navy",
+   "pattern": "Gingham",
+   "mill": "ALBINI",
+   "img": "30-3482-05.jpg",
+   "mat": "Cotton"
+  },
+  {
+   "code": "70-7094-05",
+   "color": "Navy",
+   "pattern": "Floral",
+   "mill": "LARUSMIANI",
+   "img": "70-7094-05.jpg",
+   "mat": "Cotton"
+  },
+  {
+   "code": "10-1071-01",
+   "color": "Black",
+   "pattern": "Solid",
+   "mill": "LUTHAI",
+   "img": "10-1071-01.jpg",
+   "mat": "Cotton"
+  },
+  {
+   "code": "10-1101-01",
+   "color": "Black",
+   "pattern": "Check",
+   "mill": "",
+   "img": "10-1101-01.jpg",
+   "mat": "Cotton"
+  },
+  {
+   "code": "30-3403-03",
+   "color": "Grey",
+   "pattern": "Stripe",
+   "mill": "ALBINI",
+   "img": "30-3403-03.jpg",
+   "mat": "Cotton"
+  },
+  {
+   "code": "30-3248-03",
+   "color": "Grey",
+   "pattern": "Stripe",
+   "mill": "ALBINI",
+   "img": "30-3248-03.jpg",
+   "mat": "Cotton"
+  },
+  {
+   "code": "30-3227-03",
+   "color": "Grey",
+   "pattern": "Plaid",
+   "mill": "JAMES FABRICS",
+   "img": "30-3227-03.jpg",
+   "mat": "Cotton"
+  },
+  {
+   "code": "30-3278-02",
+   "color": "Dark Grey",
+   "pattern": "Micro Check",
+   "mill": "ALBINI",
+   "img": "30-3278-02.jpg",
+   "mat": "Cotton"
+  },
+  {
+   "code": "15-1519-04",
+   "color": "Light Grey",
+   "pattern": "Solid",
+   "mill": "LUTHAI",
+   "img": "15-1519-04.jpg",
+   "mat": "Cotton"
+  },
+  {
+   "code": "15-1532-04",
+   "color": "Light Grey",
+   "pattern": "Herringbone",
+   "mill": "LUTHAI",
+   "img": "15-1532-04.jpg",
+   "mat": "Cotton"
+  },
+  {
+   "code": "10-1317-04",
+   "color": "Light Grey",
+   "pattern": "Stripe",
+   "mill": "LUTHAI",
+   "img": "10-1317-04.jpg",
+   "mat": "Cotton"
+  },
+  {
+   "code": "30-3441-06",
+   "color": "Light Grey",
+   "pattern": "Micro Check",
+   "mill": "BONINO",
+   "img": "30-3441-06.jpg",
+   "mat": "Cotton"
+  },
+  {
+   "code": "30-3334-99",
+   "color": "Light Grey",
+   "pattern": "Check",
+   "mill": "ALBINI",
+   "img": "30-3334-99.jpg",
+   "mat": "Cotton"
+  },
+  {
+   "code": "10-1069-06",
+   "color": "Blue",
+   "pattern": "Solid",
+   "mill": "",
+   "img": "10-1069-06.jpg",
+   "mat": "Cotton"
+  },
+  {
+   "code": "15-1533-07",
+   "color": "Blue",
+   "pattern": "Herringbone",
+   "mill": "LUTHAI",
+   "img": "15-1533-07.jpg",
+   "mat": "Cotton"
+  },
+  {
+   "code": "10-1226-07",
+   "color": "Blue",
+   "pattern": "Fine Stripe",
+   "mill": "LUTHAI",
+   "img": "10-1226-07.jpg",
+   "mat": "Cotton"
+  },
+  {
+   "code": "10-1034-07",
+   "color": "Blue",
+   "pattern": "Stripe",
+   "mill": "",
+   "img": "10-1034-07.JPG",
+   "mat": "Cotton"
+  },
+  {
+   "code": "10-1175-07",
+   "color": "Blue",
+   "pattern": "Micro Check",
+   "mill": "JLIANGSU JAMES TEXTILE",
+   "img": "10-1175-07.jpg",
+   "mat": "Cotton"
+  },
+  {
+   "code": "10-1040-06",
+   "color": "Blue",
+   "pattern": "Check",
+   "mill": "",
+   "img": "10-1040-06.JPG",
+   "mat": "Cotton"
+  },
+  {
+   "code": "25-2505-07",
+   "color": "Blue",
+   "pattern": "Glen Plaid",
+   "mill": "LUTHAI",
+   "img": "25-2505-07.jpg",
+   "mat": "Cotton"
+  },
+  {
+   "code": "10-1224-06",
+   "color": "Blue",
+   "pattern": "Plaid",
+   "mill": "LUTHAI",
+   "img": "10-1224-06.jpg",
+   "mat": "Cotton"
+  },
+  {
+   "code": "15-1551-06",
+   "color": "Blue",
+   "pattern": "Houndstooth",
+   "mill": "LUTHAI",
+   "img": "15-1551-06.jpg",
+   "mat": "Cotton"
+  },
+  {
+   "code": "30-3442-07",
+   "color": "Blue",
+   "pattern": "Gingham",
+   "mill": "BONINO",
+   "img": "30-3442-07.jpg",
+   "mat": "Cotton"
+  },
+  {
+   "code": "10-1142-07",
+   "color": "Blue",
+   "pattern": "Floral",
+   "mill": "JAMES FABRIC",
+   "img": "10-1142-07.jpg",
+   "mat": "Cotton"
+  },
+  {
+   "code": "10-1191-06",
+   "color": "Blue",
+   "pattern": "Fancy",
+   "mill": "LUTHAI",
+   "img": "10-1191-06.jpg",
+   "mat": "Cotton"
+  },
+  {
+   "code": "30-3305-99",
+   "color": "Brown",
+   "pattern": "Stripe",
+   "mill": "BONINO(ALBINI)",
+   "img": "30-3305-99.jpg",
+   "mat": "Cotton"
+  },
+  {
+   "code": "10-1089-10",
+   "color": "Brown",
+   "pattern": "Check",
+   "mill": "",
+   "img": "10-1089-10.jpg",
+   "mat": "Cotton"
+  },
+  {
+   "code": "30-3283-10",
+   "color": "Brown",
+   "pattern": "Plaid",
+   "mill": "ALBINI",
+   "img": "30-3283-10.jpg",
+   "mat": "Cotton"
+  },
+  {
+   "code": "30-3233-11",
+   "color": "Light Brown",
+   "pattern": "Stripe",
+   "mill": "ALBINI",
+   "img": "30-3233-11.jpg",
+   "mat": "Cotton"
+  },
+  {
+   "code": "30-3450-03",
+   "color": "Light Brown",
+   "pattern": "Plaid",
+   "mill": "BONINO",
+   "img": "30-3450-03.jpg",
+   "mat": "Cotton"
+  }
+ ],
+ "linen": [
+  {
+   "code": "30-3201-04",
+   "color": "Navy",
+   "pattern": "Stripe",
+   "mill": "ALBINI",
+   "img": "70-7089-04.jpg",
+   "mat": "Linen"
+  },
+  {
+   "code": "25-2532-06",
+   "color": "Blue",
+   "pattern": "Solid",
+   "mill": "LUTHAI",
+   "img": "25-2532-06.jpg",
+   "mat": "Linen"
+  },
+  {
+   "code": "30-3198-07",
+   "color": "Blue",
+   "pattern": "Stripe",
+   "mill": "ALBINI",
+   "img": "70-7081-07.jpg",
+   "mat": "Linen"
+  },
+  {
+   "code": "30-3302-99",
+   "color": "White",
+   "pattern": "Stripe",
+   "mill": "BONINO(ALBINI)",
+   "img": "30-3302-99.jpg",
+   "mat": "Linen"
+  },
+  {
+   "code": "30-3017-26",
+   "color": "Pink",
+   "pattern": "Solid",
+   "mill": "",
+   "img": "30-3017-26.JPG",
+   "mat": "Linen"
+  },
+  {
+   "code": "30-3314-20",
+   "color": "Lavender",
+   "pattern": "Solid",
+   "mill": "BONINO(ALBINI)",
+   "img": "30-3314-20.jpg",
+   "mat": "Linen"
+  },
+  {
+   "code": "30-3318-05",
+   "color": "Navy",
+   "pattern": "Stripe",
+   "mill": "ALBINI",
+   "img": "30-3318-05.jpg",
+   "mat": "Linen"
+  },
+  {
+   "code": "30-3297-08",
+   "color": "Blue",
+   "pattern": "Solid",
+   "mill": "BONINO(ALBINI)",
+   "img": "30-3297-08.jpg",
+   "mat": "Linen"
+  },
+  {
+   "code": "30-3298-07",
+   "color": "Blue",
+   "pattern": "Solid",
+   "mill": "BONINO(ALBINI)",
+   "img": "30-3298-07.jpg",
+   "mat": "Linen"
+  }
+ ]
+}

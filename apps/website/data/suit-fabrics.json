@@ -1,0 +1,764 @@
+{
+ "wool": [
+  {
+   "code": "CN17301",
+   "color": "Navy",
+   "pattern": "Solid",
+   "mill": "CIMEXLANA",
+   "img": "CN17301.jpg"
+  },
+  {
+   "code": "CN51070",
+   "color": "Navy",
+   "pattern": "Herringbone",
+   "mill": "CIMEXLANA",
+   "img": "CN51070.jpg"
+  },
+  {
+   "code": "CN51150",
+   "color": "Navy",
+   "pattern": "Windowpane",
+   "mill": "CIMEXLANA",
+   "img": "CN51150.JPG"
+  },
+  {
+   "code": "CN51065",
+   "color": "Navy",
+   "pattern": "Fine Stripe",
+   "mill": "CIMEXLANA",
+   "img": "CN51065.JPG"
+  },
+  {
+   "code": "CN51002",
+   "color": "Navy",
+   "pattern": "Stripe",
+   "mill": "CIMEXLANA",
+   "img": "CN51002.jpg"
+  },
+  {
+   "code": "EN16118",
+   "color": "Navy",
+   "pattern": "Micro Check",
+   "mill": "BONINO",
+   "img": "EN16118.jpg"
+  },
+  {
+   "code": "CN51088",
+   "color": "Navy",
+   "pattern": "Check",
+   "mill": "CIMEXLANA",
+   "img": "CN51088.jpg"
+  },
+  {
+   "code": "CN51157",
+   "color": "Navy",
+   "pattern": "Glen Plaid",
+   "mill": "CIMEXLANA",
+   "img": "CN51157.jpg"
+  },
+  {
+   "code": "CN51011",
+   "color": "Navy",
+   "pattern": "Plaid",
+   "mill": "CIMEXLANA",
+   "img": "CN51011.jpg"
+  },
+  {
+   "code": "EN05102",
+   "color": "Navy",
+   "pattern": "Houndstooth",
+   "mill": "ZIGNONE",
+   "img": "EN05102.jpg"
+  },
+  {
+   "code": "CN51395",
+   "color": "Navy",
+   "pattern": "Birdseye",
+   "mill": "CIMEXLANA",
+   "img": "CN51395.jpg"
+  },
+  {
+   "code": "CN51051",
+   "color": "Navy",
+   "pattern": "Sharkskin",
+   "mill": "CIMEXLANA",
+   "img": "CN51051.jpg"
+  },
+  {
+   "code": "CN51076",
+   "color": "Navy",
+   "pattern": "Dot",
+   "mill": "CIMEXLANA",
+   "img": "CN51076.jpg"
+  },
+  {
+   "code": "EN06105",
+   "color": "Navy",
+   "pattern": "Floral",
+   "mill": "ZIGNONE",
+   "img": "EN06105.jpg"
+  },
+  {
+   "code": "CN51232",
+   "color": "Navy",
+   "pattern": "Diamond",
+   "mill": "CIMEXLANA",
+   "img": "CN51232.jpg"
+  },
+  {
+   "code": "CN51221",
+   "color": "Navy",
+   "pattern": "Basket Weave",
+   "mill": "CIMEXLANA",
+   "img": "CN51221.jpg"
+  },
+  {
+   "code": "CN51212",
+   "color": "Navy",
+   "pattern": "Cavalry Twill",
+   "mill": "CIMEXLANA",
+   "img": "CN51212.jpg"
+  },
+  {
+   "code": "CN51291",
+   "color": "Navy",
+   "pattern": "Twill",
+   "mill": "CIMEXLANA",
+   "img": "CN51291.jpg"
+  },
+  {
+   "code": "EN54315",
+   "color": "Navy",
+   "pattern": "Melange",
+   "mill": "VITALE BARBERIS CANONICO",
+   "img": "EN54315.jpg"
+  },
+  {
+   "code": "CN51208",
+   "color": "Navy",
+   "pattern": "Fancy",
+   "mill": "CIMEXLANA",
+   "img": "CN51208.jpg"
+  },
+  {
+   "code": "CN51241",
+   "color": "Navy",
+   "pattern": "Textured",
+   "mill": "CIMEXLANA",
+   "img": "CN51241.jpg"
+  },
+  {
+   "code": "EN54459",
+   "color": "Navy",
+   "pattern": "Corduroy",
+   "mill": "ERMENEGILDO ZEGNA",
+   "img": "EN54459.jpg"
+  },
+  {
+   "code": "EN54540",
+   "color": "Navy",
+   "pattern": "Seersucker",
+   "mill": "VITALE BARBERIS CANONICO",
+   "img": "EN54540.jpg"
+  },
+  {
+   "code": "CG21033",
+   "color": "Charcoal",
+   "pattern": "Solid",
+   "mill": "CIMEXLANA",
+   "img": "CG21033.jpg"
+  },
+  {
+   "code": "EG12401",
+   "color": "Charcoal",
+   "pattern": "Herringbone",
+   "mill": "VITALE BARBERIS CANONICO",
+   "img": "EG12401.jpg"
+  },
+  {
+   "code": "EG23293",
+   "color": "Charcoal",
+   "pattern": "Windowpane",
+   "mill": "VITALE BARBERIS CANONICO",
+   "img": "EG23293.jpg"
+  },
+  {
+   "code": "EG92400",
+   "color": "Charcoal",
+   "pattern": "Fine Stripe",
+   "mill": "ANGELICO",
+   "img": "EG92400.JPG"
+  },
+  {
+   "code": "CG21037",
+   "color": "Charcoal",
+   "pattern": "Stripe",
+   "mill": "CIMEXLANA",
+   "img": "CG21037.jpg"
+  },
+  {
+   "code": "CG21206",
+   "color": "Charcoal",
+   "pattern": "Check",
+   "mill": "CIMEXLANA",
+   "img": "CG21206.jpg"
+  },
+  {
+   "code": "CG21253",
+   "color": "Charcoal",
+   "pattern": "Glen Plaid",
+   "mill": "CIMEXLANA",
+   "img": "CG21253.jpg"
+  },
+  {
+   "code": "CG21119",
+   "color": "Charcoal",
+   "pattern": "Plaid",
+   "mill": "CIMEXLANA",
+   "img": "CG21119.jpg"
+  },
+  {
+   "code": "CG21356",
+   "color": "Charcoal",
+   "pattern": "Houndstooth",
+   "mill": "CIMEXLANA",
+   "img": "CG21356.jpg"
+  },
+  {
+   "code": "EG12107",
+   "color": "Charcoal",
+   "pattern": "Sharkskin",
+   "mill": "VITALE BARBERIS CANONICO",
+   "img": "EG12107.jpg"
+  },
+  {
+   "code": "CG92300",
+   "color": "Charcoal",
+   "pattern": "Dot",
+   "mill": "CIMEXLANA",
+   "img": "CG92300.jpg"
+  },
+  {
+   "code": "EG23736",
+   "color": "Charcoal",
+   "pattern": "Diamond",
+   "mill": "ERMENEGILDO ZEGNA",
+   "img": "EG23736.jpg"
+  },
+  {
+   "code": "CG21243",
+   "color": "Charcoal",
+   "pattern": "Basket Weave",
+   "mill": "CIMEXLANA",
+   "img": "CG21243.jpg"
+  }
+ ],
+ "linen": [
+  {
+   "code": "EN53338",
+   "color": "Navy",
+   "pattern": "Solid",
+   "mill": "LARUSMIANI",
+   "img": "EN53338.jpg"
+  },
+  {
+   "code": "EN53701",
+   "color": "Navy",
+   "pattern": "Windowpane",
+   "mill": "BONINO",
+   "img": "EN53701.jpg"
+  },
+  {
+   "code": "EN53601",
+   "color": "Navy",
+   "pattern": "Check",
+   "mill": "GIORDANO BASSO",
+   "img": "EN53601.jpg"
+  },
+  {
+   "code": "EN17710",
+   "color": "Navy",
+   "pattern": "Plaid",
+   "mill": "BONINO",
+   "img": "EN17710.jpg"
+  },
+  {
+   "code": "EN53714",
+   "color": "Navy",
+   "pattern": "Basket Weave",
+   "mill": "ANGELICO",
+   "img": "EN53714.jpg"
+  },
+  {
+   "code": "EB13013",
+   "color": "Black",
+   "pattern": "Solid",
+   "mill": "GIORDANO BASSO",
+   "img": "EB13013.jpg"
+  },
+  {
+   "code": "EB13055",
+   "color": "Black",
+   "pattern": "Floral",
+   "mill": "GIORDANO BASSO",
+   "img": "EB13055.jpg"
+  },
+  {
+   "code": "EG23495",
+   "color": "Grey",
+   "pattern": "Solid",
+   "mill": "ERMENEGILDO ZEGNA",
+   "img": "EG23495.jpg"
+  },
+  {
+   "code": "KO42026",
+   "color": "Grey",
+   "pattern": "Herringbone",
+   "mill": "COSY",
+   "img": "KO42026.jpg"
+  },
+  {
+   "code": "EG23384",
+   "color": "Grey",
+   "pattern": "Windowpane",
+   "mill": "BONINO",
+   "img": "EG23384.jpg"
+  },
+  {
+   "code": "EG23633",
+   "color": "Grey",
+   "pattern": "Check",
+   "mill": "ERMENEGILDO ZEGNA",
+   "img": "EG23633.jpg"
+  },
+  {
+   "code": "EG23385",
+   "color": "Grey",
+   "pattern": "Basket Weave",
+   "mill": "ANGELICO",
+   "img": "EG23385.jpg"
+  },
+  {
+   "code": "EG23494",
+   "color": "Light Grey",
+   "pattern": "Solid",
+   "mill": "ERMENEGILDO ZEGNA",
+   "img": "EG23494.jpg"
+  },
+  {
+   "code": "EG23834",
+   "color": "Light Grey",
+   "pattern": "Check",
+   "mill": "SOLBIATI",
+   "img": "EG23834.jpg"
+  },
+  {
+   "code": "EG23751",
+   "color": "Light Grey",
+   "pattern": "Glen Plaid",
+   "mill": "VITALE BARBERIS CANONICO",
+   "img": "EG23751.jpg"
+  },
+  {
+   "code": "EN17127",
+   "color": "Blue",
+   "pattern": "Solid",
+   "mill": "ANGELICO",
+   "img": "EN17127.jpg"
+  },
+  {
+   "code": "EN54058",
+   "color": "Blue",
+   "pattern": "Herringbone",
+   "mill": "SONDRIO",
+   "img": "EN54058.JPG"
+  },
+  {
+   "code": "EN53697",
+   "color": "Blue",
+   "pattern": "Windowpane",
+   "mill": "BONINO",
+   "img": "EN53697.jpg"
+  },
+  {
+   "code": "KN52032",
+   "color": "Blue",
+   "pattern": "Fine Stripe",
+   "mill": "SHENZHEN",
+   "img": "KN52032.jpg"
+  },
+  {
+   "code": "EN53092",
+   "color": "Blue",
+   "pattern": "Stripe",
+   "mill": "MADE IN ITALY",
+   "img": "EN53092.jpg"
+  },
+  {
+   "code": "EN53600",
+   "color": "Blue",
+   "pattern": "Check",
+   "mill": "GIORDANO BASSO",
+   "img": "EN53600.jpg"
+  },
+  {
+   "code": "EN53237",
+   "color": "Blue",
+   "pattern": "Plaid",
+   "mill": "ANGELICO",
+   "img": "EN53237.jpg"
+  },
+  {
+   "code": "KN52031",
+   "color": "Blue",
+   "pattern": "Houndstooth",
+   "mill": "COSY",
+   "img": "KN52031.jpg"
+  },
+  {
+   "code": "ER33189",
+   "color": "Brown",
+   "pattern": "Solid",
+   "mill": "ERMENEGILDO ZEGNA",
+   "img": "ER33189.jpg"
+  },
+  {
+   "code": "ER33069",
+   "color": "Brown",
+   "pattern": "Plaid",
+   "mill": "BONINO",
+   "img": "ER33069.jpg"
+  },
+  {
+   "code": "KR32027",
+   "color": "Light Brown",
+   "pattern": "Solid",
+   "mill": "LANIER CHINA",
+   "img": "KR32027.jpg"
+  },
+  {
+   "code": "ER33185",
+   "color": "Light Brown",
+   "pattern": "Twill",
+   "mill": "SOLBIATI",
+   "img": "ER33185.jpg"
+  },
+  {
+   "code": "ER33006",
+   "color": "Sand",
+   "pattern": "Solid",
+   "mill": "ERMENEGILDO ZEGNA",
+   "img": "ER33006.jpg"
+  },
+  {
+   "code": "EO43405",
+   "color": "Sand",
+   "pattern": "Glen Plaid",
+   "mill": "SOLBIATI",
+   "img": "EO43405.jpg"
+  },
+  {
+   "code": "KO42022",
+   "color": "Beige",
+   "pattern": "Solid",
+   "mill": "SHENZHEN",
+   "img": "KO42022.jpg"
+  },
+  {
+   "code": "EO43522",
+   "color": "Tan",
+   "pattern": "Solid",
+   "mill": "ANGELICO",
+   "img": "EO43522.jpg"
+  },
+  {
+   "code": "ER33141",
+   "color": "Tan",
+   "pattern": "Herringbone",
+   "mill": "SONDRIO",
+   "img": "ER33141.jpg"
+  },
+  {
+   "code": "KO42027",
+   "color": "Tan",
+   "pattern": "Houndstooth",
+   "mill": "SHENZHEN",
+   "img": "KO42027.jpg"
+  },
+  {
+   "code": "KO42025",
+   "color": "Khaki",
+   "pattern": "Solid",
+   "mill": "SUZHOU XINSHEN",
+   "img": "KO42025.jpg"
+  },
+  {
+   "code": "ER33182",
+   "color": "Taupe",
+   "pattern": "Solid",
+   "mill": "ERMENEGILDO ZEGNA",
+   "img": "ER33182.jpg"
+  },
+  {
+   "code": "ER33249",
+   "color": "Taupe",
+   "pattern": "Check",
+   "mill": "ANGELICO",
+   "img": "ER33249.jpg"
+  }
+ ],
+ "cotton": [
+  {
+   "code": "EN53001",
+   "color": "Navy",
+   "pattern": "Solid",
+   "mill": "LORO PIANA",
+   "img": "EN53001.JPG"
+  },
+  {
+   "code": "KN52028",
+   "color": "Navy",
+   "pattern": "Windowpane",
+   "mill": "JIANGSU",
+   "img": "KN52028.jpg"
+  },
+  {
+   "code": "CN51038",
+   "color": "Navy",
+   "pattern": "Stripe",
+   "mill": "CIMEXLANA",
+   "img": "CN51038.jpg"
+  },
+  {
+   "code": "EN54032",
+   "color": "Navy",
+   "pattern": "Fancy",
+   "mill": "OLIMPIAS",
+   "img": "EN54032.jpg"
+  },
+  {
+   "code": "KB12017",
+   "color": "Black",
+   "pattern": "Solid",
+   "mill": "JLIANGSU JAMES TEXTILE",
+   "img": "KB12017.JPG"
+  },
+  {
+   "code": "EB13146",
+   "color": "Black",
+   "pattern": "Stripe",
+   "mill": "ERMENEGILDO ZEGNA",
+   "img": "EB13146.jpg"
+  },
+  {
+   "code": "KB12025",
+   "color": "Black",
+   "pattern": "Dot",
+   "mill": "GIRMES ST",
+   "img": "KB12025.jpg"
+  },
+  {
+   "code": "KG22053",
+   "color": "Grey",
+   "pattern": "Solid",
+   "mill": "DAG",
+   "img": "KG22053.jpg"
+  },
+  {
+   "code": "EG23628",
+   "color": "Grey",
+   "pattern": "Stripe",
+   "mill": "LORO PIANA",
+   "img": "EG23104.JPG"
+  },
+  {
+   "code": "EG23474",
+   "color": "Grey",
+   "pattern": "Houndstooth",
+   "mill": "BONINO",
+   "img": "EG23474.jpg"
+  },
+  {
+   "code": "EG23475",
+   "color": "Dark Grey",
+   "pattern": "Houndstooth",
+   "mill": "BONINO",
+   "img": "EG23475.jpg"
+  },
+  {
+   "code": "EG23725",
+   "color": "Light Grey",
+   "pattern": "Solid",
+   "mill": "ERMENEGILDO ZEGNA",
+   "img": "EG23725.jpg"
+  },
+  {
+   "code": "EG23300",
+   "color": "Light Grey",
+   "pattern": "Fancy",
+   "mill": "GIORDANO BASSO",
+   "img": "EG23300.jpg"
+  },
+  {
+   "code": "CN98301",
+   "color": "Blue",
+   "pattern": "Solid",
+   "mill": "CIMEXLANA",
+   "img": "CN98301.jpg"
+  },
+  {
+   "code": "EN54063",
+   "color": "Blue",
+   "pattern": "Windowpane",
+   "mill": "VITALE BARBERIS CANONICO",
+   "img": "EN54063.jpg"
+  },
+  {
+   "code": "CO41012",
+   "color": "Blue",
+   "pattern": "Stripe",
+   "mill": "CIMEXLANA",
+   "img": "CO41012.JPG"
+  },
+  {
+   "code": "EN53021",
+   "color": "Blue",
+   "pattern": "Micro Check",
+   "mill": "ZANIERI",
+   "img": "EN53021.jpg"
+  },
+  {
+   "code": "EN54059",
+   "color": "Blue",
+   "pattern": "Twill",
+   "mill": "SONDRIO",
+   "img": "EN54059.jpg"
+  },
+  {
+   "code": "ER33056",
+   "color": "Chocolate",
+   "pattern": "Solid",
+   "mill": "BONINO",
+   "img": "ER33056.jpg"
+  },
+  {
+   "code": "ER33008",
+   "color": "Brown",
+   "pattern": "Solid",
+   "mill": "MADE IN ITALY",
+   "img": "ER33008.jpg"
+  },
+  {
+   "code": "ER33013",
+   "color": "Brown",
+   "pattern": "Stripe",
+   "mill": "ZANIERI",
+   "img": "ER33013.JPG"
+  },
+  {
+   "code": "EO43081",
+   "color": "Brown",
+   "pattern": "Plaid",
+   "mill": "BONINO",
+   "img": "EO43081.jpg"
+  },
+  {
+   "code": "EO43371",
+   "color": "Light Brown",
+   "pattern": "Solid",
+   "mill": "SONDRIO",
+   "img": "EO43371.jpg"
+  },
+  {
+   "code": "CR31034",
+   "color": "Light Brown",
+   "pattern": "Herringbone",
+   "mill": "CIMEXLANA",
+   "img": "CR31034.jpg"
+  },
+  {
+   "code": "ER33062",
+   "color": "Light Brown",
+   "pattern": "Stripe",
+   "mill": "BONINO",
+   "img": "ER33062.jpg"
+  },
+  {
+   "code": "EO43067",
+   "color": "Sand",
+   "pattern": "Solid",
+   "mill": "BONINO",
+   "img": "EO43067.jpg"
+  },
+  {
+   "code": "EO43349",
+   "color": "Beige",
+   "pattern": "Solid",
+   "mill": "UBOLDI",
+   "img": "EO43349.jpg"
+  },
+  {
+   "code": "EO43098",
+   "color": "Beige",
+   "pattern": "Stripe",
+   "mill": "BONINO",
+   "img": "EO43098.jpg"
+  },
+  {
+   "code": "ER33005",
+   "color": "Tan",
+   "pattern": "Solid",
+   "mill": "LARUSMIANI",
+   "img": "ER33005.JPG"
+  },
+  {
+   "code": "EO43080",
+   "color": "Tan",
+   "pattern": "Plaid",
+   "mill": "BONINO",
+   "img": "EO43080.jpg"
+  },
+  {
+   "code": "ER33238",
+   "color": "Tan",
+   "pattern": "Basket Weave",
+   "mill": "LORO PIANA",
+   "img": "ER33238.jpg"
+  },
+  {
+   "code": "ER33002",
+   "color": "Camel",
+   "pattern": "Solid",
+   "mill": "LARUSMIANI",
+   "img": "ER33002.JPG"
+  },
+  {
+   "code": "ER33107",
+   "color": "Camel",
+   "pattern": "Herringbone",
+   "mill": "BONINO",
+   "img": "ER33107.jpg"
+  },
+  {
+   "code": "EO43023",
+   "color": "Khaki",
+   "pattern": "Solid",
+   "mill": "LARUSMIANI",
+   "img": "EO43023.jpg"
+  },
+  {
+   "code": "ER33061",
+   "color": "Taupe",
+   "pattern": "Stripe",
+   "mill": "BONINO",
+   "img": "ER33061.jpg"
+  },
+  {
+   "code": "KO42080",
+   "color": "Stone",
+   "pattern": "Solid",
+   "mill": "LUTHAI",
+   "img": "KO42080.jpg"
+  }
+ ]
+}

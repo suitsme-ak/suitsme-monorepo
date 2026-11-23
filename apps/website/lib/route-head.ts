@@ -232,6 +232,60 @@ export function headForWomen(
   };
 }
 
+export interface SuitHeadSource {
+  code: string;
+  color: string;
+  pattern: string;
+  mill: string;
+  material: string;
+}
+
+// Fabric defined suits (owner decisions, 2026-11-21 and 2026-11-22):
+// a men's tailored suit built from a real library fabric carries
+// that fabric's code in its URL, /suits/<code>, the same pattern
+// the fabric jackets use (/jackets/<code>). The head names the
+// fabric so the code in the URL is also the code in the title and
+// the canonical.
+export function headForSuit(
+  entry: SuitHeadSource | undefined,
+): RouteHead | null {
+  if (!entry) return null;
+  const cloth = `${entry.color} ${entry.pattern} ${entry.material}`.trim();
+  return {
+    title: `${cloth} suit, fabric ${entry.code} | Suits.me`,
+    description: `${cloth} suit at Suits.me, made from fabric ${entry.code}${entry.mill ? `, woven by ${entry.mill}` : ""}, in the shop fabric library. The photograph is generated from this fabric's own swatch. Custom tailored to your measurements.`,
+    canonicalPath: `/suits/${encodeURIComponent(entry.code)}`,
+    robots: "index",
+  };
+}
+
+export interface ShirtHeadSource {
+  code: string;
+  color: string;
+  pattern: string;
+  mill: string;
+  material: string;
+}
+
+// Fabric defined shirts (owner decisions, 2026-11-21 and
+// 2026-11-22): a men's tailored shirt built from a real library
+// fabric carries that fabric's code in its URL, /shirts/<code>,
+// the same pattern the fabric suits use (/suits/<code>). The
+// head names the fabric so the code in the URL is also the code
+// in the title and the canonical.
+export function headForShirt(
+  entry: ShirtHeadSource | undefined,
+): RouteHead | null {
+  if (!entry) return null;
+  const cloth = `${entry.color} ${entry.pattern} ${entry.material}`.trim();
+  return {
+    title: `${cloth} shirt, fabric ${entry.code} | Suits.me`,
+    description: `${cloth} shirt at Suits.me, made from fabric ${entry.code}${entry.mill ? `, woven by ${entry.mill}` : ""}, in the shop fabric library. The photograph is generated from this fabric's own swatch. Custom tailored to your measurements.`,
+    canonicalPath: `/shirts/${encodeURIComponent(entry.code)}`,
+    robots: "index",
+  };
+}
+
 export function headForOrderDetail(path: string): RouteHead {
   // Order detail is shopper state: it always carries noindex, and
   // its canonical is the URL itself, the only canonical form an

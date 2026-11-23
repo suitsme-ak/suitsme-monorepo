@@ -2,288 +2,288 @@
   "Shop All": {
     "title": "Shop All",
     "ids": [
-      1789,
-      1690,
-      1637,
-      1747,
-      1818,
-      1805,
-      1704,
-      1653,
-      1756,
-      1815
+      1792,
+      1693,
+      1640,
+      1750,
+      1821,
+      1808,
+      1707,
+      1656,
+      1759,
+      1818
     ],
     "intro": "Ten distinct looks, created using original Suits.me fabrics."
   },
   "New Arrivals": {
     "title": "New Arrivals",
     "ids": [
-      1789,
-      1690,
-      1637,
-      1747,
-      1818,
-      1805,
-      1704,
-      1653,
-      1756,
-      1815
+      1792,
+      1693,
+      1640,
+      1750,
+      1821,
+      1808,
+      1707,
+      1656,
+      1759,
+      1818
     ],
     "intro": "A new edit of ten looks, created from original Suits.me swatches."
   },
   "Popular Suits": {
     "title": "Popular Suits",
     "ids": [
-      1688,
-      1790,
-      1810,
-      1638,
-      1755,
-      1694,
-      1806,
-      1812,
-      1658,
-      1758
+      1691,
+      1793,
+      1813,
+      1641,
+      1758,
+      1697,
+      1809,
+      1815,
+      1661,
+      1761
     ],
     "intro": "Ten distinct looks, created using original Suits.me fabrics."
   },
   "Linen Suits": {
     "title": "Linen Suits",
     "ids": [
-      1688,
-      1690,
       1691,
-      1692,
       1693,
       1694,
-      1704,
-      1705,
-      1713,
-      1689
+      1695,
+      1696,
+      1697,
+      1707,
+      1708,
+      1716,
+      1692
     ],
     "intro": "Ten distinct looks, created using original Suits.me fabrics."
   },
   "Wool Suits": {
     "title": "Wool Suits",
     "ids": [
-      1789,
-      1790,
-      1791,
-      1592,
-      1795,
-      1805,
-      1806,
       1792,
       1793,
-      1794
+      1794,
+      1595,
+      1798,
+      1808,
+      1809,
+      1795,
+      1796,
+      1797
     ],
     "intro": "Ten distinct looks, created using original Suits.me fabrics."
   },
   "Luxury Suits": {
     "title": "Luxury Suits",
     "ids": [
-      1789,
-      1790,
-      1791,
-      1592,
-      1795,
-      1805,
-      1806,
       1792,
       1793,
-      1794
+      1794,
+      1595,
+      1798,
+      1808,
+      1809,
+      1795,
+      1796,
+      1797
     ],
     "intro": "Ten fabrics from your Suits.me Top Tier collection."
   },
   "Cotton Suits": {
     "title": "Cotton Suits",
     "ids": [
-      1635,
-      1636,
-      1637,
       1638,
       1639,
-      1644,
-      1651,
-      1653,
-      1658,
-      1659
+      1640,
+      1641,
+      1642,
+      1647,
+      1654,
+      1656,
+      1661,
+      1662
     ],
     "intro": "Ten distinct looks, created using original Suits.me fabrics."
   },
   "Corduroy Suits": {
     "title": "Corduroy Suits",
     "ids": [
-      1739,
-      1743,
-      1745,
+      1742,
+      1746,
+      1748,
+      1750,
+      1758,
+      1760,
       1747,
-      1755,
       1757,
-      1744,
-      1754,
-      1756,
-      1758
+      1759,
+      1761
     ],
     "intro": "Ten distinct looks, created using original Suits.me fabrics."
   },
   "Wedding Suits": {
     "title": "Wedding Suits",
     "ids": [
-      1808,
-      1809,
-      1810,
-      1816,
-      1818,
-      1823,
       1811,
       1812,
+      1813,
+      1819,
+      1821,
+      1826,
       1814,
-      1815
+      1815,
+      1817,
+      1818
     ],
     "intro": "Ten distinct looks, created using original Suits.me fabrics."
   },
   "Business Suits": {
     "title": "Business Suits",
     "ids": [
-      1789,
-      1790,
-      1791,
-      1592,
-      1795,
-      1805,
-      1806,
       1792,
       1793,
-      1794
+      1794,
+      1595,
+      1798,
+      1808,
+      1809,
+      1795,
+      1796,
+      1797
     ],
     "intro": "Ten distinct looks, created using original Suits.me fabrics."
   },
   "Tuxedos": {
     "title": "Tuxedos",
     "ids": [
-      2002,
-      2003,
-      2004,
       2005,
       2006,
       2007,
       2008,
       2009,
       2010,
-      2011
+      2011,
+      2012,
+      2013,
+      2014
     ],
     "intro": "Ten distinct looks, created using original Suits.me fabrics."
   },
   "Cocktail & Evening Suits": {
     "title": "Cocktail & Evening Suits",
     "ids": [
-      1808,
-      1809,
-      1810,
-      1747,
-      1818,
-      1757,
       1811,
       1812,
+      1813,
+      1750,
+      1821,
+      1760,
       1814,
-      1815
+      1815,
+      1817,
+      1818
     ],
     "intro": "Ten distinct looks, created using original Suits.me fabrics."
   },
   "Red Carpet Suits": {
     "title": "Red Carpet Suits",
     "ids": [
-      1808,
-      1690,
-      1637,
-      1747,
-      1818,
-      1694,
-      1806,
-      1812,
-      1658,
-      1758
+      1811,
+      1693,
+      1640,
+      1750,
+      1821,
+      1697,
+      1809,
+      1815,
+      1661,
+      1761
     ],
     "intro": "Ten distinct looks, created using original Suits.me fabrics."
   },
   "Double Breasted Suits": {
     "title": "Double Breasted Suits",
     "ids": [
-      1992,
-      1993,
-      1994,
       1995,
       1996,
       1997,
       1998,
       1999,
       2000,
-      2001
+      2001,
+      2002,
+      2003,
+      2004
     ],
     "intro": "Ten distinct looks, created using original Suits.me fabrics."
   },
   "Boys Suits": {
     "title": "Boys Suits",
     "ids": [
-      2012,
-      2013,
-      2014,
       2015,
       2016,
       2017,
       2018,
       2019,
       2020,
-      2021
+      2021,
+      2022,
+      2023,
+      2024
     ],
     "intro": "Ten distinct looks, created using original Suits.me fabrics."
   },
   "Look Book (All)": {
     "title": "Look Book (All)",
     "ids": [
-      1688,
-      1790,
-      1810,
-      1638,
-      1755,
-      1694,
-      1806,
-      1812,
-      1658,
-      1758
+      1691,
+      1793,
+      1813,
+      1641,
+      1758,
+      1697,
+      1809,
+      1815,
+      1661,
+      1761
     ],
     "intro": "Ten distinct looks, created using original Suits.me fabrics."
   },
   "Shop By Style": {
     "title": "Shop By Style",
     "ids": [
-      1992,
-      1993,
-      1994,
       1995,
-      2006,
-      2007,
-      2008,
-      1653,
-      1756,
-      1815
+      1996,
+      1997,
+      1998,
+      2009,
+      2010,
+      2011,
+      1656,
+      1759,
+      1818
     ],
     "intro": "Ten distinct looks, created using original Suits.me fabrics."
   },
   "Sale": {
     "title": "Sale",
     "ids": [
-      1688,
-      1790,
-      1810,
-      1638,
-      1755,
-      1694,
-      1806,
-      1812,
-      1658,
-      1758
+      1691,
+      1793,
+      1813,
+      1641,
+      1758,
+      1697,
+      1809,
+      1815,
+      1661,
+      1761
     ],
     "intro": "Explore this fabric edit. Ask your stylist about current offers."
   }

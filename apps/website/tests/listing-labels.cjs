@@ -78,10 +78,10 @@ for(const menu of menus)for(const a of menu.anchors){
   assertSignal(html,kind,a.href);
   if(kind==='fabric')fabrics++;else designs++;
 }
-assert.equal(anchors,96,'rendered menu rows unchanged at 96');
-assert.equal(destinations.size,94,'distinct destinations unchanged at 94');
+assert.equal(anchors,95,'rendered menu rows at 95 (96 before the silk shirts removal, owner decision 2026-11-22)');
+assert.equal(destinations.size,93,'distinct destinations at 93 (94 before the silk shirts removal)');
 assert.equal(fabrics,20,'fabric listing destinations unchanged at 20');
-assert.equal(designs,67,'design listing destinations unchanged at 67');
+assert.equal(designs,66,'design listing destinations at 66 (67 before the silk shirts removal)');
 
 // The fabric swatch routes, reached from chips and product pages rather
 // than the menus, are fabric listings too and render through render().
@@ -93,4 +93,4 @@ for(const route of ['#fabrics/suit','#fabrics/shirt']){
 assertSignal(run(`categoryCollection('#collection')`),'fabric','#collection');
 assertSignal(run(`categoryCollection('#collection/Fabrics')`),'fabric','#collection/Fabrics');
 
-console.log('Listing label checks passed: every fabric listing shows the Fabrics signal, every design listing shows the Designs signal, the signals never cross, and the destination inventory is unchanged (96 anchors, 94 destinations, 20 fabric, 67 design).');
+console.log('Listing label checks passed: every fabric listing shows the Fabrics signal, every design listing shows the Designs signal, the signals never cross, and the destination inventory is unchanged (95 anchors, 93 destinations, 20 fabric, 66 design).');
